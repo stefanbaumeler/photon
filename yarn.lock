@@ -1798,6 +1798,7 @@ __metadata:
     apollo-server-express: ^3.10.0
     dotenv: ^16.0.1
     express: ^4.18.1
+    index.ts: "link:./"
     knex: ^2.2.0
     pg: ^8.7.3
     ts-node-dev: ^2.0.0
@@ -5028,6 +5029,12 @@ __metadata:
   checksum: 824cfb9929d031dabf059bebfe08cf3137365e112019086ed3dcff6a0a7b698cb80cf67ccccde0e25b9e2d7527aa6cc1fed1ac490c752162496caba3e6699612
   languageName: node
   linkType: hard
+
+"index.ts@link:./::locator=%40photon%2Fapi%40workspace%3Aapi":
+  version: 0.0.0-use.local
+  resolution: "index.ts@link:./::locator=%40photon%2Fapi%40workspace%3Aapi"
+  languageName: node
+  linkType: soft
 
 "infer-owner@npm:^1.0.4":
   version: 1.0.4

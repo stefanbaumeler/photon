@@ -2850,6 +2850,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["apollo-server-express", "virtual:2cda2326c0123a353f83e8a6dcbc40936e0eb4deb300585656cc8be861a861b89a6926087b5d2c55c548bd60a00a68974710f3c61db747a25f13b80e622352b7#npm:3.10.0"],\
             ["dotenv", "npm:16.0.1"],\
             ["express", "npm:4.18.1"],\
+            ["index.ts", "link:./::locator=%40photon%2Fapi%40workspace%3Aapi"],\
             ["knex", "virtual:2cda2326c0123a353f83e8a6dcbc40936e0eb4deb300585656cc8be861a861b89a6926087b5d2c55c548bd60a00a68974710f3c61db747a25f13b80e622352b7#npm:2.2.0"],\
             ["pg", "virtual:2cda2326c0123a353f83e8a6dcbc40936e0eb4deb300585656cc8be861a861b89a6926087b5d2c55c548bd60a00a68974710f3c61db747a25f13b80e622352b7#npm:8.7.3"],\
             ["ts-node-dev", "virtual:2cda2326c0123a353f83e8a6dcbc40936e0eb4deb300585656cc8be861a861b89a6926087b5d2c55c548bd60a00a68974710f3c61db747a25f13b80e622352b7#npm:2.0.0"]\
@@ -6830,6 +6831,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["indent-string", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["index.ts", [\
+        ["link:./::locator=%40photon%2Fapi%40workspace%3Aapi", {\
+          "packageLocation": "./api/",\
+          "packageDependencies": [\
+            ["index.ts", "link:./::locator=%40photon%2Fapi%40workspace%3Aapi"]\
+          ],\
+          "linkType": "SOFT",\
+          "discardFromLookup": true\
         }]\
       ]],\
       ["infer-owner", [\
