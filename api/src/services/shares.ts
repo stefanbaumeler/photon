@@ -1,0 +1,29 @@
+import { Knex } from 'knex'
+
+export default class SharesService {
+    knex: Knex
+
+    tableName = 'shares'
+
+    constructor (knex: Knex) {
+        this.knex = knex
+    }
+
+    async createOne () {
+        return this.knex.insert({
+            filename_disk: '123232123123.jpg',
+            filename_download: 'foobar.jpg',
+            title: 'foobar',
+            description: ''
+        })
+            .into(this.tableName)
+            .returning('id')
+            .then((result) => result[0])
+    }
+
+    async readOne (key: number) {
+        return this.knex.from(this.tableName).select().where({
+            id: key
+        })
+    }
+}
