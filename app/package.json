@@ -28,16 +28,16 @@
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {
+        "@types/node": "^18.6.3",
         "autoprefixer": "^10.4.7",
         "postcss": "^8.4.14",
-        "tailwindcss": "^3.1.4"
+        "tailwindcss": "^3.1.4",
+        "typescript": "^4.7.4"
     },
     "peerDependencies": {
         "@testing-library/dom": "*",
-        "@types/node": "*",
         "graphql": "*",
-        "graphql-tag": "*",
-        "typescript": "*"
+        "graphql-tag": "*"
     },
     "scripts": {
         "dev": "next dev",
