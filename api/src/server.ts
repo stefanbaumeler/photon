@@ -1,11 +1,15 @@
 import { createApp } from './app'
 import * as http from 'http'
+import { createApolloServer } from './apollo'
 
 export const createServer = async (): Promise<http.Server> => {
-    return http.createServer(await createApp())
+    const app = await createApp()
+    const apollo = await createApolloServer(app)
+
+    return http.createServer(app)
 }
 
-const port = 3000
+const port = 4000
 const host = 'localhost'
 
 export const startServer = async () => {

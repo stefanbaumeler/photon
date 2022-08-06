@@ -11,7 +11,7 @@ export default class MediaService {
         this.knex = getDatabase()
     }
 
-    async createOne (medium: Medium) {
+    async createOne (medium: Omit<Medium, 'id'>) {
         return this.knex.transaction(async (trx) => {
             return trx.insert(medium)
                 .into(this.tableName)
