@@ -1,0 +1,11 @@
+@mixin root-root
+    display: grid
+    grid-template: 'search search' 60px 'sidebar main' auto / #{$sidebar-width} 1fr
+    flex-wrap: wrap
+    height: 100vh
+
+@mixin root
+    .root
+        @include root-root
+
+@include root

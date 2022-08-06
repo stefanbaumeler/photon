@@ -1,0 +1,10 @@
+@mixin sidebar-root
+    display: flex
+    box-shadow: inset -1px 0 rgba($color-black, .05)
+    grid-area: sidebar
+
+@mixin sidebar
+    .sidebar
+        @include sidebar-root
+
+@include sidebar

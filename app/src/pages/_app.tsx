@@ -17,7 +17,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 //     plugins: [followCursor]
 // })
 
-import styles from '../styles/index.css'
+import styles from '../styles/index.sass'
 styles.length
 
 setDefaultLocale('de-DE')

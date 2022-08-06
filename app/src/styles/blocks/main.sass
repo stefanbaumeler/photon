@@ -1,0 +1,9 @@
+@mixin main-root
+    padding: 10px
+    grid-area: main
+
+@mixin main
+    .main
+        @include main-root
+
+@include main

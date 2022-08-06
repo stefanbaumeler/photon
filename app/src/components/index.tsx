@@ -1,1 +1,5 @@
 export { default as Sidebar } from './Sidebar'
+export { default as Brand } from './Brand'
+export { default as SearchBar } from './SearchBar'
+export { default as MainNav } from './MainNav'
+export { default as Search } from './Search'

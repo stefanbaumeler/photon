@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Sidebar } from '@/components'
+import { Sidebar, SearchBar } from '@/components'
 
 type Props = {
     children?: ReactNode
@@ -8,9 +8,13 @@ type Props = {
 const Layout = ({ children }: Props) => {
     return <>
         <div id="modal-root"></div>
-        <div id="content-root">
+        <div
+            id="content-root"
+            className="root"
+        >
+            <SearchBar />
             <Sidebar />
-            <main className="flex flex-col flex-1 pt-12 bg-gray-100 items-center px-10">
+            <main className="main">
                 {children}
             </main>
         </div>

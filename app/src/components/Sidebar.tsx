@@ -1,6 +1,8 @@
+import { MainNav } from '@/components'
+
 const Sidebar = () => {
-    return <aside>
-        foobar
+    return <aside className="sidebar">
+        <MainNav />
     </aside>
 }
 

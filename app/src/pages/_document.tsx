@@ -6,7 +6,7 @@ class Doc extends Document {
             <Html>
                 <TheHead>
                 </TheHead>
-                <body className="bg-gray-100 box-border h-screen">
+                <body>
                     <Main />
                     <NextScript />
                 </body>
