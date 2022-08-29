@@ -20,7 +20,7 @@ export default class MediaService {
         })
     }
 
-    async createMany (media: Medium[]) {
+    async createMany (media: Omit<Medium, 'id'>[]) {
         const primaryKeys = []
 
         for (const medium of media) {

@@ -4,4 +4,6 @@ export type Medium = {
     filename_download: string
     title: string
     description: string
+    width: number
+    height: number
 }

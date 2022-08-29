@@ -1,7 +1,14 @@
 @mixin sidebar-root
+    position: fixed
+    top: $searchbar-height
+    width: $sidebar-width
     display: flex
-    box-shadow: inset -1px 0 rgba($color-black, .05)
+    justify-content: center
+    flex-direction: column
+    height: calc(100vh - #{$searchbar-height})
+    box-sizing: border-box
     grid-area: sidebar
+    padding: 16px 0
 
 @mixin sidebar
     .sidebar

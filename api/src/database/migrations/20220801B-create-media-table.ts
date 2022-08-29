@@ -8,6 +8,8 @@ export async function up (knex: Knex) {
         t.timestamp('modified_at').defaultTo(knex.raw(defaults.now))
         t.string('filename_disk', 100)
         t.string('filename_download', 100)
+        t.integer('width')
+        t.integer('height')
         t.string('title', 100)
         t.text('description')
     }).then(() => knex.raw(onModifiedTrigger('media')))

@@ -9,7 +9,7 @@ export const createServer = async (): Promise<http.Server> => {
     return http.createServer(app)
 }
 
-const port = 4000
+const port = 2000
 const host = 'localhost'
 
 export const startServer = async () => {

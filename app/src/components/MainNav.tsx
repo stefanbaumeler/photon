@@ -1,35 +1,45 @@
-const MainNav = () => {
-    const items = [
-        'Photos',
-        'Albums',
-        'Shares',
-        'Archive',
-        'Trash',
-        'Settings'
+import Icon from '@mdi/react'
+import { TNav, TNavItem } from '@/types/app'
+import { useContext } from 'react'
+import { NavContext } from '@/contexts'
+import Link from 'next/link'
 
-        // Profile
-        // Sync
-        // API
-        // Partner
-        // Defaults
-        // Import / Export
-        // Notifications
-    ]
+type Props = {
+    nav: TNav
+}
 
-    return <nav className="main-nav">
-        <ul className="main-nav__list">
-            {items.map((item, key) =>
+const MainNav = ({ nav }: Props) => {
+    const navs = useContext(NavContext)
+
+    const click = (item: TNavItem) => {
+        if (item.subNav) {
+            navs.setActive([item.subNav])
+        }
+    }
+
+    return <nav className={nav.type}>
+        <ul className={`${nav.type}__list`}>
+            {nav.items.map((item, key) =>
                 <li
                     key={key}
-                    className="main-nav__item"
+                    className={`${nav.type}__item`}
                 >
-                    <a
-                        href="#"
-                        className="main-nav__link"
-                    >
-                        <span className="main-nav__icon" />
-                        {item}
-                    </a>
+                    <Link href={`/${item.href || '#'}`}>
+                        <a
+                            className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
+                            onClick={() => click(item)}
+                        >
+                            <span className={`${nav.type}__icon`}>
+                                <Icon
+                                    path={item.icon}
+                                    size={1}
+                                />
+                            </span>
+                            <span className={`${nav.type}__label`}>
+                                {item.label}
+                            </span>
+                        </a>
+                    </Link>
                 </li>
             )}
         </ul>

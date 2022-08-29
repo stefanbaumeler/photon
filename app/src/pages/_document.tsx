@@ -6,7 +6,7 @@ class Doc extends Document {
             <Html>
                 <TheHead>
                 </TheHead>
-                <body>
+                <body className="body">
                     <Main />
                     <NextScript />
                 </body>

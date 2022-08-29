@@ -18,7 +18,7 @@ const errorLink = onError(({
 })
 
 const httpLink = new HttpLink({
-    uri: 'https://auto-reply-api.staging.1up.io/api/graphql'
+    uri: 'http://localhost:2000/graphql'
 })
 
 const client = new ApolloClient({

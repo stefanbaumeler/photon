@@ -1,0 +1,19 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type Media {
+    description: String
+    filename_disk: String
+    filename_download: String
+    height: Int
+    id: ID
+    title: String
+    width: Int
+}
+
+type Query {
+    media: [Media]
+}

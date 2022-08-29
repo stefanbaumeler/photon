@@ -1,0 +1,21 @@
+@mixin search-root
+    padding: 8px
+    height: 100%
+
+@mixin search-input
+    border: none
+    background: $color-blue-lighter
+    padding: 8px
+    border-radius: 8px
+    height: 100%
+    box-sizing: border-box
+    width: calc(50vw - #{$sidebar-width / 2})
+
+@mixin search
+    .search
+        @include search-root
+
+        &__input
+            @include search-input
+
+@include search

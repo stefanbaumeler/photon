@@ -10,6 +10,8 @@ export const createApolloServer = async (app: Express) => {
             filename_download: String
             title: String
             description: String
+            width: Int
+            height: Int
         }
 
         type Query {

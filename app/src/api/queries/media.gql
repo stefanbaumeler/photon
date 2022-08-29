@@ -1,0 +1,9 @@
+query MediaQuery {
+    media {
+        id
+        title
+        filename_disk
+        width
+        height
+    }
+}

@@ -1,0 +1,71 @@
+@mixin medium-root
+    margin: 2px
+    position: relative
+    background-color: #D8D8D8
+    display: flex
+    cursor: pointer
+
+    &:before
+        content: ''
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background-image: linear-gradient(rgba($color-black, .2), transparent 50%)
+        z-index: 2
+        transition: opacity .25s
+        opacity: 0
+
+    &:hover:before
+        opacity: 1
+
+@mixin medium-placeholder
+    position: absolute
+    top: 0
+    left: 0
+    image-rendering: pixelated
+
+@mixin medium-image
+    position: relative
+    z-index: 1
+    transition: opacity .1s
+    opacity: 0
+
+    &--loaded
+        opacity: 1
+
+@mixin medium-check
+    opacity: 0
+    position: absolute
+    top: 8px
+    left: 8px
+    width: 24px
+    height: 24px
+    background-color: #D8D8D8
+    border-radius: 50%
+    z-index: 3
+    transition: opacity .1s, background-color .25s
+
+    &:hover
+        background-color: #FFFFFF
+
+
+    @at-root .medium:hover &
+        opacity: 1
+
+
+@mixin medium
+    .medium
+        @include medium-root
+
+        &__placeholder
+            @include medium-placeholder
+
+        &__image
+            @include medium-image
+
+        &__check
+            @include medium-check
+
+@include medium

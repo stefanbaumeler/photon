@@ -1,8 +1,22 @@
 import { MainNav } from '@/components'
+import { useContext } from 'react'
+import { NavContext } from '@/contexts'
+
+// Sync
+// API
+// Partner
+// Defaults
+// Import / Export
+// Notifications
 
 const Sidebar = () => {
+    const navs = useContext(NavContext)
+
     return <aside className="sidebar">
-        <MainNav />
+        {navs?.navs.filter((nav) => navs.active.includes(nav.id)).map((nav, k) => <MainNav
+            key={k}
+            nav={nav}
+        />)}
     </aside>
 }
 

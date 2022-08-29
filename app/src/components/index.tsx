@@ -1,5 +1,11 @@
 export { default as Sidebar } from './Sidebar'
 export { default as Brand } from './Brand'
+export { default as Details } from './Details'
 export { default as SearchBar } from './SearchBar'
 export { default as MainNav } from './MainNav'
 export { default as Search } from './Search'
+export { default as Media } from './Media'
+export { default as MediaSection } from './MediaSection'
+export { default as Medium } from './Medium'
+export { default as Uploader } from './Uploader'
+

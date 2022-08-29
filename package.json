@@ -1,9 +1,9 @@
 {
     "name": "photon",
+    "private": true,
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
-    "packageManager": "yarn@3.2.2",
     "workspaces": [
         "./app",
         "./api"

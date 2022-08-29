@@ -1,25 +1,63 @@
 @mixin main-nav-root
     width: 100%
+    height: 100%
+
+    &:last-of-type
+        display: flex
+        align-items: flex-end
+
+        &:only-of-type
+            align-items: flex-start
 
 @mixin main-nav-list
     margin: 0
     list-style: none
-    padding: 0
+    padding: 0 8px 0 0
     display: flex
     flex-direction: column
+    width: 100%
+    box-sizing: border-box
 
 @mixin main-nav-link
-    color: $color-black
+    font-size: 15px
+    color: $color-gray-dark
     display: flex
     align-items: center
     gap: 10px
-    padding: 5px 10px
+    padding: 4px 8px
+    position: relative
+    transition: background-color .25s
+
+    &:before
+        content: ''
+        position: absolute
+        inset: 0
+        transition: background-color .25s
+
+
+
+    &--active
+        font-weight: bold
+        background-color: $color-blue-lighter
+        box-shadow: inset 4px 0 $color-blue-light
+        color: $color-blue-light
+
+        &:hover:before
+            background-color: rgba($color-black, .025)
+
+    &:hover
+        background-color: $color-blue-lighter
 
 @mixin main-nav-icon
-    width: 50px
-    height: 40px
-    background: red
-    display: block
+    position: relative
+    width: 48px
+    height: 32px
+    display: flex
+    justify-content: center
+    align-items: center
+
+@mixin main-nav-label
+    position: relative
 
 @mixin main-nav
     .main-nav
@@ -33,5 +71,8 @@
 
         &__icon
             @include main-nav-icon
+
+        &__label
+            @include main-nav-label
 
 @include main-nav

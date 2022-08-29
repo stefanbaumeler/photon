@@ -1,10 +1,10 @@
 const Brand = () => {
     return <div className="brand">
         <div className="brand__logo">
-            Pn
+            Pi
         </div>
         <div className="brand__name">
-            Photon
+            Picchu
         </div>
     </div>
 }

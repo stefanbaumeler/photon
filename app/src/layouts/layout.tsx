@@ -17,6 +17,7 @@ const Layout = ({ children }: Props) => {
             <main className="main">
                 {children}
             </main>
+            <div className="scrollbar"></div>
         </div>
     </>
 }
