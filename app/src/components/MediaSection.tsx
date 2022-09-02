@@ -1,14 +1,8 @@
 import { TMedia } from '@/types/api'
+import { GalleryItem } from '@/types/app'
 import { Medium } from '@/components'
 import { useEffect, useRef, useState } from 'react'
-import { findShortestPath } from '@/util/dijkstra'
-
-type GalleryItem = {
-    medium: TMedia
-    ratio: number
-    width?: number
-    height?: number
-}
+import { generateGallery } from '@/util/gallery'
 
 type Props = {
     media: TMedia[]
@@ -18,8 +12,6 @@ const MediaSection = ({ media }: Props) => {
     const galleryEl = useRef(null)
     const [containerWidth, setContainerWidth] = useState(0)
     const [images, setImages] = useState<GalleryItem[]>([])
-    const targetRowHeight = 300
-    const margin = 2
 
     useEffect(() => {
         setImages(media
@@ -51,44 +43,12 @@ const MediaSection = ({ media }: Props) => {
         }
     })
 
-    const getCommonHeight = (row: GalleryItem[]) => {
-        const rowWidth = containerWidth - row.length * (margin * 2)
-        const totalAspectRatio = row.reduce((acc, photo) => acc + photo.ratio, 0)
-        return rowWidth / totalAspectRatio
-    }
-
-    const makeGetNeighbors = (limitNodeSearch: number) => (start: string) => {
-        const results: {[key: string]: number} = {}
-        const startNum = +start
-        results[+start] = 0
-
-        for (let i = startNum + 1; i < images.length + 1; ++i) {
-            if (i - startNum > limitNodeSearch) {
-                break
-            }
-
-            results[i.toString()] = Math.pow(Math.abs(getCommonHeight(images.slice(startNum, i)) - targetRowHeight), 2)
-        }
-
-        return results
-    }
-
-    const generateGallery = () => {
-        const idealNodeSearch = containerWidth >= 450 ? Math.round(containerWidth / targetRowHeight / 1.5 * 100) / 100 + 8 : 2
-        const getNeighbors = makeGetNeighbors(idealNodeSearch)
-        const path = findShortestPath(getNeighbors, '0', images.length).map((node) => +node)
-
-        for (let i = 1; i < path.length; ++i) {
-            const height = getCommonHeight(images.slice(path[i - 1], path[i]))
-
-            for (let j = path[i - 1]; j < path[i]; ++j) {
-                images[j].width = Math.round(height * images[j].ratio * 100) / 100
-                images[j].height = height
-            }
-        }
-    }
-
-    generateGallery()
+    generateGallery({
+        containerWidth,
+        images,
+        targetRowHeight: 300,
+        margin: 2
+    })
 
     return <div
         className="media-section"

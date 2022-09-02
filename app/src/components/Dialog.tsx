@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { DialogContext } from '@/contexts'
+import { DialogContext } from '@/providers'
 import { TDialogButton } from '@/types/app'
 
 const Dialog = () => {

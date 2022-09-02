@@ -1,6 +1,6 @@
 import { MainNav } from '@/components'
 import { useContext } from 'react'
-import { NavContext } from '@/contexts'
+import { NavContext } from '@/providers'
 
 // Sync
 // API

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { DetailsContext, DialogContext } from '@/contexts'
+import { DetailsContext, DialogContext } from '@/providers'
 import Icon from '@mdi/react'
 import { mdiArrowLeft, mdiArrowRight,
     mdiInformation,

@@ -1,24 +1,12 @@
 @mixin medium-root
     margin: 2px
     position: relative
-    background-color: #D8D8D8
-    display: flex
     cursor: pointer
+    background-color: #D8D8D8
 
-    &:before
-        content: ''
-        position: absolute
-        top: 0
-        left: 0
-        width: 100%
-        height: 100%
-        background-image: linear-gradient(rgba($color-black, .2), transparent 50%)
-        z-index: 2
-        transition: opacity .25s
-        opacity: 0
+@mixin medium-container
+    pointer-events: all
 
-    &:hover:before
-        opacity: 1
 
 @mixin medium-placeholder
     position: absolute
@@ -26,11 +14,46 @@
     left: 0
     image-rendering: pixelated
 
+@mixin medium-image-container
+    display: flex
+    position: relative
+    inset: 0
+    box-sizing: border-box
+
+    &:before
+        content: ''
+        position: absolute
+        inset: 0
+        background-image: linear-gradient(rgba($color-black, .2), transparent 50%)
+        z-index: 2
+        transition: opacity .25s
+        opacity: 0
+        pointer-events: none
+
+        @at-root .medium:hover &
+            opacity: 1
+
+    &:after
+        content: ''
+        position: absolute
+        inset: 0
+        z-index: 2
+        transition: box-shadow .1s
+        box-shadow: inset 0 0 0 0 $color-secondary-highlight
+
+        @at-root .medium--selected &
+            box-shadow: inset 0 0 0 16px $color-secondary-highlight
+
+
+
 @mixin medium-image
     position: relative
     z-index: 1
-    transition: opacity .1s
+    transition: opacity .1s, transform .1s
     opacity: 0
+
+    @at-root .medium--selected &
+        transform: scale(.9)
 
     &--loaded
         opacity: 1
@@ -45,22 +68,40 @@
     background-color: #D8D8D8
     border-radius: 50%
     z-index: 3
-    transition: opacity .1s, background-color .25s
+    transition: opacity .1s, background-color .25s, color .25s, transform .25s
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: center
 
     &:hover
-        background-color: #FFFFFF
+        background-color: $color-secondary-highlight
+
+    &:active
+        transform: scale(.75)
+        transition: none
 
 
     @at-root .medium:hover &
         opacity: 1
+
+    @at-root .medium--selected &
+        background-color: $color-secondary-dark
+        color: $color-white
 
 
 @mixin medium
     .medium
         @include medium-root
 
+        &__container
+            @include medium-container
+
         &__placeholder
             @include medium-placeholder
+
+        &__image-container
+            @include medium-image-container
 
         &__image
             @include medium-image

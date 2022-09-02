@@ -1,9 +1,8 @@
 import { ApolloProvider } from '@apollo/client'
-import { NavProvider } from '@/providers'
+import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
-import DialogProvider from '@/providers/DialogProvider'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -24,11 +23,9 @@ const AutoReplyApp = ({
     Component, pageProps
 }: AppProps) => {
     return <ApolloProvider client={client}>
-        <DialogProvider>
-            <NavProvider>
-                <Component {...pageProps} />
-            </NavProvider>
-        </DialogProvider>
+        <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider]}>
+            <Component {...pageProps} />
+        </ProviderProvider>
     </ApolloProvider>
 }
 

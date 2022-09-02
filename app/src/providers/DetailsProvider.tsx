@@ -1,9 +1,21 @@
-import { DetailsContext } from '@/contexts'
-import { ReactNode, useState } from 'react'
+import { createContext, ReactNode, useState } from 'react'
+import { TMedia } from '@/types/api'
 
 type Props = {
     children?: ReactNode
 }
+
+interface DetailsContext {
+    active: boolean
+    infos: boolean
+    medium: TMedia
+    collection: TMedia[]
+    openDetails: (medium: TMedia, collection: TMedia[]) => void
+    closeDetails: () => void
+    openInfos: () => void
+    closeInfos: () => void
+}
+const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
     const [medium, setMedium] = useState({})
@@ -37,4 +49,6 @@ const DetailsProvider = ({ children }: Props) => {
     </DetailsContext.Provider>
 }
 
-export default DetailsProvider
+export {
+    DetailsProvider, DetailsContext
+}

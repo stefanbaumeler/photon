@@ -1,3 +1,6 @@
-export { default as DetailsProvider } from './DetailsProvider'
-export { default as NavProvider } from './NavProvider'
+export * from './DetailsProvider'
+export * from './DialogProvider'
+export * from './NavProvider'
+export * from './SelectionProvider'
 
+export { default as ProviderProvider } from './ProviderProvider'

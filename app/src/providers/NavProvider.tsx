@@ -1,5 +1,4 @@
-import { ReactNode, useState } from 'react'
-import { NavContext } from '@/contexts'
+import { createContext, ReactNode, useState } from 'react'
 import { mdiAccountOutline, mdiApi,
     mdiArchiveOutline, mdiArrowLeft, mdiCloudSyncOutline, mdiCogOutline, mdiCogs, mdiDevices, mdiExitRun,
     mdiImageMultipleOutline,
@@ -7,7 +6,7 @@ import { mdiAccountOutline, mdiApi,
     mdiShareVariant,
     mdiTrashCanOutline } from '@mdi/js'
 import { useRouter } from 'next/router'
-import { TNav } from '@/types/app'
+import { TNav, TNavContext } from '@/types/app'
 
 type Props = {
     children?: ReactNode
@@ -18,6 +17,8 @@ enum ENavs {
     SETTINGS = 'SETTINGS',
     USER = 'USER'
 }
+
+const NavContext = createContext<TNavContext>(null)
 
 const NavProvider = ({ children }: Props) => {
     const router = useRouter()
@@ -171,4 +172,6 @@ const NavProvider = ({ children }: Props) => {
     </NavContext.Provider>
 }
 
-export default NavProvider
+export {
+    NavProvider, NavContext
+}

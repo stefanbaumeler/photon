@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { TMedia } from '@/types/api'
 
 export type TMediaInput = {
 
@@ -28,4 +29,11 @@ export type TNavContext = {
     active: string[]
     setActive: Dispatch<SetStateAction<string[]>>
     navs: TNav[]
+}
+
+export type GalleryItem = {
+    medium: TMedia
+    ratio: number
+    width?: number
+    height?: number
 }
