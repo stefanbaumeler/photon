@@ -3,9 +3,13 @@ import { TMedia } from '@/types/api'
 
 interface DetailsContext {
     active: boolean
+    infos: boolean
     medium: TMedia
-    openDetails: (medium: TMedia) => void
+    collection: TMedia[]
+    openDetails: (medium: TMedia, collection: TMedia[]) => void
     closeDetails: () => void
+    openInfos: () => void
+    closeInfos: () => void
 }
 const context = createContext<DetailsContext | null>(null)
 

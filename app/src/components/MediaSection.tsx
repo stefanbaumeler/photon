@@ -101,6 +101,7 @@ const MediaSection = ({ media }: Props) => {
             }}
         >
             {images.map((galleryItem, k) => <Medium
+                collection={media}
                 medium={galleryItem.medium}
                 width={galleryItem.width}
                 height={galleryItem.height}

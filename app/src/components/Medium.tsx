@@ -3,20 +3,21 @@ import { useContext, useEffect, useState } from 'react'
 import { DetailsContext } from '@/contexts'
 
 type Props = {
+    collection: TMedia[]
     medium: TMedia
     width: number
     height: number
 }
 
 const Medium = ({
-    medium, width, height
+    medium, width, height, collection
 }: Props) => {
     const [loading, setLoading] = useState(true)
     const [maxWidth, setMaxWidth] = useState(50)
     const { openDetails } = useContext(DetailsContext)
 
     const open = () => {
-        openDetails(medium)
+        openDetails(medium, collection)
     }
 
     useEffect(() => {

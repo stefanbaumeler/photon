@@ -14,14 +14,22 @@ export const createApolloServer = async (app: Express) => {
             height: Int
         }
 
+        type Mutation {
+            deleteMedium(id: ID): String
+        }
+
         type Query {
             media: [Media]
+            deleteMedium(id: ID): String
         }
     `
 
     const resolvers = {
         Query: {
             media: () => new MediaService().readMany()
+        },
+        Mutation: {
+            deleteMedium: async (_: any, input: { id: string }) => new MediaService().destroy(input.id)
         }
     }
 

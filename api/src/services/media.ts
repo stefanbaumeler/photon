@@ -40,4 +40,10 @@ export default class MediaService {
     async readMany (limit = 100) {
         return this.knex.from(this.tableName).select().limit(limit)
     }
+
+    async destroy (key: string | number) {
+        return this.knex.from(this.tableName).where({
+            id: key
+        }).delete().limit(1)
+    }
 }

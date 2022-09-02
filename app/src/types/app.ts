@@ -4,6 +4,12 @@ export type TMediaInput = {
 
 }
 
+export type TDialogButton = {
+    label: string
+    action: () => void
+    type?: 'secondary'
+}
+
 export type TNavItem = {
     label: string
     icon: string

@@ -2,6 +2,7 @@
 
 schema {
     query: Query
+    mutation: Mutation
 }
 
 type Media {
@@ -14,6 +15,11 @@ type Media {
     width: Int
 }
 
+type Mutation {
+    deleteMedium(id: ID): String
+}
+
 type Query {
+    deleteMedium(id: ID): String
     media: [Media]
 }

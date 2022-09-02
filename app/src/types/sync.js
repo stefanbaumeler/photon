@@ -13,6 +13,7 @@ module.exports = {
                 // 'fragment-matcher'
             ],
             config: {
+                withMutationFn: true,
                 typesPrefix: 'T',
                 addDocBlocks: false,
                 dedupeFragments: true,

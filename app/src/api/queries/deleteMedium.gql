@@ -1,0 +1,3 @@
+mutation deleteMedium($id: ID) {
+    deleteMedium(id: $id)
+}

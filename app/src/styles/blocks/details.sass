@@ -1,8 +1,8 @@
 @mixin details-root
     position: fixed
     inset: 0
-    display: grid
-    grid-template: 'preview sidebar' 100vh / calc(100vw - #{$sidebar-width * 1.5}) #{$sidebar-width * 1.5}
+    display: flex
+    transition: grid-template .25s
     opacity: 0
     pointer-events: none
     z-index: 4
@@ -11,29 +11,30 @@
         opacity: 1
         pointer-events: all
 
-
-@mixin details-sidebar-area
-    grid-area: sidebar
-
 @mixin details-sidebar
     background-color: $color-white
-    width: 100%
+    width: $sidebar-width * 1.5
     height: 100%
     transition: transform .25s
     transform: translateX(100%)
+    flex-shrink: 0
 
     @at-root .details--active &
         transform: none
 
 @mixin details-preview
-    grid-area: preview
+    width: 100vw
+    flex-shrink: 0
     position: relative
     background-color: #080808
-    transition: opacity .25s
+    transition: opacity .25s, width .25s
     opacity: 0
 
     @at-root .details--active &
         opacity: 1
+
+    @at-root .details--infos &
+        width: calc(100vw - #{$sidebar-width * 1.5})
 
 @mixin details-container
     position: absolute
@@ -69,9 +70,6 @@
 @mixin details
     .details
         @include details-root
-
-        &__sidebar-area
-            @include details-sidebar-area
 
         &__sidebar
             @include details-sidebar

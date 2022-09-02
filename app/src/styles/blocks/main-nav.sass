@@ -20,7 +20,7 @@
 
 @mixin main-nav-link
     font-size: 15px
-    color: $color-gray-dark
+    color: $color-black
     display: flex
     align-items: center
     gap: 10px
@@ -35,18 +35,18 @@
         transition: background-color .25s
 
 
-
     &--active
         font-weight: bold
-        background-color: $color-blue-lighter
-        box-shadow: inset 4px 0 $color-blue-light
-        color: $color-blue-light
+        background-color: $color-secondary-highlight
+        box-shadow: inset 4px 0 $color-secondary-dark
+        color: $color-secondary-dark
+
 
         &:hover:before
-            background-color: rgba($color-black, .025)
+            background-color: rgba($color-black, .05)
 
     &:hover
-        background-color: $color-blue-lighter
+        background-color: rgba($color-secondary-highlight, 1)
 
 @mixin main-nav-icon
     position: relative

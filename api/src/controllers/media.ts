@@ -36,6 +36,16 @@ router.get('/:id', async (req, res, next) => {
     return next()
 })
 
+router.delete('/:id', async (req, res, next) => {
+    const service = new MediaService()
+
+    const result = await service.destroy(req.params.id)
+
+    res.status(200)
+
+    return next()
+})
+
 router.post('/', upload.array('upload'), async (req, res, next) => {
     const service = new MediaService()
 
