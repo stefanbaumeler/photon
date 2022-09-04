@@ -2,6 +2,8 @@ import { createContext, ReactNode, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
 import { TNav, TNavContext } from '@/types/app'
+import { useTranslation } from 'react-i18next'
+import { ETrans } from '@/types/translations'
 
 type Props = {
     children?: ReactNode
@@ -17,6 +19,7 @@ const NavContext = createContext<TNavContext>(null)
 
 const NavProvider = ({ children }: Props) => {
     const router = useRouter()
+    const { t } = useTranslation()
 
     const defaultNav = router.route.split('/')[1].toUpperCase()
 
@@ -28,27 +31,27 @@ const NavProvider = ({ children }: Props) => {
             type: 'main-nav',
             items: [
                 {
-                    label: 'Photos',
+                    label: t(ETrans.PHOTO_PLURAL),
                     icon: Icons.mdiImageOutline,
                     href: ''
                 },
                 {
-                    label: 'Albums',
+                    label: t(ETrans.ALBUM_PLURAL),
                     icon: Icons.mdiImageMultipleOutline,
                     href: 'albums'
                 },
                 {
-                    label: 'Shares',
+                    label: t(ETrans.SHARING),
                     icon: Icons.mdiShareVariant,
-                    href: 'shares'
+                    href: 'sharing'
                 },
                 {
-                    label: 'Archive',
+                    label: t(ETrans.ARCHIVE),
                     icon: Icons.mdiArchiveOutline,
                     href: 'archive'
                 },
                 {
-                    label: 'Trash',
+                    label: t(ETrans.TRASH),
                     icon: Icons.mdiTrashCanOutline,
                     href: 'trash'
                 }
@@ -59,7 +62,7 @@ const NavProvider = ({ children }: Props) => {
             type: 'main-nav',
             items: [
                 {
-                    label: 'Settings',
+                    label: t(ETrans.SETTING_PLURAL),
                     icon: Icons.mdiCogOutline,
                     subNav: ENavs.SETTINGS,
                     href: 'settings'
@@ -71,47 +74,47 @@ const NavProvider = ({ children }: Props) => {
             type: 'main-nav',
             items: [
                 {
-                    label: 'General',
+                    label: t(ETrans.GENERAL),
                     icon: Icons.mdiCogs,
                     href: 'settings'
                 },
                 {
-                    label: 'Security',
+                    label: t(ETrans.SECURITY),
                     icon: Icons.mdiSecurity,
                     href: 'settings/security'
                 },
                 {
-                    label: 'User',
+                    label: t(ETrans.USER),
                     icon: Icons.mdiAccountOutline,
                     href: 'settings/user'
                 },
                 {
-                    label: 'Sharing',
+                    label: t(ETrans.SHARING),
                     icon: Icons.mdiShareVariant,
                     href: 'settings/sharing'
                 },
                 {
-                    label: 'API',
+                    label: t(ETrans.API),
                     icon: Icons.mdiApi,
                     href: 'settings/api'
                 },
                 {
-                    label: 'Search',
+                    label: t(ETrans.SEARCH),
                     icon: Icons.mdiMagnify,
                     href: 'settings/search'
                 },
                 {
-                    label: 'Sync',
+                    label: t(ETrans.SYNC),
                     icon: Icons.mdiCloudSyncOutline,
                     href: 'settings/sync'
                 },
                 {
-                    label: 'Devices',
+                    label: t(ETrans.DEVICE_PLURAL),
                     icon: Icons.mdiDevices,
                     href: 'settings/devices'
                 },
                 {
-                    label: 'Export',
+                    label: t(ETrans.EXPORT),
                     icon: Icons.mdiExitRun,
                     href: 'settings/export'
                 }
@@ -123,7 +126,7 @@ const NavProvider = ({ children }: Props) => {
             type: 'main-nav',
             items: [
                 {
-                    label: 'Back',
+                    label: t(ETrans.BACK),
                     icon: Icons.mdiArrowLeft,
                     subNav: ENavs.HOME,
                     href: ''

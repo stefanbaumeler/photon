@@ -1,12 +1,16 @@
-import { forwardRef, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
 import { useDeleteMedia } from '@/types/api'
 import { useMedia } from '@/api/hooks'
 import { Check, IconButton } from '@/components'
+import { useTranslation } from 'react-i18next'
+import { ETrans } from '@/types/translations'
 
 const Details = () => {
+    const { t } = useTranslation()
+
     const {
         active, medium, collection,
         openDetails, closeDetails,
@@ -71,12 +75,12 @@ const Details = () => {
     const openAskDeleteDialog = () => {
         openDialog('Remove from Picchu and all synced devices?', [
             {
-                label: 'Cancel',
+                label: t(ETrans.MOVE_TO_TRASH),
                 action: closeDialog,
                 type: 'secondary'
             },
             {
-                label: 'Move to trash',
+                label: t(ETrans.MOVE_TO_TRASH),
                 action: confirmDeleteMedium
             }
         ])
@@ -103,7 +107,9 @@ const Details = () => {
         }
 
         return <IconButton
-            hint={'Show Infos'}
+            hint={t(ETrans.SHOW_THING, {
+                thing: t(ETrans.INFO_PLURAL)
+            })}
             white={true}
             onClick={openInfos}
             icon={Icons.mdiInformation}
@@ -113,7 +119,7 @@ const Details = () => {
     const RightToolbar = () => {
         if (isInSelectionMode) {
             return <Tippy
-                content="Select"
+                content={t(ETrans.SELECT)}
             >
                 <Check
                     onClick={select}
@@ -128,7 +134,7 @@ const Details = () => {
         return <>
             <IconButton
                 href={src}
-                hint={'Download'}
+                hint={t(ETrans.DOWNLOAD)}
                 white={true}
                 onClick={download}
                 download={medium.filename_download}
@@ -136,7 +142,7 @@ const Details = () => {
                 icon={Icons.mdiTrayArrowDown}
             />
             <IconButton
-                hint={'Delete'}
+                hint={t(ETrans.DELETE)}
                 white={true}
                 onClick={openAskDeleteDialog}
                 icon={Icons.mdiTrashCanOutline}
@@ -150,7 +156,7 @@ const Details = () => {
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
-                        hint={'Back'}
+                        hint={t(ETrans.BACK)}
                         white={true}
                         onClick={closeDetails}
                         icon={Icons.mdiArrowLeft}
@@ -180,7 +186,9 @@ const Details = () => {
             <div className="toolbar">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
-                        hint={'Hide Infos'}
+                        hint={t(ETrans.HIDE_THING, {
+                            thing: t(ETrans.INFO_PLURAL)
+                        })}
                         onClick={closeInfos}
                         icon={Icons.mdiArrowRight}
                     />

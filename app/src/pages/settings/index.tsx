@@ -1,7 +1,6 @@
 import Layout from '@/layouts/layout'
 import { useMedia } from '@/api/hooks'
-import { Media, Uploader, Details } from '@/components'
-import { DetailsProvider } from '@/providers'
+import { Uploader } from '@/components'
 
 const Home = () => {
     const { state: [{ media }] } = useMedia()
@@ -14,6 +13,14 @@ const Home = () => {
                     <h1>
                         Settings
                     </h1>
+                    <ul>
+                        <li>
+                            Trash deletion offset
+                        </li>
+                        <li>
+                            Language
+                        </li>
+                    </ul>
                 </div>
             </div>
         </section>

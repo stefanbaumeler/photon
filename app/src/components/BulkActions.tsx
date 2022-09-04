@@ -4,8 +4,12 @@ import { useContext } from 'react'
 import { DialogContext, SelectionContext } from '@/providers'
 import { useDeleteMedia } from '@/types/api'
 import { useMedia } from '@/api/hooks'
+import { ETrans } from '@/types/translations'
+import { useTranslation } from 'react-i18next'
 
-const Brand = () => {
+const BulkActions = () => {
+    const { t } = useTranslation()
+
     const {
         openDialog, closeDialog
     } = useContext(DialogContext)
@@ -25,12 +29,12 @@ const Brand = () => {
     const openAskDeleteDialog = () => {
         openDialog(`Remove ${selected.size} from Picchu and all synced devices?`, [
             {
-                label: 'Cancel',
+                label: t(ETrans.CANCEL),
                 action: closeDialog,
                 type: 'secondary'
             },
             {
-                label: 'Move to trash',
+                label: t(ETrans.MOVE_TO_TRASH),
                 action: confirmDeleteMedia
             }
         ])
@@ -54,21 +58,21 @@ const Brand = () => {
 
     return <div className="bulk-actions">
         <IconButton
-            hint={'Add to...'}
+            hint={t(ETrans.ADD_TO)}
             icon={Icons.mdiPlus}
         />
         <IconButton
-            hint={'Download'}
+            hint={t(ETrans.DOWNLOAD)}
             onClick={download}
             external={true}
             icon={Icons.mdiTrayArrowDown}
         />
         <IconButton
-            hint={'Delete'}
+            hint={t(ETrans.DELETE)}
             onClick={openAskDeleteDialog}
             icon={Icons.mdiTrashCanOutline}
         />
     </div>
 }
 
-export default Brand
+export default BulkActions
