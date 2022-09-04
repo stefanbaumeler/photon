@@ -28,49 +28,49 @@ export type TMedia = {
 
 export type TMutation = {
   __typename?: 'Mutation'
-  deleteMedium?: Maybe<Scalars['String']>
+  deleteMedia?: Maybe<Scalars['String']>
 }
 
-export type TMutationDeleteMediumArgs = {
-  id?: InputMaybe<Scalars['ID']>
+export type TMutationDeleteMediaArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
 export type TQuery = {
   __typename?: 'Query'
-  deleteMedium?: Maybe<Scalars['String']>
+  deleteMedia?: Maybe<Scalars['String']>
   media?: Maybe<Array<Maybe<TMedia>>>
 }
 
-export type TQueryDeleteMediumArgs = {
-  id?: InputMaybe<Scalars['ID']>
+export type TQueryDeleteMediaArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
-export type TDeleteMediumVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']>
+export type TDeleteMediaVariables = Exact<{
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
 }>
 
-export type TDeleteMedium = { __typename?: 'Mutation', deleteMedium?: string | null }
+export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: string | null }
 
 export type TMediaQueryVariables = Exact<{ [key: string]: never }>
 
 export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Media', id?: string | null, title?: string | null, filename_disk?: string | null, width?: number | null, height?: number | null } | null> | null }
 
-export const DeleteMediumDocument = gql`
-    mutation deleteMedium($id: ID) {
-  deleteMedium(id: $id)
+export const DeleteMediaDocument = gql`
+    mutation deleteMedia($ids: [ID]) {
+  deleteMedia(ids: $ids)
 }
     `
-export type TDeleteMediumMutationFn = Apollo.MutationFunction<TDeleteMedium, TDeleteMediumVariables>
-export function useDeleteMedium (baseOptions?: Apollo.MutationHookOptions<TDeleteMedium, TDeleteMediumVariables>) {
+export type TDeleteMediaMutationFn = Apollo.MutationFunction<TDeleteMedia, TDeleteMediaVariables>
+export function useDeleteMedia (baseOptions?: Apollo.MutationHookOptions<TDeleteMedia, TDeleteMediaVariables>) {
     const options = {
         ...defaultOptions,
         ...baseOptions
     }
-    return Apollo.useMutation<TDeleteMedium, TDeleteMediumVariables>(DeleteMediumDocument, options)
+    return Apollo.useMutation<TDeleteMedia, TDeleteMediaVariables>(DeleteMediaDocument, options)
 }
-export type DeleteMediumHookResult = ReturnType<typeof useDeleteMedium>
-export type DeleteMediumMutationResult = Apollo.MutationResult<TDeleteMedium>
-export type DeleteMediumMutationOptions = Apollo.BaseMutationOptions<TDeleteMedium, TDeleteMediumVariables>
+export type DeleteMediaHookResult = ReturnType<typeof useDeleteMedia>
+export type DeleteMediaMutationResult = Apollo.MutationResult<TDeleteMedia>
+export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia, TDeleteMediaVariables>
 export const MediaQueryDocument = gql`
     query MediaQuery {
   media {

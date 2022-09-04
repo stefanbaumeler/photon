@@ -1,8 +1,9 @@
 import { TMedia } from '@/types/api'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
-import { mdiCheck } from '@mdi/js'
+import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
+import { Check } from '@/components/index'
 
 type Props = {
     collection: TMedia[]
@@ -15,16 +16,20 @@ const Medium = ({
     medium, width, height, collection
 }: Props) => {
     const [loading, setLoading] = useState(true)
-    const [selected, setSelected] = useState(false)
-
     const [maxWidth, setMaxWidth] = useState(50)
     const { openDetails } = useContext(DetailsContext)
+
     const {
-        addSelected, removeSelected, isSelected, selected: foo
+        addSelected, removeSelected, isSelected, isInSelectionMode
     } = useContext(SelectionContext)
 
-    const open = () => {
-        openDetails(medium, collection)
+    const select = () => {
+        if (isSelected(medium)) {
+            removeSelected(medium)
+        }
+        else {
+            addSelected(medium)
+        }
     }
 
     useEffect(() => {
@@ -33,27 +38,34 @@ const Medium = ({
         }
     }, [width])
 
-    const select = () => {
-        if (isSelected(medium)) {
-            removeSelected(medium)
-            setSelected(false)
-        }
-        else {
-            addSelected(medium)
-            setSelected(true)
-        }
-
-        console.log(foo)
+    const forceOpen = () => {
+        openDetails(medium, collection)
     }
 
-    return <div className={`medium${selected ? ' medium--selected' : ''}`}>
+    const open = () => {
+        if (isInSelectionMode) {
+            select()
+        }
+        else {
+            openDetails(medium, collection)
+        }
+    }
+
+    return <div className={`medium${isSelected(medium) ? ' medium--selected' : ''}`}>
+        <div className="medium__check">
+            <Check
+                onClick={select}
+                ready={isInSelectionMode}
+                checked={isSelected(medium)}
+            />
+        </div>
         <button
-            className="medium__check"
-            onClick={select}
+            className="medium__open-fallback"
+            onClick={forceOpen}
         >
             <Icon
-                path={mdiCheck}
-                size={.9}
+                path={Icons.mdiMagnifyPlusOutline}
+                size={1}
             />
         </button>
         <div

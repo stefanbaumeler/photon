@@ -41,9 +41,9 @@ export default class MediaService {
         return this.knex.from(this.tableName).select().limit(limit)
     }
 
-    async destroy (key: string | number) {
-        return this.knex.from(this.tableName).where({
-            id: key
-        }).delete().limit(1)
+    async destroy (keys: string[] | number[] | string | number) {
+        const keysToDestroy = Array.isArray(keys) ? keys : [keys]
+
+        return this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete()
     }
 }

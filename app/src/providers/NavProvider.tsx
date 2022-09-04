@@ -1,10 +1,5 @@
 import { createContext, ReactNode, useState } from 'react'
-import { mdiAccountOutline, mdiApi,
-    mdiArchiveOutline, mdiArrowLeft, mdiCloudSyncOutline, mdiCogOutline, mdiCogs, mdiDevices, mdiExitRun,
-    mdiImageMultipleOutline,
-    mdiImageOutline, mdiLogoutVariant, mdiMagnify, mdiSecurity,
-    mdiShareVariant,
-    mdiTrashCanOutline } from '@mdi/js'
+import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
 import { TNav, TNavContext } from '@/types/app'
 
@@ -34,27 +29,27 @@ const NavProvider = ({ children }: Props) => {
             items: [
                 {
                     label: 'Photos',
-                    icon: mdiImageOutline,
+                    icon: Icons.mdiImageOutline,
                     href: ''
                 },
                 {
                     label: 'Albums',
-                    icon: mdiImageMultipleOutline,
+                    icon: Icons.mdiImageMultipleOutline,
                     href: 'albums'
                 },
                 {
                     label: 'Shares',
-                    icon: mdiShareVariant,
+                    icon: Icons.mdiShareVariant,
                     href: 'shares'
                 },
                 {
                     label: 'Archive',
-                    icon: mdiArchiveOutline,
+                    icon: Icons.mdiArchiveOutline,
                     href: 'archive'
                 },
                 {
                     label: 'Trash',
-                    icon: mdiTrashCanOutline,
+                    icon: Icons.mdiTrashCanOutline,
                     href: 'trash'
                 }
             ]
@@ -65,7 +60,7 @@ const NavProvider = ({ children }: Props) => {
             items: [
                 {
                     label: 'Settings',
-                    icon: mdiCogOutline,
+                    icon: Icons.mdiCogOutline,
                     subNav: ENavs.SETTINGS,
                     href: 'settings'
                 }
@@ -77,47 +72,47 @@ const NavProvider = ({ children }: Props) => {
             items: [
                 {
                     label: 'General',
-                    icon: mdiCogs,
+                    icon: Icons.mdiCogs,
                     href: 'settings'
                 },
                 {
                     label: 'Security',
-                    icon: mdiSecurity,
+                    icon: Icons.mdiSecurity,
                     href: 'settings/security'
                 },
                 {
                     label: 'User',
-                    icon: mdiAccountOutline,
+                    icon: Icons.mdiAccountOutline,
                     href: 'settings/user'
                 },
                 {
                     label: 'Sharing',
-                    icon: mdiShareVariant,
+                    icon: Icons.mdiShareVariant,
                     href: 'settings/sharing'
                 },
                 {
                     label: 'API',
-                    icon: mdiApi,
+                    icon: Icons.mdiApi,
                     href: 'settings/api'
                 },
                 {
                     label: 'Search',
-                    icon: mdiMagnify,
+                    icon: Icons.mdiMagnify,
                     href: 'settings/search'
                 },
                 {
                     label: 'Sync',
-                    icon: mdiCloudSyncOutline,
+                    icon: Icons.mdiCloudSyncOutline,
                     href: 'settings/sync'
                 },
                 {
                     label: 'Devices',
-                    icon: mdiDevices,
+                    icon: Icons.mdiDevices,
                     href: 'settings/devices'
                 },
                 {
                     label: 'Export',
-                    icon: mdiExitRun,
+                    icon: Icons.mdiExitRun,
                     href: 'settings/export'
                 }
 
@@ -129,7 +124,7 @@ const NavProvider = ({ children }: Props) => {
             items: [
                 {
                     label: 'Back',
-                    icon: mdiArrowLeft,
+                    icon: Icons.mdiArrowLeft,
                     subNav: ENavs.HOME,
                     href: ''
                 }
@@ -141,11 +136,11 @@ const NavProvider = ({ children }: Props) => {
             items: [
                 {
                     label: 'Profile',
-                    icon: mdiAccountOutline
+                    icon: Icons.mdiAccountOutline
                 },
                 {
                     label: 'Sign Out',
-                    icon: mdiLogoutVariant
+                    icon: Icons.mdiLogoutVariant
                 }
             ]
         }

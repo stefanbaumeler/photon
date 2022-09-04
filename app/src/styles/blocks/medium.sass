@@ -40,6 +40,7 @@
         z-index: 2
         transition: box-shadow .1s
         box-shadow: inset 0 0 0 0 $color-secondary-highlight
+        pointer-events: none
 
         @at-root .medium--selected &
             box-shadow: inset 0 0 0 16px $color-secondary-highlight
@@ -59,36 +60,54 @@
         opacity: 1
 
 @mixin medium-check
-    opacity: 0
     position: absolute
     top: 8px
     left: 8px
-    width: 24px
-    height: 24px
-    background-color: #D8D8D8
-    border-radius: 50%
     z-index: 3
     transition: opacity .1s, background-color .25s, color .25s, transform .25s
-    cursor: pointer
+    opacity: 0
     display: flex
-    align-items: center
-    justify-content: center
-
-    &:hover
-        background-color: $color-secondary-highlight
-
-    &:active
-        transform: scale(.75)
-        transition: none
-
 
     @at-root .medium:hover &
-        opacity: 1
+        opacity: .75
+
+        &:hover
+            opacity: 1
+
+    @at-root .root--selecting &
+        opacity: .75
+
+        &:hover
+            opacity: 1
 
     @at-root .medium--selected &
-        background-color: $color-secondary-dark
-        color: $color-white
+        opacity: 1
 
+    @at-root .medium--selected:hover &
+        opacity: 1
+
+@mixin medium-open-fallback
+    opacity: 0
+    pointer-events: none
+    cursor: pointer
+    position: absolute
+    color: $color-white
+    bottom: 8px
+    right: 8px
+    width: 24px
+    height: 24px
+    z-index: 2
+    transition: opacity .1s, transform .1s
+
+    @at-root .medium--selected &
+        transform: translate(-20px, -20px)
+
+    @at-root .root--selecting .medium:hover &
+        opacity: .75
+        pointer-events: all
+
+        &:hover
+            opacity: 1
 
 @mixin medium
     .medium
@@ -108,5 +127,8 @@
 
         &__check
             @include medium-check
+
+        &__open-fallback
+            @include medium-open-fallback
 
 @include medium

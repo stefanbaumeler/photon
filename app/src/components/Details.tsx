@@ -1,13 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { DetailsContext, DialogContext } from '@/providers'
+import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import Icon from '@mdi/react'
-import { mdiArrowLeft, mdiArrowRight,
-    mdiInformation,
-    mdiTrashCanOutline,
-    mdiTrayArrowDown } from '@mdi/js'
+import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
-import { useDeleteMedium } from '@/types/api'
+import { useDeleteMedia } from '@/types/api'
 import { useMedia } from '@/api/hooks'
+import { Check, IconButton } from '@/components'
 
 const Details = () => {
     const {
@@ -20,11 +18,24 @@ const Details = () => {
         openDialog, closeDialog
     } = useContext(DialogContext)
 
+    const {
+        addSelected, removeSelected, isSelected, isInSelectionMode
+    } = useContext(SelectionContext)
+
+    const select = () => {
+        if (isSelected(medium)) {
+            removeSelected(medium)
+        }
+        else {
+            addSelected(medium)
+        }
+    }
+
     const { refetch } = useMedia()
 
-    const [deleteMedium] = useDeleteMedium({
+    const [deleteMedium] = useDeleteMedia({
         variables: {
-            id: medium.id
+            ids: [medium.id]
         }
     })
 
@@ -59,14 +70,14 @@ const Details = () => {
     }, [collection, medium])
 
     const openAskDeleteDialog = () => {
-        openDialog('Are you sure you want to permanently delete this?', [
+        openDialog('Remove from Picchu and all synced devices?', [
             {
                 label: 'Cancel',
                 action: closeDialog,
                 type: 'secondary'
             },
             {
-                label: 'Yes',
+                label: 'Move to trash',
                 action: confirmDeleteMedium
             }
         ])
@@ -92,71 +103,62 @@ const Details = () => {
             return <></>
         }
 
-        return <Tippy
-            content="Show Infos"
-        >
-            <button
-                className="toolbar__button"
-                onClick={openInfos}
-            >
-                <Icon
-                    path={mdiInformation}
-                    size={1}
-                />
-            </button>
-        </Tippy>
+        return <IconButton
+            hint={'Show Infos'}
+            white={true}
+            onClick={openInfos}
+            icon={Icons.mdiInformation}
+        />
+    }
+
+    const RightToolbar = () => {
+        if (isInSelectionMode) {
+            return <>
+                <Tippy
+                    content="Select"
+                >
+                    <Check
+                        onClick={select}
+                        ready={true}
+                        checked={isSelected(medium)}
+                    />
+                </Tippy>
+            </>
+        }
+
+        return <>
+            <IconButton
+                href={src}
+                hint={'Download'}
+                white={true}
+                onClick={download}
+                download={medium.filename_download}
+                external={true}
+                icon={Icons.mdiTrayArrowDown}
+            />
+            <IconButton
+                hint={'Delete'}
+                white={true}
+                onClick={openAskDeleteDialog}
+                icon={Icons.mdiTrashCanOutline}
+            />
+            <OpenInfosButton />
+        </>
     }
 
     return <div className={`details${active ? ' details--active' : ''}${infos ? ' details--infos' : ''}`}>
         <div className="details__preview">
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
-                    <Tippy
-                        content="Back"
-                    >
-                        <button
-                            className="toolbar__button"
-                            onClick={closeDetails}
-                        >
-                            <Icon
-                                path={mdiArrowLeft}
-                                size={1}
-                            />
-                        </button>
-                    </Tippy>
+                    <IconButton
+                        hint={'Back'}
+                        white={true}
+                        onClick={closeDetails}
+                        icon={Icons.mdiArrowLeft}
+                    />
                 </div>
                 <div className="toolbar__section toolbar__section--right">
-                    <Tippy
-                        content="Download"
-                    >
-                        <a
-                            href={src}
-                            target="_blank"
-                            download={medium.filename_download}
-                            className="toolbar__button"
-                            onClick={download}
-                            rel="noreferrer"
-                        >
-                            <Icon
-                                path={mdiTrayArrowDown}
-                                size={1}
-                            />
-                        </a>
-                    </Tippy>
-                    <Tippy
-                        content="Delete"
-                    >
-                        <button
-                            className="toolbar__button"
-                            onClick={() => openAskDeleteDialog()}
-                        >
-                            <Icon
-                                path={mdiTrashCanOutline}
-                                size={1}
-                            />
-                        </button>
-                    </Tippy>
-                    <OpenInfosButton />
+                    <RightToolbar />
                 </div>
             </div>
             <div className="details__container">
@@ -178,19 +180,11 @@ const Details = () => {
         <aside className="details__sidebar">
             <div className="toolbar">
                 <div className="toolbar__section toolbar__section--left">
-                    <Tippy
-                        content="Hide Infos"
-                    >
-                        <button
-                            className="toolbar__button"
-                            onClick={closeInfos}
-                        >
-                            <Icon
-                                path={mdiArrowRight}
-                                size={1}
-                            />
-                        </button>
-                    </Tippy>
+                    <IconButton
+                        hint={'Hide Infos'}
+                        onClick={closeInfos}
+                        icon={Icons.mdiArrowRight}
+                    />
                 </div>
             </div>
         </aside>

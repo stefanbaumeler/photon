@@ -1,16 +1,19 @@
-import { ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import { Sidebar, SearchBar } from '@/components'
+import { SelectionContext } from '@/providers'
 
 type Props = {
     children?: ReactNode
 }
 
 const Layout = ({ children }: Props) => {
+    const { isInSelectionMode } = useContext(SelectionContext)
+
     return <>
         <div id="modal-root"></div>
         <div
             id="content-root"
-            className="root"
+            className={`root${isInSelectionMode ? ' root--selecting' : ''}`}
         >
             <SearchBar />
             <Sidebar />

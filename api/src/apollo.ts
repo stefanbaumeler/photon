@@ -15,12 +15,12 @@ export const createApolloServer = async (app: Express) => {
         }
 
         type Mutation {
-            deleteMedium(id: ID): String
+            deleteMedia(ids: [ID]): String
         }
 
         type Query {
             media: [Media]
-            deleteMedium(id: ID): String
+            deleteMedia(ids: [ID]): String
         }
     `
 
@@ -29,7 +29,7 @@ export const createApolloServer = async (app: Express) => {
             media: () => new MediaService().readMany()
         },
         Mutation: {
-            deleteMedium: async (_: any, input: { id: string }) => new MediaService().destroy(input.id)
+            deleteMedia: async (_: any, input: { ids: string[] }) => new MediaService().destroy(input.ids)
         }
     }
 
