@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
+import { forwardRef, useContext, useEffect, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
-import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
 import { useDeleteMedia } from '@/types/api'
@@ -113,17 +112,17 @@ const Details = () => {
 
     const RightToolbar = () => {
         if (isInSelectionMode) {
-            return <>
-                <Tippy
-                    content="Select"
-                >
-                    <Check
-                        onClick={select}
-                        ready={true}
-                        checked={isSelected(medium)}
-                    />
-                </Tippy>
-            </>
+            return <Tippy
+                content="Select"
+            >
+                <Check
+                    onClick={select}
+                    ready={true}
+                    checked={isSelected(medium)}
+                    boxSize={48}
+                    hover={true}
+                />
+            </Tippy>
         }
 
         return <>

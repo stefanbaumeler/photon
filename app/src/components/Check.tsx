@@ -1,19 +1,26 @@
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import { TNav } from '@/types/app'
+import { Ref, forwardRef } from 'react'
 
 type Props = {
     checked: boolean
     ready: boolean
     onClick: () => void
+    boxSize?: number
+    hover?: boolean
 }
 
 const Check = ({
-    checked, ready, onClick
-}: Props) => {
+    checked, ready, onClick, boxSize, hover
+}: Props, ref: Ref<unknown>) => {
     return <button
-        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}`}
+        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}`}
         onClick={onClick}
+        ref={ref as Ref<HTMLButtonElement>}
+        style={{
+            width: `${boxSize || 24}px`,
+            height: `${boxSize || 24}px`
+        }}
     >
         <Icon
             className="check__icon check__icon--background"
@@ -35,4 +42,4 @@ const Check = ({
     </button>
 }
 
-export default Check
+export default forwardRef(Check)
