@@ -6,6 +6,7 @@ type TGalleryConfig = {
     images: GalleryItem[]
     targetRowHeight: number
     margin: number
+    maxHeight: number
 }
 
 const getCommonHeight = (row: GalleryItem[], config: TGalleryConfig) => {
@@ -36,7 +37,7 @@ export const generateGallery = (config: TGalleryConfig) => {
     const path = findShortestPath(getNeighbors, '0', config.images.length).map((node) => +node)
 
     for (let i = 1; i < path.length; ++i) {
-        const height = getCommonHeight(config.images.slice(path[i - 1], path[i]), config)
+        const height = Math.min(getCommonHeight(config.images.slice(path[i - 1], path[i]), config), config.maxHeight)
 
         for (let j = path[i - 1]; j < path[i]; ++j) {
             config.images[j].width = Math.round(height * config.images[j].ratio * 100) / 100

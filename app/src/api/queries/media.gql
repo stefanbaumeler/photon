@@ -1,9 +1,21 @@
 query MediaQuery {
     media {
+        date_created
+        date_modified
+        date_taken
         id
-        title
         filename_disk
+        filename_download
+        title
+        description
         width
         height
+        camera_make
+        camera_model
+        flash
+        f_number
+        iso
+        lat
+        lng
     }
 }

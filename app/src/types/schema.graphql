@@ -6,20 +6,30 @@ schema {
 }
 
 type Media {
+    camera_make: String
+    camera_model: String
+    date_created: String
+    date_modified: String
+    date_taken: String
     description: String
+    f_number: Float
     filename_disk: String
     filename_download: String
+    flash: Int
     height: Int
     id: ID
+    iso: Int
+    lat: Float
+    lng: Float
     title: String
     width: Int
 }
 
 type Mutation {
-    deleteMedium(id: ID): String
+    deleteMedia(ids: [ID]): String
 }
 
 type Query {
-    deleteMedium(id: ID): String
+    deleteMedia(ids: [ID]): String
     media: [Media]
 }

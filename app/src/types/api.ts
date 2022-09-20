@@ -17,11 +17,21 @@ export type Scalars = {
 
 export type TMedia = {
   __typename?: 'Media'
+  camera_make?: Maybe<Scalars['String']>
+  camera_model?: Maybe<Scalars['String']>
+  date_created?: Maybe<Scalars['String']>
+  date_modified?: Maybe<Scalars['String']>
+  date_taken?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
+  f_number?: Maybe<Scalars['Float']>
   filename_disk?: Maybe<Scalars['String']>
   filename_download?: Maybe<Scalars['String']>
+  flash?: Maybe<Scalars['Int']>
   height?: Maybe<Scalars['Int']>
   id?: Maybe<Scalars['ID']>
+  iso?: Maybe<Scalars['Int']>
+  lat?: Maybe<Scalars['Float']>
+  lng?: Maybe<Scalars['Float']>
   title?: Maybe<Scalars['String']>
   width?: Maybe<Scalars['Int']>
 }
@@ -53,7 +63,7 @@ export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: string | nul
 
 export type TMediaQueryVariables = Exact<{ [key: string]: never }>
 
-export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Media', id?: string | null, title?: string | null, filename_disk?: string | null, width?: number | null, height?: number | null } | null> | null }
+export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Media', date_created?: string | null, date_modified?: string | null, date_taken?: string | null, id?: string | null, filename_disk?: string | null, filename_download?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, camera_make?: string | null, camera_model?: string | null, flash?: number | null, f_number?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
 
 export const DeleteMediaDocument = gql`
     mutation deleteMedia($ids: [ID]) {
@@ -74,11 +84,23 @@ export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia
 export const MediaQueryDocument = gql`
     query MediaQuery {
   media {
+    date_created
+    date_modified
+    date_taken
     id
-    title
     filename_disk
+    filename_download
+    title
+    description
     width
     height
+    camera_make
+    camera_model
+    flash
+    f_number
+    iso
+    lat
+    lng
   }
 }
     `

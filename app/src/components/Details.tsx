@@ -4,9 +4,11 @@ import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
 import { useDeleteMedia } from '@/types/api'
 import { useMedia } from '@/api/hooks'
-import { Check, IconButton } from '@/components'
+import { Check, IconButton, Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
+import { MapContainer, Marker, TileLayer } from 'react-leaflet'
+import dynamic from 'next/dynamic'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -151,6 +153,47 @@ const Details = () => {
         </>
     }
 
+    const getRelativeTime = (d1: Date, d2 = new Date()) => {
+        const units: {
+            [key: string]: number
+        } = {
+            year  : 24 * 60 * 60 * 1000 * 365,
+            month : 24 * 60 * 60 * 1000 * 365 / 12,
+            day   : 24 * 60 * 60 * 1000,
+            hour  : 60 * 60 * 1000,
+            minute: 60 * 1000,
+            second: 1000
+        }
+
+        const rtf = new Intl.RelativeTimeFormat('en-US', {
+            numeric: 'auto'
+        })
+
+        const elapsed = d1.getTime() - d2.getTime()
+
+        for (const u in units) {
+            if (Math.abs(elapsed) > units[u] || u === 'second') {
+                return rtf.format(Math.round(elapsed / units[u]), u as Intl.RelativeTimeFormatUnit)
+            }
+        }
+    }
+
+    const ConditionalDateDetail = () => {
+        if (medium.date_taken) {
+            return <Detail
+                icon={Icons.mdiCalendar}
+                title={new Date(parseInt(medium.date_taken, 10)).toLocaleString('en-US')}
+                values={getRelativeTime(new Date(parseInt(medium.date_taken, 10)))}
+            />
+        }
+
+        return <></>
+    }
+
+    const Map = dynamic(() => import('@/components/DetailsMap'), {
+        ssr: false
+    })
+
     return <div className={`details${active ? ' details--active' : ''}${infos ? ' details--infos' : ''}`}>
         <div className="details__preview">
             <div className="toolbar toolbar--light">
@@ -193,6 +236,23 @@ const Details = () => {
                         icon={Icons.mdiArrowRight}
                     />
                 </div>
+            </div>
+            <div className="details__sidebar-content">
+                <ConditionalDateDetail />
+                <Detail
+                    icon={Icons.mdiCameraIris}
+                    title={`${medium.camera_make} ${medium.camera_model}`}
+                    values={[`f/${medium.f_number}`, `${medium.iso}`]}
+                />
+                <Detail
+                    icon={Icons.mdiMapMarker}
+                    title={`${medium.camera_make} ${medium.camera_model}`}
+                    values={[`f/${medium.f_number}`, `${medium.iso}`]}
+                />
+                <Map
+                    lat={medium.lat}
+                    lng={medium.lng}
+                />
             </div>
         </aside>
     </div>

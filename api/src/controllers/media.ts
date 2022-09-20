@@ -3,8 +3,8 @@ import MediaService from '../services/media'
 import multer from 'multer'
 import path from 'path'
 import sizeOf from 'image-size'
-import sharp from 'sharp'
 import ExifReader from 'exifreader'
+import { Medium } from '../types'
 
 const upload = multer({
     dest: 'uploads/'
@@ -52,28 +52,50 @@ router.post('/', upload.array('upload'), async (req, res, next) => {
     if (req.files) {
         const data = req.files as Express.Multer.File[]
 
-        await service.createMany(data.map((file) => {
+        const writePromises = data.map((file) => new Promise<Omit<Medium, 'id' | 'date_created' | 'date_modified'>>((resolve) => {
             const dimensions = sizeOf(file.path)
 
-            const getMetadata = async () => {
-                ExifReader.load(file.path).then((meta) => {
-                    console.log(meta)
-                })
-                const metadata = await sharp(file.path).metadata().then((meta) => {
-                })
-            }
+            ExifReader.load(file.path).then((meta) => {
+                let fNumber = meta.FNumber?.value
 
-            getMetadata()
+                if (fNumber && Array.isArray(fNumber)) {
+                    fNumber = fNumber.reduce((a, b) => a / b)
+                }
 
-            return {
-                filename_disk: file.filename,
-                filename_download: file.originalname,
-                title: path.parse(file.originalname).name,
-                description: '',
-                height: dimensions.height || 0,
-                width: dimensions.width || 0
-            }
+                const date = meta.DateTime?.value[0].split(' ')[0].split(':').join('-')
+                const time = meta.DateTime?.value[0].split(' ')[1]
+                const dateTime = [date, time].join(' ')
+
+                const latRef = meta.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
+                const lngRef = meta.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
+
+                const rawLat = parseFloat(meta.GPSLatitude?.description || '') * latRef
+                const rawLng = parseFloat(meta.GPSLongitude?.description || '') * lngRef
+
+                const lat = Number.isNaN(rawLat) ? null : rawLat
+                const lng = Number.isNaN(rawLng) ? null : rawLng
+
+                resolve({
+                    date_taken: dateTime,
+                    filename_disk: file.filename,
+                    filename_download: file.originalname,
+                    title: path.parse(file.originalname).name,
+                    description: '',
+                    height: dimensions.height || 0,
+                    width: dimensions.width || 0,
+                    camera_make: meta.Make?.value[0],
+                    camera_model: meta.Model?.value[0],
+                    flash: meta.Flash?.value,
+                    f_number: fNumber,
+                    lat,
+                    lng
+                })
+            })
         }))
+
+        Promise.all(writePromises).then((data) => {
+            service.createMany(data)
+        })
 
         res.json('ok').status(200)
     }

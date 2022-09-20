@@ -47,7 +47,8 @@ const MediaSection = ({ media }: Props) => {
         containerWidth,
         images,
         targetRowHeight: 300,
-        margin: 2
+        margin: 2,
+        maxHeight: 300
     })
 
     return <div

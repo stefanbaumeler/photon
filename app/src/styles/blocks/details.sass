@@ -22,6 +22,9 @@
     @at-root .details--active &
         transform: none
 
+@mixin details-sidebar-content
+    padding-top: 64px
+
 @mixin details-preview
     width: 100vw
     flex-shrink: 0
@@ -73,6 +76,9 @@
 
         &__sidebar
             @include details-sidebar
+
+        &__sidebar-content
+            @include details-sidebar-content
 
         &__preview
             @include details-preview
