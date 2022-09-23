@@ -1,0 +1,12 @@
+@mixin main-root {
+    padding: 8px;
+    grid-area: main;
+}
+
+@mixin main {
+    .main {
+        @include main-root;
+    }
+}
+
+@include main;

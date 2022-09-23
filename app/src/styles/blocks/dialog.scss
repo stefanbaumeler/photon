@@ -1,0 +1,98 @@
+@mixin dialog-root {
+    position: fixed;
+    background-color: rgba($color-black, .5);
+    inset: 0;
+    z-index: 10;
+    display: none;
+
+    &--active {
+        display: block;
+    }
+}
+
+@mixin dialog-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $color-white;
+    padding: 64px 32px 32px;
+}
+
+@mixin dialog-text {
+
+}
+
+@mixin dialog-controls {
+    padding-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+@mixin dialog-button {
+    color: $color-white;
+    padding: 12px 32px;
+    background-color: $color-primary;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color .25s, box-shadow .25s;
+    border-radius: 4px;
+    position: relative;
+
+    &:before {
+        content: '';
+        position: absolute;
+        left: 4px;
+        bottom: 2px;
+        width: 0;
+        height: 2px;
+        background-color: $color-white;
+        transition: width .25s;
+    }
+
+    &:hover:before {
+        width: calc(100% - 8px);
+    }
+    &--secondary {
+        background-color: transparent;
+        color: $color-primary-dark;
+
+        &:before {
+            left: 32px;
+            bottom: 8px;
+            background-color: $color-primary;
+        }
+
+        &:hover:before {
+            width: calc(100% - 64px);
+        }
+    }
+    &--danger {
+        background-color: $color-danger;
+    }
+}
+
+@mixin dialog {
+    .dialog {
+        @include dialog-root;
+
+        &__content {
+            @include dialog-content;
+        }
+
+        &__text {
+            @include dialog-text;
+        }
+
+        &__controls {
+            @include dialog-controls;
+        }
+
+        &__button {
+            @include dialog-button;
+        }
+    }
+}
+
+@include dialog;

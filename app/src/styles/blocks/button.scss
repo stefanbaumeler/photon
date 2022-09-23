@@ -1,0 +1,25 @@
+@mixin button-root {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color .25s;
+
+    &:hover {
+        background-color: rgba(#888, .25);
+    }
+    &--white {
+        color: $color-white;
+    }
+}
+
+@mixin button {
+    .button {
+        @include button-root;
+    }
+}
+
+@include button;

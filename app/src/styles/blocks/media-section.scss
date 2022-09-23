@@ -1,0 +1,21 @@
+@mixin media-section-root {
+    margin: -2px;
+}
+
+@mixin media-section-container {
+    display: flex;
+    flex-wrap: wrap;
+    transition: width 0s;
+}
+
+@mixin media-section {
+    .media-section {
+        @include media-section-root;
+
+        &__container {
+            @include media-section-container;
+        }
+    }
+}
+
+@include media-section;

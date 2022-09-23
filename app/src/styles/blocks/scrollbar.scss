@@ -1,0 +1,16 @@
+@mixin scrollbar-root {
+    position: fixed;
+    right: 0;
+    top: $searchbar-height;
+    width: $scrollbar-width;
+    height: calc(100vh - #{$searchbar-height});
+    background: red;
+}
+
+@mixin scrollbar {
+    .scrollbar {
+        @include scrollbar-root;
+    }
+}
+
+@include scrollbar;

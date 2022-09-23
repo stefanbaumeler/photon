@@ -1,0 +1,158 @@
+@mixin medium-root {
+    margin: 2px;
+    position: relative;
+    cursor: pointer;
+    background-color: #D8D8D8;
+}
+
+@mixin medium-container {
+    pointer-events: all;
+}
+
+@mixin medium-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    image-rendering: pixelated;
+}
+
+@mixin medium-image-container {
+    display: flex;
+    position: relative;
+    inset: 0;
+    box-sizing: border-box;
+
+    &:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba($color-black, .2), transparent 50%);
+        z-index: 2;
+        transition: opacity .25s;
+        opacity: 0;
+        pointer-events: none;
+
+        @at-root .medium:hover & {
+            opacity: 1;
+        }
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        transition: box-shadow .1s;
+        box-shadow: inset 0 0 0 0 $color-secondary-highlight;
+        pointer-events: none;
+
+        @at-root .medium--selected & {
+            box-shadow: inset 0 0 0 16px $color-secondary-highlight;
+        }
+    }
+}
+
+@mixin medium-image {
+    position: relative;
+    z-index: 1;
+    transition: opacity .1s, transform .1s;
+    opacity: 0;
+
+    @at-root .medium--selected & {
+        transform: scale(.9);
+    }
+
+    &--loaded {
+        opacity: 1;
+    }
+}
+
+@mixin medium-check {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 3;
+    transition: opacity .1s, background-color .25s, color .25s, transform .25s;
+    opacity: 0;
+    display: flex;
+
+    @at-root .medium:hover & {
+        opacity: .75;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+    @at-root .root--selecting & {
+        opacity: .75;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+    @at-root .medium--selected & {
+        opacity: 1;
+    }
+
+    @at-root .medium--selected:hover & {
+        opacity: 1;
+    }
+}
+
+@mixin medium-open-fallback {
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    position: absolute;
+    color: $color-white;
+    bottom: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    z-index: 2;
+    transition: opacity .1s, transform .1s;
+
+    @at-root .medium--selected & {
+        transform: translate(-20px, -20px);
+    }
+
+    @at-root .root--selecting .medium:hover & {
+        opacity: .75;
+        pointer-events: all;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+@mixin medium {
+    .medium {
+        @include medium-root;
+
+        &__container {
+            @include medium-container;
+        }
+
+        &__placeholder {
+            @include medium-placeholder;
+        }
+
+        &__image-container {
+            @include medium-image-container;
+        }
+
+        &__image {
+            @include medium-image;
+        }
+
+        &__check {
+            @include medium-check;
+        }
+
+        &__open-fallback {
+            @include medium-open-fallback;
+        }
+    }
+}
+
+@include medium;
