@@ -27,4 +27,13 @@ router.get('/:id', async (req, res, next) => {
     return next()
 })
 
+router.post('/', async (req, res) => {
+    const service = new AlbumsService()
+
+    service.createOne({
+        title: '',
+        description: ''
+    })
+})
+
 export default router

@@ -26,7 +26,7 @@ const Uploader = () => {
         }
     }, [])
 
-    const change = (event: Event) => {
+    const change = () => {
         const formData = new FormData()
 
         for (let i = 0; i < upload.current.files.length; i++) {

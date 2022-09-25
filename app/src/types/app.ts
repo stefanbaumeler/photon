@@ -1,8 +1,16 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TMedia } from '@/types/api'
+import { TMedium } from '@/types/api'
 
 export type TMediaInput = {
 
+}
+
+export type TAlbumsInput = {
+
+}
+
+export type TAlbumInput = {
+    id: string
 }
 
 export type TDialogButton = {
@@ -17,6 +25,7 @@ export type TNavItem = {
     active?: boolean
     subNav?: string
     href?: string
+    type?: string
 }
 
 export type TNav = {
@@ -29,11 +38,16 @@ export type TNavContext = {
     active: string[]
     setActive: Dispatch<SetStateAction<string[]>>
     navs: TNav[]
+    getActiveItem: () => TNavItem
 }
 
 export type GalleryItem = {
-    medium: TMedia
+    medium: TMedium
     ratio: number
     width?: number
     height?: number
+}
+
+export enum ENavItemType {
+    ALBUMS = 'ALBUMS'
 }

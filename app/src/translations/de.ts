@@ -30,5 +30,6 @@ export default {
     cancel: 'Abbrechen',
     delete: 'Löschen',
     download: 'Herunterladen',
-    addto: 'Hinzufügen zu...'
+    addto: 'Hinzufügen zu...',
+    create_thing: '{{thing}} erstellen'
 }

@@ -1,3 +1,5 @@
+export { default as Albums } from './Albums'
+export { default as AlbumsActions } from './AlbumsActions'
 export { default as Sidebar } from './Sidebar'
 export { default as Brand } from './Brand'
 export { default as BulkActions } from './BulkActions'

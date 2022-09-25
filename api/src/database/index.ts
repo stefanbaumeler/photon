@@ -1,5 +1,6 @@
 import { knex, Knex } from 'knex'
 import knexConfig from '../../knexfile'
+import knexStringCase from 'knex-stringcase'
 
 let database: Knex | null = null
 
@@ -8,7 +9,9 @@ export const getDatabase = () => {
         return database
     }
 
-    database = knex(knexConfig)
+    const options = knexStringCase(knexConfig)
+
+    database = knex(options)
 
     return database
 }

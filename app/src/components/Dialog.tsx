@@ -1,11 +1,26 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { DialogContext } from '@/providers'
 import { TDialogButton } from '@/types/app'
 
 const Dialog = () => {
     const {
-        text, buttons, active
+        text, buttons, active, content,
+        closeDialog
     } = useContext(DialogContext)
+
+    useEffect(() => {
+        const keydown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeDialog()
+            }
+        }
+
+        window.addEventListener('keydown', keydown)
+
+        return () => {
+            window.removeEventListener('keydown', keydown)
+        }
+    }, [])
 
     const DialogButton = (btn: TDialogButton) => {
         return <button
@@ -16,11 +31,22 @@ const Dialog = () => {
         </button>
     }
 
+    const DialogContent = () => {
+        if (content) {
+            return <div className="dialog__content">
+                {content}
+            </div>
+        }
+
+        return <></>
+    }
+
     return <div className={`dialog${active ? ' dialog--active' : ''}`}>
-        <div className="dialog__content">
+        <div className="dialog__container">
             <div className="dialog__text">
                 {text}
             </div>
+            <DialogContent />
             <div className="dialog__controls">
                 {buttons.map((button, k) => <DialogButton
                     key={k}

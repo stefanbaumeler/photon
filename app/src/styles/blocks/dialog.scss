@@ -10,7 +10,7 @@
     }
 }
 
-@mixin dialog-content {
+@mixin dialog-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -77,8 +77,8 @@
     .dialog {
         @include dialog-root;
 
-        &__content {
-            @include dialog-content;
+        &__container {
+            @include dialog-container;
         }
 
         &__text {

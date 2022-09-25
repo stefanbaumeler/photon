@@ -1,22 +1,33 @@
 import * as Icons from '@mdi/js'
 import { IconButton } from '@/components/index'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DialogContext, SelectionContext } from '@/providers'
-import { useDeleteMedia } from '@/types/api'
-import { useMedia } from '@/api/hooks'
+import { useAddToAlbum, useDeleteMedia } from '@/types/api'
+import { useAlbums, useMedia } from '@/api/hooks'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 
 const BulkActions = () => {
     const { t } = useTranslation()
 
+    const [activeAlbum, setActiveAlbum] = useState<string | number>()
+
     const {
         openDialog, closeDialog
     } = useContext(DialogContext)
 
+    const { state: [{ albums }] } = useAlbums()
+
     const {
         selected, isInSelectionMode
     } = useContext(SelectionContext)
+
+    const [addToAlbumMutation] = useAddToAlbum({
+        variables: {
+            idAlbum: `${activeAlbum}`,
+            media: Array.from(selected).map((s) => s.id)
+        }
+    })
 
     const [deleteMedia] = useDeleteMedia({
         variables: {
@@ -52,6 +63,24 @@ const BulkActions = () => {
 
     }
 
+    useEffect(() => {
+        if (activeAlbum) {
+            addToAlbumMutation()
+        }
+    }, [activeAlbum])
+
+    const addToAlbum = (id: string | number) => {
+        setActiveAlbum(id)
+    }
+
+    const addTo = () => {
+        openDialog('Add to Album', [], <>
+            {albums.map((album) => <button onClick={() => addToAlbum(album.id)}>
+                {album.id}
+            </button>)}
+        </>)
+    }
+
     if (!isInSelectionMode) {
         return <></>
     }
@@ -60,6 +89,7 @@ const BulkActions = () => {
         <IconButton
             hint={t(ETrans.ADD_TO)}
             icon={Icons.mdiPlus}
+            onClick={addTo}
         />
         <IconButton
             hint={t(ETrans.DOWNLOAD)}

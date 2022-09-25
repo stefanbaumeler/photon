@@ -1,14 +1,18 @@
-import { TMedia } from '@/types/api'
+import { TMedium } from '@/types/api'
 import { GalleryItem } from '@/types/app'
 import { Medium } from '@/components'
 import { useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 
 type Props = {
-    media: TMedia[]
+    media: TMedium[]
+    title: string
+    collection: TMedium[]
 }
 
-const MediaSection = ({ media }: Props) => {
+const MediaSection = ({
+    media, title, collection
+}: Props) => {
     const galleryEl = useRef(null)
     const [containerWidth, setContainerWidth] = useState(0)
     const [images, setImages] = useState<GalleryItem[]>([])
@@ -55,6 +59,9 @@ const MediaSection = ({ media }: Props) => {
         className="media-section"
         ref={galleryEl}
     >
+        <span className="media-section__title">
+            {title}
+        </span>
         <div
             className="media-section__container"
             style={{
@@ -62,7 +69,7 @@ const MediaSection = ({ media }: Props) => {
             }}
         >
             {images.map((galleryItem, k) => <Medium
-                collection={media}
+                collection={collection}
                 medium={galleryItem.medium}
                 width={galleryItem.width}
                 height={galleryItem.height}

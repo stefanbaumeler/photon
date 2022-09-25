@@ -15,17 +15,25 @@ export type Scalars = {
   Float: number
 }
 
-export type TMedia = {
-  __typename?: 'Media'
-  camera_make?: Maybe<Scalars['String']>
-  camera_model?: Maybe<Scalars['String']>
-  date_created?: Maybe<Scalars['String']>
-  date_modified?: Maybe<Scalars['String']>
-  date_taken?: Maybe<Scalars['String']>
+export type TAlbum = {
+  __typename?: 'Album'
   description?: Maybe<Scalars['String']>
-  f_number?: Maybe<Scalars['Float']>
-  filename_disk?: Maybe<Scalars['String']>
-  filename_download?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['ID']>
+  idMedium?: Maybe<Scalars['Int']>
+  title?: Maybe<Scalars['String']>
+}
+
+export type TMedium = {
+  __typename?: 'Medium'
+  cameraMake?: Maybe<Scalars['String']>
+  cameraModel?: Maybe<Scalars['String']>
+  dateCreated?: Maybe<Scalars['String']>
+  dateModified?: Maybe<Scalars['String']>
+  dateTaken?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  fNumber?: Maybe<Scalars['Float']>
+  filenameDisk?: Maybe<Scalars['String']>
+  filenameDownload?: Maybe<Scalars['String']>
   flash?: Maybe<Scalars['Int']>
   height?: Maybe<Scalars['Int']>
   id?: Maybe<Scalars['ID']>
@@ -38,7 +46,13 @@ export type TMedia = {
 
 export type TMutation = {
   __typename?: 'Mutation'
+  addToAlbum?: Maybe<Scalars['String']>
   deleteMedia?: Maybe<Scalars['String']>
+}
+
+export type TMutationAddToAlbumArgs = {
+  idAlbum?: InputMaybe<Scalars['ID']>
+  media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
 export type TMutationDeleteMediaArgs = {
@@ -47,13 +61,47 @@ export type TMutationDeleteMediaArgs = {
 
 export type TQuery = {
   __typename?: 'Query'
+  album?: Maybe<Array<Maybe<TAlbum>>>
+  albumMedia?: Maybe<Array<Maybe<TMedium>>>
+  albums?: Maybe<Array<Maybe<TAlbum>>>
   deleteMedia?: Maybe<Scalars['String']>
-  media?: Maybe<Array<Maybe<TMedia>>>
+  media?: Maybe<Array<Maybe<TMedium>>>
+}
+
+export type TQueryAlbumArgs = {
+  id?: InputMaybe<Scalars['ID']>
+}
+
+export type TQueryAlbumMediaArgs = {
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type TQueryDeleteMediaArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
+
+export type TAddToAlbumVariables = Exact<{
+  idAlbum?: InputMaybe<Scalars['ID']>
+  media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
+}>
+
+export type TAddToAlbum = { __typename?: 'Mutation', addToAlbum?: string | null }
+
+export type TAlbumQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>
+}>
+
+export type TAlbumQuery = { __typename?: 'Query', album?: Array<{ __typename?: 'Album', id?: string | null, title?: string | null, description?: string | null, idMedium?: number | null } | null> | null }
+
+export type TAlbumMediaQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>
+}>
+
+export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
+
+export type TAlbumsQueryVariables = Exact<{ [key: string]: never }>
+
+export type TAlbumsQuery = { __typename?: 'Query', albums?: Array<{ __typename?: 'Album', id?: string | null, title?: string | null, description?: string | null, idMedium?: number | null } | null> | null }
 
 export type TDeleteMediaVariables = Exact<{
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
@@ -63,8 +111,118 @@ export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: string | nul
 
 export type TMediaQueryVariables = Exact<{ [key: string]: never }>
 
-export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Media', date_created?: string | null, date_modified?: string | null, date_taken?: string | null, id?: string | null, filename_disk?: string | null, filename_download?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, camera_make?: string | null, camera_model?: string | null, flash?: number | null, f_number?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
+export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
 
+export const AddToAlbumDocument = gql`
+    mutation addToAlbum($idAlbum: ID, $media: [ID]) {
+  addToAlbum(idAlbum: $idAlbum, media: $media)
+}
+    `
+export type TAddToAlbumMutationFn = Apollo.MutationFunction<TAddToAlbum, TAddToAlbumVariables>
+export function useAddToAlbum (baseOptions?: Apollo.MutationHookOptions<TAddToAlbum, TAddToAlbumVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TAddToAlbum, TAddToAlbumVariables>(AddToAlbumDocument, options)
+}
+export type AddToAlbumHookResult = ReturnType<typeof useAddToAlbum>
+export type AddToAlbumMutationResult = Apollo.MutationResult<TAddToAlbum>
+export type AddToAlbumMutationOptions = Apollo.BaseMutationOptions<TAddToAlbum, TAddToAlbumVariables>
+export const AlbumQueryDocument = gql`
+    query AlbumQuery($id: ID) {
+  album(id: $id) {
+    id
+    title
+    description
+    idMedium
+  }
+}
+    `
+export function useAlbumQuery (baseOptions?: Apollo.QueryHookOptions<TAlbumQuery, TAlbumQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useQuery<TAlbumQuery, TAlbumQueryVariables>(AlbumQueryDocument, options)
+}
+export function useAlbumQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptions<TAlbumQuery, TAlbumQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useLazyQuery<TAlbumQuery, TAlbumQueryVariables>(AlbumQueryDocument, options)
+}
+export type AlbumQueryHookResult = ReturnType<typeof useAlbumQuery>
+export type AlbumQueryLazyQueryHookResult = ReturnType<typeof useAlbumQueryLazyQuery>
+export type AlbumQueryQueryResult = Apollo.QueryResult<TAlbumQuery, TAlbumQueryVariables>
+export const AlbumMediaQueryDocument = gql`
+    query AlbumMediaQuery($id: ID) {
+  albumMedia(id: $id) {
+    dateCreated
+    dateModified
+    dateTaken
+    id
+    filenameDisk
+    filenameDownload
+    title
+    description
+    width
+    height
+    cameraMake
+    cameraModel
+    flash
+    fNumber
+    iso
+    lat
+    lng
+  }
+}
+    `
+export function useAlbumMediaQuery (baseOptions?: Apollo.QueryHookOptions<TAlbumMediaQuery, TAlbumMediaQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useQuery<TAlbumMediaQuery, TAlbumMediaQueryVariables>(AlbumMediaQueryDocument, options)
+}
+export function useAlbumMediaQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptions<TAlbumMediaQuery, TAlbumMediaQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useLazyQuery<TAlbumMediaQuery, TAlbumMediaQueryVariables>(AlbumMediaQueryDocument, options)
+}
+export type AlbumMediaQueryHookResult = ReturnType<typeof useAlbumMediaQuery>
+export type AlbumMediaQueryLazyQueryHookResult = ReturnType<typeof useAlbumMediaQueryLazyQuery>
+export type AlbumMediaQueryQueryResult = Apollo.QueryResult<TAlbumMediaQuery, TAlbumMediaQueryVariables>
+export const AlbumsQueryDocument = gql`
+    query AlbumsQuery {
+  albums {
+    id
+    title
+    description
+    idMedium
+  }
+}
+    `
+export function useAlbumsQuery (baseOptions?: Apollo.QueryHookOptions<TAlbumsQuery, TAlbumsQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useQuery<TAlbumsQuery, TAlbumsQueryVariables>(AlbumsQueryDocument, options)
+}
+export function useAlbumsQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptions<TAlbumsQuery, TAlbumsQueryVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useLazyQuery<TAlbumsQuery, TAlbumsQueryVariables>(AlbumsQueryDocument, options)
+}
+export type AlbumsQueryHookResult = ReturnType<typeof useAlbumsQuery>
+export type AlbumsQueryLazyQueryHookResult = ReturnType<typeof useAlbumsQueryLazyQuery>
+export type AlbumsQueryQueryResult = Apollo.QueryResult<TAlbumsQuery, TAlbumsQueryVariables>
 export const DeleteMediaDocument = gql`
     mutation deleteMedia($ids: [ID]) {
   deleteMedia(ids: $ids)
@@ -84,20 +242,20 @@ export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia
 export const MediaQueryDocument = gql`
     query MediaQuery {
   media {
-    date_created
-    date_modified
-    date_taken
+    dateCreated
+    dateModified
+    dateTaken
     id
-    filename_disk
-    filename_download
+    filenameDisk
+    filenameDownload
     title
     description
     width
     height
-    camera_make
-    camera_model
+    cameraMake
+    cameraModel
     flash
-    f_number
+    fNumber
     iso
     lat
     lng

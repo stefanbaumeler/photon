@@ -11,7 +11,7 @@ export default class MediaService {
         this.knex = getDatabase()
     }
 
-    async createOne (medium: Omit<Medium, 'id' | 'date_created' | 'date_modified'>) {
+    async createOne (medium: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>) {
         return this.knex.transaction(async (trx) => {
             return trx.insert(medium)
                 .into(this.tableName)
@@ -20,7 +20,7 @@ export default class MediaService {
         })
     }
 
-    async createMany (media: Omit<Medium, 'id' | 'date_created' | 'date_modified'>[]) {
+    async createMany (media: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>[]) {
         const primaryKeys = []
 
         for (const medium of media) {

@@ -1097,6 +1097,12 @@ isarray@~1.0.0:
   resolved "https://packages.1up.io:443/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
 
+knex-stringcase@eioo/knex-stringcase:
+  version "1.2.4"
+  resolved "https://codeload.github.com/eioo/knex-stringcase/tar.gz/eb7465758dd046fdfc0807a28d7433c449700727"
+  dependencies:
+    stringcase "^4.3.0"
+
 knex@^2.2.0:
   version "2.2.0"
   resolved "https://packages.1up.io:443/knex/-/knex-2.2.0.tgz#86a3176924d37303b3f9ff7f70087418c263ce7a"
@@ -1698,6 +1704,11 @@ string_decoder@~1.1.1:
   integrity sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==
   dependencies:
     safe-buffer "~5.1.0"
+
+stringcase@^4.3.0:
+  version "4.3.1"
+  resolved "https://packages.1up.io:443/stringcase/-/stringcase-4.3.1.tgz#54279c9dd7379ff50f4e47d50d036b2ac888d34b"
+  integrity sha512-Ov7McNX1sFaEX9NWijD1hIOVDDhKdnFzN9tvoa1N8xgrclouhsO4kBPVrTPhjO/zP5mn1Ww03uZ2SThNMXS7zg==
 
 strip-bom@^3.0.0:
   version "3.0.0"

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react'
-import { TMedia } from '@/types/api'
+import { TMedium } from '@/types/api'
 
 type Props = {
     children?: ReactNode
@@ -8,9 +8,9 @@ type Props = {
 interface DetailsContext {
     active: boolean
     infos: boolean
-    medium: TMedia
-    collection: TMedia[]
-    openDetails: (medium: TMedia, collection: TMedia[]) => void
+    medium: TMedium
+    collection: TMedium[]
+    openDetails: (medium: TMedium, collection: TMedium[]) => void
     closeDetails: () => void
     openInfos: () => void
     closeInfos: () => void

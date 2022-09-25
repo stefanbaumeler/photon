@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
-import { Album } from '../types'
+import { Album, Medium } from '../types'
 import { getDatabase } from '../database'
+import AlbumsMediaService from './albumsMedia'
 
 export default class AlbumsService {
     knex: Knex
@@ -11,20 +12,30 @@ export default class AlbumsService {
         this.knex = getDatabase()
     }
 
-    async createOne (album: Album) {
+    async createOne (album: Omit<Album, 'id' | 'idMedium'>, media?: Medium[]) {
         return this.knex.transaction(async (trx) => {
             return trx.insert(album)
                 .into(this.tableName)
-                .returning('id')
+                .returning<{ id: string | number }[]>('id')
                 .then((result) => result[0].id)
+                .then((result) => {
+                    if (media) {
+                        const albumsMediaService = new AlbumsMediaService()
+
+                        albumsMediaService.createMany(media.map((medium) => ({
+                            idMedium: medium.id,
+                            idAlbum: result
+                        })))
+                    }
+                })
         })
     }
 
-    async createMany (media: Album[]) {
+    async createMany (albums: Album[]) {
         const primaryKeys = []
 
-        for (const medium of media) {
-            const pk = await this.createOne(medium)
+        for (const album of albums) {
+            const pk = await this.createOne(album)
             primaryKeys.push(pk)
         }
 
@@ -32,7 +43,7 @@ export default class AlbumsService {
     }
 
     async readOne (key: string | number) {
-        return this.knex.from(this.tableName).join('media', 'media.id', 'albums.id_media').select().where({
+        return this.knex.from(this.tableName).select().where({
             id: key
         })
     }

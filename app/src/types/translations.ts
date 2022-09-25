@@ -32,6 +32,7 @@ export enum ETrans {
     MOVE_TO_TRASH = 'movetotrash',
     CANCEL = 'cancel',
     DELETE = 'delete',
-    DOWNLOAD = 'download'
-    ADD_TO = 'addto'
+    DOWNLOAD = 'download',
+    ADD_TO = 'addto',
+    CREATE_THING = 'create_thing'
 }

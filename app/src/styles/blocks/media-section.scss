@@ -1,5 +1,15 @@
 @mixin media-section-root {
-    margin: -2px;
+    margin: 22px -2px -2px -2px;
+
+    &:first-child {
+        margin-top: -2px;
+    }
+}
+
+@mixin media-section-title {
+    font-weight: bold;
+    padding-bottom: 8px;
+    display: block;
 }
 
 @mixin media-section-container {
@@ -11,6 +21,10 @@
 @mixin media-section {
     .media-section {
         @include media-section-root;
+
+        &__title {
+            @include media-section-title;
+        }
 
         &__container {
             @include media-section-container;

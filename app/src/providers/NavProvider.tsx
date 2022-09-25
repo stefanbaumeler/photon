@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
-import { TNav, TNavContext } from '@/types/app'
+import { TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 
@@ -13,6 +13,10 @@ enum ENavs {
     HOME = 'HOME',
     SETTINGS = 'SETTINGS',
     USER = 'USER'
+}
+
+enum ENavItemType {
+    ALBUMS = 'ALBUMS'
 }
 
 const NavContext = createContext<TNavContext>(null)
@@ -38,7 +42,8 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.ALBUM_PLURAL),
                     icon: Icons.mdiImageMultipleOutline,
-                    href: 'albums'
+                    href: 'albums',
+                    type: ENavItemType.ALBUMS
                 },
                 {
                     label: t(ETrans.SHARING),
@@ -147,7 +152,7 @@ const NavProvider = ({ children }: Props) => {
                 }
             ]
         }
-    ]
+    ] as TNav[]
 
     const setActiveItem = (navs: TNav[]) => {
         const route = router.route.substr( 1, router.route.length)
@@ -160,10 +165,21 @@ const NavProvider = ({ children }: Props) => {
 
     setActiveItem(navs)
 
+    const getActiveItem = () => {
+        const activeNav = navs.find((nav) => nav.items.find((item: TNavItem) => item.active))
+
+        if (activeNav) {
+            return activeNav.items.find((item: TNavItem) => item.active)
+        }
+
+        return navs[0].items[0]
+    }
+
     return <NavContext.Provider value={{
         active,
         setActive,
-        navs
+        navs,
+        getActiveItem
     }}
     >
         {children}

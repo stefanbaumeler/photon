@@ -52,7 +52,7 @@ router.post('/', upload.array('upload'), async (req, res, next) => {
     if (req.files) {
         const data = req.files as Express.Multer.File[]
 
-        const writePromises = data.map((file) => new Promise<Omit<Medium, 'id' | 'date_created' | 'date_modified'>>((resolve) => {
+        const writePromises = data.map((file) => new Promise<Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>>((resolve) => {
             const dimensions = sizeOf(file.path)
 
             ExifReader.load(file.path).then((meta) => {
@@ -76,17 +76,17 @@ router.post('/', upload.array('upload'), async (req, res, next) => {
                 const lng = Number.isNaN(rawLng) ? null : rawLng
 
                 resolve({
-                    date_taken: dateTime,
-                    filename_disk: file.filename,
-                    filename_download: file.originalname,
+                    dateTaken: dateTime,
+                    filenameDisk: file.filename,
+                    filenameDownload: file.originalname,
                     title: path.parse(file.originalname).name,
                     description: '',
                     height: dimensions.height || 0,
                     width: dimensions.width || 0,
-                    camera_make: meta.Make?.value[0],
-                    camera_model: meta.Model?.value[0],
+                    cameraMake: meta.Make?.value[0],
+                    cameraModel: meta.Model?.value[0],
                     flash: meta.Flash?.value,
-                    f_number: fNumber,
+                    fNumber: fNumber,
                     lat,
                     lng
                 })

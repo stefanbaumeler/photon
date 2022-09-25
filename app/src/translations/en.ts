@@ -30,5 +30,6 @@ export default {
     cancel: 'Cancel',
     delete: 'Delete',
     download: 'Download',
-    addto: 'Add to...'
+    addto: 'Add to...',
+    create_thing: 'Create {{thing, lowercase}}'
 }

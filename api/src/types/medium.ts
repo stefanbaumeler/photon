@@ -1,18 +1,18 @@
 export type Medium = {
-    date_created: string
-    date_modified: string
-    date_taken?: string
+    dateCreated: string
+    dateModified: string
+    dateTaken?: string
     id: string | number
-    filename_disk: string
-    filename_download: string
+    filenameDisk: string
+    filenameDownload: string
     title: string
     description: string
     width: number
     height: number
-    camera_make?: string
-    camera_model?: string
+    cameraMake?: string
+    cameraModel?: string
     flash?: number
-    f_number?: number
+    fNumber?: number
     iso?: number
     lat: number | null
     lng: number | null

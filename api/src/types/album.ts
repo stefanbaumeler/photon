@@ -4,3 +4,9 @@ export type Album = {
     description: string
     idMedium: number
 }
+
+export type AlbumsMedia = {
+    id: string | number
+    idAlbum: string | number
+    idMedium: string | number
+}

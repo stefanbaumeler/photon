@@ -1,25 +1,25 @@
 import { createContext, ReactNode, useState } from 'react'
-import { TMedia } from '@/types/api'
+import { TMedium } from '@/types/api'
 
 type Props = {
     children?: ReactNode
 }
 
 interface SelectionContext {
-    selected: Set<TMedia>
-    addSelected: (media: TMedia | TMedia[]) => void
-    removeSelected: (media: TMedia | TMedia[]) => void
-    isSelected: (media: TMedia | TMedia[]) => boolean
+    selected: Set<TMedium>
+    addSelected: (media: TMedium | TMedium[]) => void
+    removeSelected: (media: TMedium | TMedium[]) => void
+    isSelected: (media: TMedium | TMedium[]) => boolean
     clearSelected: () => void
     isInSelectionMode: boolean
 }
 const SelectionContext = createContext<SelectionContext | null>(null)
 
 const SelectionProvider = ({ children }: Props) => {
-    const [selected, setSelected] = useState(new Set<TMedia>())
+    const [selected, setSelected] = useState(new Set<TMedium>())
     const [isInSelectionMode, setIsInSelectionMode] = useState(false)
 
-    const addSelected = (items: TMedia | TMedia[]) => {
+    const addSelected = (items: TMedium | TMedium[]) => {
         const itemsToAdd = Array.isArray(items) ? items : [items]
         const newSet = new Set(selected)
 
@@ -31,7 +31,7 @@ const SelectionProvider = ({ children }: Props) => {
         setIsInSelectionMode(newSet.size !== 0)
     }
 
-    const removeSelected = (items: TMedia | TMedia[]) => {
+    const removeSelected = (items: TMedium | TMedium[]) => {
         const itemsToRemove = Array.isArray(items) ? items : [items]
         const newSet = new Set(selected)
 
@@ -43,7 +43,7 @@ const SelectionProvider = ({ children }: Props) => {
         setIsInSelectionMode(newSet.size !== 0)
     }
 
-    const isSelected = (items: TMedia | TMedia[]) => {
+    const isSelected = (items: TMedium | TMedium[]) => {
         const itemsToCheck = Array.isArray(items) ? items : [items]
 
         return itemsToCheck.every((item) => selected.has(item))

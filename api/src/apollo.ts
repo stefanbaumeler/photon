@@ -1,45 +1,65 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import { Express } from 'express'
 import MediaService from './services/media'
+import AlbumsService from './services/albums'
+import AlbumsMediaService from './services/albumsMedia'
 
 export const createApolloServer = async (app: Express) => {
     const typeDefs = gql`
-        type Media {
-            date_created: String
-            date_modified: String
-            date_taken: String
+        type Medium {
+            dateCreated: String
+            dateModified: String
+            dateTaken: String
             id: ID
-            filename_disk: String
-            filename_download: String
+            filenameDisk: String
+            filenameDownload: String
             title: String
             description: String
             width: Int
             height: Int
-            camera_make: String
-            camera_model: String
+            cameraMake: String
+            cameraModel: String
             flash: Int
-            f_number: Float
+            fNumber: Float
             iso: Int
             lat: Float
             lng: Float
         }
 
+        type Album {
+            id: ID
+            title: String
+            description: String
+            idMedium: Int
+        }
+
         type Mutation {
             deleteMedia(ids: [ID]): String
+            addToAlbum(idAlbum: ID, media: [ID]): [ID]
         }
 
         type Query {
-            media: [Media]
+            media: [Medium]
+            albums: [Album]
+            album(id: ID): [Album]
+            albumMedia(id: ID): [Medium]
             deleteMedia(ids: [ID]): String
         }
     `
 
     const resolvers = {
         Query: {
-            media: () => new MediaService().readMany()
+            media: () => new MediaService().readMany(),
+            albums: () => new AlbumsService().readMany(),
+            album: async (_: any, input: { id: number } ) => new AlbumsService().readOne(input.id),
+            albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
-            deleteMedia: async (_: any, input: { ids: string[] }) => new MediaService().destroy(input.ids)
+            deleteMedia: async (_: any, input: { ids: string[] }) => new MediaService().destroy(input.ids),
+            addToAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().createMany(input.media.map((medium) => ({
+                idAlbum: input.idAlbum,
+                idMedium: medium
+            })))
         }
     }
 

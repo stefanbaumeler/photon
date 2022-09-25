@@ -1,0 +1,8 @@
+query AlbumsQuery {
+    albums {
+        id
+        title
+        description
+        idMedium
+    }
+}

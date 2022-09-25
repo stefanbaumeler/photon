@@ -11,8 +11,8 @@ export default class SharesService {
 
     async createOne () {
         return this.knex.insert({
-            filename_disk: '123232123123.jpg',
-            filename_download: 'foobar.jpg',
+            filenameDisk: '123232123123.jpg',
+            filenameDownload: 'foobar.jpg',
             title: 'foobar',
             description: ''
         })

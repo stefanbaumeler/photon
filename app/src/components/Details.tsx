@@ -7,7 +7,6 @@ import { useMedia } from '@/api/hooks'
 import { Check, IconButton, Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import dynamic from 'next/dynamic'
 
 const Details = () => {
@@ -20,7 +19,8 @@ const Details = () => {
     } = useContext(DetailsContext)
 
     const {
-        openDialog, closeDialog
+        openDialog, closeDialog,
+        active: dialogActive
     } = useContext(DialogContext)
 
     const {
@@ -47,12 +47,8 @@ const Details = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const keydown = (event: KeyboardEvent) => {
+        const leftRight = (event: KeyboardEvent) => {
             const index = collection.indexOf(medium)
-
-            if (event.key === 'Escape') {
-                closeDetails()
-            }
 
             if (event.key === 'ArrowLeft') {
                 if (collection[index - 1]) {
@@ -67,12 +63,26 @@ const Details = () => {
             }
         }
 
+        window.addEventListener('keydown', leftRight)
+
+        return () => {
+            window.removeEventListener('keydown', leftRight)
+        }
+    }, [collection, medium])
+
+    useEffect(() => {
+        const keydown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && !dialogActive) {
+                closeDetails()
+            }
+        }
+
         window.addEventListener('keydown', keydown)
 
         return () => {
             window.removeEventListener('keydown', keydown)
         }
-    }, [collection, medium])
+    }, [dialogActive])
 
     const openAskDeleteDialog = () => {
         openDialog('Remove from Picchu and all synced devices?', [
@@ -101,7 +111,7 @@ const Details = () => {
 
     }
 
-    const src = medium.filename_disk ? `http://localhost:2000/uploads/${medium.filename_disk}` : '#'
+    const src = medium.filenameDisk ? `http://localhost:2000/uploads/${medium.filenameDisk}` : '#'
 
     const OpenInfosButton = () => {
         if (infos) {
@@ -139,7 +149,7 @@ const Details = () => {
                 hint={t(ETrans.DOWNLOAD)}
                 white={true}
                 onClick={download}
-                download={medium.filename_download}
+                download={medium.filenameDownload}
                 external={true}
                 icon={Icons.mdiTrayArrowDown}
             />
@@ -179,11 +189,11 @@ const Details = () => {
     }
 
     const ConditionalDateDetail = () => {
-        if (medium.date_taken) {
+        if (medium.dateTaken) {
             return <Detail
                 icon={Icons.mdiCalendar}
-                title={new Date(parseInt(medium.date_taken, 10)).toLocaleString('en-US')}
-                values={getRelativeTime(new Date(parseInt(medium.date_taken, 10)))}
+                title={new Date(parseInt(medium.dateTaken, 10)).toLocaleString('en-US')}
+                values={getRelativeTime(new Date(parseInt(medium.dateTaken, 10)))}
             />
         }
 
@@ -241,13 +251,13 @@ const Details = () => {
                 <ConditionalDateDetail />
                 <Detail
                     icon={Icons.mdiCameraIris}
-                    title={`${medium.camera_make} ${medium.camera_model}`}
-                    values={[`f/${medium.f_number}`, `${medium.iso}`]}
+                    title={`${medium.cameraMake} ${medium.cameraModel}`}
+                    values={[`f/${medium.fNumber}`, `${medium.iso}`]}
                 />
                 <Detail
                     icon={Icons.mdiMapMarker}
-                    title={`${medium.camera_make} ${medium.camera_model}`}
-                    values={[`f/${medium.f_number}`, `${medium.iso}`]}
+                    title={`${medium.cameraMake} ${medium.cameraModel}`}
+                    values={[`f/${medium.fNumber}`, `${medium.iso}`]}
                 />
                 <Map
                     lat={medium.lat}

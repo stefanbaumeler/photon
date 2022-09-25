@@ -5,16 +5,23 @@ schema {
     mutation: Mutation
 }
 
-type Media {
-    camera_make: String
-    camera_model: String
-    date_created: String
-    date_modified: String
-    date_taken: String
+type Album {
     description: String
-    f_number: Float
-    filename_disk: String
-    filename_download: String
+    id: ID
+    idMedium: Int
+    title: String
+}
+
+type Medium {
+    cameraMake: String
+    cameraModel: String
+    dateCreated: String
+    dateModified: String
+    dateTaken: String
+    description: String
+    fNumber: Float
+    filenameDisk: String
+    filenameDownload: String
     flash: Int
     height: Int
     id: ID
@@ -26,10 +33,14 @@ type Media {
 }
 
 type Mutation {
+    addToAlbum(idAlbum: ID, media: [ID]): String
     deleteMedia(ids: [ID]): String
 }
 
 type Query {
+    album(id: ID): [Album]
+    albumMedia(id: ID): [Medium]
+    albums: [Album]
     deleteMedia(ids: [ID]): String
-    media: [Media]
+    media: [Medium]
 }
