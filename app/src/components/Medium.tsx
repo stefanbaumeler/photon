@@ -17,19 +17,12 @@ const Medium = ({
 }: Props) => {
     const [loading, setLoading] = useState(true)
     const [maxWidth, setMaxWidth] = useState(50)
-    const { openDetails } = useContext(DetailsContext)
+    const details = useContext(DetailsContext)
 
-    const {
-        addSelected, removeSelected, isSelected, isInSelectionMode
-    } = useContext(SelectionContext)
+    const selection = useContext(SelectionContext)
 
     const select = () => {
-        if (isSelected(medium)) {
-            removeSelected(medium)
-        }
-        else {
-            addSelected(medium)
-        }
+        selection.toggle(medium)
     }
 
     useEffect(() => {
@@ -39,24 +32,24 @@ const Medium = ({
     }, [width])
 
     const forceOpen = () => {
-        openDetails(medium, collection)
+        details.open(medium, collection)
     }
 
     const open = () => {
-        if (isInSelectionMode) {
+        if (selection.isInSelectionMode) {
             select()
         }
         else {
-            openDetails(medium, collection)
+            details.open(medium, collection)
         }
     }
 
-    return <div className={`medium${isSelected(medium) ? ' medium--selected' : ''}`}>
+    return <div className={`medium${selection.isSelected(medium) ? ' medium--selected' : ''}`}>
         <div className="medium__check">
             <Check
                 onClick={select}
-                ready={isInSelectionMode}
-                checked={isSelected(medium)}
+                ready={selection.isInSelectionMode}
+                checked={selection.isSelected(medium)}
             />
         </div>
         <button

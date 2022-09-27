@@ -12,36 +12,32 @@ const BulkActions = () => {
 
     const [activeAlbum, setActiveAlbum] = useState<string | number>()
 
-    const {
-        openDialog, closeDialog
-    } = useContext(DialogContext)
+    const dialog = useContext(DialogContext)
 
     const { state: [{ albums }] } = useAlbums()
 
-    const {
-        selected, isInSelectionMode
-    } = useContext(SelectionContext)
+    const selection = useContext(SelectionContext)
 
     const [addToAlbumMutation] = useAddToAlbum({
         variables: {
             idAlbum: `${activeAlbum}`,
-            media: Array.from(selected).map((s) => s.id)
+            media: Array.from(selection.selected).map((s) => s.id)
         }
     })
 
     const [deleteMedia] = useDeleteMedia({
         variables: {
-            ids: Array.from(selected).map((item) => item.id)
+            ids: Array.from(selection.selected).map((item) => item.id)
         }
     })
 
     const { refetch } = useMedia()
 
     const openAskDeleteDialog = () => {
-        openDialog(`Remove ${selected.size} from Picchu and all synced devices?`, [
+        dialog.open(`Remove ${selection.selected.size} from Picchu and all synced devices?`, [
             {
                 label: t(ETrans.CANCEL),
-                action: closeDialog,
+                action: dialog.close,
                 type: 'secondary'
             },
             {
@@ -54,7 +50,7 @@ const BulkActions = () => {
     const confirmDeleteMedia = () => {
         deleteMedia().then(() => {
             refetch().then(() => {
-                closeDialog()
+                dialog.close()
             })
         })
     }
@@ -74,14 +70,17 @@ const BulkActions = () => {
     }
 
     const addTo = () => {
-        openDialog('Add to Album', [], <>
-            {albums.map((album) => <button onClick={() => addToAlbum(album.id)}>
+        dialog.open('Add to Album', [], <>
+            {albums.map((album, k) => <button
+                key={k}
+                onClick={() => addToAlbum(album.id)}
+            >
                 {album.id}
             </button>)}
         </>)
     }
 
-    if (!isInSelectionMode) {
+    if (!selection.isInSelectionMode) {
         return <></>
     }
 

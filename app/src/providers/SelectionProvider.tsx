@@ -7,10 +7,11 @@ type Props = {
 
 interface SelectionContext {
     selected: Set<TMedium>
-    addSelected: (media: TMedium | TMedium[]) => void
-    removeSelected: (media: TMedium | TMedium[]) => void
+    add: (media: TMedium | TMedium[]) => void
+    remove: (media: TMedium | TMedium[]) => void
+    toggle: (media: TMedium | TMedium[]) => void
     isSelected: (media: TMedium | TMedium[]) => boolean
-    clearSelected: () => void
+    clear: () => void
     isInSelectionMode: boolean
 }
 const SelectionContext = createContext<SelectionContext | null>(null)
@@ -19,7 +20,7 @@ const SelectionProvider = ({ children }: Props) => {
     const [selected, setSelected] = useState(new Set<TMedium>())
     const [isInSelectionMode, setIsInSelectionMode] = useState(false)
 
-    const addSelected = (items: TMedium | TMedium[]) => {
+    const add = (items: TMedium | TMedium[]) => {
         const itemsToAdd = Array.isArray(items) ? items : [items]
         const newSet = new Set(selected)
 
@@ -31,7 +32,7 @@ const SelectionProvider = ({ children }: Props) => {
         setIsInSelectionMode(newSet.size !== 0)
     }
 
-    const removeSelected = (items: TMedium | TMedium[]) => {
+    const remove = (items: TMedium | TMedium[]) => {
         const itemsToRemove = Array.isArray(items) ? items : [items]
         const newSet = new Set(selected)
 
@@ -43,23 +44,36 @@ const SelectionProvider = ({ children }: Props) => {
         setIsInSelectionMode(newSet.size !== 0)
     }
 
+    const toggle = (items: TMedium | TMedium[]) => {
+        const itemsToToggle = Array.isArray(items) ? items : [items]
+
+        itemsToToggle.forEach((item) => {
+            if (isSelected(item)) {
+                remove(item)
+            } else {
+                add(item)
+            }
+        })
+    }
+
     const isSelected = (items: TMedium | TMedium[]) => {
         const itemsToCheck = Array.isArray(items) ? items : [items]
 
         return itemsToCheck.every((item) => selected.has(item))
     }
 
-    const clearSelected = () => {
+    const clear = () => {
         setSelected(new Set())
         setIsInSelectionMode(false)
     }
 
     return <SelectionContext.Provider value={{
         selected,
-        addSelected,
-        removeSelected,
+        add,
+        remove,
+        toggle,
         isSelected,
-        clearSelected,
+        clear,
         isInSelectionMode
     }}
     >

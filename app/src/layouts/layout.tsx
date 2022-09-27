@@ -7,13 +7,13 @@ type Props = {
 }
 
 const Layout = ({ children }: Props) => {
-    const { isInSelectionMode } = useContext(SelectionContext)
+    const selection = useContext(SelectionContext)
 
     return <>
         <div id="modal-root"></div>
         <div
             id="content-root"
-            className={`root${isInSelectionMode ? ' root--selecting' : ''}`}
+            className={`root${selection.isInSelectionMode ? ' root--selecting' : ''}`}
         >
             <SearchBar />
             <Sidebar />

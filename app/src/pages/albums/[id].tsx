@@ -18,9 +18,15 @@ const Home = () => {
     })
 
     return <Layout>
-        {album.title}
         <section>
-            <div>
+            <div className="album">
+                <div className="album__title-container">
+                    <input
+                        type="text"
+                        className="album__title"
+                        value={album.title}
+                    />
+                </div>
                 <Dialog />
                 <Uploader />
                 <DetailsProvider>

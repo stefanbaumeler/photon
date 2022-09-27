@@ -3,15 +3,12 @@ import { DialogContext } from '@/providers'
 import { TDialogButton } from '@/types/app'
 
 const Dialog = () => {
-    const {
-        text, buttons, active, content,
-        closeDialog
-    } = useContext(DialogContext)
+    const dialog = useContext(DialogContext)
 
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
-                closeDialog()
+                dialog.close()
             }
         }
 
@@ -32,23 +29,23 @@ const Dialog = () => {
     }
 
     const DialogContent = () => {
-        if (content) {
+        if (dialog.content) {
             return <div className="dialog__content">
-                {content}
+                {dialog.content}
             </div>
         }
 
         return <></>
     }
 
-    return <div className={`dialog${active ? ' dialog--active' : ''}`}>
+    return <div className={`dialog${dialog.active ? ' dialog--active' : ''}`}>
         <div className="dialog__container">
             <div className="dialog__text">
-                {text}
+                {dialog.text}
             </div>
             <DialogContent />
             <div className="dialog__controls">
-                {buttons.map((button, k) => <DialogButton
+                {dialog.buttons.map((button, k) => <DialogButton
                     key={k}
                     label={button.label}
                     action={button.action}

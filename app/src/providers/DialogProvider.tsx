@@ -10,8 +10,8 @@ interface DialogContext {
     text: string
     buttons: TDialogButton[]
     content: ReactNode
-    closeDialog: () => void
-    openDialog: (text: string, buttons: TDialogButton[], content?: ReactNode) => void
+    close: () => void
+    open: (text: string, buttons: TDialogButton[], content?: ReactNode) => void
 }
 
 const DialogContext = createContext<DialogContext | null>(null)
@@ -27,13 +27,13 @@ const DialogProvider = ({ children }: Props) => {
         text,
         buttons,
         content,
-        openDialog: (text: string, buttons: TDialogButton[], content?: ReactNode) => {
+        open: (text: string, buttons: TDialogButton[], content?: ReactNode) => {
             setText(text)
             setButtons(buttons)
             setActive(true)
             setContent(content)
         },
-        closeDialog: () => setActive(false)
+        close: () => setActive(false)
     }}
     >
         {children}

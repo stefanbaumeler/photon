@@ -10,8 +10,8 @@ interface DetailsContext {
     infos: boolean
     medium: TMedium
     collection: TMedium[]
-    openDetails: (medium: TMedium, collection: TMedium[]) => void
-    closeDetails: () => void
+    open: (medium: TMedium, collection: TMedium[]) => void
+    close: () => void
     openInfos: () => void
     closeInfos: () => void
 }
@@ -28,12 +28,12 @@ const DetailsProvider = ({ children }: Props) => {
         infos,
         medium,
         collection,
-        openDetails: (newMedium, newCollection) => {
+        open: (newMedium, newCollection) => {
             setCollection(newCollection)
             setMedium(newMedium)
             setActive(true)
         },
-        closeDetails: () => {
+        close: () => {
             setMedium({})
             setActive(false)
         },

@@ -1,6 +1,6 @@
 import { TMedium } from '@/types/api'
 import { MediaSection } from '@/components'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 
 type Props = {
@@ -8,9 +8,9 @@ type Props = {
 }
 
 const Media = ({ media }: Props) => {
-    const { clearSelected } = useContext(SelectionContext)
-    const { active: detailsActive } = useContext(DetailsContext)
-    const { active: dialogActive } = useContext(DialogContext)
+    const selection = useContext(SelectionContext)
+    const details = useContext(DetailsContext)
+    const dialog = useContext(DialogContext)
 
     const takenDates = new Set<string>()
 
@@ -31,8 +31,8 @@ const Media = ({ media }: Props) => {
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
-                if (!detailsActive && !dialogActive) {
-                    clearSelected()
+                if (!details.active && !dialog.active) {
+                    selection.clear()
                 }
             }
         }
@@ -42,7 +42,7 @@ const Media = ({ media }: Props) => {
         return () => {
             window.removeEventListener('keydown', keydown)
         }
-    }, [detailsActive, dialogActive])
+    }, [details.active, dialog.active])
 
     return <div className="media">
         <div className="media__header">

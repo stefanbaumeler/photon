@@ -12,35 +12,19 @@ import dynamic from 'next/dynamic'
 const Details = () => {
     const { t } = useTranslation()
 
-    const {
-        active, medium, collection,
-        openDetails, closeDetails,
-        openInfos, closeInfos, infos
-    } = useContext(DetailsContext)
-
-    const {
-        openDialog, closeDialog,
-        active: dialogActive
-    } = useContext(DialogContext)
-
-    const {
-        addSelected, removeSelected, isSelected, isInSelectionMode
-    } = useContext(SelectionContext)
+    const details = useContext(DetailsContext)
+    const dialog = useContext(DialogContext)
+    const selection = useContext(SelectionContext)
 
     const select = () => {
-        if (isSelected(medium)) {
-            removeSelected(medium)
-        }
-        else {
-            addSelected(medium)
-        }
+        selection.toggle(details.medium)
     }
 
     const { refetch } = useMedia()
 
     const [deleteMedium] = useDeleteMedia({
         variables: {
-            ids: [medium.id]
+            ids: [details.medium.id]
         }
     })
 
@@ -48,17 +32,17 @@ const Details = () => {
 
     useEffect(() => {
         const leftRight = (event: KeyboardEvent) => {
-            const index = collection.indexOf(medium)
+            const index = details.collection.indexOf(details.medium)
 
             if (event.key === 'ArrowLeft') {
-                if (collection[index - 1]) {
-                    openDetails(collection[index - 1], collection)
+                if (details.collection[index - 1]) {
+                    details.open(details.collection[index - 1], details.collection)
                 }
             }
 
             if (event.key === 'ArrowRight') {
-                if (collection[index + 1]) {
-                    openDetails(collection[index + 1], collection)
+                if (details.collection[index + 1]) {
+                    details.open(details.collection[index + 1], details.collection)
                 }
             }
         }
@@ -68,12 +52,12 @@ const Details = () => {
         return () => {
             window.removeEventListener('keydown', leftRight)
         }
-    }, [collection, medium])
+    }, [details.collection, details.medium])
 
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && !dialogActive) {
-                closeDetails()
+            if (event.key === 'Escape' && !dialog.active) {
+                details.close()
             }
         }
 
@@ -82,13 +66,13 @@ const Details = () => {
         return () => {
             window.removeEventListener('keydown', keydown)
         }
-    }, [dialogActive])
+    }, [dialog.active])
 
     const openAskDeleteDialog = () => {
-        openDialog('Remove from Picchu and all synced devices?', [
+        dialog.open('Remove from Picchu and all synced devices?', [
             {
                 label: t(ETrans.MOVE_TO_TRASH),
-                action: closeDialog,
+                action: dialog.close,
                 type: 'secondary'
             },
             {
@@ -101,8 +85,8 @@ const Details = () => {
     const confirmDeleteMedium = () => {
         deleteMedium().then(() => {
             refetch().then(() => {
-                closeDetails()
-                closeDialog()
+                details.close()
+                dialog.close()
             })
         })
     }
@@ -111,10 +95,10 @@ const Details = () => {
 
     }
 
-    const src = medium.filenameDisk ? `http://localhost:2000/uploads/${medium.filenameDisk}` : '#'
+    const src = details.medium.filenameDisk ? `http://localhost:2000/uploads/${details.medium.filenameDisk}` : '#'
 
     const OpenInfosButton = () => {
-        if (infos) {
+        if (details.infos) {
             return <></>
         }
 
@@ -123,20 +107,20 @@ const Details = () => {
                 thing: t(ETrans.INFO_PLURAL)
             })}
             white={true}
-            onClick={openInfos}
+            onClick={details.openInfos}
             icon={Icons.mdiInformation}
         />
     }
 
     const RightToolbar = () => {
-        if (isInSelectionMode) {
+        if (selection.isInSelectionMode) {
             return <Tippy
                 content={t(ETrans.SELECT)}
             >
                 <Check
                     onClick={select}
                     ready={true}
-                    checked={isSelected(medium)}
+                    checked={selection.isSelected(details.medium)}
                     boxSize={48}
                     hover={true}
                 />
@@ -149,7 +133,7 @@ const Details = () => {
                 hint={t(ETrans.DOWNLOAD)}
                 white={true}
                 onClick={download}
-                download={medium.filenameDownload}
+                download={details.medium.filenameDownload}
                 external={true}
                 icon={Icons.mdiTrayArrowDown}
             />
@@ -189,11 +173,11 @@ const Details = () => {
     }
 
     const ConditionalDateDetail = () => {
-        if (medium.dateTaken) {
+        if (details.medium.dateTaken) {
             return <Detail
                 icon={Icons.mdiCalendar}
-                title={new Date(parseInt(medium.dateTaken, 10)).toLocaleString('en-US')}
-                values={getRelativeTime(new Date(parseInt(medium.dateTaken, 10)))}
+                title={new Date(parseInt(details.medium.dateTaken, 10)).toLocaleString('en-US')}
+                values={getRelativeTime(new Date(parseInt(details.medium.dateTaken, 10)))}
             />
         }
 
@@ -204,14 +188,14 @@ const Details = () => {
         ssr: false
     })
 
-    return <div className={`details${active ? ' details--active' : ''}${infos ? ' details--infos' : ''}`}>
+    return <div className={`details${details.active ? ' details--active' : ''}${details.infos ? ' details--infos' : ''}`}>
         <div className="details__preview">
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
                         hint={t(ETrans.BACK)}
                         white={true}
-                        onClick={closeDetails}
+                        onClick={details.close}
                         icon={Icons.mdiArrowLeft}
                     />
                 </div>
@@ -242,7 +226,7 @@ const Details = () => {
                         hint={t(ETrans.HIDE_THING, {
                             thing: t(ETrans.INFO_PLURAL)
                         })}
-                        onClick={closeInfos}
+                        onClick={details.closeInfos}
                         icon={Icons.mdiArrowRight}
                     />
                 </div>
@@ -251,17 +235,17 @@ const Details = () => {
                 <ConditionalDateDetail />
                 <Detail
                     icon={Icons.mdiCameraIris}
-                    title={`${medium.cameraMake} ${medium.cameraModel}`}
-                    values={[`f/${medium.fNumber}`, `${medium.iso}`]}
+                    title={`${details.medium.cameraMake} ${details.medium.cameraModel}`}
+                    values={[`f/${details.medium.fNumber}`, `${details.medium.iso}`]}
                 />
                 <Detail
                     icon={Icons.mdiMapMarker}
-                    title={`${medium.cameraMake} ${medium.cameraModel}`}
-                    values={[`f/${medium.fNumber}`, `${medium.iso}`]}
+                    title={`${details.medium.cameraMake} ${details.medium.cameraModel}`}
+                    values={[`f/${details.medium.fNumber}`, `${details.medium.iso}`]}
                 />
                 <Map
-                    lat={medium.lat}
-                    lng={medium.lng}
+                    lat={details.medium.lat}
+                    lng={details.medium.lng}
                 />
             </div>
         </aside>

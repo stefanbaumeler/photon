@@ -1,0 +1,40 @@
+@mixin album-root {
+
+}
+
+@mixin album-title-container {
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: $color-secondary-highlight;
+    }
+}
+
+@mixin album-title {
+    height: 100px;
+    position: relative;
+    cursor: pointer;
+    border-width: 0;
+}
+
+@mixin album {
+    .album {
+        @include album-root;
+
+        &__title-container {
+            @include album-title-container;
+        }
+
+        &__title {
+            @include album-title;
+        }
+    }
+}
+
+@include album;
