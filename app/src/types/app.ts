@@ -51,3 +51,9 @@ export type GalleryItem = {
 export enum ENavItemType {
     ALBUMS = 'ALBUMS'
 }
+
+export enum ESelectionMode {
+    SELECT = 'SELECT',
+    DELETE = 'DELETE',
+    OFF = 'OFF'
+}

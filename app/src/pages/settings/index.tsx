@@ -2,7 +2,7 @@ import Layout from '@/layouts/layout'
 import { useMedia } from '@/api/hooks'
 import { Uploader } from '@/components'
 
-const Home = () => {
+const SettingsPage = () => {
     const { state: [{ media }] } = useMedia()
 
     return <Layout>
@@ -27,4 +27,4 @@ const Home = () => {
     </Layout>
 }
 
-export default Home
+export default SettingsPage

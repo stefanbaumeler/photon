@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { TMedium } from '@/types/api'
+import { ESelectionMode } from '@/types/app'
 
 type Props = {
     children?: ReactNode
@@ -12,13 +13,14 @@ interface SelectionContext {
     toggle: (media: TMedium | TMedium[]) => void
     isSelected: (media: TMedium | TMedium[]) => boolean
     clear: () => void
-    isInSelectionMode: boolean
+    mode: ESelectionMode
+    setMode: Dispatch<SetStateAction<ESelectionMode>>
 }
 const SelectionContext = createContext<SelectionContext | null>(null)
 
 const SelectionProvider = ({ children }: Props) => {
     const [selected, setSelected] = useState(new Set<TMedium>())
-    const [isInSelectionMode, setIsInSelectionMode] = useState(false)
+    const [mode, setMode] = useState(ESelectionMode.OFF)
 
     const add = (items: TMedium | TMedium[]) => {
         const itemsToAdd = Array.isArray(items) ? items : [items]
@@ -29,7 +31,10 @@ const SelectionProvider = ({ children }: Props) => {
         })
 
         setSelected(newSet)
-        setIsInSelectionMode(newSet.size !== 0)
+
+        if (newSet.size === 0) {
+            setMode(ESelectionMode.OFF)
+        }
     }
 
     const remove = (items: TMedium | TMedium[]) => {
@@ -41,7 +46,10 @@ const SelectionProvider = ({ children }: Props) => {
         })
 
         setSelected(newSet)
-        setIsInSelectionMode(newSet.size !== 0)
+
+        if (newSet.size === 0) {
+            setMode(ESelectionMode.OFF)
+        }
     }
 
     const toggle = (items: TMedium | TMedium[]) => {
@@ -64,7 +72,7 @@ const SelectionProvider = ({ children }: Props) => {
 
     const clear = () => {
         setSelected(new Set())
-        setIsInSelectionMode(false)
+        setMode(ESelectionMode.OFF)
     }
 
     return <SelectionContext.Provider value={{
@@ -74,7 +82,8 @@ const SelectionProvider = ({ children }: Props) => {
         toggle,
         isSelected,
         clear,
-        isInSelectionMode
+        mode,
+        setMode
     }}
     >
         {children}

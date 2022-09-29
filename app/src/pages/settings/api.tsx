@@ -3,7 +3,7 @@ import { useMedia } from '@/api/hooks'
 import { Media, Uploader, Details } from '@/components'
 import { DetailsProvider } from '@/providers'
 
-const Home = () => {
+const ApiPage = () => {
     const { state: [{ media }] } = useMedia()
 
     return <Layout>
@@ -19,4 +19,4 @@ const Home = () => {
     </Layout>
 }
 
-export default Home
+export default ApiPage

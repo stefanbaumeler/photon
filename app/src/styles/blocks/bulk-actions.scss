@@ -3,9 +3,19 @@
     margin-left: auto;
 }
 
+@mixin bulk-actions-count {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
 @mixin bulk-actions {
     .bulk-actions {
         @include bulk-actions-root;
+
+        &__count {
+            @include bulk-actions-count;
+        }
     }
 }
 

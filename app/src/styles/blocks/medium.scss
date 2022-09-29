@@ -2,7 +2,11 @@
     margin: 2px;
     position: relative;
     cursor: pointer;
-    background-color: #D8D8D8;
+    background-color: $color-gray;
+
+    &--removed {
+        display: none;
+    }
 }
 
 @mixin medium-container {
@@ -71,7 +75,7 @@
     top: 8px;
     left: 8px;
     z-index: 3;
-    transition: opacity .1s, background-color .25s, color .25s, transform .25s;
+    transition: opacity .1s, background-color .25s, color .25s;
     opacity: 0;
     display: flex;
 
@@ -95,6 +99,17 @@
 
     @at-root .medium--selected:hover & {
         opacity: 1;
+    }
+
+    @at-root .medium--removable & {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+
+    @at-root .medium--removable:hover &:hover {
+        opacity: .75;
     }
 }
 

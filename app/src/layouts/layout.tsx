@@ -1,6 +1,7 @@
 import { ReactNode, useContext } from 'react'
-import { Sidebar, SearchBar } from '@/components'
+import { SearchBar, Sidebar } from '@/components'
 import { SelectionContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
 
 type Props = {
     children?: ReactNode
@@ -13,7 +14,7 @@ const Layout = ({ children }: Props) => {
         <div id="modal-root"></div>
         <div
             id="content-root"
-            className={`root${selection.isInSelectionMode ? ' root--selecting' : ''}`}
+            className={`root${selection.mode !== ESelectionMode.OFF ? ' root--selecting' : ''}`}
         >
             <SearchBar />
             <Sidebar />

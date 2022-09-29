@@ -8,13 +8,14 @@ type Props = {
     onClick: () => void
     boxSize?: number
     hover?: boolean
+    remove?: boolean
 }
 
 const Check = ({
-    checked, ready, onClick, boxSize, hover
+    checked, ready, onClick, boxSize, hover, remove
 }: Props, ref: Ref<unknown>) => {
     return <button
-        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}`}
+        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}${remove ? ' check--remove' : ''}`}
         onClick={onClick}
         ref={ref as Ref<HTMLButtonElement>}
         style={{
@@ -22,6 +23,12 @@ const Check = ({
             height: `${boxSize || 24}px`
         }}
     >
+        <Icon
+            className="check__icon check__icon--remove"
+            path={Icons.mdiCloseCircle}
+            size={1}
+        />
+
         <Icon
             className="check__icon check__icon--background"
             path={Icons.mdiCheckboxBlankCircle}

@@ -31,6 +31,26 @@ export default class AlbumsMediaService {
         return primaryKeys
     }
 
+    async destroyOne (albumsMedia: Omit<AlbumsMedia, 'id'>) {
+        return this.knex.transaction(async (trx) => {
+            return trx.from(this.tableName).delete().where({
+                id_album: albumsMedia.idAlbum,
+                id_medium: albumsMedia.idMedium
+            })
+        })
+    }
+
+    async destroyMany (albumsMedia: Omit<AlbumsMedia, 'id'>[]) {
+        const primaryKeys = []
+
+        for (const albumMedium of albumsMedia) {
+            const pk = await this.destroyOne(albumMedium)
+            primaryKeys.push(pk)
+        }
+
+        return primaryKeys
+    }
+
     async readOne (key: string | number) {
         return this.knex.from(this.tableName).join('media', 'albums_media.id_medium', 'media.id').select().where({
             id: key
@@ -38,7 +58,6 @@ export default class AlbumsMediaService {
     }
 
     async readMany (idAlbum: string | number) {
-        console.log(idAlbum)
         return this.knex.from(this.tableName).select().where({
             id_album: idAlbum || null
         }).join('media', 'media.id', 'albums_media.id_medium')

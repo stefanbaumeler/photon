@@ -1,8 +1,9 @@
 import { TMedium } from '@/types/api'
 import { GalleryItem } from '@/types/app'
 import { Medium } from '@/components'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
+import { SelectionContext } from '@/providers'
 
 type Props = {
     media: TMedium[]

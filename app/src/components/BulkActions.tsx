@@ -6,6 +6,7 @@ import { useAddToAlbum, useDeleteMedia } from '@/types/api'
 import { useAlbums, useMedia } from '@/api/hooks'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
+import { ESelectionMode } from '@/types/app'
 
 const BulkActions = () => {
     const { t } = useTranslation()
@@ -70,7 +71,9 @@ const BulkActions = () => {
     }
 
     const addTo = () => {
-        dialog.open('Add to Album', [], <>
+        dialog.open(t(ETrans.ADD_TO_THING, {
+            thing: t(ETrans.ALBUM)
+        }), [], <>
             {albums.map((album, k) => <button
                 key={k}
                 onClick={() => addToAlbum(album.id)}
@@ -80,11 +83,16 @@ const BulkActions = () => {
         </>)
     }
 
-    if (!selection.isInSelectionMode) {
+    if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
 
     return <div className="bulk-actions">
+        <span className="bulk-actions__count">
+            {t(ETrans.N_SELECTED, {
+                n: selection.selected.size
+            })}
+        </span>
         <IconButton
             hint={t(ETrans.ADD_TO)}
             icon={Icons.mdiPlus}

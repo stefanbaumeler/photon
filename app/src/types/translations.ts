@@ -34,5 +34,9 @@ export enum ETrans {
     DELETE = 'delete',
     DOWNLOAD = 'download',
     ADD_TO = 'addto',
-    CREATE_THING = 'create_thing'
+    CREATE_THING = 'create_thing',
+    SAVE = 'save',
+    DISCARD = 'discard',
+    N_SELECTED = 'n_selected',
+    ADD_TO_THING = 'addto_thing'
 }

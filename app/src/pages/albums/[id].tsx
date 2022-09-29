@@ -1,13 +1,17 @@
 import Layout from '@/layouts/layout'
-import { Uploader, Details, Dialog, Media } from '@/components'
-import { DetailsProvider } from '@/providers'
+import { Details, Dialog, Media, Uploader } from '@/components'
+import { DetailsProvider, SelectionContext } from '@/providers'
 import { useAlbum } from '@/api/hooks'
 import { useRouter } from 'next/router'
 import { useAlbumMedia } from '@/api/hooks/albums'
+import { useContext } from 'react'
+import { ESelectionMode } from '@/types/app'
 
-const Home = () => {
+const AlbumPage = () => {
     const router = useRouter()
     const id = Array.isArray(router.query.id) ? router.query.id.join('') : router.query.id
+
+    const selection = useContext(SelectionContext)
 
     const { state: [album] } = useAlbum({
         id
@@ -17,6 +21,10 @@ const Home = () => {
         id
     })
 
+    const edit = () => {
+        selection.setMode(ESelectionMode.DELETE)
+    }
+
     return <Layout>
         <section>
             <div className="album">
@@ -25,6 +33,7 @@ const Home = () => {
                         type="text"
                         className="album__title"
                         value={album.title}
+                        onClick={edit}
                     />
                 </div>
                 <Dialog />
@@ -38,4 +47,4 @@ const Home = () => {
     </Layout>
 }
 
-export default Home
+export default AlbumPage

@@ -36,6 +36,7 @@ export const createApolloServer = async (app: Express) => {
         type Mutation {
             deleteMedia(ids: [ID]): String
             addToAlbum(idAlbum: ID, media: [ID]): [ID]
+            removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
         }
 
         type Query {
@@ -57,6 +58,10 @@ export const createApolloServer = async (app: Express) => {
         Mutation: {
             deleteMedia: async (_: any, input: { ids: string[] }) => new MediaService().destroy(input.ids),
             addToAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().createMany(input.media.map((medium) => ({
+                idAlbum: input.idAlbum,
+                idMedium: medium
+            }))),
+            removeFromAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().destroyMany(input.media.map((medium) => ({
                 idAlbum: input.idAlbum,
                 idMedium: medium
             })))

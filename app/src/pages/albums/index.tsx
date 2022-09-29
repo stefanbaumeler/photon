@@ -2,7 +2,7 @@ import Layout from '@/layouts/layout'
 import { useAlbums } from '@/api/hooks'
 import { Albums, Uploader, Dialog } from '@/components'
 
-const Home = () => {
+const AlbumsPage = () => {
     const { state: [{ albums }] } = useAlbums()
     return <Layout>
         <section>
@@ -15,4 +15,4 @@ const Home = () => {
     </Layout>
 }
 
-export default Home
+export default AlbumsPage

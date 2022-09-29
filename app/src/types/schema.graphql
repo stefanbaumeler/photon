@@ -33,8 +33,9 @@ type Medium {
 }
 
 type Mutation {
-    addToAlbum(idAlbum: ID, media: [ID]): String
+    addToAlbum(idAlbum: ID, media: [ID]): [ID]
     deleteMedia(ids: [ID]): String
+    removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
 }
 
 type Query {

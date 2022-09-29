@@ -4,6 +4,7 @@ import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check } from '@/components/index'
+import { ESelectionMode } from '@/types/app'
 
 type Props = {
     collection: TMedium[]
@@ -17,11 +18,15 @@ const Medium = ({
 }: Props) => {
     const [loading, setLoading] = useState(true)
     const [maxWidth, setMaxWidth] = useState(50)
-    const details = useContext(DetailsContext)
 
+    const details = useContext(DetailsContext)
     const selection = useContext(SelectionContext)
 
     const select = () => {
+        if (selection.mode === ESelectionMode.OFF) {
+            selection.setMode(ESelectionMode.SELECT)
+        }
+
         selection.toggle(medium)
     }
 
@@ -36,23 +41,20 @@ const Medium = ({
     }
 
     const open = () => {
-        if (selection.isInSelectionMode) {
+        if (selection.mode !== ESelectionMode.OFF) {
             select()
+            return
         }
-        else {
-            details.open(medium, collection)
-        }
+
+        forceOpen()
     }
 
-    return <div className={`medium${selection.isSelected(medium) ? ' medium--selected' : ''}`}>
-        <div className="medium__check">
-            <Check
-                onClick={select}
-                ready={selection.isInSelectionMode}
-                checked={selection.isSelected(medium)}
-            />
-        </div>
-        <button
+    const FallbackButton = () => {
+        if (selection.mode === ESelectionMode.DELETE) {
+            return <></>
+        }
+
+        return <button
             className="medium__open-fallback"
             onClick={forceOpen}
         >
@@ -61,6 +63,30 @@ const Medium = ({
                 size={1}
             />
         </button>
+    }
+
+    const classes = ['medium']
+
+    if (selection.isSelected(medium)) {
+        classes.push('medium--selected')
+
+        if (selection.mode === ESelectionMode.DELETE) {
+            classes.push('medium--removed')
+        }
+    } else if (selection.mode === ESelectionMode.DELETE) {
+        classes.push('medium--removable')
+    }
+
+    return <div className={classes.join(' ')}>
+        <div className="medium__check">
+            <Check
+                onClick={select}
+                ready={selection.mode !== ESelectionMode.OFF}
+                checked={selection.isSelected(medium)}
+                remove={selection.mode === ESelectionMode.DELETE}
+            />
+        </div>
+        <FallbackButton />
         <div
             className="medium__container"
             onClick={open}

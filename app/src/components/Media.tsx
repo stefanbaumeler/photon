@@ -2,6 +2,7 @@ import { TMedium } from '@/types/api'
 import { MediaSection } from '@/components'
 import { useContext, useEffect } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
 
 type Props = {
     media: TMedium[]
@@ -19,11 +20,17 @@ const Media = ({ media }: Props) => {
     })
 
     const sections = Array.from(takenDates).map((takenDate, key) => {
-        const mediaTakenOnThisDate = media.filter((medium) => new Date(parseInt(medium.dateTaken, 10)).toLocaleDateString('de-CH') === takenDate)
+        const takenOnThisDate = media.filter((medium) => new Date(parseInt(medium.dateTaken, 10)).toLocaleDateString('de-CH') === takenDate)
+        const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
+
+        if (!notRemoved.length) {
+            return <></>
+        }
+
         return <MediaSection
             key={key}
             title={takenDate}
-            media={mediaTakenOnThisDate}
+            media={notRemoved}
             collection={media}
         />
     })

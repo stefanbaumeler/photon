@@ -31,5 +31,9 @@ export default {
     delete: 'Delete',
     download: 'Download',
     addto: 'Add to...',
-    create_thing: 'Create {{thing, lowercase}}'
+    create_thing: 'Create {{thing, lowercase}}',
+    save: 'Save changes',
+    discard: 'Discard changes',
+    n_selected: '{{n}} selected',
+    addto_thing: 'Add to {{thing, lowercase}}'
 }

@@ -58,6 +58,14 @@
             opacity: 0;
         }
     }
+
+    &--remove {
+        display: none;
+
+        @at-root .check--remove & {
+            display: block;
+        }
+    }
 }
 
 @mixin check {
