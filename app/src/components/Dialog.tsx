@@ -29,21 +29,28 @@ const Dialog = () => {
     }
 
     const DialogContent = () => {
-        if (dialog.content) {
-            return <div className="dialog__content">
-                {dialog.content}
-            </div>
+        if (!dialog.content) {
+            return <></>
         }
 
-        return <></>
+        return <div className="dialog__content">
+            {dialog.content}
+        </div>
     }
 
     return <div className={`dialog${dialog.active ? ' dialog--active' : ''}`}>
         <div className="dialog__container">
-            <div className="dialog__text">
-                {dialog.text}
+            <div className="dialog__header">
+                <div className="dialog__title">
+                    {dialog.title}
+                </div>
             </div>
-            <DialogContent />
+            <div className="dialog__content-container">
+                <div className="dialog__text">
+                    {dialog.text}
+                </div>
+                <DialogContent />
+            </div>
             <div className="dialog__controls">
                 {dialog.buttons.map((button, k) => <DialogButton
                     key={k}

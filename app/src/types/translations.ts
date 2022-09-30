@@ -38,5 +38,9 @@ export enum ETrans {
     SAVE = 'save',
     DISCARD = 'discard',
     N_SELECTED = 'n_selected',
-    ADD_TO_THING = 'addto_thing'
+    ADD_TO_THING = 'addto_thing',
+    UNTITLED = 'untitled',
+    NEW_ALBUM = 'newalbum',
+    MOVE_ITEMS_TO_TRASH = 'move_items_totrash',
+    ELEMENT = 'element'
 }

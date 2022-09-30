@@ -35,5 +35,10 @@ export default {
     save: 'Save changes',
     discard: 'Discard changes',
     n_selected: '{{n}} selected',
-    addto_thing: 'Add to {{thing, lowercase}}'
+    addto_thing: 'Add to {{thing, lowercase}}',
+    untitled: 'Untitled',
+    newalbum: 'New Album',
+    element_one: 'item',
+    element_other: 'items',
+    move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?'
 }

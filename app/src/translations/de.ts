@@ -35,5 +35,10 @@ export default {
     save: 'Änderungen speichern',
     discard: 'Änderungen verwerfen',
     n_selected: '{{n}} ausgewählt',
-    addto_thing: 'Zu {{thing}} hinzufügen'
+    addto_thing: 'Zu {{thing}} hinzufügen',
+    untitled: 'Ohne Titel',
+    newalbum: 'Neues Album',
+    element_one: 'Element',
+    element_other: 'Elemente',
+    move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?'
 }

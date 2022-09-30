@@ -69,17 +69,21 @@ const Details = () => {
     }, [dialog.active])
 
     const openAskDeleteDialog = () => {
-        dialog.open('Remove from Picchu and all synced devices?', [
-            {
-                label: t(ETrans.MOVE_TO_TRASH),
-                action: dialog.close,
-                type: 'secondary'
-            },
-            {
-                label: t(ETrans.MOVE_TO_TRASH),
-                action: confirmDeleteMedium
-            }
-        ])
+        dialog.open({
+            title: t(ETrans.MOVE_TO_TRASH),
+            text: 'Remove from Picchu and all synced devices?',
+            buttons: [
+                {
+                    label: t(ETrans.MOVE_TO_TRASH),
+                    action: dialog.close,
+                    type: 'secondary'
+                },
+                {
+                    label: t(ETrans.MOVE_TO_TRASH),
+                    action: confirmDeleteMedium
+                }
+            ]
+        })
     }
 
     const confirmDeleteMedium = () => {

@@ -1,3 +1,4 @@
+export { default as Album } from './Album'
 export { default as Albums } from './Albums'
 export { default as AlbumsActions } from './AlbumsActions'
 export { default as Sidebar } from './Sidebar'
@@ -15,4 +16,5 @@ export { default as Media } from './Media'
 export { default as MediaSection } from './MediaSection'
 export { default as Medium } from './Medium'
 export { default as Uploader } from './Uploader'
-
+export { default as Thumbnail } from './Thumbnail'
+export { default as Thumbnails } from './Thumbnails'

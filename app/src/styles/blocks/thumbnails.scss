@@ -1,0 +1,17 @@
+@mixin thumbnails-root {
+    display: flex;
+    flex-direction: column;
+
+    @at-root .dialog & {
+        margin-left: -32px;
+        margin-right: -32px;
+    }
+}
+
+@mixin thumbnails {
+    .thumbnails {
+        @include thumbnails-root;
+    }
+}
+
+@include thumbnails;

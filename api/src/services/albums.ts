@@ -12,23 +12,27 @@ export default class AlbumsService {
         this.knex = getDatabase()
     }
 
-    async createOne (album: Omit<Album, 'id' | 'idMedium'>, media?: Medium[]) {
-        return this.knex.transaction(async (trx) => {
-            return trx.insert(album)
-                .into(this.tableName)
-                .returning<{ id: string | number }[]>('id')
-                .then((result) => result[0].id)
-                .then((result) => {
-                    if (media) {
-                        const albumsMediaService = new AlbumsMediaService()
+    async createOne (album: Partial<Album>, media?: Pick<Medium, 'id'>[]) {
+        if (media?.length) {
+            album.idMedium = media[0].id
+        }
 
-                        albumsMediaService.createMany(media.map((medium) => ({
-                            idMedium: medium.id,
-                            idAlbum: result
-                        })))
-                    }
-                })
-        })
+        return this.knex.insert(album)
+            .into(this.tableName)
+            .returning<{ id: string | number }[]>('id')
+            .then((result) => result[0].id)
+            .then((result) => {
+                if (media) {
+                    const albumsMediaService = new AlbumsMediaService()
+
+                    albumsMediaService.createMany(media.map((medium) => ({
+                        idMedium: medium.id,
+                        idAlbum: result
+                    })))
+
+                    return result
+                }
+            })
     }
 
     async createMany (albums: Album[]) {

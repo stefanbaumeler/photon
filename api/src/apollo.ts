@@ -30,17 +30,26 @@ export const createApolloServer = async (app: Express) => {
             id: ID
             title: String
             description: String
-            idMedium: Int
+            idMedium: ID
+        }
+
+        input AlbumInput {
+            id: ID
+            title: String
+            description: String
+            idMedium: ID
         }
 
         type Mutation {
             deleteMedia(ids: [ID]): String
             addToAlbum(idAlbum: ID, media: [ID]): [ID]
             removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
+            createAlbum(album: AlbumInput, media: [ID]): ID
         }
 
         type Query {
             media: [Medium]
+            medium(id: ID): [Medium]
             albums: [Album]
             album(id: ID): [Album]
             albumMedia(id: ID): [Medium]
@@ -51,8 +60,9 @@ export const createApolloServer = async (app: Express) => {
     const resolvers = {
         Query: {
             media: () => new MediaService().readMany(),
+            medium: (_: any, input: { id: number }) => new MediaService().readOne(input.id),
             albums: () => new AlbumsService().readMany(),
-            album: async (_: any, input: { id: number } ) => new AlbumsService().readOne(input.id),
+            album: async (_: any, input: { id: number }) => new AlbumsService().readOne(input.id),
             albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
@@ -64,6 +74,9 @@ export const createApolloServer = async (app: Express) => {
             removeFromAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().destroyMany(input.media.map((medium) => ({
                 idAlbum: input.idAlbum,
                 idMedium: medium
+            }))),
+            createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsService().createOne({}, input.media.map((medium) => ({
+                id: medium
             })))
         }
     }

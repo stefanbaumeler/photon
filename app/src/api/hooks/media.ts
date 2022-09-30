@@ -1,6 +1,6 @@
-import { useMediaQuery } from '@/types/api'
+import { useMediaQuery, useMediumQuery } from '@/types/api'
 import { stateFrom } from '@/api/hooks/helpers'
-import { TMediaInput } from '@/types/app'
+import { TMediaInput, TMediumInput } from '@/types/app'
 
 export const useMedia = (variables: TMediaInput = {}) => {
     const {
@@ -12,6 +12,21 @@ export const useMedia = (variables: TMediaInput = {}) => {
     return {
         state: stateFrom(data, {
             media: []
+        }),
+        refetch
+    }
+}
+
+export const useMedium = (variables: TMediumInput) => {
+    const {
+        data, refetch
+    } = useMediumQuery({
+        variables
+    })
+
+    return {
+        state: stateFrom(data, {
+            medium: []
         }),
         refetch
     }

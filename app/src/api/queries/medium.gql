@@ -1,0 +1,21 @@
+query MediumQuery($id: ID) {
+    medium(id: $id) {
+        dateCreated
+        dateModified
+        dateTaken
+        id
+        filenameDisk
+        filenameDownload
+        title
+        description
+        width
+        height
+        cameraMake
+        cameraModel
+        flash
+        fNumber
+        iso
+        lat
+        lng
+    }
+}

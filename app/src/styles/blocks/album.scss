@@ -1,38 +1,49 @@
 @mixin album-root {
-
+    display: flex;
+    flex-direction: column;
 }
 
-@mixin album-title-container {
-    position: relative;
+@mixin album-image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: $color-gray;
+}
 
-    &:after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background-color: $color-secondary-highlight;
-    }
+@mixin album-image {
+    width: 100%;
 }
 
 @mixin album-title {
-    height: 100px;
-    position: relative;
-    cursor: pointer;
-    border-width: 0;
+    display: block;
+    font-weight: 600;
+    color: $color-black;
+    padding: 8px 0 4px;
+}
+
+@mixin album-misc {
+    color: $color-gray;
+    font-size: 12px;
 }
 
 @mixin album {
     .album {
         @include album-root;
 
-        &__title-container {
-            @include album-title-container;
+        &__image-container {
+            @include album-image-container;
+        }
+
+        &__image {
+            @include album-image;
         }
 
         &__title {
             @include album-title;
+        }
+
+        &__misc {
+            @include album-misc;
         }
     }
 }

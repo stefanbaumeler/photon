@@ -16,11 +16,27 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: $color-white;
-    padding: 64px 32px 32px;
+    padding: 32px 0;
+}
+
+@mixin dialog-header {
+    padding: 0 32px 32px;
+    background-color: $color-white;
+}
+
+@mixin dialog-title {
+    font-weight: 600;
+    top: 22px;
 }
 
 @mixin dialog-text {
 
+}
+
+@mixin dialog-content-container {
+    max-height: calc(100vh - 500px);
+    overflow: auto;
+    padding: 0 32px;
 }
 
 @mixin dialog-controls {
@@ -34,7 +50,7 @@
     color: $color-white;
     padding: 12px 32px;
     background-color: $color-primary;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
     transition: background-color .25s, box-shadow .25s;
     border-radius: 4px;
@@ -79,6 +95,18 @@
 
         &__container {
             @include dialog-container;
+        }
+
+        &__header {
+            @include dialog-header;
+        }
+
+        &__title {
+            @include dialog-title;
+        }
+
+        &__content-container {
+            @include dialog-content-container;
         }
 
         &__text {

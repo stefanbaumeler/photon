@@ -35,7 +35,7 @@
 @mixin uploader-label {
     color: $color-white;
     position: absolute;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 30px;
     text-shadow: 0 0 0 50px black;
 }

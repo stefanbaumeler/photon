@@ -1,0 +1,75 @@
+@mixin thumbnail-root {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    padding: 8px 0;
+    border-bottom: 1px solid $color-gray-light;
+    min-width: 400px;
+    transition: background-color .25s;
+
+    @at-root .dialog & {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+    &:hover {
+        background-color: $color-gray-light;
+    }
+}
+
+@mixin thumbnail-image-container {
+    background-color: $color-gray;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @at-root .thumbnail--new & {
+        background-color: $color-white;
+    }
+}
+
+@mixin thumbnail-image {
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+}
+
+@mixin thumbnail-label {
+
+    &--empty {
+        font-style: italic;
+    }
+}
+
+@mixin thumbnail-icon {
+
+}
+
+@mixin thumbnail {
+    .thumbnail {
+        @include thumbnail-root;
+
+        &__image-container {
+            @include thumbnail-image-container;
+        }
+
+        &__image {
+            @include thumbnail-image;
+        }
+
+        &__label {
+            @include thumbnail-label;
+        }
+
+        &__icon {
+            @include thumbnail-icon;
+        }
+    }
+}
+
+@include thumbnail;

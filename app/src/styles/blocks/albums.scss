@@ -1,0 +1,21 @@
+@mixin albums-root {
+
+}
+
+@mixin albums-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+@mixin albums {
+    .albums {
+        @include albums-root;
+
+        &__items {
+            @include albums-items;
+        }
+    }
+}
+
+@include albums;

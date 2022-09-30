@@ -5,6 +5,10 @@ export type TMediaInput = {
 
 }
 
+export type TMediumInput = {
+    id: string
+}
+
 export type TAlbumsInput = {
 
 }
@@ -48,6 +52,13 @@ export type GalleryItem = {
     height?: number
 }
 
+export type TThumbnail = {
+    type: EThumbnailType
+    title?: string
+    idMedium?: string | number
+    onClick: () => void
+}
+
 export enum ENavItemType {
     ALBUMS = 'ALBUMS'
 }
@@ -56,4 +67,9 @@ export enum ESelectionMode {
     SELECT = 'SELECT',
     DELETE = 'DELETE',
     OFF = 'OFF'
+}
+
+export enum EThumbnailType {
+    DEFAULT = 'DEFAULT',
+    ADD ='ADD'
 }

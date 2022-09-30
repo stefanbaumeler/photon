@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
-import { Check } from '@/components/index'
+import { Check } from '@/components'
 import { ESelectionMode } from '@/types/app'
 
 type Props = {
