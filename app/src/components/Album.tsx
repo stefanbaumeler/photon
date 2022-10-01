@@ -12,22 +12,22 @@ type Props = {
 const Album = ({ album }: Props) => {
     const { t } = useTranslation()
 
-    const { state: [media] } = useAlbumMedia({
+    const media = useAlbumMedia({
         id: album.id
     })
 
-    const { state: [{ medium }] } = useMedium({
+    const medium = useMedium({
         id: `${album.idMedium}`
     })
 
     const AlbumImage = () => {
-        if (!medium[0]?.filenameDisk) {
+        if (!medium.state.filenameDisk) {
             return <></>
         }
 
         return <img
             className="album__image"
-            src={`http://localhost:2000/uploads/${medium[0]?.filenameDisk}?w=800`}
+            src={`http://localhost:2000/uploads/${medium.state.filenameDisk}?w=800`}
             alt=""
         />
     }
@@ -45,9 +45,9 @@ const Album = ({ album }: Props) => {
                 </span>
                 <div className="album__misc">
                     <span className="album__count">
-                        {`${media.length} `}
+                        {`${media.state.length} `}
                         {t(ETrans.ELEMENT, {
-                            count: media.length
+                            count: media.state.length
                         })}
                     </span>
                 </div>

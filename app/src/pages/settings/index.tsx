@@ -1,10 +1,7 @@
 import Layout from '@/layouts/layout'
-import { useMedia } from '@/api/hooks'
 import { Uploader } from '@/components'
 
 const SettingsPage = () => {
-    const { state: [{ media }] } = useMedia()
-
     return <Layout>
         <section>
             <div>

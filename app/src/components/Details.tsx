@@ -4,10 +4,11 @@ import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
 import { useDeleteMedia } from '@/types/api'
 import { useMedia } from '@/api/hooks'
-import { Check, IconButton, Detail } from '@/components'
+import { Check, Detail, IconButton } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
+import { ESelectionMode } from '@/types/app'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -117,7 +118,7 @@ const Details = () => {
     }
 
     const RightToolbar = () => {
-        if (selection.isInSelectionMode) {
+        if (selection.mode === ESelectionMode.SELECT) {
             return <Tippy
                 content={t(ETrans.SELECT)}
             >

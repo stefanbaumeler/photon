@@ -46,13 +46,21 @@ export default class AlbumsService {
         return primaryKeys
     }
 
-    async readOne (key: string | number) {
+    async readOne (id: string | number) {
         return this.knex.from(this.tableName).select().where({
-            id: key
+            id
         })
     }
 
     async readMany (limit = 100) {
         return this.knex.from(this.tableName).select().limit(limit)
+    }
+
+    async updateOne (id: string | number, newProps: Partial<Album>) {
+        delete newProps.id
+
+        return this.knex.from(this.tableName).where({
+            id
+        }).update(newProps)
     }
 }

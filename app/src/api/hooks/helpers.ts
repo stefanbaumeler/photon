@@ -2,9 +2,9 @@ import { Dispatch, useEffect, useState } from 'react'
 
 type DeepPartial<T> = T extends object ? {
     [P in keyof T]?: DeepPartial<T[P]>;
-} : T;
+} : T
 
-export const stateFrom = function<T> (data: T, defaultState: DeepPartial<T> ): [T, Dispatch<T>] {
+export const stateFrom = function<T> (data: T, defaultState: DeepPartial<T> ): T {
     const [dataState, setDataState] = useState<T>(defaultState as T)
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export const stateFrom = function<T> (data: T, defaultState: DeepPartial<T> ): [
         }
     }, [data])
 
-    return [dataState, setDataState]
+    return dataState
 }
 
 export const sanitizeId = (id?: string | number) => {

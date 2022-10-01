@@ -3,13 +3,13 @@ import { useAlbums } from '@/api/hooks'
 import { Albums, Uploader, Dialog } from '@/components'
 
 const AlbumsPage = () => {
-    const { state: [{ albums }] } = useAlbums()
+    const albums = useAlbums()
     return <Layout>
         <section>
             <div>
                 <Dialog />
                 <Uploader />
-                <Albums albums={albums} />
+                <Albums albums={albums.state} />
             </div>
         </section>
     </Layout>

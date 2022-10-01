@@ -73,3 +73,9 @@ export enum EThumbnailType {
     DEFAULT = 'DEFAULT',
     ADD ='ADD'
 }
+
+export enum EEditState {
+    DISCARDED = 'DISCARDED',
+    CONFIRMED = 'CONFIRMED',
+    EDITING = 'EDITING'
+}

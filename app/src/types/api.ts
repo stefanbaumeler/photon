@@ -57,6 +57,7 @@ export type TMutation = {
   createAlbum?: Maybe<Scalars['ID']>
   deleteMedia?: Maybe<Scalars['String']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
+  updateAlbumTitle?: Maybe<Array<Maybe<Scalars['ID']>>>
 }
 
 export type TMutationAddToAlbumArgs = {
@@ -76,6 +77,11 @@ export type TMutationDeleteMediaArgs = {
 export type TMutationRemoveFromAlbumArgs = {
   idAlbum?: InputMaybe<Scalars['ID']>
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
+}
+
+export type TMutationUpdateAlbumTitleArgs = {
+  id?: InputMaybe<Scalars['ID']>
+  title?: InputMaybe<Scalars['String']>
 }
 
 export type TQuery = {
@@ -155,6 +161,13 @@ export type TRemoveFromAlbumVariables = Exact<{
 }>
 
 export type TRemoveFromAlbum = { __typename?: 'Mutation', removeFromAlbum?: Array<string | null> | null }
+
+export type TUpdateAlbumTitleVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>
+  title?: InputMaybe<Scalars['String']>
+}>
+
+export type TUpdateAlbumTitle = { __typename?: 'Mutation', updateAlbumTitle?: Array<string | null> | null }
 
 export const AddToAlbumDocument = gql`
     mutation addToAlbum($idAlbum: ID, $media: [ID]) {
@@ -394,3 +407,19 @@ export function useRemoveFromAlbum (baseOptions?: Apollo.MutationHookOptions<TRe
 export type RemoveFromAlbumHookResult = ReturnType<typeof useRemoveFromAlbum>
 export type RemoveFromAlbumMutationResult = Apollo.MutationResult<TRemoveFromAlbum>
 export type RemoveFromAlbumMutationOptions = Apollo.BaseMutationOptions<TRemoveFromAlbum, TRemoveFromAlbumVariables>
+export const UpdateAlbumTitleDocument = gql`
+    mutation updateAlbumTitle($id: ID, $title: String) {
+  updateAlbumTitle(id: $id, title: $title)
+}
+    `
+export type TUpdateAlbumTitleMutationFn = Apollo.MutationFunction<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>
+export function useUpdateAlbumTitle (baseOptions?: Apollo.MutationHookOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>(UpdateAlbumTitleDocument, options)
+}
+export type UpdateAlbumTitleHookResult = ReturnType<typeof useUpdateAlbumTitle>
+export type UpdateAlbumTitleMutationResult = Apollo.MutationResult<TUpdateAlbumTitle>
+export type UpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>

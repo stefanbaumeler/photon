@@ -1,0 +1,40 @@
+@mixin album-details-root {
+
+}
+
+@mixin album-details-title-container {
+
+}
+
+@mixin album-details-title {
+    font-size: 48px;
+    border-width: 0;
+    outline: none;
+    margin-bottom: 16px;
+    width: calc(50% + #{$scrollbar-width / 2} + 4px);
+    transition: box-shadow .25s;
+
+    &:hover {
+        box-shadow: 0 -2px inset $color-gray-light;
+    }
+
+    &:focus {
+        box-shadow: 0 -2px inset $color-secondary-light;
+    }
+}
+
+@mixin album-details {
+    .album-details {
+        @include album-details-root;
+
+        &__title-container {
+            @include album-details-title-container;
+        }
+
+        &__title {
+            @include album-details-title;
+        }
+    }
+}
+
+@include album-details;

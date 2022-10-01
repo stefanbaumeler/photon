@@ -10,9 +10,7 @@ export const useAlbums = (variables: TAlbumsInput = {}) => {
     })
 
     return {
-        state: stateFrom(data, {
-            albums: []
-        }),
+        state: stateFrom(data?.albums, []),
         refetch
     }
 }
@@ -25,7 +23,7 @@ export const useAlbum = (variables: TAlbumInput) => {
     })
 
     return {
-        state: stateFrom(data?.album[0], {}),
+        state: stateFrom((data?.album || [])[0], {}),
         refetch
     }
 }

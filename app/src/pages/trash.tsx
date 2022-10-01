@@ -4,7 +4,7 @@ import { Media, Uploader, Details } from '@/components'
 import { DetailsProvider } from '@/providers'
 
 const TrashPage = () => {
-    const { state: [{ media }] } = useMedia()
+    const media = useMedia()
 
     return <Layout>
         <section>
@@ -12,7 +12,7 @@ const TrashPage = () => {
                 <Uploader />
                 <DetailsProvider>
                     <Details />
-                    <Media media={media} />
+                    <Media media={media.state} />
                 </DetailsProvider>
             </div>
         </section>

@@ -2,42 +2,23 @@ import * as Icons from '@mdi/js'
 import { IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ESelectionMode } from '@/types/app'
-import { useContext, useEffect, useState } from 'react'
-import { SelectionContext } from '@/providers'
-import { useRemoveFromAlbum } from '@/types/api'
-import { useRouter } from 'next/router'
+import { EEditState, ESelectionMode } from '@/types/app'
+import { useContext } from 'react'
+import { EditContext, SelectionContext } from '@/providers'
 
-const BulkActions = () => {
+const EditActions = () => {
     const { t } = useTranslation()
-    const router = useRouter()
-    const id = Array.isArray(router.query.id) ? router.query.id.join('') : router.query.id
+
+    const edit = useContext(EditContext)
 
     const selection = useContext(SelectionContext)
-    const [confirmed, setConfirmed] = useState(false)
 
-    const [removeFromAlbum] = useRemoveFromAlbum({
-        variables: {
-            idAlbum: `${id}`,
-            media: Array.from(selection.selected).map((s) => s.id)
-        }
-    })
-
-    useEffect(() => {
-        if (confirmed) {
-            setConfirmed(false)
-            removeFromAlbum()
-            selection.clear()
-        }
-    }, [confirmed])
-
-    const save = () => {
-        setConfirmed(true)
+    const confirm = () => {
+        edit.setState(EEditState.CONFIRMED)
     }
 
     const discard = () => {
-        selection.setMode(ESelectionMode.SELECT)
-        selection.clear()
+        edit.setState(EEditState.DISCARDED)
     }
 
     if (selection.mode !== ESelectionMode.DELETE) {
@@ -48,15 +29,14 @@ const BulkActions = () => {
         <IconButton
             hint={t(ETrans.SAVE)}
             icon={Icons.mdiCheck}
-            onClick={save}
+            onClick={confirm}
         />
         <IconButton
             hint={t(ETrans.DISCARD)}
             onClick={discard}
-            external={true}
             icon={Icons.mdiClose}
         />
     </div>
 }
 
-export default BulkActions
+export default EditActions

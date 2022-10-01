@@ -44,6 +44,7 @@ export const createApolloServer = async (app: Express) => {
             deleteMedia(ids: [ID]): String
             addToAlbum(idAlbum: ID, media: [ID]): [ID]
             removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
+            updateAlbumTitle(id: ID, title: String): ID
             createAlbum(album: AlbumInput, media: [ID]): ID
         }
 
@@ -75,6 +76,7 @@ export const createApolloServer = async (app: Express) => {
                 idAlbum: input.idAlbum,
                 idMedium: medium
             }))),
+            updateAlbumTitle: async (_: any, input: { id: string | number, title: string}) => new AlbumsService().updateOne(input.id, input),
             createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsService().createOne({}, input.media.map((medium) => ({
                 id: medium
             })))

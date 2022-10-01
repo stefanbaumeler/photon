@@ -19,7 +19,7 @@ const BulkActions = () => {
 
     const dialog = useContext(DialogContext)
 
-    const { state: [{ albums }] } = useAlbums()
+    const albums = useAlbums()
 
     const selection = useContext(SelectionContext)
 
@@ -44,7 +44,7 @@ const BulkActions = () => {
         setNewAlbum(true)
     }
 
-    const albumThumbnails = albums.map<TThumbnail>((album) => ({
+    const albumThumbnails = albums.state.map<TThumbnail>((album) => ({
         type: EThumbnailType.DEFAULT,
         title: album.title,
         idMedium: album.idMedium,

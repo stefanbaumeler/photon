@@ -3,8 +3,6 @@ import * as Icons from '@mdi/js'
 import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useMedia } from '@/api/hooks'
-import { useMediumQuery } from '@/types/api'
 import { useMedium } from '@/api/hooks/media'
 
 const Thumbnail = ({
@@ -13,7 +11,7 @@ const Thumbnail = ({
 }: TThumbnail) => {
     const { t } = useTranslation()
 
-    const { state: [{ medium: icon }] } = useMedium({
+    const medium = useMedium({
         id: `${idMedium}`
     })
 
@@ -36,13 +34,13 @@ const Thumbnail = ({
     }
 
     const ThumbnailImage = () => {
-        if (!icon[0]?.filenameDisk) {
+        if (!medium.state.filenameDisk) {
             return <></>
         }
 
         return <img
             className="thumbnail__image"
-            src={`http://localhost:2000/uploads/${icon[0]?.filenameDisk}?w=100`}
+            src={`http://localhost:2000/uploads/${medium.state.filenameDisk}?w=100`}
             alt=""
         />
     }
