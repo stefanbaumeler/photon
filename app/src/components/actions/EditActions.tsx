@@ -25,7 +25,7 @@ const EditActions = () => {
         return <></>
     }
 
-    return <div className="bulk-actions">
+    return <div className="actions">
         <IconButton
             hint={t(ETrans.SAVE)}
             icon={Icons.mdiCheck}

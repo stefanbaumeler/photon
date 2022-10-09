@@ -1,6 +1,7 @@
 import express from 'express'
 import sharp from 'sharp'
 import * as fs from 'fs'
+import MediaService from '../services/media'
 
 const router = express.Router()
 
@@ -18,7 +19,19 @@ const resize = (p: string, width: string | undefined) => {
 
 router.get('/:id', async (req, res) => {
     res.setHeader('Content-Type', 'image/png')
-    resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
+
+    if (req.query.download) {
+        await new MediaService().readOneFromDisk(req.params.id).then((medium) => {
+            res.setHeader(
+                'Content-disposition',
+                `attachment; filename=${medium[0].filenameDownload}.jpg`
+            )
+            resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
+        })
+    }
+    else {
+        resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
+    }
 })
 
 export default router

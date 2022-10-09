@@ -1,4 +1,4 @@
-import { Brand, Search, BulkActions, AlbumsActions, EditActions } from '@/components'
+import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions } from '@/components'
 
 const SearchBar = () => {
     return <div className="searchbar">
@@ -7,6 +7,7 @@ const SearchBar = () => {
         <BulkActions />
         <EditActions />
         <AlbumsActions />
+        <DefaultActions />
     </div>
 }
 

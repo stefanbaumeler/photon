@@ -42,5 +42,6 @@ export enum ETrans {
     UNTITLED = 'untitled',
     NEW_ALBUM = 'newalbum',
     MOVE_ITEMS_TO_TRASH = 'move_items_totrash',
-    ELEMENT = 'element'
+    ELEMENT = 'element',
+    UPLOAD = 'upload'
 }

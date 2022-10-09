@@ -140,8 +140,8 @@ const BulkActions = () => {
         return <></>
     }
 
-    return <div className="bulk-actions">
-        <span className="bulk-actions__count">
+    return <div className="actions">
+        <span className="actions__count">
             {t(ETrans.N_SELECTED, {
                 n: selection.selected.size
             })}

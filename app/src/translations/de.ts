@@ -40,5 +40,6 @@ export default {
     newalbum: 'Neues Album',
     element_one: 'Element',
     element_other: 'Elemente',
-    move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?'
+    move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?',
+    upload: 'Hochladen'
 }

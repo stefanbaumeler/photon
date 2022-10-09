@@ -48,7 +48,7 @@
     transition: background-color .25s;
 
     &:hover {
-        background-color: rgba(#888, .25);
+        background-color: rgba($color-gray, .25);
     }
     @at-root .toolbar--light & {
         color: $color-white;

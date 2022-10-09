@@ -5,7 +5,7 @@
     cursor: pointer;
 
     &--hover:hover {
-        background-color: rgba(#888, .25);
+        background-color: rgba($color-gray, .25);
     }
 }
 

@@ -37,6 +37,12 @@ export default class MediaService {
         })
     }
 
+    async readOneFromDisk (key: string | number) {
+        return this.knex.from(this.tableName).select().where({
+            filenameDisk: key
+        })
+    }
+
     async readMany (limit = 100) {
         return this.knex.from(this.tableName).select().limit(limit)
     }

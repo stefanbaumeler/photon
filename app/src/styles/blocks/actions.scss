@@ -1,0 +1,30 @@
+@mixin actions-root {
+    display: flex;
+    margin-left: auto;
+}
+
+@mixin actions-count {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+@mixin actions-uploader {
+    display: none;
+}
+
+@mixin actions {
+    .actions {
+        @include actions-root;
+
+        &__count {
+            @include actions-count;
+        }
+
+        &__uploader {
+            @include actions-uploader;
+        }
+    }
+}
+
+@include actions;

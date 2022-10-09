@@ -28,7 +28,7 @@ const AlbumsActions = () => {
         })
     }
 
-    return <div className="bulk-actions">
+    return <div className="actions">
         <IconButton
             hint={t(ETrans.CREATE_THING, {
                 thing: t(ETrans.ALBUM)

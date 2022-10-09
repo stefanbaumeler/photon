@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
 import { ESelectionMode } from '@/types/app'
+import { getRelativeTime } from '@/util/date'
+import Icon from '@mdi/react'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -31,20 +33,30 @@ const Details = () => {
 
     const [loading, setLoading] = useState(true)
 
+    const prev = () => {
+        const index = details.collection.indexOf(details.medium)
+
+        if (details.collection[index - 1]) {
+            details.open(details.collection[index - 1], details.collection)
+        }
+    }
+
+    const next = () => {
+        const index = details.collection.indexOf(details.medium)
+
+        if (details.collection[index + 1]) {
+            details.open(details.collection[index + 1], details.collection)
+        }
+    }
+
     useEffect(() => {
         const leftRight = (event: KeyboardEvent) => {
-            const index = details.collection.indexOf(details.medium)
-
             if (event.key === 'ArrowLeft') {
-                if (details.collection[index - 1]) {
-                    details.open(details.collection[index - 1], details.collection)
-                }
+                prev()
             }
 
             if (event.key === 'ArrowRight') {
-                if (details.collection[index + 1]) {
-                    details.open(details.collection[index + 1], details.collection)
-                }
+                next()
             }
         }
 
@@ -134,10 +146,9 @@ const Details = () => {
 
         return <>
             <IconButton
-                href={src}
+                href={`${src}?download=true`}
                 hint={t(ETrans.DOWNLOAD)}
                 white={true}
-                onClick={download}
                 download={details.medium.filenameDownload}
                 external={true}
                 icon={Icons.mdiTrayArrowDown}
@@ -150,31 +161,6 @@ const Details = () => {
             />
             <OpenInfosButton />
         </>
-    }
-
-    const getRelativeTime = (d1: Date, d2 = new Date()) => {
-        const units: {
-            [key: string]: number
-        } = {
-            year  : 24 * 60 * 60 * 1000 * 365,
-            month : 24 * 60 * 60 * 1000 * 365 / 12,
-            day   : 24 * 60 * 60 * 1000,
-            hour  : 60 * 60 * 1000,
-            minute: 60 * 1000,
-            second: 1000
-        }
-
-        const rtf = new Intl.RelativeTimeFormat('en-US', {
-            numeric: 'auto'
-        })
-
-        const elapsed = d1.getTime() - d2.getTime()
-
-        for (const u in units) {
-            if (Math.abs(elapsed) > units[u] || u === 'second') {
-                return rtf.format(Math.round(elapsed / units[u]), u as Intl.RelativeTimeFormatUnit)
-            }
-        }
     }
 
     const ConditionalDateDetail = () => {
@@ -195,6 +181,25 @@ const Details = () => {
 
     return <div className={`details${details.active ? ' details--active' : ''}${details.infos ? ' details--infos' : ''}`}>
         <div className="details__preview">
+
+            <button
+                className="details__button details__button--prev"
+                onClick={prev}
+            >
+                <Icon
+                    path={Icons.mdiChevronLeft}
+                    size={1.75}
+                />
+            </button>
+            <button
+                className="details__button details__button--next"
+                onClick={next}
+            >
+                <Icon
+                    path={Icons.mdiChevronRight}
+                    size={1.75}
+                />
+            </button>
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton

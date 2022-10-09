@@ -40,5 +40,6 @@ export default {
     newalbum: 'New Album',
     element_one: 'item',
     element_other: 'items',
-    move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?'
+    move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?',
+    upload: 'Upload'
 }
