@@ -3,22 +3,19 @@ import { IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useContext, useRef } from 'react'
-import { NavContext } from '@/providers'
-import { ENavItemType } from '@/types/app'
+import { NavContext, SelectionContext } from '@/providers'
+import { ENavItemType, ESelectionMode } from '@/types/app'
 import { useAlbums } from '@/api/hooks'
 
 const DefaultActions = () => {
     const { t } = useTranslation()
 
     const nav = useContext(NavContext)
+    const selection = useContext(SelectionContext)
 
     const uploadRef = useRef<HTMLInputElement>(null)
 
     const item = nav.getActiveItem()
-
-    if (item.type === ENavItemType.ALBUMS) {
-        return <></>
-    }
 
     const { refetch } = useAlbums()
 
@@ -41,6 +38,10 @@ const DefaultActions = () => {
                 uploadRef.current.value = ''
             })
         })
+    }
+
+    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF) {
+        return <></>
     }
 
     return <div className="actions">

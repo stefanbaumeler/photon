@@ -18,16 +18,45 @@ const Medium = ({
 }: Props) => {
     const [loading, setLoading] = useState(true)
     const [maxWidth, setMaxWidth] = useState(50)
+    const [shift, setShift] = useState(false)
 
     const details = useContext(DetailsContext)
     const selection = useContext(SelectionContext)
+
+    useEffect(() => {
+        const keydown = (event: KeyboardEvent) => {
+            if (event.key === 'Shift') {
+                setShift(true)
+            }
+        }
+
+        const keyup = (event: KeyboardEvent) => {
+            if (event.key === 'Shift') {
+                setShift(false)
+            }
+        }
+
+        window.addEventListener('keydown', keydown)
+        window.addEventListener('keyup', keyup)
+
+        return () => {
+            window.removeEventListener('keydown', keydown)
+            window.removeEventListener('keyup', keyup)
+        }
+    }, [])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        selection.toggle(medium)
+        if (shift) {
+            selection.add(selection.shiftTargets)
+            selection.setShiftTargets([])
+        }
+        else {
+            selection.toggle(medium)
+        }
     }
 
     useEffect(() => {
@@ -65,6 +94,16 @@ const Medium = ({
         </button>
     }
 
+    const updateShiftTargets = () => {
+        const ids = collection.map((medium) => medium.id)
+        const lastIndex = ids.indexOf(selection.lastAdded?.id)
+        const hoverIndex = ids.indexOf(medium.id)
+
+        const newShiftTargets = lastIndex < hoverIndex ? collection.slice(lastIndex, hoverIndex + 1) : collection.slice(hoverIndex, lastIndex + 1)
+
+        selection.setShiftTargets(newShiftTargets)
+    }
+
     const classes = ['medium']
 
     if (selection.isSelected(medium)) {
@@ -77,7 +116,18 @@ const Medium = ({
         classes.push('medium--removable')
     }
 
-    return <div className={classes.join(' ')}>
+    if (selection.lastAdded?.id === medium.id) {
+        classes.push('medium--last')
+    }
+
+    if (selection.shiftTargets.map((medium) => medium.id).includes(medium.id) && shift) {
+        classes.push('medium--shift')
+    }
+
+    return <div
+        className={classes.join(' ')}
+        onMouseOver={updateShiftTargets}
+    >
         <div className="medium__check">
             <Check
                 onClick={select}
@@ -94,14 +144,14 @@ const Medium = ({
             <div className="medium__image-container">
                 <img
                     className="medium__placeholder"
-                    width={width}
+                    width={width - 1}
                     height={height + 4}
                     src={`http://localhost:2000/uploads/${medium.filenameDisk}?w=75`}
                     alt=""
                 />
                 <img
                     className={`medium__image${!loading ? ' medium__image--loaded' : ''}`}
-                    width={width}
+                    width={width - 1}
                     height={height + 4}
                     src={`http://localhost:2000/uploads/${medium.filenameDisk}?w=${Math.abs(parseInt(`${maxWidth * 2}`, 10))}`}
                     alt=""

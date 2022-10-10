@@ -4,18 +4,19 @@ import { Ref, forwardRef } from 'react'
 
 type Props = {
     checked: boolean
-    ready: boolean
+    ready?: boolean
     onClick: () => void
     boxSize?: number
     hover?: boolean
     remove?: boolean
+    dark?: boolean
 }
 
 const Check = ({
-    checked, ready, onClick, boxSize, hover, remove
+    dark, checked, ready, onClick, boxSize, hover, remove
 }: Props, ref: Ref<unknown>) => {
     return <button
-        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}${remove ? ' check--remove' : ''}`}
+        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}${remove ? ' check--remove' : ''}${dark ? ' check--dark' : ''}`}
         onClick={onClick}
         ref={ref as Ref<HTMLButtonElement>}
         style={{

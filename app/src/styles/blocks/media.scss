@@ -1,9 +1,19 @@
 @mixin media-root {
 }
 
+@mixin media-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
 @mixin media {
     .media {
         @include media-root;
+
+        &__sections {
+            @include media-sections;
+        }
     }
 }
 

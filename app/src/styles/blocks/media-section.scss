@@ -1,26 +1,70 @@
 @mixin media-section-root {
-    margin: 22px -2px -2px -2px;
+    margin: -2px;
+    width: auto;
+}
 
-    &:first-child {
-        margin-top: -2px;
+@mixin media-section-header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-bottom: 8px;
+    overflow: hidden;
+}
+
+@mixin media-section-check {
+    transition: opacity .25s;
+    opacity: 0;
+
+    @at-root .media-section--one & {
+        display: none;
+    }
+
+    @at-root .media-section:hover & {
+        opacity: 1;
+    }
+
+    @at-root .media-section__header--selecting & {
+        opacity: 1;
     }
 }
 
 @mixin media-section-title {
     font-weight: 600;
-    padding-bottom: 8px;
     display: block;
+    translate: -32px;
+    transition: translate .25s;
+
+    @at-root .media-section--one & {
+        translate: none;
+    }
+
+    @at-root .media-section:hover & {
+        translate: none;
+    }
+
+    @at-root .media-section__header--selecting & {
+        translate: none;
+    }
 }
 
 @mixin media-section-container {
     display: flex;
     flex-wrap: wrap;
     transition: width 0s;
+    width: 100%;
 }
 
 @mixin media-section {
     .media-section {
         @include media-section-root;
+
+        &__header {
+            @include media-section-header;
+        }
+
+        &__check {
+            @include media-section-check;
+        }
 
         &__title {
             @include media-section-title;

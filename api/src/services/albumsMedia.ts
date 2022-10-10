@@ -13,10 +13,18 @@ export default class AlbumsMediaService {
 
     async createOne (albumMedium: Omit<AlbumsMedia, 'id'>) {
         return this.knex.transaction(async (trx) => {
-            return trx.insert(albumMedium)
-                .into(this.tableName)
-                .returning('id')
-                .then((result) => result[0].id)
+            return trx.select().from(this.tableName).where({
+                id_album: albumMedium.idAlbum,
+                id_medium: albumMedium.idMedium
+            }).then((result) => {
+                if (!result.length) {
+                    return trx
+                        .insert(albumMedium)
+                        .into(this.tableName)
+                        .returning('id')
+                        .then((result) => result[0].id)
+                }
+            })
         })
     }
 

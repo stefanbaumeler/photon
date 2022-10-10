@@ -37,7 +37,7 @@ export const generateGallery = (config: TGalleryConfig) => {
     const path = findShortestPath(getNeighbors, '0', config.images.length).map((node) => +node)
 
     for (let i = 1; i < path.length; ++i) {
-        const height = Math.min(getCommonHeight(config.images.slice(path[i - 1], path[i]), config), config.maxHeight)
+        const height = Math.max(Math.min(getCommonHeight(config.images.slice(path[i - 1], path[i]), config), config.maxHeight), 200)
 
         for (let j = path[i - 1]; j < path[i]; ++j) {
             config.images[j].width = Math.round(height * config.images[j].ratio * 100) / 100

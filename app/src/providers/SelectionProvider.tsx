@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useReducer, useState } from 'react'
 import { TMedium } from '@/types/api'
 import { ESelectionMode } from '@/types/app'
 
@@ -15,12 +15,17 @@ interface SelectionContext {
     clear: () => void
     mode: ESelectionMode
     setMode: Dispatch<SetStateAction<ESelectionMode>>
+    lastAdded: TMedium
+    shiftTargets: TMedium[]
+    setShiftTargets: Dispatch<SetStateAction<TMedium[]>>
 }
 const SelectionContext = createContext<SelectionContext | null>(null)
 
 const SelectionProvider = ({ children }: Props) => {
     const [selected, setSelected] = useState(new Set<TMedium>())
     const [mode, setMode] = useState(ESelectionMode.OFF)
+    const [lastAdded, setLastAdded] = useState<TMedium>()
+    const [shiftTargets, setShiftTargets] = useState<TMedium[]>([])
 
     const add = (items: TMedium | TMedium[]) => {
         const itemsToAdd = Array.isArray(items) ? items : [items]
@@ -31,6 +36,12 @@ const SelectionProvider = ({ children }: Props) => {
         })
 
         setSelected(newSet)
+        if (itemsToAdd.indexOf(lastAdded) === itemsToAdd.length - 1) {
+            setLastAdded(itemsToAdd[0])
+        }
+        else {
+            setLastAdded(itemsToAdd[itemsToAdd.length - 1])
+        }
 
         if (newSet.size === 0) {
             setMode(ESelectionMode.OFF)
@@ -46,6 +57,7 @@ const SelectionProvider = ({ children }: Props) => {
         })
 
         setSelected(newSet)
+        setLastAdded(undefined)
 
         if (newSet.size === 0) {
             setMode(ESelectionMode.OFF)
@@ -55,13 +67,12 @@ const SelectionProvider = ({ children }: Props) => {
     const toggle = (items: TMedium | TMedium[]) => {
         const itemsToToggle = Array.isArray(items) ? items : [items]
 
-        itemsToToggle.forEach((item) => {
-            if (isSelected(item)) {
-                remove(item)
-            } else {
-                add(item)
-            }
-        })
+        if (isSelected(itemsToToggle)) {
+            remove(itemsToToggle)
+        }
+        else {
+            add(itemsToToggle)
+        }
     }
 
     const isSelected = (items: TMedium | TMedium[]) => {
@@ -73,6 +84,8 @@ const SelectionProvider = ({ children }: Props) => {
     const clear = () => {
         setSelected(new Set())
         setMode(ESelectionMode.OFF)
+        setShiftTargets([])
+        setLastAdded(undefined)
     }
 
     return <SelectionContext.Provider value={{
@@ -83,7 +96,10 @@ const SelectionProvider = ({ children }: Props) => {
         isSelected,
         clear,
         mode,
-        setMode
+        setMode,
+        lastAdded,
+        shiftTargets,
+        setShiftTargets
     }}
     >
         {children}
