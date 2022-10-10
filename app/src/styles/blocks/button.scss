@@ -7,12 +7,18 @@
     align-items: center;
     cursor: pointer;
     transition: background-color .25s;
+    color: inherit;
 
     &:hover {
         background-color: rgba($color-gray, .25);
     }
+
     &--white {
         color: $color-white;
+    }
+
+    &--solid {
+        background-color: rgba($color-gray, .125);
     }
 }
 

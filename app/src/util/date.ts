@@ -1,3 +1,5 @@
+import { EDateFormat } from '@/types/app'
+
 export const getRelativeTime = (d1: Date, d2 = new Date()) => {
     const units: {
         [key: string]: number
@@ -21,4 +23,59 @@ export const getRelativeTime = (d1: Date, d2 = new Date()) => {
             return rtf.format(Math.round(elapsed / units[u]), u as Intl.RelativeTimeFormatUnit)
         }
     }
+}
+
+export const formatDate = (date?: Date | number | string, format: EDateFormat = EDateFormat.SHORT) => {
+    let d = date
+
+    if (typeof date === 'undefined') {
+        return
+    }
+
+    if (typeof d === 'string') {
+        d = parseInt(d, 10)
+    }
+
+    if (typeof d === 'number') {
+        d = new Date(d)
+    }
+
+    if (format === EDateFormat.LONG) {
+        if (d.getFullYear() === new Date().getFullYear()) {
+            return d.toLocaleDateString('de-CH', {
+                day: '2-digit',
+                month: 'short'
+            })
+        }
+
+        return d.toLocaleDateString('de-CH', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        })
+    }
+
+    return d.toLocaleDateString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    })
+}
+
+export const toDate = (date?: Date | number | string) => {
+    let d = date
+
+    if (typeof date === 'undefined') {
+        return undefined
+    }
+
+    if (typeof d === 'string') {
+        d = parseInt(d, 10)
+    }
+
+    if (typeof d === 'number') {
+        d = new Date(d)
+    }
+
+    return d
 }

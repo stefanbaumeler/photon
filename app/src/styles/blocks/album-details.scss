@@ -2,15 +2,22 @@
 
 }
 
-@mixin album-details-title-container {
+@mixin album-details-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
 
+@mixin album-details-back {
+    margin-left: -16px;
 }
 
 @mixin album-details-title {
     font-size: 48px;
     border-width: 0;
     outline: none;
-    margin-bottom: 16px;
     width: calc(50% + #{$scrollbar-width / 2} + 4px);
     transition: box-shadow .25s;
 
@@ -23,16 +30,28 @@
     }
 }
 
+@mixin album-details-dates {
+    color: $color-gray;
+}
+
 @mixin album-details {
     .album-details {
         @include album-details-root;
 
-        &__title-container {
-            @include album-details-title-container;
+        &__header {
+            @include album-details-header;
+        }
+
+        &__back {
+            @include album-details-back;
         }
 
         &__title {
             @include album-details-title;
+        }
+
+        &__dates {
+            @include album-details-dates;
         }
     }
 }

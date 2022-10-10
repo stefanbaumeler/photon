@@ -1,8 +1,9 @@
 import { TMedium } from '@/types/api'
 import { MediaSection } from '@/components'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
+import { formatDate, toDate } from '@/util/date'
 
 type Props = {
     media: TMedium[]
@@ -13,27 +14,48 @@ const Media = ({ media }: Props) => {
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
 
-    const takenDates = new Set<string>()
+    const [sections, setSections] = useState<JSX.Element[]>([])
 
-    media.forEach((medium) => {
-        takenDates.add(new Date(parseInt(medium.dateTaken, 10)).toLocaleDateString('de-CH'))
-    })
+    useEffect(() => {
+        const takenDates = new Set<string>()
 
-    const sections = Array.from(takenDates).map((takenDate, key) => {
-        const takenOnThisDate = media.filter((medium) => new Date(parseInt(medium.dateTaken, 10)).toLocaleDateString('de-CH') === takenDate)
-        const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
+        const mediaSortedByDateTaken = media
+            .sort((a, b) => toDate(b.dateTaken).getTime() - toDate(a.dateTaken).getTime())
 
-        if (!notRemoved.length) {
-            return <></>
-        }
+        mediaSortedByDateTaken.forEach((medium) => {
+            takenDates.add(formatDate(medium.dateTaken))
+        })
 
-        return <MediaSection
-            key={key}
-            title={takenDate}
-            media={notRemoved}
-            collection={media}
-        />
-    })
+        const unsortedSections = Array.from(takenDates).map((takenDate, key) => {
+            const takenOnThisDate = mediaSortedByDateTaken.filter((medium) => formatDate(medium.dateTaken) === takenDate)
+            const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
+
+            if (!notRemoved.length) {
+                return {
+                    date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
+                    template: <></>
+                }
+            }
+
+            console.log(mediaSortedByDateTaken)
+
+            return {
+                date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
+                template: <MediaSection
+                    key={key}
+                    title={takenDate}
+                    media={notRemoved}
+                    collection={mediaSortedByDateTaken}
+                />
+            }
+        })
+
+        const s = unsortedSections
+            .sort((a, b) => b.date - a.date)
+            .map((section) => section.template)
+
+        setSections(s)
+    }, [media])
 
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {

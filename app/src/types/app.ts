@@ -79,3 +79,8 @@ export enum EEditState {
     CONFIRMED = 'CONFIRMED',
     EDITING = 'EDITING'
 }
+
+export enum EDateFormat {
+    SHORT = 'short',
+    LONG = 'long'
+}
