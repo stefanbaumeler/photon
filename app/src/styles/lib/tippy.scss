@@ -1,0 +1,11 @@
+.tippy-box {
+    font-size: 12px;
+    overflow: hidden;
+
+    &[data-theme='light'] {
+
+        .tippy-content {
+            padding: 0;
+        }
+    }
+}

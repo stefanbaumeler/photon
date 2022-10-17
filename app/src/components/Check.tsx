@@ -1,6 +1,7 @@
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import { Ref, forwardRef } from 'react'
+import bem from '@/util/bem'
 
 type Props = {
     checked: boolean
@@ -15,8 +16,16 @@ type Props = {
 const Check = ({
     dark, checked, ready, onClick, boxSize, hover, remove
 }: Props, ref: Ref<unknown>) => {
+    const classes = bem('check', [
+        ['ready', ready],
+        ['checked', checked],
+        ['hover', hover],
+        ['remove', remove],
+        ['dark', dark]
+    ])
+
     return <button
-        className={`check${ready ? ' check--ready' : ''}${checked ? ' check--checked' : ''}${hover ? ' check--hover' : ''}${remove ? ' check--remove' : ''}${dark ? ' check--dark' : ''}`}
+        className={classes}
         onClick={onClick}
         ref={ref as Ref<HTMLButtonElement>}
         style={{

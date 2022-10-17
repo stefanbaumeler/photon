@@ -71,12 +71,14 @@ const AlbumPage = () => {
             Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
                 Promise.all([media.refetch(), album.refetch()]).then(() => {
                     selection.clear()
+                    edit.setState(EEditState.OFF)
                 })
             })
         }
 
         if (edit.state === EEditState.DISCARDED) {
             selection.clear()
+            edit.setState(EEditState.OFF)
         }
     }, [edit.state])
 
@@ -84,7 +86,7 @@ const AlbumPage = () => {
     const [latest, setLatest] = useState('')
 
     useEffect(() => {
-        const mediaSortedByDateTaken = media.state
+        const mediaSortedByDateTaken = Array.from(media.state)
             .sort((a, b) => new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime())
 
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))

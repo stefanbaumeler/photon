@@ -5,6 +5,8 @@ import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check } from '@/components'
 import { ESelectionMode } from '@/types/app'
+import useKeyboard from '@/hooks/keyboard'
+import bem from '@/util/bem'
 
 type Props = {
     collection: TMedium[]
@@ -23,29 +25,16 @@ const Medium = ({
     const details = useContext(DetailsContext)
     const selection = useContext(SelectionContext)
 
-    useEffect(() => {
-        const keydown = (event: KeyboardEvent) => {
-            if (event.key === 'Shift') {
-                setShift(true)
-            }
-        }
+    useKeyboard('keydown', 'Shift', () => {
+        setShift(true)
+    }, [])
 
-        const keyup = (event: KeyboardEvent) => {
-            if (event.key === 'Shift') {
-                setShift(false)
-            }
-        }
-
-        window.addEventListener('keydown', keydown)
-        window.addEventListener('keyup', keyup)
-
-        return () => {
-            window.removeEventListener('keydown', keydown)
-            window.removeEventListener('keyup', keyup)
-        }
+    useKeyboard('keyup', 'Shift', () => {
+        setShift(false)
     }, [])
 
     const select = () => {
+        console.log('s')
         if (selection.mode === ESelectionMode.OFF) {
             selection.setMode(ESelectionMode.SELECT)
         }
@@ -104,28 +93,20 @@ const Medium = ({
         selection.setShiftTargets(newShiftTargets)
     }
 
-    const classes = ['medium']
+    const classes = bem('medium', [
+        ['selected', selection.isSelected(medium)],
+        ['removed', selection.isSelected(medium) && selection.mode === ESelectionMode.DELETE],
+        ['removable', !selection.isSelected(medium) && selection.mode === ESelectionMode.DELETE],
+        ['last', selection.lastAdded?.id === medium.id],
+        ['shift', selection.shiftTargets.map((medium) => medium.id).includes(medium.id) && shift]
+    ])
 
-    if (selection.isSelected(medium)) {
-        classes.push('medium--selected')
-
-        if (selection.mode === ESelectionMode.DELETE) {
-            classes.push('medium--removed')
-        }
-    } else if (selection.mode === ESelectionMode.DELETE) {
-        classes.push('medium--removable')
-    }
-
-    if (selection.lastAdded?.id === medium.id) {
-        classes.push('medium--last')
-    }
-
-    if (selection.shiftTargets.map((medium) => medium.id).includes(medium.id) && shift) {
-        classes.push('medium--shift')
-    }
+    const imageClasses = bem('medium__image', [
+        ['loaded', !loading]
+    ])
 
     return <div
-        className={classes.join(' ')}
+        className={classes}
         onMouseOver={updateShiftTargets}
     >
         <div className="medium__check">
@@ -146,14 +127,14 @@ const Medium = ({
                     className="medium__placeholder"
                     width={width - 1}
                     height={height + 4}
-                    src={`http://localhost:2000/uploads/${medium.filenameDisk}?w=75`}
+                    src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=75`}
                     alt=""
                 />
                 <img
-                    className={`medium__image${!loading ? ' medium__image--loaded' : ''}`}
+                    className={imageClasses}
                     width={width - 1}
                     height={height + 4}
-                    src={`http://localhost:2000/uploads/${medium.filenameDisk}?w=${Math.abs(parseInt(`${maxWidth * 2}`, 10))}`}
+                    src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${maxWidth * 2}`, 10))}`}
                     alt=""
                     onLoad={() => setLoading(false)}
                 />

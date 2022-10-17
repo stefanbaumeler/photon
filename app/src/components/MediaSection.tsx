@@ -4,6 +4,7 @@ import { Check, Medium } from '@/components'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { SelectionContext } from '@/providers'
+import bem from '@/util/bem'
 
 type Props = {
     media: TMedium[]
@@ -29,24 +30,23 @@ const MediaSection = ({
         )
     }, [media])
 
+    const resize = () => {
+        const newWidth = galleryEl.current?.clientWidth
+
+        if (containerWidth !== newWidth) {
+            setContainerWidth(Math.floor(newWidth))
+        }
+    }
+
     useEffect(() => {
-        let animationFrameID: number = null
+        resize()
+    }, [images])
 
-        const observer = new ResizeObserver((entries) => {
-            const newWidth = entries[0].contentRect.width
-
-            if (containerWidth !== newWidth) {
-                animationFrameID = window.requestAnimationFrame(() => {
-                    setContainerWidth(Math.floor(newWidth))
-                })
-            }
-        })
-
-        observer.observe(galleryEl.current)
+    useEffect(() => {
+        window.addEventListener('resize', resize)
 
         return () => {
-            observer.disconnect()
-            window.cancelAnimationFrame(animationFrameID)
+            window.removeEventListener('resize', resize)
         }
     })
 
@@ -66,25 +66,24 @@ const MediaSection = ({
         selection.toggle(media)
     }
 
-    const classes = ['media-section']
+    const classes = bem('media-section', [
+        ['one', media.length === 1]
+    ])
 
-    if (media.length === 1) {
-        classes.push('media-section--one')
-    }
-
-    if (media.map((medium) => medium.id).includes(selection.lastAdded?.id)) {
-        classes.push('media-section--has-last')
-    }
+    const headerClasses = bem('media-section__header', [
+        ['selecting', selection.mode !== ESelectionMode.OFF]
+    ])
 
     return <div
-        className={classes.join(' ')}
+        className={classes}
         ref={galleryEl}
     >
-        <div className={`media-section__header${selection.mode === ESelectionMode.OFF ? '' : ' media-section__header--selecting'}`}>
+        <div className={headerClasses}>
             <div className="media-section__check">
                 <Check
                     dark={true}
                     onClick={select}
+                    ready={false}
                     checked={selection.isSelected(media)}
                     remove={selection.mode === ESelectionMode.DELETE}
                 />

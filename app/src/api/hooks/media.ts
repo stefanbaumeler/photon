@@ -9,6 +9,8 @@ export const useMedia = (variables: TMediaInput = {}) => {
         variables
     })
 
+    refetch()
+
     return {
         state: stateFrom(data?.media, []),
         refetch
@@ -21,6 +23,8 @@ export const useMedium = (variables: TMediumInput) => {
     } = useMediumQuery({
         variables
     })
+
+    refetch()
 
     return {
         state: stateFrom((data?.medium || [])[0], {}),

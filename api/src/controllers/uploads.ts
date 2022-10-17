@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
         await new MediaService().readOneFromDisk(req.params.id).then((medium) => {
             res.setHeader(
                 'Content-disposition',
-                `attachment; filename=${medium[0].filenameDownload}.jpg`
+                `attachment; filename=${medium[0].filenameDownload}`
             )
             resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
         })

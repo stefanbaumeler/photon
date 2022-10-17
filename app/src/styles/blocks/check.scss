@@ -53,10 +53,10 @@
             opacity: 1;
         }
     }
+
     &--blank {
         color: $color-white;
         opacity: 0;
-
 
         @at-root .check--ready & {
             opacity: 1;

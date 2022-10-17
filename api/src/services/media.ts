@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
 import { Medium } from '../types'
 import { getDatabase } from '../database'
+import AlbumsMediaService from './albumsMedia'
 
 export default class MediaService {
     knex: Knex
@@ -13,22 +14,26 @@ export default class MediaService {
 
     async createOne (medium: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>) {
         return this.knex.transaction(async (trx) => {
-            return trx.insert(medium)
-                .into(this.tableName)
-                .returning('id')
-                .then((result) => result[0].id)
+            return trx.select().from(this.tableName).where({
+                hash: medium.hash
+            }).then((result) => {
+                if (!result.length) {
+                    return trx
+                        .insert(medium)
+                        .into(this.tableName)
+                        .returning('id')
+                        .then((result) => result[0].id)
+                }
+            })
         })
     }
 
     async createMany (media: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>[]) {
-        const primaryKeys = []
+        const primaryKeys = media.map((medium) => this.createOne(medium))
 
-        for (const medium of media) {
-            const pk = await this.createOne(medium)
-            primaryKeys.push(pk)
-        }
-
-        return primaryKeys
+        return await Promise.all(primaryKeys).then((results) => {
+            return results
+        })
     }
 
     async readOne (key: string | number) {

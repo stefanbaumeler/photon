@@ -4,6 +4,7 @@ import { onModifiedTrigger, defaults } from '../helpers'
 export async function up (knex: Knex) {
     return knex.schema.createTable('media', (t) => {
         t.uuid('id').primary().defaultTo(knex.raw(defaults.uuid))
+        t.bigint('hash')
         t.timestamp('date_created').defaultTo(knex.raw(defaults.now))
         t.timestamp('date_modified').defaultTo(knex.raw(defaults.now))
         t.dateTime('date_taken')

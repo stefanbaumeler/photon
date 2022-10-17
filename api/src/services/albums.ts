@@ -17,33 +17,34 @@ export default class AlbumsService {
             album.idMedium = media[0].id
         }
 
-        return this.knex.insert(album)
-            .into(this.tableName)
-            .returning<{ id: string | number }[]>('id')
-            .then((result) => result[0].id)
-            .then((result) => {
-                if (media) {
-                    const albumsMediaService = new AlbumsMediaService()
+        return new Promise<string | number>((resolve) => {
+            this.knex.insert(album)
+                .into(this.tableName)
+                .returning<{ id: string | number }[]>('id')
+                .then((result) => result[0].id)
+                .then((result) => {
+                    if (media) {
+                        const albumsMediaService = new AlbumsMediaService()
 
-                    albumsMediaService.createMany(media.map((medium) => ({
-                        idMedium: medium.id,
-                        idAlbum: result
-                    })))
+                        const albumsMedia = media.map((medium) => ({
+                            idMedium: medium.id,
+                            idAlbum: result
+                        }))
 
-                    return result
-                }
-            })
+                        albumsMediaService.createMany(albumsMedia).then(() => {
+                            resolve(result)
+                        })
+                    }
+                })
+        })
     }
 
     async createMany (albums: Album[]) {
-        const primaryKeys = []
+        const primaryKeys = albums.map((album) => this.createOne(album))
 
-        for (const album of albums) {
-            const pk = await this.createOne(album)
-            primaryKeys.push(pk)
-        }
-
-        return primaryKeys
+        return await Promise.all(primaryKeys).then((results) => {
+            return results
+        })
     }
 
     async readOne (id: string | number) {

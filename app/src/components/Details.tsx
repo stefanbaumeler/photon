@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
@@ -11,6 +11,10 @@ import dynamic from 'next/dynamic'
 import { ESelectionMode } from '@/types/app'
 import { getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
+import useKeyboard from '@/hooks/keyboard'
+import bem from '@/util/bem'
+import Dropdown from '@/components/Dropdown'
+import useDeleteMediaDialog from '@/dialogs/delete-media'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -23,7 +27,7 @@ const Details = () => {
         selection.toggle(details.medium)
     }
 
-    const { refetch } = useMedia()
+    const media = useMedia()
 
     const [deleteMedium] = useDeleteMedia({
         variables: {
@@ -33,86 +37,27 @@ const Details = () => {
 
     const [loading, setLoading] = useState(true)
 
-    const prev = () => {
+    const slide = (direction: number) => {
         const index = details.collection.indexOf(details.medium)
 
-        if (details.collection[index - 1]) {
-            details.open(details.collection[index - 1], details.collection)
+        if (details.collection[index + direction]) {
+            details.open(details.collection[index + direction], details.collection)
         }
     }
 
-    const next = () => {
-        const index = details.collection.indexOf(details.medium)
-
-        if (details.collection[index + 1]) {
-            details.open(details.collection[index + 1], details.collection)
-        }
-    }
-
-    useEffect(() => {
-        const leftRight = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowLeft') {
-                prev()
-            }
-
-            if (event.key === 'ArrowRight') {
-                next()
-            }
-        }
-
-        window.addEventListener('keydown', leftRight)
-
-        return () => {
-            window.removeEventListener('keydown', leftRight)
-        }
+    useKeyboard('keydown', 'ArrowLeft', () => {
+        slide(-1)
     }, [details.collection, details.medium])
 
-    useEffect(() => {
-        const keydown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && !dialog.active) {
-                details.close()
-            }
-        }
+    useKeyboard('keydown', 'ArrowRight', () => {
+        slide(1)
+    }, [details.collection, details.medium])
 
-        window.addEventListener('keydown', keydown)
-
-        return () => {
-            window.removeEventListener('keydown', keydown)
-        }
+    useKeyboard('keydown', 'Escape', () => {
+        details.close()
     }, [dialog.active])
 
-    const openAskDeleteDialog = () => {
-        dialog.open({
-            title: t(ETrans.MOVE_TO_TRASH),
-            text: 'Remove from Picchu and all synced devices?',
-            buttons: [
-                {
-                    label: t(ETrans.MOVE_TO_TRASH),
-                    action: dialog.close,
-                    type: 'secondary'
-                },
-                {
-                    label: t(ETrans.MOVE_TO_TRASH),
-                    action: confirmDeleteMedium
-                }
-            ]
-        })
-    }
-
-    const confirmDeleteMedium = () => {
-        deleteMedium().then(() => {
-            refetch().then(() => {
-                details.close()
-                dialog.close()
-            })
-        })
-    }
-
-    const download = () => {
-
-    }
-
-    const src = details.medium.filenameDisk ? `http://localhost:2000/uploads/${details.medium.filenameDisk}` : '#'
+    const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${details.medium.filenameDisk}` : '#'
 
     const OpenInfosButton = () => {
         if (details.infos) {
@@ -144,21 +89,44 @@ const Details = () => {
             </Tippy>
         }
 
+        const rotate = () => {
+
+        }
+
+        const deleteMediaDialog = useDeleteMediaDialog()
+
+        const moreItems = [
+            {
+                label: t(ETrans.DELETE),
+                callback: deleteMediaDialog
+            },
+            {
+                label: t(ETrans.ROTATE_RIGHT),
+                callback: rotate
+            }
+        ]
+
+        const [moreActive, setMoreActive] = useState(false)
+
         return <>
             <IconButton
                 href={`${src}?download=true`}
                 hint={t(ETrans.DOWNLOAD)}
                 white={true}
-                download={details.medium.filenameDownload}
-                external={true}
                 icon={Icons.mdiTrayArrowDown}
             />
-            <IconButton
-                hint={t(ETrans.DELETE)}
-                white={true}
-                onClick={openAskDeleteDialog}
-                icon={Icons.mdiTrashCanOutline}
-            />
+            <Dropdown
+                items={moreItems}
+                active={moreActive}
+                onClickOutside={() => setMoreActive(false)}
+            >
+                <IconButton
+                    hint={t(ETrans.MORE_OPTIONS)}
+                    icon={Icons.mdiDotsVertical}
+                    white={true}
+                    onClick={() => setMoreActive(!moreActive)}
+                />
+            </Dropdown>
             <OpenInfosButton />
         </>
     }
@@ -179,12 +147,21 @@ const Details = () => {
         ssr: false
     })
 
-    return <div className={`details${details.active ? ' details--active' : ''}${details.infos ? ' details--infos' : ''}`}>
+    const classes = bem('details', [
+        ['active', details.active],
+        ['infos', details.infos]
+    ])
+
+    const imageClasses = bem('details__image', [
+        ['loaded', !loading]
+    ])
+
+    return <div className={classes}>
         <div className="details__preview">
 
             <button
                 className="details__button details__button--prev"
-                onClick={prev}
+                onClick={() => slide(-1)}
             >
                 <Icon
                     path={Icons.mdiChevronLeft}
@@ -193,7 +170,7 @@ const Details = () => {
             </button>
             <button
                 className="details__button details__button--next"
-                onClick={next}
+                onClick={() => slide(1)}
             >
                 <Icon
                     path={Icons.mdiChevronRight}
@@ -222,7 +199,7 @@ const Details = () => {
                     />
                 </div>
                 <img
-                    className={`details__image${!loading ? ' details__image--loaded' : ''}`}
+                    className={imageClasses}
                     src={src}
                     alt=""
                     onLoad={() => setLoading(false)}

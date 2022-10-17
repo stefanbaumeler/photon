@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useContext, useRef } from 'react'
 import { NavContext, SelectionContext } from '@/providers'
 import { ENavItemType, ESelectionMode } from '@/types/app'
-import { useAlbums } from '@/api/hooks'
+import useUpload from '@/hooks/upload'
 
 const DefaultActions = () => {
     const { t } = useTranslation()
@@ -17,28 +17,11 @@ const DefaultActions = () => {
 
     const item = nav.getActiveItem()
 
-    const { refetch } = useAlbums()
-
-    const upload = () => {
+    const clickUpload = () => {
         uploadRef.current.click()
     }
 
-    const change = () => {
-        const formData = new FormData()
-
-        for (let i = 0; i < uploadRef.current.files.length; i++) {
-            formData.append('upload', uploadRef.current.files[i])
-        }
-
-        fetch('http://localhost:2000/media', {
-            method: 'post',
-            body: formData
-        }).then(() => {
-            refetch().then(() => {
-                uploadRef.current.value = ''
-            })
-        })
-    }
+    const upload = useUpload()
 
     if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF) {
         return <></>
@@ -49,13 +32,13 @@ const DefaultActions = () => {
             type="file"
             className="actions__uploader"
             ref={uploadRef}
-            onChange={change}
+            onChange={upload}
             multiple={true}
         />
         <IconButton
             hint={t(ETrans.UPLOAD)}
             icon={Icons.mdiTrayArrowUp}
-            onClick={upload}
+            onClick={clickUpload}
         />
     </div>
 }

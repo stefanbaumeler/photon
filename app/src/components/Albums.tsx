@@ -1,6 +1,4 @@
-import { useAlbums } from '@/api/hooks'
 import { TAlbum } from '@/types/api'
-import Link from 'next/link'
 import { Album } from '@/components'
 
 type Props = {

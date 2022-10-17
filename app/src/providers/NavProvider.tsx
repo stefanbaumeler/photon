@@ -155,7 +155,7 @@ const NavProvider = ({ children }: Props) => {
     ] as TNav[]
 
     const setActiveItem = (navs: TNav[]) => {
-        const route = router.route.substr( 1, router.route.length)
+        const route = router.route.substring( 1, router.route.length)
         navs.forEach((nav) => {
             nav.items.forEach((item) => {
                 item.active = item.href === route

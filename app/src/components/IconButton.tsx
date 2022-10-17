@@ -3,6 +3,7 @@ import Tippy from '@tippyjs/react'
 import { forwardRef, ReactElement, Ref } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
+import bem from '@/util/bem'
 
 type Props = {
     onClick?: () => void
@@ -11,13 +12,11 @@ type Props = {
     href?: string
     white?: boolean
     icon: string
-    external?: boolean
-    download?: string
     solid?: boolean
 }
 
 const IconButton = ({
-    onClick, hint, hintPlacement, href, white, icon, external, download, solid
+    onClick, hint, hintPlacement, href, white = false, icon, solid = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -34,38 +33,19 @@ const IconButton = ({
         </>
     }
 
-    const linkClasses = ['button']
-
-    if (white) {
-        linkClasses.push('button--white')
-    }
-
-    if (solid) {
-        linkClasses.push('button--solid')
-    }
+    const linkClasses = bem('button', [
+        ['white', white],
+        ['solid', solid]
+    ])
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
         if (href) {
-            if (external) {
-                return <a
-                    ref={ref as Ref<HTMLAnchorElement>}
-                    href={href}
-                    className={linkClasses.join(' ')}
-                    onClick={onClick}
-                    target="_blank"
-                    rel="noreferrer"
-                    download={download}
-                >
-                    {children}
-                </a>
-            }
-
             return <Link
                 href={href}
                 onClick={onClick}
             >
                 <a
-                    className={linkClasses.join(' ')}
+                    className={linkClasses}
                     ref={ref as Ref<HTMLAnchorElement>}
                 >
                     {children}
@@ -75,7 +55,7 @@ const IconButton = ({
 
         return <button
             ref={ref as Ref<HTMLButtonElement>}
-            className={linkClasses.join(' ')}
+            className={linkClasses}
             onClick={onClick}
         >
             {children}

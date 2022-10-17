@@ -59,6 +59,11 @@ export type TThumbnail = {
     onClick: () => void
 }
 
+export type TDropdownItem = {
+    label: string
+    callback: () => void
+}
+
 export enum ENavItemType {
     ALBUMS = 'ALBUMS'
 }
@@ -75,6 +80,7 @@ export enum EThumbnailType {
 }
 
 export enum EEditState {
+    OFF = 'OFF',
     DISCARDED = 'DISCARDED',
     CONFIRMED = 'CONFIRMED',
     EDITING = 'EDITING'

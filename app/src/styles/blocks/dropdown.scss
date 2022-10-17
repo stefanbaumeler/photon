@@ -1,0 +1,59 @@
+@mixin dropdown-root {
+    position: relative;
+}
+
+@mixin dropdown-container {
+    min-width: 200px;
+}
+
+@mixin dropdown-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+@mixin dropdown-item {
+    display: block;
+    width: 100%;
+}
+
+@mixin dropdown-button {
+    padding: 16px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    transition: background-color .25s;
+    width: 100%;
+    text-align: left;
+
+    &:hover {
+        background-color: $color-gray-light;
+    }
+}
+
+@mixin dropdown {
+    .dropdown {
+        @include dropdown-root;
+
+        &__container {
+            @include dropdown-container;
+        }
+
+        &__list {
+            @include dropdown-list;
+        }
+
+        &__item {
+            @include dropdown-item;
+        }
+
+        &__button {
+            @include dropdown-button;
+        }
+    }
+}
+
+@include dropdown;

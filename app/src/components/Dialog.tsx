@@ -1,27 +1,21 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { DialogContext } from '@/providers'
 import { TDialogButton } from '@/types/app'
+import useKeyboard from '@/hooks/keyboard'
+import bem from '@/util/bem'
 
 const Dialog = () => {
     const dialog = useContext(DialogContext)
 
-    useEffect(() => {
-        const keydown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                dialog.close()
-            }
-        }
-
-        window.addEventListener('keydown', keydown)
-
-        return () => {
-            window.removeEventListener('keydown', keydown)
-        }
+    useKeyboard('keydown', 'Escape', () => {
+        dialog.close()
     }, [])
 
     const DialogButton = (btn: TDialogButton) => {
+        const classes = bem('dialog__button', [[btn.type || 'primary']])
+
         return <button
-            className={`dialog__button dialog__button--${btn.type || 'primary'}`}
+            className={classes}
             onClick={btn.action}
         >
             {btn.label}
@@ -38,7 +32,11 @@ const Dialog = () => {
         </div>
     }
 
-    return <div className={`dialog${dialog.active ? ' dialog--active' : ''}`}>
+    const classes = bem('dialog', [
+        ['active', dialog.active]
+    ])
+
+    return <div className={classes}>
         <div className="dialog__container">
             <div className="dialog__header">
                 <div className="dialog__title">

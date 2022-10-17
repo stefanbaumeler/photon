@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useContext } from 'react'
 import { NavContext } from '@/providers'
 import { ENavItemType } from '@/types/app'
-import { useAlbums } from '@/api/hooks'
+import useCreateAlbum from '@/hooks/create-album'
 
 const AlbumsActions = () => {
     const { t } = useTranslation()
@@ -18,15 +18,7 @@ const AlbumsActions = () => {
         return <></>
     }
 
-    const { refetch } = useAlbums()
-
-    const add = () => {
-        fetch('http://localhost:2000/albums', {
-            method: 'post'
-        }).then(() => {
-            refetch()
-        })
-    }
+    const createAlbum = useCreateAlbum()
 
     return <div className="actions">
         <IconButton
@@ -34,7 +26,7 @@ const AlbumsActions = () => {
                 thing: t(ETrans.ALBUM)
             })}
             icon={Icons.mdiPlus}
-            onClick={add}
+            onClick={createAlbum}
         />
     </div>
 }

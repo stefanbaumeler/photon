@@ -4,6 +4,7 @@ import { Albums, Uploader, Dialog } from '@/components'
 
 const AlbumsPage = () => {
     const albums = useAlbums()
+
     return <Layout>
         <section>
             <div>

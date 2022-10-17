@@ -67,19 +67,35 @@ export const createApolloServer = async (app: Express) => {
             albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
-            deleteMedia: async (_: any, input: { ids: string[] }) => new MediaService().destroy(input.ids),
-            addToAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().createMany(input.media.map((medium) => ({
-                idAlbum: input.idAlbum,
-                idMedium: medium
-            }))),
-            removeFromAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsMediaService().destroyMany(input.media.map((medium) => ({
-                idAlbum: input.idAlbum,
-                idMedium: medium
-            }))),
-            updateAlbumTitle: async (_: any, input: { id: string | number, title: string}) => new AlbumsService().updateOne(input.id, input),
-            createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => new AlbumsService().createOne({}, input.media.map((medium) => ({
-                id: medium
-            })))
+            deleteMedia: async (_: any, input: { ids: string[] }) => {
+                return await new MediaService().destroy(input.ids)
+            },
+            addToAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
+                const albumsMedia = input.media.map((medium) => ({
+                    idAlbum: input.idAlbum,
+                    idMedium: medium
+                }))
+
+                return await new AlbumsMediaService().createMany(albumsMedia)
+            },
+            removeFromAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
+                const itemsToRemove = input.media.map((medium) => ({
+                    idAlbum: input.idAlbum,
+                    idMedium: medium
+                }))
+
+                return await new AlbumsMediaService().destroyMany(itemsToRemove)
+            },
+            updateAlbumTitle: async (_: any, input: { id: string | number, title: string}) => {
+                return await new AlbumsService().updateOne(input.id, input)
+            },
+            createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
+                const media = input.media.map((medium) => ({
+                    id: medium
+                }))
+
+                return await new AlbumsService().createOne({}, media)
+            }
         }
     }
 

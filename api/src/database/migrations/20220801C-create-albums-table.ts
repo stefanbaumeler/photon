@@ -7,13 +7,13 @@ export async function up (knex: Knex) {
             t.uuid('id').primary().defaultTo(knex.raw(defaults.uuid))
             t.string('title', 100)
             t.text('description')
-            t.uuid('id_medium').references('media.id')
+            t.uuid('id_medium').references('media.id').onDelete('SET NULL')
         }),
 
         knex.schema.createTable('albums_media', (t) => {
             t.uuid('id').primary().defaultTo(knex.raw(defaults.uuid))
-            t.uuid('id_album').references('albums.id')
-            t.uuid('id_medium').references('media.id')
+            t.uuid('id_album').references('albums.id').onDelete('CASCADE')
+            t.uuid('id_medium').references('media.id').onDelete('CASCADE')
         })
     ])
 }

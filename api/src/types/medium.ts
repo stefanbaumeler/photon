@@ -1,4 +1,5 @@
 export type Medium = {
+    hash: number
     dateCreated: string
     dateModified: string
     dateTaken?: string

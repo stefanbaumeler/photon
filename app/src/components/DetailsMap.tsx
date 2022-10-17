@@ -1,5 +1,6 @@
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import L from 'leaflet'
+import { useState } from 'react'
 
 type Props = {
     lat: number
@@ -13,19 +14,32 @@ const DetailsMap = ({
         return <></>
     }
 
-    const foo = require('leaflet/dist/images/marker-icon-2x.png').default.src
+    const [markerIcon, setMarkerIcon] = useState('')
 
-    console.log(foo)
-
-    const myIcon = L.icon({
-        iconUrl: require('leaflet/dist/images/marker-icon-2x.png').default.src,
-        iconSize: [25, 41],
-        iconAnchor: [12.5, 41],
-        popupAnchor: null,
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
+    import('leaflet/dist/images/marker-icon-2x.png').then((icon) => {
+        setMarkerIcon(icon.default.src)
     })
+
+    const ConditionalMarker = () => {
+        if (markerIcon) {
+            const icon = L.icon({
+                iconUrl: markerIcon,
+                iconSize: [25, 41],
+                iconAnchor: [12.5, 41],
+                popupAnchor: null,
+                shadowUrl: null,
+                shadowSize: null,
+                shadowAnchor: null
+            })
+
+            return <Marker
+                position={[lat, lng]}
+                icon={icon}
+            />
+        }
+
+        return <></>
+    }
 
     return <div className="details-map">
         <a
@@ -44,10 +58,7 @@ const DetailsMap = ({
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker
-                    position={[lat, lng]}
-                    icon={myIcon}
-                />
+                <ConditionalMarker />
             </MapContainer>
         </a>
     </div>

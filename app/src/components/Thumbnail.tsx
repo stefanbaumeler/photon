@@ -4,6 +4,7 @@ import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { useMedium } from '@/api/hooks/media'
+import bem from '@/util/bem'
 
 const Thumbnail = ({
     idMedium, title, onClick,
@@ -14,6 +15,10 @@ const Thumbnail = ({
     const medium = useMedium({
         id: `${idMedium}`
     })
+
+    const labelClasses = bem('thumbnail__label', [
+        ['empty', !title?.length]
+    ])
 
     if (type === EThumbnailType.ADD) {
         return <button
@@ -40,7 +45,7 @@ const Thumbnail = ({
 
         return <img
             className="thumbnail__image"
-            src={`http://localhost:2000/uploads/${medium.state.filenameDisk}?w=100`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.state.filenameDisk}?w=100`}
             alt=""
         />
     }
@@ -52,7 +57,7 @@ const Thumbnail = ({
         <div className="thumbnail__image-container">
             <ThumbnailImage />
         </div>
-        <div className={`thumbnail__label${title?.length ? '' : ' thumbnail__label--empty'}`}>
+        <div className={labelClasses}>
             {title || t(ETrans.UNTITLED)}
         </div>
     </button>

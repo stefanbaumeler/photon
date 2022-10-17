@@ -12,51 +12,62 @@ export default class AlbumsMediaService {
     }
 
     async createOne (albumMedium: Omit<AlbumsMedia, 'id'>) {
-        return this.knex.transaction(async (trx) => {
-            return trx.select().from(this.tableName).where({
+        return new Promise<string | number>((resolve) => {
+            this.knex.select().from(this.tableName).where({
                 id_album: albumMedium.idAlbum,
                 id_medium: albumMedium.idMedium
-            }).then((result) => {
-                if (!result.length) {
-                    return trx
-                        .insert(albumMedium)
-                        .into(this.tableName)
-                        .returning('id')
-                        .then((result) => result[0].id)
+            }).then(async (results) => {
+                if (results.length) {
+                    resolve(results[0].id)
+                    return
                 }
+
+                this.knex
+                    .insert(albumMedium)
+                    .into(this.tableName)
+                    .returning<{ id: string | number }>('id')
+                    .then((result) => {
+                        resolve(result.id)
+                    })
             })
         })
     }
 
     async createMany (albumsMedia: Omit<AlbumsMedia, 'id'>[]) {
-        const primaryKeys = []
+        const primaryKeys = albumsMedia.map((albumMedium) => this.createOne(albumMedium))
 
-        for (const albumMedium of albumsMedia) {
-            const pk = await this.createOne(albumMedium)
-            primaryKeys.push(pk)
-        }
-
-        return primaryKeys
+        return await Promise.all(primaryKeys).then((results) => {
+            return results
+        })
     }
 
-    async destroyOne (albumsMedia: Omit<AlbumsMedia, 'id'>) {
-        return this.knex.transaction(async (trx) => {
-            return trx.from(this.tableName).delete().where({
-                id_album: albumsMedia.idAlbum,
-                id_medium: albumsMedia.idMedium
+    async destroyOne (albumsMedia: Omit<AlbumsMedia, 'id'> | string | number) {
+        return new Promise<string | number>((resolve) => {
+            if (typeof albumsMedia === 'object') {
+                this.knex.from(this.tableName).delete().where({
+                    id_album: albumsMedia.idAlbum,
+                    id_medium: albumsMedia.idMedium
+                }).then(() => {
+                    resolve('')
+                })
+
+                return
+            }
+
+            this.knex.from(this.tableName).delete().where({
+                id: albumsMedia
+            }).then(() => {
+                resolve('')
             })
         })
     }
 
-    async destroyMany (albumsMedia: Omit<AlbumsMedia, 'id'>[]) {
-        const primaryKeys = []
+    async destroyMany (albumsMedia: (Omit<AlbumsMedia, 'id'> | string | number)[]) {
+        const primaryKeys = albumsMedia.map((albumMedium) => this.destroyOne(albumMedium))
 
-        for (const albumMedium of albumsMedia) {
-            const pk = await this.destroyOne(albumMedium)
-            primaryKeys.push(pk)
-        }
-
-        return primaryKeys
+        return await Promise.all(primaryKeys).then((results) => {
+            return results
+        })
     }
 
     async readOne (key: string | number) {
@@ -68,6 +79,12 @@ export default class AlbumsMediaService {
     async readMany (idAlbum: string | number) {
         return this.knex.from(this.tableName).select().where({
             id_album: idAlbum || null
+        }).join('media', 'media.id', 'albums_media.id_medium')
+    }
+
+    async readManyByMedium (idMedium: string | number) {
+        return this.knex.from(this.tableName).select().where({
+            id_medium: idMedium || null
         }).join('media', 'media.id', 'albums_media.id_medium')
     }
 }

@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import { formatDate, toDate } from '@/util/date'
+import useKeyboard from '@/hooks/keyboard'
 
 type Props = {
     media: TMedium[]
@@ -19,7 +20,7 @@ const Media = ({ media }: Props) => {
     useEffect(() => {
         const takenDates = new Set<string>()
 
-        const mediaSortedByDateTaken = media
+        const mediaSortedByDateTaken = Array.from(media)
             .sort((a, b) => toDate(b.dateTaken).getTime() - toDate(a.dateTaken).getTime())
 
         mediaSortedByDateTaken.forEach((medium) => {
@@ -36,8 +37,6 @@ const Media = ({ media }: Props) => {
                     template: <></>
                 }
             }
-
-            console.log(mediaSortedByDateTaken)
 
             return {
                 date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
@@ -57,19 +56,9 @@ const Media = ({ media }: Props) => {
         setSections(s)
     }, [media])
 
-    useEffect(() => {
-        const keydown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                if (!details.active && !dialog.active) {
-                    selection.clear()
-                }
-            }
-        }
-
-        window.addEventListener('keydown', keydown)
-
-        return () => {
-            window.removeEventListener('keydown', keydown)
+    useKeyboard('keydown', 'Escape', () => {
+        if (!details.active && !dialog.active) {
+            selection.clear()
         }
     }, [details.active, dialog.active])
 

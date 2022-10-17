@@ -1,7 +1,7 @@
 import Icon from '@mdi/react'
-import { TNav, TNavItem } from '@/types/app'
+import { ESelectionMode, TNav, TNavItem } from '@/types/app'
 import { useContext } from 'react'
-import { NavContext } from '@/providers'
+import { NavContext, SelectionContext } from '@/providers'
 import Link from 'next/link'
 
 type Props = {
@@ -10,8 +10,11 @@ type Props = {
 
 const MainNav = ({ nav }: Props) => {
     const navs = useContext(NavContext)
+    const selection = useContext(SelectionContext)
 
     const click = (item: TNavItem) => {
+        selection.clear()
+
         if (item.subNav) {
             navs.setActive([item.subNav])
         }

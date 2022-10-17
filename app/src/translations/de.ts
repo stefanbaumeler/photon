@@ -41,5 +41,7 @@ export default {
     element_one: 'Element',
     element_other: 'Elemente',
     move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?',
-    upload: 'Hochladen'
+    upload: 'Hochladen',
+    moreoptions: 'Mehr Optionen',
+    rotateright: 'Nach rechts drehen'
 }

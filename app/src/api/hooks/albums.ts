@@ -9,6 +9,8 @@ export const useAlbums = (variables: TAlbumsInput = {}) => {
         variables
     })
 
+    refetch()
+
     return {
         state: stateFrom(data?.albums, []),
         refetch
@@ -22,6 +24,8 @@ export const useAlbum = (variables: TAlbumInput) => {
         variables
     })
 
+    refetch()
+
     return {
         state: stateFrom((data?.album || [])[0], {}),
         refetch
@@ -34,6 +38,8 @@ export const useAlbumMedia = (variables: TAlbumInput) => {
     } = useAlbumMediaQuery({
         variables
     })
+
+    refetch()
 
     return {
         state: stateFrom(data?.albumMedia, []),

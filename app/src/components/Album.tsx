@@ -27,7 +27,7 @@ const Album = ({ album }: Props) => {
 
         return <img
             className="album__image"
-            src={`http://localhost:2000/uploads/${medium.state.filenameDisk}?w=800`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.state.filenameDisk}?w=800`}
             alt=""
         />
     }

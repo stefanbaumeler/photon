@@ -27,12 +27,16 @@ router.get('/:id', async (req, res, next) => {
     return next()
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const service = new AlbumsService()
 
     service.createOne({
         title: '',
         description: ''
+    }).then((r) => {
+        res.json(r).status(200)
+
+        return next()
     })
 })
 

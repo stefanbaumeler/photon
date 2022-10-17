@@ -13,7 +13,7 @@ interface EditContext {
 const EditContext = createContext<EditContext | null>(null)
 
 const EditProvider = ({ children }: Props) => {
-    const [state, setState] = useState(EEditState.EDITING)
+    const [state, setState] = useState(EEditState.OFF)
 
     return <EditContext.Provider value={{
         state,

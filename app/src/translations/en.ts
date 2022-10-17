@@ -41,5 +41,8 @@ export default {
     element_one: 'item',
     element_other: 'items',
     move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?',
-    upload: 'Upload'
+    upload: 'Upload',
+    moreoptions: 'More Options',
+    rotateright: 'Rotate right'
+
 }

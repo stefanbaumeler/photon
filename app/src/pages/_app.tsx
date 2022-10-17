@@ -10,12 +10,13 @@ import translationsEn from '@/translations/en'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-// import tippy, { followCursor } from 'tippy.js'
-//
-// tippy.setDefaultProps({
-//     theme: 'light',
-//     plugins: [followCursor]
-// })
+import 'tippy.js/themes/light.css'
+
+import tippy  from 'tippy.js'
+
+tippy.setDefaultProps({
+    zIndex: 101
+})
 
 import styles from '../styles/index.scss'
 
@@ -35,7 +36,7 @@ i18next.use(initReactI18next).init({
     lng: 'de',
     fallbackLng: 'en',
     interpolation: {
-        format: (value, format, lng) => {
+        format: (value, format) => {
             if (format === 'uppercase') {
                 return value.toUpperCase()
             }
@@ -51,7 +52,7 @@ i18next.use(initReactI18next).init({
     }
 })
 
-const AutoReplyApp = ({
+const Picchu = ({
     Component, pageProps
 }: AppProps) => {
     return <ApolloProvider client={client}>
@@ -61,4 +62,4 @@ const AutoReplyApp = ({
     </ApolloProvider>
 }
 
-export default AutoReplyApp
+export default Picchu
