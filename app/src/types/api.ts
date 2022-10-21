@@ -57,7 +57,7 @@ export type TMutation = {
   createAlbum?: Maybe<Scalars['ID']>
   deleteMedia?: Maybe<Scalars['String']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
-  updateAlbumTitle?: Maybe<Array<Maybe<Scalars['ID']>>>
+  updateAlbumTitle?: Maybe<Scalars['ID']>
 }
 
 export type TMutationAddToAlbumArgs = {
@@ -167,7 +167,7 @@ export type TUpdateAlbumTitleVariables = Exact<{
   title?: InputMaybe<Scalars['String']>
 }>
 
-export type TUpdateAlbumTitle = { __typename?: 'Mutation', updateAlbumTitle?: Array<string | null> | null }
+export type TUpdateAlbumTitle = { __typename?: 'Mutation', updateAlbumTitle?: string | null }
 
 export const AddToAlbumDocument = gql`
     mutation addToAlbum($idAlbum: ID, $media: [ID]) {
@@ -212,6 +212,12 @@ export function useAlbumQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOption
 export type AlbumQueryHookResult = ReturnType<typeof useAlbumQuery>
 export type AlbumQueryLazyQueryHookResult = ReturnType<typeof useAlbumQueryLazyQuery>
 export type AlbumQueryQueryResult = Apollo.QueryResult<TAlbumQuery, TAlbumQueryVariables>
+export function refetchAlbumQuery (variables?: TAlbumQueryVariables) {
+    return {
+        query: AlbumQueryDocument,
+        variables: variables
+    }
+}
 export const AlbumMediaQueryDocument = gql`
     query AlbumMediaQuery($id: ID) {
   albumMedia(id: $id) {
@@ -252,6 +258,12 @@ export function useAlbumMediaQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookO
 export type AlbumMediaQueryHookResult = ReturnType<typeof useAlbumMediaQuery>
 export type AlbumMediaQueryLazyQueryHookResult = ReturnType<typeof useAlbumMediaQueryLazyQuery>
 export type AlbumMediaQueryQueryResult = Apollo.QueryResult<TAlbumMediaQuery, TAlbumMediaQueryVariables>
+export function refetchAlbumMediaQuery (variables?: TAlbumMediaQueryVariables) {
+    return {
+        query: AlbumMediaQueryDocument,
+        variables: variables
+    }
+}
 export const AlbumsQueryDocument = gql`
     query AlbumsQuery {
   albums {
@@ -279,6 +291,12 @@ export function useAlbumsQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptio
 export type AlbumsQueryHookResult = ReturnType<typeof useAlbumsQuery>
 export type AlbumsQueryLazyQueryHookResult = ReturnType<typeof useAlbumsQueryLazyQuery>
 export type AlbumsQueryQueryResult = Apollo.QueryResult<TAlbumsQuery, TAlbumsQueryVariables>
+export function refetchAlbumsQuery (variables?: TAlbumsQueryVariables) {
+    return {
+        query: AlbumsQueryDocument,
+        variables: variables
+    }
+}
 export const CreateAlbumDocument = gql`
     mutation createAlbum($media: [ID]) {
   createAlbum(media: $media)
@@ -351,6 +369,12 @@ export function useMediaQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOption
 export type MediaQueryHookResult = ReturnType<typeof useMediaQuery>
 export type MediaQueryLazyQueryHookResult = ReturnType<typeof useMediaQueryLazyQuery>
 export type MediaQueryQueryResult = Apollo.QueryResult<TMediaQuery, TMediaQueryVariables>
+export function refetchMediaQuery (variables?: TMediaQueryVariables) {
+    return {
+        query: MediaQueryDocument,
+        variables: variables
+    }
+}
 export const MediumQueryDocument = gql`
     query MediumQuery($id: ID) {
   medium(id: $id) {
@@ -391,6 +415,12 @@ export function useMediumQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptio
 export type MediumQueryHookResult = ReturnType<typeof useMediumQuery>
 export type MediumQueryLazyQueryHookResult = ReturnType<typeof useMediumQueryLazyQuery>
 export type MediumQueryQueryResult = Apollo.QueryResult<TMediumQuery, TMediumQueryVariables>
+export function refetchMediumQuery (variables?: TMediumQueryVariables) {
+    return {
+        query: MediumQueryDocument,
+        variables: variables
+    }
+}
 export const RemoveFromAlbumDocument = gql`
     mutation removeFromAlbum($idAlbum: ID, $media: [ID]) {
   removeFromAlbum(idAlbum: $idAlbum, media: $media)

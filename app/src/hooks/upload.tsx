@@ -1,9 +1,10 @@
-import { useAlbums, useMedia } from '@/api/hooks'
 import { ChangeEvent } from 'react'
+import { useMediaQuery } from '@/types/api'
 
 const useUpload = () => {
-    const albums = useAlbums()
-    const media = useMedia()
+    const media = useMediaQuery({
+        skip: true
+    })
 
     return (event: ChangeEvent<HTMLInputElement>) => {
         const formData = new FormData()
@@ -15,8 +16,8 @@ const useUpload = () => {
         fetch('http://localhost:2000/media', {
             method: 'post',
             body: formData
-        }).then((response) => {
-            Promise.all([albums.refetch(), media.refetch()]).then(() => {
+        }).then(() => {
+            media.refetch().then(() => {
                 event.target.value = ''
             })
         })

@@ -3,8 +3,9 @@ import * as Icons from '@mdi/js'
 import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useMedium } from '@/api/hooks/media'
 import bem from '@/util/bem'
+import { TMedium, useMediumQuery } from '@/types/api'
+import { useEffect, useState } from 'react'
 
 const Thumbnail = ({
     idMedium, title, onClick,
@@ -12,13 +13,27 @@ const Thumbnail = ({
 }: TThumbnail) => {
     const { t } = useTranslation()
 
-    const medium = useMedium({
-        id: `${idMedium}`
+    const [medium, setMedium] = useState<TMedium>({})
+
+    const mediumQuery = useMediumQuery({
+        variables: {
+            id: `${idMedium}`
+        }
     })
 
     const labelClasses = bem('thumbnail__label', [
         ['empty', !title?.length]
     ])
+
+    useEffect(() => {
+        if (mediumQuery.data) {
+            setMedium(mediumQuery.data.medium[0])
+        }
+    }, [mediumQuery.data])
+
+    if (mediumQuery.loading) {
+        return <></>
+    }
 
     if (type === EThumbnailType.ADD) {
         return <button
@@ -39,13 +54,13 @@ const Thumbnail = ({
     }
 
     const ThumbnailImage = () => {
-        if (!medium.state.filenameDisk) {
+        if (!medium.filenameDisk) {
             return <></>
         }
 
         return <img
             className="thumbnail__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.state.filenameDisk}?w=100`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=100`}
             alt=""
         />
     }

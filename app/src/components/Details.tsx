@@ -3,7 +3,6 @@ import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
 import { useDeleteMedia } from '@/types/api'
-import { useMedia } from '@/api/hooks'
 import { Check, Detail, IconButton } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -26,8 +25,6 @@ const Details = () => {
     const select = () => {
         selection.toggle(details.medium)
     }
-
-    const media = useMedia()
 
     const [deleteMedium] = useDeleteMedia({
         variables: {

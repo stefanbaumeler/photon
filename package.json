@@ -5,9 +5,13 @@
     "main": "index.js",
     "license": "MIT",
     "workspaces": [
-        "./app",
-        "./api"
+        "app",
+        "api"
     ],
+    "engines": {
+        "node": "16.16.0"
+    },
+    "engineStrict": true,
     "dependencies": {
         "@next/eslint-plugin-next": "^12.2.3",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
@@ -16,5 +20,25 @@
         "eslint-plugin-react": "^7.30.1",
         "graphql": "^16.5.0",
         "typescript": "^4.7.4"
+    },
+    "devDependencies": {
+        "concurrently": "^7.4.0",
+        "cypress": "^10.10.0",
+        "cypress-dotenv": "^2.0.0",
+        "cypress-recurse": "^1.23.0",
+        "dotenv": "^16.0.3",
+        "eslint-plugin-cypress": "^2.12.1",
+        "start-server-and-test": "^1.14.0"
+    },
+    "scripts": {
+        "db:up": "node scripts/setup-db.js",
+        "db:down": "node scripts/teardown-db.js",
+        "start": "conc \"yarn start:api\" \"yarn start:app\"",
+        "start:app": "yarn workspace @photon/app dev",
+        "start:api": "yarn workspace @photon/api dev",
+        "test": "sh ./scripts/test.sh",
+        "test:open": "sh ./scripts/test-open.sh",
+        "cy": "npx cypress run",
+        "cy:open": "npx cypress open --e2e -b 'chrome'"
     }
 }

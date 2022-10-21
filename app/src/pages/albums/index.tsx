@@ -1,16 +1,16 @@
 import Layout from '@/layouts/layout'
-import { useAlbums } from '@/api/hooks'
 import { Albums, Uploader, Dialog } from '@/components'
+import { useAlbumsQuery } from '@/types/api'
 
 const AlbumsPage = () => {
-    const albums = useAlbums()
+    const albums = useAlbumsQuery()
 
     return <Layout>
         <section>
             <div>
                 <Dialog />
                 <Uploader />
-                <Albums albums={albums.state} />
+                <Albums albums={albums.data?.albums || []} />
             </div>
         </section>
     </Layout>

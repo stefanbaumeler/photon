@@ -1,10 +1,15 @@
 import Layout from '@/layouts/layout'
-import { useMedia } from '@/api/hooks'
 import { Media, Uploader, Details, Dialog } from '@/components'
 import { DetailsProvider } from '@/providers'
+import { useMediaQuery } from '@/types/api'
 
 const HomePage = () => {
-    const media = useMedia()
+    const media = useMediaQuery()
+
+    if (media.loading) {
+        return <></>
+    }
+
     return <Layout>
         <section>
             <div>
@@ -12,7 +17,7 @@ const HomePage = () => {
                 <Uploader />
                 <DetailsProvider>
                     <Details />
-                    <Media media={media.state} />
+                    <Media media={media.data?.media || []} />
                 </DetailsProvider>
             </div>
         </section>

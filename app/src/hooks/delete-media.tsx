@@ -1,11 +1,9 @@
 import { useContext } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
-import { useDeleteMedia as useDeleteMediaMutation } from '@/types/api'
-import { useAlbums, useMedia } from '@/api/hooks'
+import { AlbumsQueryDocument, MediaQueryDocument,
+    useDeleteMedia as useDeleteMediaMutation } from '@/types/api'
 
-const useDeleteMedia = () => {
-    const media = useMedia()
-    const albums = useAlbums()
+const useDeleteMedia = ({ skip }: { skip: boolean }) => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
@@ -13,16 +11,15 @@ const useDeleteMedia = () => {
     const [deleteMedia] = useDeleteMediaMutation({
         variables: {
             ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
-        }
+        },
+        refetchQueries: [MediaQueryDocument, AlbumsQueryDocument]
     })
 
     return () => {
         deleteMedia().then(() => {
-            Promise.all([media.refetch(), albums.refetch()]).then(() => {
-                selection.clear()
-                dialog.close()
-                details?.close()
-            })
+            selection.clear()
+            dialog.close()
+            details?.close()
         })
     }
 }

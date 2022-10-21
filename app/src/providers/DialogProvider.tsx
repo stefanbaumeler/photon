@@ -6,6 +6,7 @@ type Props = {
 }
 
 type TDialogConfig = {
+    id: string
     title?: string
     text?: string
     buttons: TDialogButton[]
@@ -13,6 +14,7 @@ type TDialogConfig = {
 }
 
 interface DialogContext {
+    id: string
     active: boolean
     title: string
     text: string
@@ -25,6 +27,7 @@ interface DialogContext {
 const DialogContext = createContext<DialogContext | null>(null)
 
 const DialogProvider = ({ children }: Props) => {
+    const [id, setId] = useState('')
     const [active, setActive] = useState(false)
     const [title, setTitle] = useState('')
     const [text, setText] = useState('')
@@ -32,19 +35,21 @@ const DialogProvider = ({ children }: Props) => {
     const [content, setContent] = useState<ReactNode>()
 
     return <DialogContext.Provider value={{
+        id,
         active,
         title,
         text,
         buttons,
         content,
         open: ({
-            title, text, buttons, content
+            title, text, buttons, content, id
         }: TDialogConfig) => {
             setTitle(title)
             setText(text)
             setButtons(buttons)
             setActive(true)
             setContent(content)
+            setId(id)
         },
         close: () => setActive(false)
     }}

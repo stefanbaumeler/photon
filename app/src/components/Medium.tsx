@@ -106,6 +106,7 @@ const Medium = ({
     ])
 
     return <div
+        data-cy="medium"
         className={classes}
         onMouseOver={updateShiftTargets}
     >

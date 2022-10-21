@@ -8,9 +8,13 @@ const useDeleteMediaDialog = () => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const { t } = useTranslation()
-    const confirm = useDeleteMedia()
+
+    const confirm = useDeleteMedia({
+        skip: !dialog.active || dialog.id !== 'delete-media'
+    })
 
     return () => dialog.open({
+        id: 'delete-media',
         title: t(ETrans.MOVE_TO_TRASH),
         text: t(ETrans.MOVE_ITEMS_TO_TRASH, {
             count: selection.selected.size || 1,

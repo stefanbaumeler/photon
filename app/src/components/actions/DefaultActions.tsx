@@ -29,6 +29,7 @@ const DefaultActions = () => {
 
     return <div className="actions">
         <input
+            data-cy="upload-action"
             type="file"
             className="actions__uploader"
             ref={uploadRef}

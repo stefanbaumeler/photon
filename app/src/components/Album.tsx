@@ -1,9 +1,7 @@
-import { TAlbum } from '@/types/api'
+import { TAlbum, useAlbumMediaQuery, useMediumQuery } from '@/types/api'
 import Link from 'next/link'
-import { useMedium } from '@/api/hooks/media'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useAlbumMedia } from '@/api/hooks/albums'
 
 type Props = {
     album: TAlbum
@@ -12,22 +10,33 @@ type Props = {
 const Album = ({ album }: Props) => {
     const { t } = useTranslation()
 
-    const media = useAlbumMedia({
-        id: album.id
+    const albumMediaQuery = useAlbumMediaQuery({
+        variables: {
+            id: album.id
+        }
     })
 
-    const medium = useMedium({
-        id: `${album.idMedium}`
+    const thumbnailQuery = useMediumQuery({
+        variables: {
+            id: `${album.idMedium}`
+        }
     })
+
+    if (thumbnailQuery.loading || albumMediaQuery.loading) {
+        return <></>
+    }
+
+    const thumbnail = thumbnailQuery.data?.medium[0] || {}
+    const media = albumMediaQuery.data.albumMedia
 
     const AlbumImage = () => {
-        if (!medium.state.filenameDisk) {
+        if (!thumbnail.filenameDisk) {
             return <></>
         }
 
         return <img
             className="album__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.state.filenameDisk}?w=800`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${thumbnail.filenameDisk}?w=800`}
             alt=""
         />
     }
@@ -45,9 +54,9 @@ const Album = ({ album }: Props) => {
                 </span>
                 <div className="album__misc">
                     <span className="album__count">
-                        {`${media.state.length} `}
+                        {`${media.length} `}
                         {t(ETrans.ELEMENT, {
-                            count: media.state.length
+                            count: media.length
                         })}
                     </span>
                 </div>

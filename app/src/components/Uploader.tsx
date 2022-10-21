@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import bem from '@/util/bem'
 import useUpload from '@/hooks/upload'
 
@@ -38,6 +38,7 @@ const Uploader = () => {
             Upload
         </span>
         <input
+            data-cy="uploader"
             className="uploader__input"
             type="file"
             multiple={true}

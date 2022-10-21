@@ -1,15 +1,14 @@
-import { useAlbums } from '@/api/hooks'
 import { useRouter } from 'next/router'
-import { useCreateAlbum as useCreateAlbumMutation } from '@/types/api'
+import { AlbumsQueryDocument, useCreateAlbum as useCreateAlbumMutation } from '@/types/api'
 
 const useCreateAlbum = () => {
-    const albums = useAlbums()
     const router = useRouter()
 
     const [createAlbumMutation] = useCreateAlbumMutation({
         variables: {
             media: []
-        }
+        },
+        refetchQueries: [AlbumsQueryDocument]
     })
 
     return () => {

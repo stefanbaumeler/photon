@@ -1,7 +1,6 @@
 import { Knex } from 'knex'
 import { Medium } from '../types'
 import { getDatabase } from '../database'
-import AlbumsMediaService from './albumsMedia'
 
 export default class MediaService {
     knex: Knex

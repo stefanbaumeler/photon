@@ -1,11 +1,38 @@
 import { Thumbnail } from '@/components'
-import { TThumbnail } from '@/types/app'
+import { EThumbnailType, TThumbnail } from '@/types/app'
+import { useEffect, useState } from 'react'
+import { ETrans } from '@/types/translations'
+import { useTranslation } from 'react-i18next'
+import useAddToNewAlbum from '../hooks/add-to-new-album'
+import useAddToAlbum from '../hooks/add-to-album'
+import { useAlbumsQuery } from '@/types/api'
 
-type Props = {
-    thumbnails: TThumbnail[]
-}
+const Thumbnails = () => {
+    const { t } = useTranslation()
 
-const Thumbnails = ({ thumbnails }: Props) => {
+    const { data: albums } = useAlbumsQuery()
+    const addToNewAlbum = useAddToNewAlbum()
+    const addToAlbum = useAddToAlbum()
+
+    const [thumbnails, setThumbnails]  = useState([])
+
+    useEffect(() => {
+        const albumThumbnails = albums?.albums.map<TThumbnail>((album) => ({
+            type: EThumbnailType.DEFAULT,
+            title: album.title,
+            idMedium: album.idMedium,
+            onClick: () => addToAlbum(album.id)
+        })) || []
+
+        albumThumbnails.push({
+            type: EThumbnailType.ADD,
+            title: t(ETrans.NEW_ALBUM),
+            onClick: addToNewAlbum
+        })
+
+        setThumbnails(albumThumbnails)
+    }, [albums])
+
     return <div className="thumbnails">
         {thumbnails.map((thumbnail, k) => <Thumbnail
             title={thumbnail.title}
