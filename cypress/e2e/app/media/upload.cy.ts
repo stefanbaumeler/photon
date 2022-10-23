@@ -9,13 +9,11 @@ describe('Upload', () => {
 
     beforeEach(() => {
         cy.intercept('/graphql', (req) => {
-            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
 
         cy.exec('node ./scripts/truncate-db.js').then(() => {
             cy.visit('/')
-            cy.wait('@MediaQuery')
         })
     })
 
