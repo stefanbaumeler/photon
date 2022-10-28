@@ -4,10 +4,8 @@ import { faker } from '@faker-js/faker'
 import { Album, AlbumsMedia } from '../../types'
 import AlbumsMediaService from '../../services/albumsMedia'
 import MediaService from '../../services/media'
-import { getDatabase } from '../index'
 
-export async function seed (k: Knex) {
-    const knex = getDatabase()
+export async function seed (knex: Knex) {
     await knex('albums').del()
 
     const albumsService = new AlbumsService()

@@ -3,10 +3,8 @@ import fs from 'fs'
 import { exifToMedium } from '../../helpers/exif'
 import MediaService from '../../services/media'
 import { Medium } from '../../types'
-import { getDatabase } from '../index'
 
-export async function seed (k: Knex) {
-    const knex = getDatabase()
+export async function seed (knex: Knex) {
     await knex('media').del()
     const service = new MediaService()
     const media = []
