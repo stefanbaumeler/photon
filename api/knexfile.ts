@@ -10,7 +10,7 @@ export default {
     client: 'pg',
     connection: {
         database: process.env.PG_DATABASE_NAME || '',
-        userName: process.env.PG_DATABASE_USER,
+        user: process.env.PG_DATABASE_USER,
         uri: process.env.PG_DATABASE_URI,
         port: parseInt(process.env.PG_DATABASE_PORT || '5432', 10),
         password: process.env.PG_DATABASE_PASSWORD
