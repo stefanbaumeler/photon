@@ -4,8 +4,6 @@ dotenv.config({
     path: process.env.NODE_ENV ? `./.env.${process.env.NODE_ENV}` : './.env'
 })
 
-console.log(process.env.NODE_ENV, process.env.PG_DATABASE_USER)
-
 export default {
     client: 'pg',
     connection: {

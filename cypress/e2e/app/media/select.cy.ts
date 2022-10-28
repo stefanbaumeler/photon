@@ -12,10 +12,7 @@ describe('Details', function () {
         })
     }
     before(function () {
-        cy.exec('yarn db:seed').then((res) => {
-            console.log(res)
-            cy.task('log', res)
-        })
+        cy.exec('yarn db:seed')
         cy.visit('/')
     })
 
