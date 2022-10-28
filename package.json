@@ -9,7 +9,7 @@
         "api"
     ],
     "engines": {
-        "node": "16.16.0"
+        "node": "^16.16.0"
     },
     "engineStrict": true,
     "dependencies": {
