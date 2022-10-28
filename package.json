@@ -33,7 +33,7 @@
     "scripts": {
         "db:up": "node ./scripts/setup-db.js",
         "db:down": "node ./scripts/teardown-db.js",
-        "db:seed": "yarn workspace @photon/api knex seed:run",
+        "db:seed": "node ./scripts/seed-db.js",
         "start": "conc \"yarn start:api\" \"yarn start:app\"",
         "start:app": "yarn workspace @photon/app dev",
         "start:api": "yarn workspace @photon/api dev",
