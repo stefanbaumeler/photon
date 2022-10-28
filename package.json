@@ -31,8 +31,8 @@
         "start-server-and-test": "^1.14.0"
     },
     "scripts": {
-        "db:up": "node scripts/setup-db.js",
-        "db:down": "node scripts/teardown-db.js",
+        "db:up": "node ./scripts/setup-db.js",
+        "db:down": "node ./scripts/teardown-db.js",
         "db:seed": "yarn workspace @photon/api knex seed:run",
         "start": "conc \"yarn start:api\" \"yarn start:app\"",
         "start:app": "yarn workspace @photon/app dev",
