@@ -33,8 +33,17 @@ jobs:
               run: yarn db:up
             - name: Seed DB
               run: yarn db:seed
+              env:
+                  POSTGRES_DB: photos
+                  POSTGRES_PASSWORD: postgres
+                  POSTGRES_USER: stefanbaumeler
+                  PG_DATABASE_NAME: photos
+                  PG_DATABASE_USER: stefanbaumeler
+                  PG_DATABASE_URI: 27.0.0.1
+                  PG_DATABASE_PORT: 5432
+                  PG_DATABASE_PASSWORD: postgres
             - name: Check DB
-              run: psql photos -c "select * from media;"
+              run: psql photos -l
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
