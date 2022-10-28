@@ -29,6 +29,10 @@ export async function seed (k: Knex) {
             const filename = predefinedUUIDs[i]
             const fullPath = `uploads/${filename}`
 
+            if (!fs.existsSync('uploads')) {
+                fs.mkdirSync('uploads')
+            }
+
             fs.copyFileSync(`../cypress/fixtures/image-${i}.jpg`, fullPath)
 
             exifToMedium(fullPath, filename, `Test Image ${i}`).then((medium) => {
