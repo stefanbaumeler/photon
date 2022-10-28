@@ -11,5 +11,6 @@ jobs:
             - name: tests
               uses: cypress-io/github-action@v4.2.0
               with:
+                  db: yarn db:up
                   start: yarn start
                   cy: yarn cy
