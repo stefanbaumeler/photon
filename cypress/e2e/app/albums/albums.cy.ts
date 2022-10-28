@@ -2,12 +2,14 @@ describe('Albums', function () {
     const albumTitle = 'Created Test Album'
 
     before(function () {
-        cy.exec('yarn db:seed')
+        cy.exec('yarn db:seed').then((res) => {
+            console.log(res)
+            cy.task('log', res)
+        })
     })
 
     beforeEach(function () {
         cy.intercept('/graphql', (req) => {
-            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
     })
