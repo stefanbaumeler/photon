@@ -6,6 +6,7 @@ import AlbumsMediaService from '../../services/albumsMedia'
 import MediaService from '../../services/media'
 
 export async function seed (knex: Knex) {
+    console.log(process.env.NODE_ENV, process.env.PG_DATABASE_NAME, process.env.PG_DATABASE_USER)
     await knex('albums').del()
 
     const albumsService = new AlbumsService()
