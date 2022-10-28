@@ -29,6 +29,10 @@ jobs:
               run: yarn install --frozen-lockfile --immutable
             - name: Setup DB
               run: yarn db:up
+            - name: Setup DB
+              run: yarn db:seed
+            - name: Check DB
+              run: psql photos -c "select * from media;"
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
