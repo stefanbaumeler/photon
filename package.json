@@ -39,7 +39,7 @@
         "start:api": "yarn workspace @photon/api dev",
         "test": "sh ./scripts/test.sh",
         "test:open": "sh ./scripts/test-open.sh",
-        "cy": "npx cypress run",
+        "cy": "npx cypress run --e2e -b 'chrome'",
         "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
     }
 }
