@@ -15,7 +15,9 @@ jobs:
                 ports:
                   - 5432:5432
                 env:
+                    POSTGRES_DB: photos
                     POSTGRES_PASSWORD: postgres
+                    POSTGRES_USER: stefanbaumeler
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -29,7 +31,7 @@ jobs:
               run: yarn install --frozen-lockfile --immutable
             - name: Setup DB
               run: yarn db:up
-            - name: Setup DB
+            - name: Seed DB
               run: yarn db:seed
             - name: Check DB
               run: psql photos -c "select * from media;"
