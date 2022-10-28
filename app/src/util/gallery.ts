@@ -31,17 +31,25 @@ const makeGetNeighbors = (limitNodeSearch: number, config: TGalleryConfig) => (s
     return results
 }
 
-export const generateGallery = (config: TGalleryConfig) => {
-    const idealNodeSearch = config.containerWidth >= 450 ? Math.round(config.containerWidth / config.targetRowHeight / 1.5 * 100) / 100 + 8 : 2
-    const getNeighbors = makeGetNeighbors(idealNodeSearch, config)
-    const path = findShortestPath(getNeighbors, '0', config.images.length).map((node) => +node)
-
-    for (let i = 1; i < path.length; ++i) {
-        const height = Math.max(Math.min(getCommonHeight(config.images.slice(path[i - 1], path[i]), config), config.maxHeight), 200)
-
-        for (let j = path[i - 1]; j < path[i]; ++j) {
-            config.images[j].width = Math.round(height * config.images[j].ratio * 100) / 100
-            config.images[j].height = height
-        }
+export const generateGallery = (config: TGalleryConfig): Promise<GalleryItem[]> => {
+    const cfg = {
+        ...config
     }
+
+    return new Promise((resolve) => {
+        const idealNodeSearch = cfg.containerWidth >= 450 ? Math.round(cfg.containerWidth / cfg.targetRowHeight / 1.5 * 100) / 100 + 8 : 2
+        const getNeighbors = makeGetNeighbors(idealNodeSearch, cfg)
+        const path = findShortestPath(getNeighbors, '0', cfg.images.length).map((node) => +node)
+
+        for (let i = 1; i < path.length; ++i) {
+            const height = Math.max(Math.min(getCommonHeight(cfg.images.slice(path[i - 1], path[i]), cfg), cfg.maxHeight), 200)
+
+            for (let j = path[i - 1]; j < path[i]; ++j) {
+                cfg.images[j].width = Math.round(height * cfg.images[j].ratio * 100) / 100
+                cfg.images[j].height = height
+            }
+        }
+
+        resolve(cfg.images)
+    })
 }

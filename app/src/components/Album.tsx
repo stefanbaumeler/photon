@@ -44,16 +44,25 @@ const Album = ({ album }: Props) => {
     return <Link
         href={`albums/${album.id}`}
     >
-        <a className="album">
+        <a
+            className="album"
+            data-cy="album-teaser"
+        >
             <div className="album__image-container">
                 <AlbumImage />
             </div>
             <div className="album__content">
-                <span className="album__title">
+                <span
+                    data-cy="album-teaser-title"
+                    className="album__title"
+                >
                     {album.title || t(ETrans.UNTITLED)}
                 </span>
                 <div className="album__misc">
-                    <span className="album__count">
+                    <span
+                        className="album__count"
+                        data-cy="album-teaser-count"
+                    >
                         {`${media.length} `}
                         {t(ETrans.ELEMENT, {
                             count: media.length

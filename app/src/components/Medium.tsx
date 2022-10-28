@@ -34,7 +34,6 @@ const Medium = ({
     }, [])
 
     const select = () => {
-        console.log('s')
         if (selection.mode === ESelectionMode.OFF) {
             selection.setMode(ESelectionMode.SELECT)
         }
@@ -67,22 +66,6 @@ const Medium = ({
         forceOpen()
     }
 
-    const FallbackButton = () => {
-        if (selection.mode === ESelectionMode.DELETE) {
-            return <></>
-        }
-
-        return <button
-            className="medium__open-fallback"
-            onClick={forceOpen}
-        >
-            <Icon
-                path={Icons.mdiMagnifyPlusOutline}
-                size={1}
-            />
-        </button>
-    }
-
     const updateShiftTargets = () => {
         const ids = collection.map((medium) => medium.id)
         const lastIndex = ids.indexOf(selection.lastAdded?.id)
@@ -105,12 +88,19 @@ const Medium = ({
         ['loaded', !loading]
     ])
 
+    const fallbackButtonClasses = bem('medium__open-fallback', [
+        ['delete', selection.mode === ESelectionMode.DELETE]
+    ])
+
     return <div
         data-cy="medium"
         className={classes}
         onMouseOver={updateShiftTargets}
     >
-        <div className="medium__check">
+        <div
+            className="medium__check"
+            data-cy="medium-check"
+        >
             <Check
                 onClick={select}
                 ready={selection.mode !== ESelectionMode.OFF}
@@ -118,7 +108,16 @@ const Medium = ({
                 remove={selection.mode === ESelectionMode.DELETE}
             />
         </div>
-        <FallbackButton />
+        <button
+            data-cy="medium-details-fallback"
+            className={fallbackButtonClasses}
+            onClick={forceOpen}
+        >
+            <Icon
+                path={Icons.mdiMagnifyPlusOutline}
+                size={1}
+            />
+        </button>
         <div
             className="medium__container"
             onClick={open}
@@ -132,6 +131,7 @@ const Medium = ({
                     alt=""
                 />
                 <img
+                    data-cy="medium-image"
                     className={imageClasses}
                     width={width - 1}
                     height={height + 4}

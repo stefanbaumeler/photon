@@ -62,6 +62,7 @@ const Details = () => {
         }
 
         return <IconButton
+            cy="show-infos"
             hint={t(ETrans.SHOW_THING, {
                 thing: t(ETrans.INFO_PLURAL)
             })}
@@ -77,6 +78,7 @@ const Details = () => {
                 content={t(ETrans.SELECT)}
             >
                 <Check
+                    cy="details-select"
                     onClick={select}
                     ready={true}
                     checked={selection.isSelected(details.medium)}
@@ -153,10 +155,14 @@ const Details = () => {
         ['loaded', !loading]
     ])
 
-    return <div className={classes}>
+    return <div
+        className={classes}
+        data-cy="details"
+    >
         <div className="details__preview">
 
             <button
+                data-cy="prev-medium"
                 className="details__button details__button--prev"
                 onClick={() => slide(-1)}
             >
@@ -166,6 +172,7 @@ const Details = () => {
                 />
             </button>
             <button
+                data-cy="next-medium"
                 className="details__button details__button--next"
                 onClick={() => slide(1)}
             >
@@ -177,6 +184,7 @@ const Details = () => {
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
+                        cy="close-details"
                         hint={t(ETrans.BACK)}
                         white={true}
                         onClick={details.close}
@@ -196,6 +204,7 @@ const Details = () => {
                     />
                 </div>
                 <img
+                    data-cy="details-image"
                     className={imageClasses}
                     src={src}
                     alt=""
@@ -203,10 +212,14 @@ const Details = () => {
                 />
             </div>
         </div>
-        <aside className="details__sidebar">
+        <aside
+            data-cy="details-sidebar"
+            className="details__sidebar"
+        >
             <div className="toolbar">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
+                        cy="hide-infos"
                         hint={t(ETrans.HIDE_THING, {
                             thing: t(ETrans.INFO_PLURAL)
                         })}

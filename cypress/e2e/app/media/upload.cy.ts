@@ -1,38 +1,45 @@
-describe('Upload', () => {
-    let mediumCount = 0
-
-    const getImage = (offset = 1) => {
-        mediumCount += offset
-
-        return `cypress/fixtures/image-${mediumCount}.jpg`
+describe('Upload', function () {
+    const getImage = (id: number) => {
+        return `cypress/fixtures/image-${id}.jpg`
     }
 
-    beforeEach(() => {
+    beforeEach(function () {
         cy.intercept('/graphql', (req) => {
             req.alias = req.body.operationName
         })
 
-        cy.exec('node ./scripts/truncate-db.js').then(() => {
+        cy.exec('node ./scripts/truncate-db.js').then(function () {
             cy.visit('/')
         })
     })
 
-    after(() => {
+    after(function () {
         cy.exec('node ./scripts/truncate-db.js')
     })
 
-    it('uploads one file per drag and drop', () => {
-        cy.get('[data-cy="uploader"]').selectFile(getImage(), {
+    it('uploads one file per drag and drop', function () {
+        cy.get('[data-cy="uploader"]').selectFile(getImage(0), {
             action: 'drag-drop',
             force: true
         })
+
         cy.wait('@MediaQuery')
 
         cy.get('[data-cy="medium"]').should('have.length', 1)
     })
 
-    it('avoids duplicates', () => {
-        cy.get('[data-cy="upload-action"]').selectFile(getImage(), {
+    it('uploads one file by button', function () {
+        cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
+            force: true
+        })
+
+        cy.wait('@MediaQuery')
+
+        cy.get('[data-cy="medium"]').should('have.length', 1)
+    })
+
+    it('avoids duplicates', function () {
+        cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
             force: true
         })
 
@@ -47,18 +54,8 @@ describe('Upload', () => {
         cy.get('[data-cy="medium"]').should('have.length', 1)
     })
 
-    it('uploads one file by button', () => {
-        cy.get('[data-cy="upload-action"]').selectFile(getImage(), {
-            force: true
-        })
-
-        cy.wait('@MediaQuery')
-
-        cy.get('[data-cy="medium"]').should('have.length', 1)
-    })
-
-    it('uploads multiple files per drag and drop', () => {
-        cy.get('[data-cy="upload-action"]').selectFile([getImage(), getImage(), getImage()], {
+    it('uploads multiple files per button', function () {
+        cy.get('[data-cy="upload-action"]').selectFile([getImage(0), getImage(1), getImage(2)], {
             force: true
         })
 

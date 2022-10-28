@@ -47,7 +47,7 @@ export default class MediaService {
         })
     }
 
-    async readMany (limit = 100) {
+    async readMany (limit = 100): Promise<Medium[]> {
         return this.knex.from(this.tableName).select().limit(limit)
     }
 

@@ -69,9 +69,7 @@ const AlbumPage = () => {
     })
 
     useEffect(() => {
-        if (album.title) {
-            setTitle(album.title)
-        }
+        setTitle(album.title || '')
     }, [album])
 
     useEffect(() => {
@@ -94,14 +92,15 @@ const AlbumPage = () => {
 
     useEffect(() => {
         if (edit.state === EEditState.CONFIRMED) {
+            edit.setState(EEditState.OFF)
             Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
                 selection.clear()
-                edit.setState(EEditState.OFF)
             })
         }
 
         if (edit.state === EEditState.DISCARDED) {
             selection.clear()
+            setTitle(album.title || '')
             edit.setState(EEditState.OFF)
         }
     }, [edit.state])
@@ -154,6 +153,7 @@ const AlbumPage = () => {
                 <div className="album-details__header">
                     <div className="albums-details__back">
                         <IconButton
+                            cy="album-back"
                             hint={t(ETrans.BACK)}
                             hintPlacement={'right'}
                             icon={Icons.mdiArrowLeft}
@@ -162,6 +162,7 @@ const AlbumPage = () => {
                         />
                     </div>
                     <input
+                        data-cy="album-title"
                         ref={titleEl}
                         type="text"
                         className="album-details__title"

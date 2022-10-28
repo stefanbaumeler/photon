@@ -39,7 +39,7 @@ export default class AlbumsService {
         })
     }
 
-    async createMany (albums: Album[]) {
+    async createMany (albums: Partial<Album>[]) {
         const primaryKeys = albums.map((album) => this.createOne(album))
 
         return await Promise.all(primaryKeys).then((results) => {

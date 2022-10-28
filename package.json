@@ -23,7 +23,7 @@
     },
     "devDependencies": {
         "concurrently": "^7.4.0",
-        "cypress": "^10.10.0",
+        "cypress": "10.11.0",
         "cypress-dotenv": "^2.0.0",
         "cypress-recurse": "^1.23.0",
         "dotenv": "^16.0.3",
@@ -33,12 +33,13 @@
     "scripts": {
         "db:up": "node scripts/setup-db.js",
         "db:down": "node scripts/teardown-db.js",
+        "db:seed": "yarn workspace @photon/api knex seed:run",
         "start": "conc \"yarn start:api\" \"yarn start:app\"",
         "start:app": "yarn workspace @photon/app dev",
         "start:api": "yarn workspace @photon/api dev",
         "test": "sh ./scripts/test.sh",
         "test:open": "sh ./scripts/test-open.sh",
         "cy": "npx cypress run",
-        "cy:open": "npx cypress open --e2e -b 'chrome'"
+        "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
     }
 }

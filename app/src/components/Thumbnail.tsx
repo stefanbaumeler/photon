@@ -37,6 +37,7 @@ const Thumbnail = ({
 
     if (type === EThumbnailType.ADD) {
         return <button
+            data-cy="thumbnail-new"
             className="thumbnail thumbnail--new"
             onClick={onClick}
         >
@@ -66,6 +67,7 @@ const Thumbnail = ({
     }
 
     return <button
+        data-cy="thumbnail"
         className="thumbnail"
         onClick={onClick}
     >

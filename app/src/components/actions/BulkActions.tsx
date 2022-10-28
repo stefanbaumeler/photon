@@ -26,12 +26,16 @@ const BulkActions = () => {
     }
 
     return <div className="actions">
-        <span className="actions__count">
+        <span
+            className="actions__count"
+            data-cy="select-count"
+        >
             {t(ETrans.N_SELECTED, {
                 n: selection.selected.size
             })}
         </span>
         <IconButton
+            cy={'add-to'}
             hint={t(ETrans.ADD_TO)}
             icon={Icons.mdiPlus}
             onClick={addToAlbumDialog}
