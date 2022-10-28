@@ -42,8 +42,6 @@ jobs:
                   PG_DATABASE_URI: 127.0.0.1
                   PG_DATABASE_PORT: 5432
                   PG_DATABASE_PASSWORD: postgres
-            - name: Check DB
-              run: psql photos -l
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
