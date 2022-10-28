@@ -4,9 +4,10 @@ import { faker } from '@faker-js/faker'
 import { Album, AlbumsMedia } from '../../types'
 import AlbumsMediaService from '../../services/albumsMedia'
 import MediaService from '../../services/media'
+import { getDatabase } from '../index'
 
-export async function seed (knex: Knex) {
-    console.log(process.env.NODE_ENV, process.env.PG_DATABASE_NAME, process.env.PG_DATABASE_USER)
+export async function seed (k: Knex) {
+    const knex = getDatabase()
     await knex('albums').del()
 
     const albumsService = new AlbumsService()
