@@ -30,9 +30,9 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile --immutable
             - name: Setup DB
-              run: yarn db:up
+              run: NODE_ENV=test yarn db:up
             - name: Seed DB
-              run: yarn db:seed
+              run: NODE_ENV=test yarn db:seed
               env:
                   POSTGRES_DB: photos
                   POSTGRES_PASSWORD: postgres
@@ -43,9 +43,9 @@ jobs:
                   PG_DATABASE_PORT: 5432
                   PG_DATABASE_PASSWORD: postgres
             - name: Check DB
-              run: psql photos -l
+              run: psql cy-photos -l
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
-                  start: yarn start
-                  cy: yarn cy
+                  start: NODE_ENV=test yarn start
+                  cy: NODE_ENV=test yarn cy
