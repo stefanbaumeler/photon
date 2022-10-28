@@ -12,11 +12,13 @@ jobs:
                     --health-interval 10s
                     --health-timeout 5s
                     --health-retries 5
+                env:
+                    POSTGRES_PASSWORD: postgres
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: tests
+            - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
                   db: yarn db:up
