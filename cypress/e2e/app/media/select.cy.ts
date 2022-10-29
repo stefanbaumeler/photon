@@ -85,6 +85,7 @@ describe('Details', function () {
             force: true
         })
         cy.get('[data-cy="details"]').should('be.visible')
+        cy.url().should('contain', '/media/')
 
         cy.get('[data-cy="details-select"]').click({
             force: true

@@ -16,12 +16,6 @@ describe('Details', function () {
         cy.visit('/')
     })
 
-    beforeEach( function () {
-        cy.intercept('/graphql', (req) => {
-            req.alias = req.body.operationName
-        })
-    })
-
     it('opens details', function () {
         cy.get('[data-cy="medium"]').first().click()
         cy.get('[data-cy="details"]').should('be.visible')
@@ -36,12 +30,17 @@ describe('Details', function () {
 
     it('closes with esc', function () {
         cy.get('[data-cy="medium"]').first().click()
+        cy.get('[data-cy="details"]').should('be.visible')
+        cy.url().should('contain', '/media/')
         cy.get('body').type('{esc}')
         cy.get('[data-cy="details"]').should('not.be.visible')
+        cy.url().should('not.contain', '/media/')
     })
 
     it('hides infos', function () {
         cy.get('[data-cy="medium"]').first().click()
+        cy.get('[data-cy="details"]').should('be.visible')
+        cy.url().should('contain', '/media/')
         cy.get('[data-cy="hide-infos"]').click()
         cy.get('[data-cy="details-sidebar"]').should('not.be.visible')
     })
