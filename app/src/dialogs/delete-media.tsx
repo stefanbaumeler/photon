@@ -9,9 +9,7 @@ const useDeleteMediaDialog = () => {
     const selection = useContext(SelectionContext)
     const { t } = useTranslation()
 
-    const confirm = useDeleteMedia({
-        skip: !dialog.active || dialog.id !== 'delete-media'
-    })
+    const confirm = useDeleteMedia()
 
     return () => dialog.open({
         id: 'delete-media',

@@ -17,7 +17,7 @@ import { formatDate } from '@/util/date'
 const AlbumPage = () => {
     const router = useRouter()
     const { t } = useTranslation()
-    const id = Array.isArray(router.query.id) ? router.query.id.join('') : router.query.id
+    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     const selection = useContext(SelectionContext)
     const edit = useContext(EditContext)
@@ -126,6 +126,11 @@ const AlbumPage = () => {
         return <></>
     }
 
+    const back = () => {
+        selection.clear()
+        router.push('/albums')
+    }
+
     const AlbumDetailsDates = () => {
         if (earliest === latest) {
             return <div className="album-details__dates">
@@ -158,7 +163,7 @@ const AlbumPage = () => {
                             hintPlacement={'right'}
                             icon={Icons.mdiArrowLeft}
                             solid={true}
-                            href={'/albums'}
+                            onClick={back}
                         />
                     </div>
                     <input

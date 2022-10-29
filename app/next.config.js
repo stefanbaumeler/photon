@@ -1,4 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withGraphql = require('next-plugin-graphql')
 
-module.exports = withGraphql({})
+module.exports = withGraphql({
+    async rewrites () {
+        return [
+            {
+                source: '/albums/:idAlbum/media/:idMedium',
+                destination: '/albums/:idAlbum?idMedium=:idMedium'
+            }
+        ]
+    }
+})

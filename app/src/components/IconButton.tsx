@@ -6,7 +6,7 @@ import { Placement } from 'tippy.js'
 import bem from '@/util/bem'
 
 type Props = {
-    onClick?: () => void
+    onClick?: (event?: Event) => void
     hint?: string
     hintPlacement?: Placement
     href?: string
@@ -14,10 +14,11 @@ type Props = {
     icon: string
     solid?: boolean
     cy?: string
+    small?: boolean
 }
 
 const IconButton = ({
-    onClick, hint, hintPlacement, href, white = false, icon, solid = false, cy
+    onClick, hint, hintPlacement, href, white = false, icon, solid = false, cy, small = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -36,7 +37,8 @@ const IconButton = ({
 
     const linkClasses = bem('button', [
         ['white', white],
-        ['solid', solid]
+        ['solid', solid],
+        ['small', small]
     ])
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
@@ -71,7 +73,7 @@ const IconButton = ({
         <ButtonOrLinkWithRef>
             <Icon
                 path={icon}
-                size={1}
+                size={small ? .75 : 1}
             />
         </ButtonOrLinkWithRef>
     </ConditionalTip>

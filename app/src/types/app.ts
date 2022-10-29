@@ -43,6 +43,7 @@ export type TNavContext = {
     setActive: Dispatch<SetStateAction<string[]>>
     navs: TNav[]
     getActiveItem: () => TNavItem
+    pathname: string
 }
 
 export type GalleryItem = {

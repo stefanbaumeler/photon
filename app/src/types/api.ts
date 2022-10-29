@@ -55,6 +55,7 @@ export type TMutation = {
   __typename?: 'Mutation'
   addToAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
   createAlbum?: Maybe<Scalars['ID']>
+  deleteAlbum?: Maybe<Scalars['String']>
   deleteMedia?: Maybe<Scalars['String']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
   updateAlbumTitle?: Maybe<Scalars['ID']>
@@ -68,6 +69,10 @@ export type TMutationAddToAlbumArgs = {
 export type TMutationCreateAlbumArgs = {
   album?: InputMaybe<TAlbumInput>
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
+}
+
+export type TMutationDeleteAlbumArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
 export type TMutationDeleteMediaArgs = {
@@ -89,6 +94,7 @@ export type TQuery = {
   album?: Maybe<Array<Maybe<TAlbum>>>
   albumMedia?: Maybe<Array<Maybe<TMedium>>>
   albums?: Maybe<Array<Maybe<TAlbum>>>
+  deleteAlbum?: Maybe<Scalars['String']>
   deleteMedia?: Maybe<Scalars['String']>
   media?: Maybe<Array<Maybe<TMedium>>>
   medium?: Maybe<Array<Maybe<TMedium>>>
@@ -100,6 +106,10 @@ export type TQueryAlbumArgs = {
 
 export type TQueryAlbumMediaArgs = {
   id?: InputMaybe<Scalars['ID']>
+}
+
+export type TQueryDeleteAlbumArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
 export type TQueryDeleteMediaArgs = {
@@ -138,6 +148,12 @@ export type TCreateAlbumVariables = Exact<{
 }>
 
 export type TCreateAlbum = { __typename?: 'Mutation', createAlbum?: string | null }
+
+export type TDeleteAlbumVariables = Exact<{
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
+}>
+
+export type TDeleteAlbum = { __typename?: 'Mutation', deleteAlbum?: string | null }
 
 export type TDeleteMediaVariables = Exact<{
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
@@ -212,12 +228,6 @@ export function useAlbumQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOption
 export type AlbumQueryHookResult = ReturnType<typeof useAlbumQuery>
 export type AlbumQueryLazyQueryHookResult = ReturnType<typeof useAlbumQueryLazyQuery>
 export type AlbumQueryQueryResult = Apollo.QueryResult<TAlbumQuery, TAlbumQueryVariables>
-export function refetchAlbumQuery (variables?: TAlbumQueryVariables) {
-    return {
-        query: AlbumQueryDocument,
-        variables: variables
-    }
-}
 export const AlbumMediaQueryDocument = gql`
     query AlbumMediaQuery($id: ID) {
   albumMedia(id: $id) {
@@ -258,12 +268,6 @@ export function useAlbumMediaQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookO
 export type AlbumMediaQueryHookResult = ReturnType<typeof useAlbumMediaQuery>
 export type AlbumMediaQueryLazyQueryHookResult = ReturnType<typeof useAlbumMediaQueryLazyQuery>
 export type AlbumMediaQueryQueryResult = Apollo.QueryResult<TAlbumMediaQuery, TAlbumMediaQueryVariables>
-export function refetchAlbumMediaQuery (variables?: TAlbumMediaQueryVariables) {
-    return {
-        query: AlbumMediaQueryDocument,
-        variables: variables
-    }
-}
 export const AlbumsQueryDocument = gql`
     query AlbumsQuery {
   albums {
@@ -291,12 +295,6 @@ export function useAlbumsQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptio
 export type AlbumsQueryHookResult = ReturnType<typeof useAlbumsQuery>
 export type AlbumsQueryLazyQueryHookResult = ReturnType<typeof useAlbumsQueryLazyQuery>
 export type AlbumsQueryQueryResult = Apollo.QueryResult<TAlbumsQuery, TAlbumsQueryVariables>
-export function refetchAlbumsQuery (variables?: TAlbumsQueryVariables) {
-    return {
-        query: AlbumsQueryDocument,
-        variables: variables
-    }
-}
 export const CreateAlbumDocument = gql`
     mutation createAlbum($media: [ID]) {
   createAlbum(media: $media)
@@ -313,6 +311,22 @@ export function useCreateAlbum (baseOptions?: Apollo.MutationHookOptions<TCreate
 export type CreateAlbumHookResult = ReturnType<typeof useCreateAlbum>
 export type CreateAlbumMutationResult = Apollo.MutationResult<TCreateAlbum>
 export type CreateAlbumMutationOptions = Apollo.BaseMutationOptions<TCreateAlbum, TCreateAlbumVariables>
+export const DeleteAlbumDocument = gql`
+    mutation deleteAlbum($ids: [ID]) {
+  deleteAlbum(ids: $ids)
+}
+    `
+export type TDeleteAlbumMutationFn = Apollo.MutationFunction<TDeleteAlbum, TDeleteAlbumVariables>
+export function useDeleteAlbum (baseOptions?: Apollo.MutationHookOptions<TDeleteAlbum, TDeleteAlbumVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TDeleteAlbum, TDeleteAlbumVariables>(DeleteAlbumDocument, options)
+}
+export type DeleteAlbumHookResult = ReturnType<typeof useDeleteAlbum>
+export type DeleteAlbumMutationResult = Apollo.MutationResult<TDeleteAlbum>
+export type DeleteAlbumMutationOptions = Apollo.BaseMutationOptions<TDeleteAlbum, TDeleteAlbumVariables>
 export const DeleteMediaDocument = gql`
     mutation deleteMedia($ids: [ID]) {
   deleteMedia(ids: $ids)
@@ -369,12 +383,6 @@ export function useMediaQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOption
 export type MediaQueryHookResult = ReturnType<typeof useMediaQuery>
 export type MediaQueryLazyQueryHookResult = ReturnType<typeof useMediaQueryLazyQuery>
 export type MediaQueryQueryResult = Apollo.QueryResult<TMediaQuery, TMediaQueryVariables>
-export function refetchMediaQuery (variables?: TMediaQueryVariables) {
-    return {
-        query: MediaQueryDocument,
-        variables: variables
-    }
-}
 export const MediumQueryDocument = gql`
     query MediumQuery($id: ID) {
   medium(id: $id) {
@@ -415,12 +423,6 @@ export function useMediumQueryLazyQuery (baseOptions?: Apollo.LazyQueryHookOptio
 export type MediumQueryHookResult = ReturnType<typeof useMediumQuery>
 export type MediumQueryLazyQueryHookResult = ReturnType<typeof useMediumQueryLazyQuery>
 export type MediumQueryQueryResult = Apollo.QueryResult<TMediumQuery, TMediumQueryVariables>
-export function refetchMediumQuery (variables?: TMediumQueryVariables) {
-    return {
-        query: MediumQueryDocument,
-        variables: variables
-    }
-}
 export const RemoveFromAlbumDocument = gql`
     mutation removeFromAlbum($idAlbum: ID, $media: [ID]) {
   removeFromAlbum(idAlbum: $idAlbum, media: $media)

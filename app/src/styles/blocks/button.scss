@@ -20,6 +20,11 @@
     &--solid {
         background-color: rgba($color-gray, .125);
     }
+
+    &--small {
+        width: 32px;
+        height: 32px;
+    }
 }
 
 @mixin button {

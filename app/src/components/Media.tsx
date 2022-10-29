@@ -38,13 +38,14 @@ const Media = ({ media }: Props) => {
                 }
             }
 
+            details.setCollection(mediaSortedByDateTaken)
+
             return {
                 date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
                 template: <MediaSection
                     key={key}
                     title={takenDate}
                     media={notRemoved}
-                    collection={mediaSortedByDateTaken}
                 />
             }
         })

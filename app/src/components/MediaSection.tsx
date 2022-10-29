@@ -9,11 +9,10 @@ import bem from '@/util/bem'
 type Props = {
     media: TMedium[]
     title: string
-    collection: TMedium[]
 }
 
 const MediaSection = ({
-    media, title, collection
+    media, title
 }: Props) => {
     const galleryEl = useRef(null)
     const [windowWidth, setWindowWidth] = useState(0)
@@ -108,7 +107,6 @@ const MediaSection = ({
         </div>
         <div className="media-section__container">
             {adjustedElements.map((galleryItem, k) => <Medium
-                collection={collection}
                 medium={galleryItem.medium}
                 width={galleryItem.width}
                 height={galleryItem.height}

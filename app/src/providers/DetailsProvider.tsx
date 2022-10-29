@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { TMedium } from '@/types/api'
+import { useRouter } from 'next/router'
 
 type Props = {
     children?: ReactNode
@@ -10,7 +11,8 @@ interface DetailsContext {
     infos: boolean
     medium: TMedium
     collection: TMedium[]
-    open: (medium: TMedium, collection: TMedium[]) => void
+    setCollection: Dispatch<SetStateAction<TMedium[]>>
+    open: (medium: TMedium) => void
     close: () => void
     openInfos: () => void
     closeInfos: () => void
@@ -18,24 +20,49 @@ interface DetailsContext {
 const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
-    const [medium, setMedium] = useState({})
+    const [medium, setMedium] = useState<TMedium>({})
     const [collection, setCollection] = useState([])
     const [active, setActive] = useState(false)
     const [infos, setInfos] = useState(true)
+    const router = useRouter()
 
     return <DetailsContext.Provider value={{
         active,
         infos,
         medium,
         collection,
-        open: (newMedium, newCollection) => {
-            setCollection(newCollection)
+        setCollection,
+        open: (newMedium) => {
             setMedium(newMedium)
             setActive(true)
+
+            let newUrl = `/media/${newMedium.id}`
+
+            if (router.query.idAlbum) {
+                newUrl = `/albums/${router.query.idAlbum}/media/${newMedium.id}`
+            }
+
+            if (newUrl !== router.asPath) {
+                router.push(newUrl, null, {
+                    shallow: true
+                })
+            }
         },
         close: () => {
             setMedium({})
             setActive(false)
+
+            let newUrl = '/'
+
+            if (router.query.idAlbum) {
+                newUrl = `/albums/${router.query.idAlbum}/`
+            }
+
+            if (newUrl !== router.asPath) {
+                router.push(newUrl, null, {
+                    shallow: true
+                })
+            }
         },
         openInfos: () => {
             setInfos(true)

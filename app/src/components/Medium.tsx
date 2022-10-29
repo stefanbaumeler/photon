@@ -9,14 +9,13 @@ import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 
 type Props = {
-    collection: TMedium[]
     medium: TMedium
     width: number
     height: number
 }
 
 const Medium = ({
-    medium, width, height, collection
+    medium, width, height
 }: Props) => {
     const [loading, setLoading] = useState(true)
     const [maxWidth, setMaxWidth] = useState(50)
@@ -54,7 +53,7 @@ const Medium = ({
     }, [width])
 
     const forceOpen = () => {
-        details.open(medium, collection)
+        details.open(medium)
     }
 
     const open = () => {
@@ -67,11 +66,11 @@ const Medium = ({
     }
 
     const updateShiftTargets = () => {
-        const ids = collection.map((medium) => medium.id)
+        const ids = details.collection.map((medium) => medium.id)
         const lastIndex = ids.indexOf(selection.lastAdded?.id)
         const hoverIndex = ids.indexOf(medium.id)
 
-        const newShiftTargets = lastIndex < hoverIndex ? collection.slice(lastIndex, hoverIndex + 1) : collection.slice(hoverIndex, lastIndex + 1)
+        const newShiftTargets = lastIndex < hoverIndex ? details.collection.slice(lastIndex, hoverIndex + 1) : details.collection.slice(hoverIndex, lastIndex + 1)
 
         selection.setShiftTargets(newShiftTargets)
     }

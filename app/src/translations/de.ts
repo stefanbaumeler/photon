@@ -43,5 +43,8 @@ export default {
     move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?',
     upload: 'Hochladen',
     moreoptions: 'Mehr Optionen',
-    rotateright: 'Nach rechts drehen'
+    rotateright: 'Nach rechts drehen',
+    delete_thing: '{{thing}} löschen',
+    permanently_delete: 'Unwiderruflich löschen',
+    permanently_delete_thing: '{{thing}} unwiderruflich löschen?'
 }

@@ -35,15 +35,17 @@ type Medium {
 type Mutation {
     addToAlbum(idAlbum: ID, media: [ID]): [ID]
     createAlbum(album: AlbumInput, media: [ID]): ID
+    deleteAlbum(ids: [ID]): String
     deleteMedia(ids: [ID]): String
     removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
-    updateAlbumTitle(id: ID, title: String): [ID]
+    updateAlbumTitle(id: ID, title: String): ID
 }
 
 type Query {
     album(id: ID): [Album]
     albumMedia(id: ID): [Medium]
     albums: [Album]
+    deleteAlbum(ids: [ID]): String
     deleteMedia(ids: [ID]): String
     media: [Medium]
     medium(id: ID): [Medium]

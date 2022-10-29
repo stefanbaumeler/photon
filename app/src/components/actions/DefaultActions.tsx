@@ -23,7 +23,7 @@ const DefaultActions = () => {
 
     const upload = useUpload()
 
-    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF) {
+    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF || nav.pathname === '/albums/[id]') {
         return <></>
     }
 

@@ -1,9 +1,8 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Tippy from '@tippyjs/react'
-import { useDeleteMedia } from '@/types/api'
-import { Check, Detail, IconButton } from '@/components'
+import { Check, Detail, IconButton, Dropdown } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
@@ -12,8 +11,8 @@ import { getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
-import Dropdown from '@/components/Dropdown'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
+import { useRouter } from 'next/router'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -21,16 +20,23 @@ const Details = () => {
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
+    const router = useRouter()
+
+    const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
+
+    useEffect(() => {
+        if (idMedium) {
+            const mediumToOpen = details.collection.find((medium) => medium.id === idMedium)
+
+            if (mediumToOpen) {
+                details.open(mediumToOpen)
+            }
+        }
+    }, [details.collection])
 
     const select = () => {
         selection.toggle(details.medium)
     }
-
-    const [deleteMedium] = useDeleteMedia({
-        variables: {
-            ids: [details.medium.id]
-        }
-    })
 
     const [loading, setLoading] = useState(true)
 
@@ -38,7 +44,7 @@ const Details = () => {
         const index = details.collection.indexOf(details.medium)
 
         if (details.collection[index + direction]) {
-            details.open(details.collection[index + direction], details.collection)
+            details.open(details.collection[index + direction])
         }
     }
 

@@ -8,10 +8,11 @@ type Props = {
     active: boolean
     children: ReactElement
     onClickOutside: () => void
+    smallButton?: boolean
 }
 
 const Dropdown = ({
-    items, active, children, onClickOutside
+    items, active, children, onClickOutside, smallButton = false
 }: Props) => {
     const DropdownItems = () => {
         return <>
@@ -46,7 +47,7 @@ const Dropdown = ({
             zIndex={102}
             interactive={true}
             onClickOutside={onClickOutside}
-            offset={[51.5, -48]}
+            offset={[smallButton ? 43.5 : 51.5, smallButton ? -32 : -48]}
         >
             <div className="dropdown__toggle">
                 {children}

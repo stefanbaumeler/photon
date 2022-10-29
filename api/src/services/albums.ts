@@ -64,4 +64,10 @@ export default class AlbumsService {
             id
         }).update(newProps)
     }
+
+    async destroy (keys: string[] | number[] | string | number) {
+        const keysToDestroy = Array.isArray(keys) ? keys : [keys]
+
+        return this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete()
+    }
 }

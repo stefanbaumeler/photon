@@ -43,6 +43,9 @@ export default {
     move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?',
     upload: 'Upload',
     moreoptions: 'More Options',
-    rotateright: 'Rotate right'
+    rotateright: 'Rotate right',
+    delete_thing: 'Delete {{thing}}',
+    permanently_delete: 'Permanently delete',
+    permanently_delete_thing: 'Are you sure you want to permanently delete this {{thing}}?'
 
 }

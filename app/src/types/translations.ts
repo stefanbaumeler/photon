@@ -45,5 +45,8 @@ export enum ETrans {
     ELEMENT = 'element',
     UPLOAD = 'upload',
     MORE_OPTIONS = 'moreoptions',
-    ROTATE_RIGHT = 'rotateright'
+    ROTATE_RIGHT = 'rotateright',
+    DELETE_THING = 'delete_thing',
+    PERMANENTLY_DELETE = 'permanently_delete',
+    PERMANENTLY_DELETE_THING = 'permanently_delete_thing'
 }

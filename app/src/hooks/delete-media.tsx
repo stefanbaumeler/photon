@@ -3,7 +3,7 @@ import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import { AlbumsQueryDocument, MediaQueryDocument,
     useDeleteMedia as useDeleteMediaMutation } from '@/types/api'
 
-const useDeleteMedia = ({ skip }: { skip: boolean }) => {
+const useDeleteMedia = () => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)

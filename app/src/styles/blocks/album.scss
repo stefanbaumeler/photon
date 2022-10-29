@@ -1,4 +1,23 @@
 @mixin album-root {
+    position: relative;
+}
+
+@mixin album-controls {
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transition: opacity .25s;
+
+    @at-root .album:hover & {
+        opacity: 1;
+    }
+
+    &:has(.dropdown--active) {
+        opacity: 1;
+    }
+}
+
+@mixin album-link {
     display: flex;
     flex-direction: column;
 }
@@ -31,6 +50,14 @@
 @mixin album {
     .album {
         @include album-root;
+
+        &__controls {
+            @include album-controls;
+        }
+
+        &__link {
+            @include album-link;
+        }
 
         &__image-container {
             @include album-image-container;

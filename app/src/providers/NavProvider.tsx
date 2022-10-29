@@ -179,7 +179,8 @@ const NavProvider = ({ children }: Props) => {
         active,
         setActive,
         navs,
-        getActiveItem
+        getActiveItem,
+        pathname: router.pathname
     }}
     >
         {children}
