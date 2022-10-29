@@ -25,7 +25,7 @@ const makeGetNeighbors = (limitNodeSearch: number, config: TGalleryConfig) => (s
             break
         }
 
-        results[i.toString()] = Math.pow(Math.abs(getCommonHeight(config.images.slice(startNum, i), config) - config.targetRowHeight), 2)
+        results[i.toString()] = Math.pow(Math.abs(getCommonHeight(config.images.slice(startNum, i), config) - Math.sqrt(config.targetRowHeight * window.innerWidth) / 2.5), 2)
     }
 
     return results
@@ -42,8 +42,8 @@ export const generateGallery = (config: TGalleryConfig): Promise<GalleryItem[]> 
         const path = findShortestPath(getNeighbors, '0', cfg.images.length).map((node) => +node)
 
         for (let i = 1; i < path.length; ++i) {
-            const height = Math.max(Math.min(getCommonHeight(cfg.images.slice(path[i - 1], path[i]), cfg), cfg.maxHeight), 200)
-
+            const calculatedHeight = getCommonHeight(cfg.images.slice(path[i - 1], path[i]), cfg)
+            const height = calculatedHeight > cfg.maxHeight * 2 ? cfg.targetRowHeight : Math.min(calculatedHeight, cfg.maxHeight)
             for (let j = path[i - 1]; j < path[i]; ++j) {
                 cfg.images[j].width = Math.round(height * cfg.images[j].ratio * 100) / 100
                 cfg.images[j].height = height

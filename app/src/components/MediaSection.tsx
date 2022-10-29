@@ -16,7 +16,7 @@ const MediaSection = ({
     media, title, collection
 }: Props) => {
     const galleryEl = useRef(null)
-    const [containerWidth, setContainerWidth] = useState(0)
+    const [windowWidth, setWindowWidth] = useState(0)
     const [elements, setElements] = useState<GalleryItem[]>([])
     const [adjustedElements, setAdjustedElements] = useState<GalleryItem[]>([])
 
@@ -35,36 +35,36 @@ const MediaSection = ({
     }, [media, selection.selected])
 
     const resize = () => {
-        const newWidth = galleryEl.current?.offsetWidth
+        if (!galleryEl.current) {return}
 
-        if (containerWidth !== newWidth && typeof newWidth !== 'undefined') {
-            setContainerWidth(Math.floor(newWidth))
-        }
+        const maxHeight = window.innerWidth < 1024 ? 400 : 500
+        const targetRowHeight = window.innerWidth < 1024 ? 400 : 250
+        setWindowWidth(window.innerWidth)
+
+        generateGallery({
+            containerWidth: window.innerWidth - 300,
+            images: elements,
+            targetRowHeight,
+            margin: 2,
+            maxHeight
+        }).then((res) => {
+            setAdjustedElements(res)
+        })
     }
+
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            resize()
+        })
+
+        return () => window.removeEventListener('resize', () => {
+            resize()
+        })
+    })
 
     useEffect(() => {
         resize()
     }, [elements])
-
-    useEffect(() => {
-        window.addEventListener('resize', resize)
-
-        return () => {
-            window.removeEventListener('resize', resize)
-        }
-    })
-
-    useEffect(() => {
-        generateGallery({
-            containerWidth: window.innerWidth - 300,
-            images: elements,
-            targetRowHeight: 300,
-            margin: 2,
-            maxHeight: 400
-        }).then((res) => {
-            setAdjustedElements(res)
-        })
-    }, [elements, window.innerWidth])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {

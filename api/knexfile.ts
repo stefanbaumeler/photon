@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { Knex } from 'knex'
+
 dotenv.config({
     path: process.env.NODE_ENV ? `./.env.${process.env.NODE_ENV}` : './.env'
 })
