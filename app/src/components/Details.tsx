@@ -22,24 +22,25 @@ const Details = () => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const router = useRouter()
+    const rotate = useRotate()
+    const deleteMediaDialog = useDeleteMediaDialog()
+
+    const [loading, setLoading] = useState(true)
 
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
 
     useEffect(() => {
         if (idMedium) {
             const mediumToOpen = details.collection.find((medium) => medium.id === idMedium)
-
             if (mediumToOpen) {
                 details.open(mediumToOpen)
             }
         }
-    }, [details.collection, details.medium])
+    }, [details.collection])
 
     const select = () => {
         selection.toggle(details.medium)
     }
-
-    const [loading, setLoading] = useState(true)
 
     const slide = (direction: number) => {
         const index = details.collection.indexOf(details.medium)
@@ -94,9 +95,6 @@ const Details = () => {
                 />
             </Tippy>
         }
-
-        const rotate = useRotate()
-        const deleteMediaDialog = useDeleteMediaDialog()
 
         const moreItems = [
             {

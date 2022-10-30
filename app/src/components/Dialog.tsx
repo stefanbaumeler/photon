@@ -36,7 +36,10 @@ const Dialog = () => {
         ['active', dialog.active]
     ])
 
-    return <div className={classes}>
+    return <div
+        data-cy={dialog.id}
+        className={classes}
+    >
         <div className="dialog__container">
             <div className="dialog__header">
                 <div className="dialog__title">

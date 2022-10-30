@@ -56,7 +56,7 @@ export default class MediaService {
 
     async destroy (keys: string[] | number[] | string | number) {
         const keysToDestroy = Array.isArray(keys) ? keys : [keys]
-        
+
         keysToDestroy.forEach((key) => {
             this.readOne(key).then((medium) => {
                 fs.unlinkSync(`./uploads/${medium[0].filenameDisk}`)

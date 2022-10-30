@@ -42,27 +42,23 @@ const DetailsProvider = ({ children }: Props) => {
                 newUrl = `/albums/${router.query.idAlbum}/media/${newMedium.id}`
             }
 
-            if (newUrl !== router.asPath) {
-                router.push(newUrl, null, {
-                    shallow: true
-                })
-            }
+            router.push(newUrl, null, {
+                shallow: true
+            })
         },
         close: () => {
-            setMedium({})
-            setActive(false)
-
             let newUrl = '/'
 
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/`
             }
 
-            if (newUrl !== router.asPath) {
-                router.push(newUrl, null, {
-                    shallow: true
-                })
-            }
+            router.push(newUrl, null, {
+                shallow: true
+            }).then(() => {
+                setActive(false)
+                setMedium({})
+            })
         },
         openInfos: () => {
             setInfos(true)

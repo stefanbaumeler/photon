@@ -117,9 +117,8 @@ const AlbumPage = () => {
         selection.setMode(ESelectionMode.DELETE)
     }
 
-    const changeTitle = (event: ChangeEvent) => {
-        const target = event.target as HTMLInputElement
-        setTitle(target.value)
+    const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.target.value)
     }
 
     if (albumQuery.loading || albumMediaQuery.loading) {

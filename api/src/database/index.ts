@@ -11,8 +11,6 @@ export const getDatabase = () => {
 
     const options = knexStringCase(knexConfig)
 
-    console.log(options)
-
     database = knex(options)
 
     return database

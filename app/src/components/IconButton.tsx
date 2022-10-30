@@ -6,7 +6,7 @@ import { Placement } from 'tippy.js'
 import bem from '@/util/bem'
 
 type Props = {
-    onClick?: (event?: Event) => void
+    onClick?: () => void
     hint?: string
     hintPlacement?: Placement
     href?: string

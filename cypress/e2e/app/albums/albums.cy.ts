@@ -1,5 +1,5 @@
 describe('Albums', function () {
-    const albumTitle = 'Created Test Album'
+    const albumTitle = '___T'
 
     before(function () {
         cy.exec('yarn db:seed')
@@ -7,6 +7,7 @@ describe('Albums', function () {
 
     beforeEach(function () {
         cy.intercept('/graphql', (req) => {
+            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
     })
@@ -20,6 +21,8 @@ describe('Albums', function () {
 
         // Add to Album dialog
         cy.get('[data-cy="add-to"]').click()
+        cy.get('[data-cy="add-to-album"]').should('be.visible')
+        cy.wait('@AlbumsQuery')
     }
 
     const makeEdits = function () {
@@ -27,7 +30,9 @@ describe('Albums', function () {
         cy.get('[data-cy="album-title"]').click()
 
         // Can enter title
-        cy.get('[data-cy="album-title"]').type(albumTitle)
+        cy.get('[data-cy="album-title"]').type(albumTitle, {
+            force: true
+        })
         cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
 
         // Remove one
@@ -87,7 +92,9 @@ describe('Albums', function () {
     it('adds another medium to the album and avoids duplicates', function () {
         select()
 
-        cy.get('[data-cy="thumbnail"]').contains(albumTitle).click()
+        cy.get('[data-cy="thumbnail"]').contains(albumTitle).click({
+            force: true
+        })
 
         // has redirected
         cy.url().should('contain', '/albums/' )
