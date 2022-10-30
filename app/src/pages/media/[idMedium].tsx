@@ -10,6 +10,8 @@ const HomePage = () => {
         return <></>
     }
 
+    console.log(media.data?.media)
+
     return <Layout>
         <section>
             <div>

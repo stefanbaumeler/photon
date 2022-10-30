@@ -37,7 +37,7 @@ const MediaSection = ({
         if (!galleryEl.current) {return}
 
         const maxHeight = window.innerWidth < 1024 ? 400 : 500
-        const targetRowHeight = window.innerWidth < 1024 ? 400 : 250
+        const targetRowHeight = window.innerWidth < 1024 ? 300 : 250
         setWindowWidth(window.innerWidth)
 
         generateGallery({

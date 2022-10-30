@@ -43,7 +43,8 @@ export const generateGallery = (config: TGalleryConfig): Promise<GalleryItem[]> 
 
         for (let i = 1; i < path.length; ++i) {
             const calculatedHeight = getCommonHeight(cfg.images.slice(path[i - 1], path[i]), cfg)
-            const height = calculatedHeight > cfg.maxHeight * 2 ? cfg.targetRowHeight : Math.min(calculatedHeight, cfg.maxHeight)
+            const height = calculatedHeight > cfg.maxHeight ? cfg.targetRowHeight : Math.min(calculatedHeight, cfg.maxHeight)
+
             for (let j = path[i - 1]; j < path[i]; ++j) {
                 cfg.images[j].width = Math.round(height * cfg.images[j].ratio * 100) / 100
                 cfg.images[j].height = height

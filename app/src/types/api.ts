@@ -58,6 +58,7 @@ export type TMutation = {
   deleteAlbum?: Maybe<Scalars['String']>
   deleteMedia?: Maybe<Scalars['String']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
+  rotate?: Maybe<Scalars['ID']>
   updateAlbumTitle?: Maybe<Scalars['ID']>
 }
 
@@ -82,6 +83,10 @@ export type TMutationDeleteMediaArgs = {
 export type TMutationRemoveFromAlbumArgs = {
   idAlbum?: InputMaybe<Scalars['ID']>
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
+}
+
+export type TMutationRotateArgs = {
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type TMutationUpdateAlbumTitleArgs = {
@@ -177,6 +182,12 @@ export type TRemoveFromAlbumVariables = Exact<{
 }>
 
 export type TRemoveFromAlbum = { __typename?: 'Mutation', removeFromAlbum?: Array<string | null> | null }
+
+export type TRotateVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>
+}>
+
+export type TRotate = { __typename?: 'Mutation', rotate?: string | null }
 
 export type TUpdateAlbumTitleVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
@@ -439,6 +450,22 @@ export function useRemoveFromAlbum (baseOptions?: Apollo.MutationHookOptions<TRe
 export type RemoveFromAlbumHookResult = ReturnType<typeof useRemoveFromAlbum>
 export type RemoveFromAlbumMutationResult = Apollo.MutationResult<TRemoveFromAlbum>
 export type RemoveFromAlbumMutationOptions = Apollo.BaseMutationOptions<TRemoveFromAlbum, TRemoveFromAlbumVariables>
+export const RotateDocument = gql`
+    mutation rotate($id: ID) {
+  rotate(id: $id)
+}
+    `
+export type TRotateMutationFn = Apollo.MutationFunction<TRotate, TRotateVariables>
+export function useRotate (baseOptions?: Apollo.MutationHookOptions<TRotate, TRotateVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TRotate, TRotateVariables>(RotateDocument, options)
+}
+export type RotateHookResult = ReturnType<typeof useRotate>
+export type RotateMutationResult = Apollo.MutationResult<TRotate>
+export type RotateMutationOptions = Apollo.BaseMutationOptions<TRotate, TRotateVariables>
 export const UpdateAlbumTitleDocument = gql`
     mutation updateAlbumTitle($id: ID, $title: String) {
   updateAlbumTitle(id: $id, title: $title)

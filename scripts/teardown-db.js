@@ -6,3 +6,4 @@ dotenv.config({
 })
 
 exec(`dropdb ${process.env.PG_DATABASE_NAME}`)
+exec('rm ./api/uploads/*')

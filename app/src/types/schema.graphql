@@ -38,6 +38,7 @@ type Mutation {
     deleteAlbum(ids: [ID]): String
     deleteMedia(ids: [ID]): String
     removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
+    rotate(id: ID): ID
     updateAlbumTitle(id: ID, title: String): ID
 }
 

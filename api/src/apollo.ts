@@ -47,6 +47,7 @@ export const createApolloServer = async (app: Express) => {
             removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
             updateAlbumTitle(id: ID, title: String): ID
             createAlbum(album: AlbumInput, media: [ID]): ID
+            rotate(id: ID): ID
         }
 
         type Query {
@@ -69,6 +70,9 @@ export const createApolloServer = async (app: Express) => {
             albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
+            rotate: (_: any, input: { id: string }) => {
+                return new MediaService().rotate(input.id)
+            },
             deleteMedia: async (_: any, input: { ids: string[] }) => {
                 return await new MediaService().destroy(input.ids)
             },

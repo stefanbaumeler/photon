@@ -5,7 +5,7 @@ const ON_MODIFIED_TIMESTAMP_FUNCTION = `
   CREATE OR REPLACE FUNCTION on_modified_timestamp()
   RETURNS trigger AS $$
   BEGIN
-    NEW.modified_at = ${defaults.now};
+    NEW.date_modified = ${defaults.now};
     RETURN NEW;
   END;
 $$ language 'plpgsql';

@@ -10,6 +10,7 @@ import { ESelectionMode } from '@/types/app'
 import { getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
+import useRotate from '@/hooks/rotate'
 import bem from '@/util/bem'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
 import { useRouter } from 'next/router'
@@ -32,7 +33,7 @@ const Details = () => {
                 details.open(mediumToOpen)
             }
         }
-    }, [details.collection])
+    }, [details.collection, details.medium])
 
     const select = () => {
         selection.toggle(details.medium)
@@ -94,10 +95,7 @@ const Details = () => {
             </Tippy>
         }
 
-        const rotate = () => {
-
-        }
-
+        const rotate = useRotate()
         const deleteMediaDialog = useDeleteMediaDialog()
 
         const moreItems = [
@@ -161,6 +159,10 @@ const Details = () => {
         ['loaded', !loading]
     ])
 
+    const containerClasses = bem('details__container', [
+        // ['rotated', rotated]
+    ])
+
     return <div
         className={classes}
         data-cy="details"
@@ -201,7 +203,7 @@ const Details = () => {
                     <RightToolbar />
                 </div>
             </div>
-            <div className="details__container">
+            <div className={containerClasses}>
                 <div className="details__placeholder-container">
                     <img
                         className="details__placeholder"
