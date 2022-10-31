@@ -26,7 +26,7 @@ export default {
     show_thing: '{{thing}} anzeigen',
     hide_thing: '{{thing}} ausblenden',
     select: 'Auswählen',
-    movetotrash: 'In den Papierkorb verschieben',
+    move_to_trash: 'In den Papierkorb verschieben',
     cancel: 'Abbrechen',
     delete: 'Löschen',
     download: 'Herunterladen',
@@ -43,8 +43,10 @@ export default {
     move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?',
     upload: 'Hochladen',
     moreoptions: 'Mehr Optionen',
-    rotateright: 'Nach rechts drehen',
+    rotate_left: 'Nach links drehen',
     delete_thing: '{{thing}} löschen',
     permanently_delete: 'Unwiderruflich löschen',
-    permanently_delete_thing: '{{thing}} unwiderruflich löschen?'
+    permanently_delete_thing: '{{thing}} unwiderruflich löschen?',
+    move_to_archive: 'Archivieren',
+    unarchive: 'Aus Archiv widerherstellen'
 }

@@ -7,6 +7,7 @@ export async function up (knex: Knex) {
         t.bigint('hash')
         t.timestamp('date_created').defaultTo(knex.raw(defaults.now))
         t.timestamp('date_modified').defaultTo(knex.raw(defaults.now))
+        t.timestamp('date_modified_status').defaultTo(knex.raw(defaults.now))
         t.dateTime('date_taken')
         t.string('filename_disk', 100)
         t.string('filename_download', 100)
@@ -21,6 +22,7 @@ export async function up (knex: Knex) {
         t.integer('iso')
         t.float('lat')
         t.float('lng')
+        t.enum('status', ['default', 'archived', 'trash']).defaultTo('default')
     }).then(() => knex.raw(onModifiedTrigger('media')))
 }
 

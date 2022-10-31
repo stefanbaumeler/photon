@@ -1,5 +1,5 @@
-query MediaQuery {
-    media {
+query MediaQuery($status: String) {
+    media(status: $status) {
         dateCreated
         dateModified
         dateTaken
@@ -17,5 +17,6 @@ query MediaQuery {
         iso
         lat
         lng
+        status
     }
 }

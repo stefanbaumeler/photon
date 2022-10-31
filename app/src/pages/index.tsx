@@ -4,7 +4,11 @@ import { DetailsProvider } from '@/providers'
 import { useMediaQuery } from '@/types/api'
 
 const HomePage = () => {
-    const media = useMediaQuery()
+    const media = useMediaQuery({
+        variables: {
+            status: 'default'
+        }
+    })
 
     if (media.loading) {
         return <></>

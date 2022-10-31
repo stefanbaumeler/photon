@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  Upload: any
 }
 
 export type TAlbum = {
@@ -30,12 +31,18 @@ export type TAlbumInput = {
   title?: InputMaybe<Scalars['String']>
 }
 
+export type TFile = {
+  __typename?: 'File'
+  url?: Maybe<Scalars['String']>
+}
+
 export type TMedium = {
   __typename?: 'Medium'
   cameraMake?: Maybe<Scalars['String']>
   cameraModel?: Maybe<Scalars['String']>
   dateCreated?: Maybe<Scalars['String']>
   dateModified?: Maybe<Scalars['String']>
+  dateModifiedStatus?: Maybe<Scalars['String']>
   dateTaken?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
   fNumber?: Maybe<Scalars['Float']>
@@ -47,6 +54,7 @@ export type TMedium = {
   iso?: Maybe<Scalars['Int']>
   lat?: Maybe<Scalars['Float']>
   lng?: Maybe<Scalars['Float']>
+  status?: Maybe<Scalars['String']>
   title?: Maybe<Scalars['String']>
   width?: Maybe<Scalars['Int']>
 }
@@ -59,7 +67,9 @@ export type TMutation = {
   deleteMedia?: Maybe<Scalars['String']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
   rotate?: Maybe<Scalars['ID']>
+  setMediaStatus?: Maybe<Array<Maybe<Scalars['ID']>>>
   updateAlbumTitle?: Maybe<Scalars['ID']>
+  upload: Array<Maybe<TFile>>
 }
 
 export type TMutationAddToAlbumArgs = {
@@ -89,9 +99,18 @@ export type TMutationRotateArgs = {
   id?: InputMaybe<Scalars['ID']>
 }
 
+export type TMutationSetMediaStatusArgs = {
+  media?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
+  status?: InputMaybe<Scalars['String']>
+}
+
 export type TMutationUpdateAlbumTitleArgs = {
   id?: InputMaybe<Scalars['ID']>
   title?: InputMaybe<Scalars['String']>
+}
+
+export type TMutationUploadArgs = {
+  file: Array<InputMaybe<Scalars['Upload']>>
 }
 
 export type TQuery = {
@@ -119,6 +138,10 @@ export type TQueryDeleteAlbumArgs = {
 
 export type TQueryDeleteMediaArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
+}
+
+export type TQueryMediaArgs = {
+  status?: InputMaybe<Scalars['String']>
 }
 
 export type TQueryMediumArgs = {
@@ -166,15 +189,17 @@ export type TDeleteMediaVariables = Exact<{
 
 export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: string | null }
 
-export type TMediaQueryVariables = Exact<{ [key: string]: never }>
+export type TMediaQueryVariables = Exact<{
+  status?: InputMaybe<Scalars['String']>
+}>
 
-export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
+export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null, status?: string | null } | null> | null }
 
 export type TMediumQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
 }>
 
-export type TMediumQuery = { __typename?: 'Query', medium?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
+export type TMediumQuery = { __typename?: 'Query', medium?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null, status?: string | null } | null> | null }
 
 export type TRemoveFromAlbumVariables = Exact<{
   idAlbum?: InputMaybe<Scalars['ID']>
@@ -189,12 +214,25 @@ export type TRotateVariables = Exact<{
 
 export type TRotate = { __typename?: 'Mutation', rotate?: string | null }
 
+export type TSetMediaStatusVariables = Exact<{
+  media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
+  status?: InputMaybe<Scalars['String']>
+}>
+
+export type TSetMediaStatus = { __typename?: 'Mutation', setMediaStatus?: Array<string | null> | null }
+
 export type TUpdateAlbumTitleVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
   title?: InputMaybe<Scalars['String']>
 }>
 
 export type TUpdateAlbumTitle = { __typename?: 'Mutation', updateAlbumTitle?: string | null }
+
+export type TUploadVariables = Exact<{
+  file: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>
+}>
+
+export type TUpload = { __typename?: 'Mutation', upload: Array<{ __typename?: 'File', url?: string | null } | null> }
 
 export const AddToAlbumDocument = gql`
     mutation addToAlbum($idAlbum: ID, $media: [ID]) {
@@ -355,8 +393,8 @@ export type DeleteMediaHookResult = ReturnType<typeof useDeleteMedia>
 export type DeleteMediaMutationResult = Apollo.MutationResult<TDeleteMedia>
 export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia, TDeleteMediaVariables>
 export const MediaQueryDocument = gql`
-    query MediaQuery {
-  media {
+    query MediaQuery($status: String) {
+  media(status: $status) {
     dateCreated
     dateModified
     dateTaken
@@ -374,6 +412,7 @@ export const MediaQueryDocument = gql`
     iso
     lat
     lng
+    status
   }
 }
     `
@@ -414,6 +453,7 @@ export const MediumQueryDocument = gql`
     iso
     lat
     lng
+    status
   }
 }
     `
@@ -466,6 +506,22 @@ export function useRotate (baseOptions?: Apollo.MutationHookOptions<TRotate, TRo
 export type RotateHookResult = ReturnType<typeof useRotate>
 export type RotateMutationResult = Apollo.MutationResult<TRotate>
 export type RotateMutationOptions = Apollo.BaseMutationOptions<TRotate, TRotateVariables>
+export const SetMediaStatusDocument = gql`
+    mutation setMediaStatus($media: [ID], $status: String) {
+  setMediaStatus(media: $media, status: $status)
+}
+    `
+export type TSetMediaStatusMutationFn = Apollo.MutationFunction<TSetMediaStatus, TSetMediaStatusVariables>
+export function useSetMediaStatus (baseOptions?: Apollo.MutationHookOptions<TSetMediaStatus, TSetMediaStatusVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TSetMediaStatus, TSetMediaStatusVariables>(SetMediaStatusDocument, options)
+}
+export type SetMediaStatusHookResult = ReturnType<typeof useSetMediaStatus>
+export type SetMediaStatusMutationResult = Apollo.MutationResult<TSetMediaStatus>
+export type SetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TSetMediaStatus, TSetMediaStatusVariables>
 export const UpdateAlbumTitleDocument = gql`
     mutation updateAlbumTitle($id: ID, $title: String) {
   updateAlbumTitle(id: $id, title: $title)
@@ -482,3 +538,21 @@ export function useUpdateAlbumTitle (baseOptions?: Apollo.MutationHookOptions<TU
 export type UpdateAlbumTitleHookResult = ReturnType<typeof useUpdateAlbumTitle>
 export type UpdateAlbumTitleMutationResult = Apollo.MutationResult<TUpdateAlbumTitle>
 export type UpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>
+export const UploadDocument = gql`
+    mutation upload($file: [Upload]!) {
+  upload(file: $file) {
+    url
+  }
+}
+    `
+export type TUploadMutationFn = Apollo.MutationFunction<TUpload, TUploadVariables>
+export function useUpload (baseOptions?: Apollo.MutationHookOptions<TUpload, TUploadVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TUpload, TUploadVariables>(UploadDocument, options)
+}
+export type UploadHookResult = ReturnType<typeof useUpload>
+export type UploadMutationResult = Apollo.MutationResult<TUpload>
+export type UploadMutationOptions = Apollo.BaseMutationOptions<TUpload, TUploadVariables>

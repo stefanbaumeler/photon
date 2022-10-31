@@ -2,6 +2,7 @@ export type Medium = {
     hash: number
     dateCreated: string
     dateModified: string
+    dateModifiedStatus: string
     dateTaken?: string
     id: string | number
     filenameDisk: string
@@ -17,4 +18,5 @@ export type Medium = {
     iso?: number
     lat: number | null
     lng: number | null
+    status: string
 }

@@ -12,7 +12,9 @@ const useDeleteMedia = () => {
         variables: {
             ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
         },
-        refetchQueries: [MediaQueryDocument, AlbumsQueryDocument]
+        refetchQueries: [MediaQueryDocument, {
+            query: AlbumsQueryDocument
+        }]
     })
 
     return () => {

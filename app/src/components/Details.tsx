@@ -6,7 +6,7 @@ import { Check, Detail, IconButton, Dropdown } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
-import { ESelectionMode } from '@/types/app'
+import { EMediumStatus, ESelectionMode } from '@/types/app'
 import { getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
@@ -14,6 +14,7 @@ import useRotate from '@/hooks/rotate'
 import bem from '@/util/bem'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
 import { useRouter } from 'next/router'
+import useSetMediaStatus from '@/hooks/set-status'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -23,6 +24,7 @@ const Details = () => {
     const selection = useContext(SelectionContext)
     const router = useRouter()
     const rotate = useRotate()
+    const archive = useSetMediaStatus(details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
     const deleteMediaDialog = useDeleteMediaDialog()
 
     const [loading, setLoading] = useState(true)
@@ -45,7 +47,7 @@ const Details = () => {
     const slide = (direction: number) => {
         const index = details.collection.indexOf(details.medium)
 
-        if (details.collection[index + direction]) {
+        if (details.collection[index + direction] && details.active) {
             details.open(details.collection[index + direction])
         }
     }
@@ -59,7 +61,9 @@ const Details = () => {
     }, [details.collection, details.medium])
 
     useKeyboard('keydown', 'Escape', () => {
-        details.close()
+        if (!dialog.active) {
+            details.close()
+        }
     }, [dialog.active])
 
     const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${details.medium.filenameDisk}` : '#'
@@ -102,8 +106,12 @@ const Details = () => {
                 callback: deleteMediaDialog
             },
             {
-                label: t(ETrans.ROTATE_RIGHT),
+                label: t(ETrans.ROTATE_LEFT),
                 callback: rotate
+            },
+            {
+                label: details.medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
+                callback: archive
             }
         ]
 

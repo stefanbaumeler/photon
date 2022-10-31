@@ -14,12 +14,15 @@ export default class MediaService {
         this.knex = getDatabase()
     }
 
-    async createOne (medium: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>) {
+    async createOne (medium: Partial<Medium>) {
         return this.knex.transaction(async (trx) => {
             return trx.select().from(this.tableName).where({
                 hash: medium.hash
             }).then((result) => {
-                if (!result.length) {
+                if (result.length) {
+                    fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+                }
+                else {
                     return trx
                         .insert(medium)
                         .into(this.tableName)
@@ -30,7 +33,7 @@ export default class MediaService {
         })
     }
 
-    async createMany (media: Omit<Medium, 'id' | 'dateCreated' | 'dateModified'>[]) {
+    async createMany (media: Partial<Medium>[]) {
         const primaryKeys = media.map((medium) => this.createOne(medium))
 
         return await Promise.all(primaryKeys).then((results) => {
@@ -50,8 +53,8 @@ export default class MediaService {
         })
     }
 
-    async readMany (limit = 100): Promise<Medium[]> {
-        return this.knex.from(this.tableName).select().limit(limit)
+    async readMany (conditions: Partial<Medium> = {}, limit = 100): Promise<Medium[]> {
+        return this.knex.from(this.tableName).where(conditions).select().limit(limit)
     }
 
     async destroy (keys: string[] | number[] | string | number) {
@@ -70,23 +73,24 @@ export default class MediaService {
         const newFileName = randomUUID()
 
         await this.readOne(key).then(async (medium) => {
-            await sharp(`./uploads/${medium[0].filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then(() => {
+            await sharp(`./uploads/${medium[0].filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then(async (row) => {
                 fs.unlinkSync(`./uploads/${medium[0].filenameDisk}`)
-            })
 
-            await this.updateOne(key, {
-                width: medium[0].height,
-                height: medium[0].width,
-                filenameDisk: newFileName
+                await this.update(key, {
+                    width: row.width,
+                    height: row.height,
+                    filenameDisk: newFileName
+                })
             })
         })
     }
 
-    async updateOne (id: string | number, newProps: Partial<Medium>) {
+    async update (ids: string[] | number[] | string | number, newProps: Partial<Medium>) {
         delete newProps.id
 
-        return this.knex.from(this.tableName).where({
-            id
-        }).update(newProps)
+        const idsToUpdate = Array.isArray(ids) ? ids : [ids]
+
+        return this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps).returning('id')
+            .then((results) => results.map((result) => result.id))
     }
 }

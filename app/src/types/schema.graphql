@@ -12,11 +12,16 @@ type Album {
     title: String
 }
 
+type File {
+    url: String
+}
+
 type Medium {
     cameraMake: String
     cameraModel: String
     dateCreated: String
     dateModified: String
+    dateModifiedStatus: String
     dateTaken: String
     description: String
     fNumber: Float
@@ -28,6 +33,7 @@ type Medium {
     iso: Int
     lat: Float
     lng: Float
+    status: String
     title: String
     width: Int
 }
@@ -39,7 +45,9 @@ type Mutation {
     deleteMedia(ids: [ID]): String
     removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
     rotate(id: ID): ID
+    setMediaStatus(media: [ID], status: String): [ID]
     updateAlbumTitle(id: ID, title: String): ID
+    upload(file: [Upload]!): [File]!
 }
 
 type Query {
@@ -48,9 +56,12 @@ type Query {
     albums: [Album]
     deleteAlbum(ids: [ID]): String
     deleteMedia(ids: [ID]): String
-    media: [Medium]
+    media(status: String): [Medium]
     medium(id: ID): [Medium]
 }
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
 
 input AlbumInput {
     description: String

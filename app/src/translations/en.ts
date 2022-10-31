@@ -26,7 +26,7 @@ export default {
     show_thing: 'Show {{thing, lowercase}}',
     hide_thing: 'Hide {{thing, lowercase}}',
     select: 'Select',
-    movetotrash: 'In den Papierkorb verschieben',
+    move_to_trash: 'Move to trash',
     cancel: 'Cancel',
     delete: 'Delete',
     download: 'Download',
@@ -43,9 +43,10 @@ export default {
     move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?',
     upload: 'Upload',
     moreoptions: 'More Options',
-    rotateright: 'Rotate right',
+    rotate_left: 'Rotate left',
     delete_thing: 'Delete {{thing}}',
     permanently_delete: 'Permanently delete',
-    permanently_delete_thing: 'Are you sure you want to permanently delete this {{thing}}?'
-
+    permanently_delete_thing: 'Are you sure you want to permanently delete this {{thing}}?',
+    move_to_archive: 'Archive',
+    unarchive: 'Unarchive'
 }

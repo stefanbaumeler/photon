@@ -91,3 +91,9 @@ export enum EDateFormat {
     SHORT = 'short',
     LONG = 'long'
 }
+
+export enum EMediumStatus {
+    DEFAULT = 'default',
+    ARCHIVED = 'archived',
+    TRASH = 'trash'
+}

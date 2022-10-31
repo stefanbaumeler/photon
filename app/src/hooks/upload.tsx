@@ -1,26 +1,31 @@
-import { ChangeEvent } from 'react'
-import { useMediaQuery } from '@/types/api'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { MediaQueryDocument, useUpload as useUploadMutation } from '@/types/api'
 
 const useUpload = () => {
-    const media = useMediaQuery({
-        skip: true
+    const [file, setFile] = useState<FileList>()
+
+    const [upload] = useUploadMutation({
+        variables: {
+            file
+        },
+        refetchQueries: [MediaQueryDocument]
     })
 
-    return (event: ChangeEvent<HTMLInputElement>) => {
-        const formData = new FormData()
+    useEffect(() => {
+        if (file) {
+            upload().then(() => {
+                setFile(undefined)
+            })
+        }
+    }, [file])
 
-        for (let i = 0; i < event.target.files.length; i++) {
-            formData.append('upload', event.target.files[i])
+    return (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files
+        if (!file) {
+            return
         }
 
-        fetch('http://localhost:2000/media', {
-            method: 'post',
-            body: formData
-        }).then(() => {
-            media.refetch().then(() => {
-                event.target.value = ''
-            })
-        })
+        setFile(file)
     }
 }
 

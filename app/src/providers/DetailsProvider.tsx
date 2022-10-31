@@ -36,7 +36,8 @@ const DetailsProvider = ({ children }: Props) => {
             setMedium(newMedium)
             setActive(true)
 
-            let newUrl = `/media/${newMedium.id}`
+            const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
+            let newUrl = `${path}/media/${newMedium.id}`
 
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/media/${newMedium.id}`
@@ -47,7 +48,7 @@ const DetailsProvider = ({ children }: Props) => {
             })
         },
         close: () => {
-            let newUrl = '/'
+            let newUrl = router.pathname
 
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/`

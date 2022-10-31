@@ -29,7 +29,7 @@ export enum ETrans {
     SHOW_THING = 'show_thing',
     HIDE_THING = 'hide_thing',
     SELECT = 'select',
-    MOVE_TO_TRASH = 'movetotrash',
+    MOVE_TO_TRASH = 'move_to_trash',
     CANCEL = 'cancel',
     DELETE = 'delete',
     DOWNLOAD = 'download',
@@ -45,8 +45,10 @@ export enum ETrans {
     ELEMENT = 'element',
     UPLOAD = 'upload',
     MORE_OPTIONS = 'moreoptions',
-    ROTATE_RIGHT = 'rotateright',
+    ROTATE_LEFT = 'rotate_left',
     DELETE_THING = 'delete_thing',
     PERMANENTLY_DELETE = 'permanently_delete',
-    PERMANENTLY_DELETE_THING = 'permanently_delete_thing'
+    PERMANENTLY_DELETE_THING = 'permanently_delete_thing',
+    MOVE_TO_ARCHIVE = 'move_to_archive',
+    UNARCHIVE = 'unarchive'
 }

@@ -1,14 +1,27 @@
 import Layout from '@/layouts/layout'
-import { Uploader, Details } from '@/components'
+import { Uploader, Details, Media, Dialog } from '@/components'
 import { DetailsProvider } from '@/providers'
+import { useMediaQuery } from '@/types/api'
 
 const ArchivePage = () => {
+    const media = useMediaQuery({
+        variables: {
+            status: 'archived'
+        }
+    })
+
+    if (media.loading) {
+        return <></>
+    }
+
     return <Layout>
         <section>
             <div>
+                <Dialog />
                 <Uploader />
                 <DetailsProvider>
                     <Details />
+                    <Media media={media.data?.media || []} />
                 </DetailsProvider>
             </div>
         </section>

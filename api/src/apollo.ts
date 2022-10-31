@@ -3,12 +3,24 @@ import { Express } from 'express'
 import MediaService from './services/media'
 import AlbumsService from './services/albums'
 import AlbumsMediaService from './services/albumsMedia'
+import { GraphQLUpload } from 'graphql-upload'
+import fs from 'fs'
+import { randomUUID } from 'crypto'
+import { Medium } from './types'
+import { exifToMedium } from './helpers/exif'
 
 export const createApolloServer = async (app: Express) => {
     const typeDefs = gql`
+        scalar Upload
+
+        type File {
+            url: String
+        }
+
         type Medium {
             dateCreated: String
             dateModified: String
+            dateModifiedStatus: String
             dateTaken: String
             id: ID
             filenameDisk: String
@@ -24,6 +36,7 @@ export const createApolloServer = async (app: Express) => {
             iso: Int
             lat: Float
             lng: Float
+            status: String
         }
 
         type Album {
@@ -48,10 +61,12 @@ export const createApolloServer = async (app: Express) => {
             updateAlbumTitle(id: ID, title: String): ID
             createAlbum(album: AlbumInput, media: [ID]): ID
             rotate(id: ID): ID
+            setMediaStatus(media: [ID], status: String): [ID]
+            upload(file: [Upload]!): [File]!
         }
 
         type Query {
-            media: [Medium]
+            media(status: String): [Medium]
             medium(id: ID): [Medium]
             albums: [Album]
             album(id: ID): [Album]
@@ -62,14 +77,60 @@ export const createApolloServer = async (app: Express) => {
     `
 
     const resolvers = {
+        Upload: GraphQLUpload,
         Query: {
-            media: () => new MediaService().readMany(),
+            media: (_: any, input: { status: string }) => {
+                return new MediaService().readMany(input.status ? {
+                    status: input.status
+                } : {})
+            },
             medium: (_: any, input: { id: number }) => new MediaService().readOne(input.id),
             albums: () => new AlbumsService().readMany(),
             album: async (_: any, input: { id: number }) => new AlbumsService().readOne(input.id),
             albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
+            upload: async (_: any, { file: files }: { file: any }) => {
+                const service = new MediaService()
+
+                const writePromises = files.map((file: any) => new Promise<Partial<Medium>> ((resolve) => {
+                    const name = randomUUID()
+                    const pathName = `./uploads/${name}`
+
+                    Promise.resolve(file).then(({
+                        createReadStream, filename
+                    }) => {
+                        const writeFileToDisk = new Promise<string>((r) => {
+                            const stream = createReadStream()
+
+                            stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
+                                r(filename)
+                            })
+                        })
+
+                        Promise.resolve(writeFileToDisk).then((filename) => {
+                            exifToMedium(pathName, name, filename).then((medium) => {
+                                resolve(medium)
+                            })
+                        })
+                    })
+                }))
+
+                await Promise.all(writePromises).then(async (data) => {
+                    await service.createMany(data)
+                })
+
+                return []
+            },
+            setMediaStatus: async (_: any, input: { media: string[], status: string }) => {
+                const res = await new MediaService().update(input.media, {
+                    dateModifiedStatus: 'NOW()',
+                    status: input.status
+                })
+
+                console.log(res)
+                return res
+            },
             rotate: (_: any, input: { id: string }) => {
                 return new MediaService().rotate(input.id)
             },
@@ -96,7 +157,9 @@ export const createApolloServer = async (app: Express) => {
                 return await new AlbumsMediaService().destroyMany(itemsToRemove)
             },
             updateAlbumTitle: async (_: any, input: { id: string | number, title: string}) => {
-                return await new AlbumsService().updateOne(input.id, input)
+                return await new AlbumsService().update(input.id, {
+                    title: input.title
+                })
             },
             createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
                 const media = input.media.map((medium) => ({

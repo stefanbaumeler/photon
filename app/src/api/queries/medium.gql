@@ -17,5 +17,6 @@ query MediumQuery($id: ID) {
         iso
         lat
         lng
+        status
     }
 }

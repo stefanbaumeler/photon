@@ -1,12 +1,13 @@
 import * as Icons from '@mdi/js'
-import { IconButton, Thumbnails } from '@/components'
-import { useContext } from 'react'
+import { Dropdown, IconButton } from '@/components'
+import { useContext, useState } from 'react'
 import { SelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ESelectionMode } from '@/types/app'
+import { EMediumStatus, ESelectionMode } from '@/types/app'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
 import useAddToAlbumDialog from '@/dialogs/add-to-album'
+import useSetMediaStatus from '@/hooks/set-status'
 
 const BulkActions = () => {
     const { t } = useTranslation()
@@ -14,6 +15,8 @@ const BulkActions = () => {
     const selection = useContext(SelectionContext)
 
     const deleteMediaDialog = useDeleteMediaDialog()
+    const archive = useSetMediaStatus(EMediumStatus.ARCHIVED)
+    const [moreActive, setMoreActive] = useState(false)
 
     const download = () => {
 
@@ -24,6 +27,13 @@ const BulkActions = () => {
     if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
+
+    const moreItems = [
+        {
+            label: t(ETrans.MOVE_TO_ARCHIVE),
+            callback: archive
+        }
+    ]
 
     return <div className="actions">
         <span
@@ -50,6 +60,17 @@ const BulkActions = () => {
             onClick={deleteMediaDialog}
             icon={Icons.mdiTrashCanOutline}
         />
+        <Dropdown
+            items={moreItems}
+            active={moreActive}
+            onClickOutside={() => setMoreActive(false)}
+        >
+            <IconButton
+                hint={t(ETrans.MORE_OPTIONS)}
+                icon={Icons.mdiDotsVertical}
+                onClick={() => setMoreActive(!moreActive)}
+            />
+        </Dropdown>
     </div>
 }
 

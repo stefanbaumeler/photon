@@ -23,7 +23,7 @@ export async function seed (knex: Knex) {
     ]
 
     for (let i = 0; i < 7; i++) {
-        const downloadPromise = new Promise<Omit<Medium, 'dateCreated' | 'dateModified'>>((resolve) => {
+        const downloadPromise = new Promise<Partial<Medium>>((resolve) => {
             const filename = predefinedUUIDs[i]
             const fullPath = `uploads/${filename}`
 

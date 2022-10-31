@@ -57,12 +57,12 @@ export default class AlbumsService {
         return this.knex.from(this.tableName).select().limit(limit)
     }
 
-    async updateOne (id: string | number, newProps: Partial<Album>) {
+    async update (ids: string[] | number[] | string | number, newProps: Partial<Album>) {
         delete newProps.id
 
-        return this.knex.from(this.tableName).where({
-            id
-        }).update(newProps)
+        const idsToUpdate = Array.isArray(ids) ? ids : [ids]
+
+        return this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps)
     }
 
     async destroy (keys: string[] | number[] | string | number) {
