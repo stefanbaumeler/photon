@@ -57,7 +57,7 @@ export default class MediaService {
         return this.knex.from(this.tableName).where(conditions).select().limit(limit)
     }
 
-    async destroy (keys: string[] | number[] | string | number) {
+    async destroy (keys: string[] | number[] | string | number | (string | number)[]) {
         const keysToDestroy = Array.isArray(keys) ? keys : [keys]
 
         keysToDestroy.forEach((key) => {
@@ -90,7 +90,7 @@ export default class MediaService {
 
         const idsToUpdate = Array.isArray(ids) ? ids : [ids]
 
-        return this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps).returning('id')
+        return await this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps).returning('id')
             .then((results) => results.map((result) => result.id))
     }
 }

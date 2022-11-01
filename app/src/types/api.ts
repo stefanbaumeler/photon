@@ -65,6 +65,7 @@ export type TMutation = {
   createAlbum?: Maybe<Scalars['ID']>
   deleteAlbum?: Maybe<Scalars['String']>
   deleteMedia?: Maybe<Scalars['String']>
+  emptyTrash?: Maybe<Scalars['Boolean']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
   rotate?: Maybe<Scalars['ID']>
   setMediaStatus?: Maybe<Array<Maybe<Scalars['ID']>>>
@@ -188,6 +189,10 @@ export type TDeleteMediaVariables = Exact<{
 }>
 
 export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: string | null }
+
+export type TEmptyTrashVariables = Exact<{ [key: string]: never }>
+
+export type TEmptyTrash = { __typename?: 'Mutation', emptyTrash?: boolean | null }
 
 export type TMediaQueryVariables = Exact<{
   status?: InputMaybe<Scalars['String']>
@@ -392,6 +397,22 @@ export function useDeleteMedia (baseOptions?: Apollo.MutationHookOptions<TDelete
 export type DeleteMediaHookResult = ReturnType<typeof useDeleteMedia>
 export type DeleteMediaMutationResult = Apollo.MutationResult<TDeleteMedia>
 export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia, TDeleteMediaVariables>
+export const EmptyTrashDocument = gql`
+    mutation emptyTrash {
+  emptyTrash
+}
+    `
+export type TEmptyTrashMutationFn = Apollo.MutationFunction<TEmptyTrash, TEmptyTrashVariables>
+export function useEmptyTrash (baseOptions?: Apollo.MutationHookOptions<TEmptyTrash, TEmptyTrashVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TEmptyTrash, TEmptyTrashVariables>(EmptyTrashDocument, options)
+}
+export type EmptyTrashHookResult = ReturnType<typeof useEmptyTrash>
+export type EmptyTrashMutationResult = Apollo.MutationResult<TEmptyTrash>
+export type EmptyTrashMutationOptions = Apollo.BaseMutationOptions<TEmptyTrash, TEmptyTrashVariables>
 export const MediaQueryDocument = gql`
     query MediaQuery($status: String) {
   media(status: $status) {

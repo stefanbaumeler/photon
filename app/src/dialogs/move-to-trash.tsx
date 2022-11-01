@@ -2,21 +2,27 @@ import { ETrans } from '@/types/translations'
 import { useContext } from 'react'
 import { DialogContext, SelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import useDeleteMedia from '@/hooks/delete-media'
+import useSetMediaStatus from '@/hooks/set-status'
+import { EMediumStatus } from '@/types/app'
 
-const useDeleteMediaDialog = () => {
+const useMoveToTrashDialog = () => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const { t } = useTranslation()
 
-    const confirm = useDeleteMedia()
+    const trash = useSetMediaStatus(EMediumStatus.TRASH)
+
+    const confirm = () => {
+        trash()
+        dialog.close()
+    }
 
     return () => dialog.open({
         id: 'delete-media',
-        title: t(ETrans.PERMANENTLY_DELETE),
-        text: t(ETrans.PERMANENTLY_DELETE_THING, {
+        title: t(ETrans.MOVE_TO_TRASH),
+        text: t(ETrans.MOVE_ITEMS_TO_TRASH, {
             count: selection.selected.size || 1,
-            thing: t(ETrans.ELEMENT_COUNT, {
+            thing: t(ETrans.ELEMENT, {
                 count: selection.selected.size || 1
             })
         }),
@@ -34,4 +40,4 @@ const useDeleteMediaDialog = () => {
     })
 }
 
-export default useDeleteMediaDialog
+export default useMoveToTrashDialog

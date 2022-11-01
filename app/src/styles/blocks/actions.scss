@@ -1,12 +1,17 @@
 @mixin actions-root {
     display: flex;
     margin-left: auto;
+
+    &--labeled {
+        color: $color-secondary;
+    }
 }
 
 @mixin actions-count {
     display: flex;
     align-items: center;
     padding: 0 24px;
+    color: $color-black;
 }
 
 @mixin actions-uploader {

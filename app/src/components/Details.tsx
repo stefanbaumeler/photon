@@ -15,6 +15,8 @@ import bem from '@/util/bem'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
 import { useRouter } from 'next/router'
 import useSetMediaStatus from '@/hooks/set-status'
+import useMoveToTrashDialog from '@/dialogs/move-to-trash'
+import useRestoreMediaDialog from '@/dialogs/restore-media'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -25,7 +27,9 @@ const Details = () => {
     const router = useRouter()
     const rotate = useRotate()
     const archive = useSetMediaStatus(details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
+    const moveToTrashDialog = useMoveToTrashDialog()
     const deleteMediaDialog = useDeleteMediaDialog()
+    const restoreMediaDialog = useRestoreMediaDialog()
 
     const [loading, setLoading] = useState(true)
 
@@ -103,7 +107,7 @@ const Details = () => {
         const moreItems = [
             {
                 label: t(ETrans.DELETE),
-                callback: deleteMediaDialog
+                callback: moveToTrashDialog
             },
             {
                 label: t(ETrans.ROTATE_LEFT),
@@ -117,25 +121,57 @@ const Details = () => {
 
         const [moreActive, setMoreActive] = useState(false)
 
-        return <>
-            <IconButton
-                href={`${src}?download=true`}
-                hint={t(ETrans.DOWNLOAD)}
-                white={true}
-                icon={Icons.mdiTrayArrowDown}
-            />
-            <Dropdown
-                items={moreItems}
-                active={moreActive}
-                onClickOutside={() => setMoreActive(false)}
-            >
+        const RegularActions = () => {
+            return <>
                 <IconButton
-                    hint={t(ETrans.MORE_OPTIONS)}
-                    icon={Icons.mdiDotsVertical}
+                    href={`${src}?download=true`}
+                    hint={t(ETrans.DOWNLOAD)}
                     white={true}
-                    onClick={() => setMoreActive(!moreActive)}
+                    icon={Icons.mdiTrayArrowDown}
                 />
-            </Dropdown>
+                <Dropdown
+                    items={moreItems}
+                    active={moreActive}
+                    onClickOutside={() => setMoreActive(false)}
+                >
+                    <IconButton
+                        hint={t(ETrans.MORE_OPTIONS)}
+                        icon={Icons.mdiDotsVertical}
+                        white={true}
+                        onClick={() => setMoreActive(!moreActive)}
+                    />
+                </Dropdown>
+            </>
+        }
+
+        const TrashActions = () => {
+            return <>
+                <IconButton
+                    label={t(ETrans.DELETE)}
+                    onClick={deleteMediaDialog}
+                    icon={Icons.mdiDeleteForever}
+                    white={true}
+                />
+                <IconButton
+                    label={t(ETrans.RESTORE)}
+                    onClick={restoreMediaDialog}
+                    icon={Icons.mdiDeleteRestore}
+                    white={true}
+                />
+            </>
+        }
+
+        const Actions = () => {
+            if (router.pathname === '/trash') {
+                return <TrashActions />
+            }
+            else {
+                return <RegularActions />
+            }
+        }
+
+        return <>
+            <Actions />
             <OpenInfosButton />
         </>
     }

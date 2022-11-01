@@ -71,11 +71,11 @@
 @mixin medium-image {
     position: relative;
     z-index: 1;
-    transition: opacity .1s, transform .1s;
+    transition: opacity .1s, scale .1s;
     opacity: 0;
 
     @at-root .medium--selected & {
-        transform: scale(.9);
+        scale: .9;
     }
 
     &--loaded {
@@ -117,7 +117,7 @@
     @at-root .medium--removable & {
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        translate: -50% -50%;
         opacity: 1;
     }
 
@@ -137,10 +137,10 @@
     width: 24px;
     height: 24px;
     z-index: 2;
-    transition: opacity .1s, transform .1s;
+    transition: opacity .1s, translate .1s;
 
     @at-root .medium--selected & {
-        transform: translate(-20px, -20px);
+        translate: -20px -20px;
     }
 
     > svg {

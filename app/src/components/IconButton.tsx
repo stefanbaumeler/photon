@@ -9,6 +9,7 @@ type Props = {
     onClick?: () => void
     hint?: string
     hintPlacement?: Placement
+    label?: string
     href?: string
     white?: boolean
     icon: string
@@ -18,7 +19,7 @@ type Props = {
 }
 
 const IconButton = ({
-    onClick, hint, hintPlacement, href, white = false, icon, solid = false, cy, small = false
+    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, cy, small = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -38,7 +39,8 @@ const IconButton = ({
     const linkClasses = bem('button', [
         ['white', white],
         ['solid', solid],
-        ['small', small]
+        ['small', small],
+        ['label', !!label?.length]
     ])
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
@@ -71,10 +73,13 @@ const IconButton = ({
 
     return <ConditionalTip>
         <ButtonOrLinkWithRef>
-            <Icon
-                path={icon}
-                size={small ? .75 : 1}
-            />
+            <>
+                <Icon
+                    path={icon}
+                    size={small ? .75 : 1}
+                />
+                {label}
+            </>
         </ButtonOrLinkWithRef>
     </ConditionalTip>
 }

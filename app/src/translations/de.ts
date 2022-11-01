@@ -38,8 +38,11 @@ export default {
     addto_thing: 'Zu {{thing}} hinzufügen',
     untitled: 'Ohne Titel',
     newalbum: 'Neues Album',
+    element_count_one: '{{count}} Element',
+    element_count_other: '{{count}} Elemente',
     element_one: 'Element',
     element_other: 'Elemente',
+    all_elements: 'Alle Elemente',
     move_items_totrash: '{{count}} {{thing}} in den Papierkorb verschieben?',
     upload: 'Hochladen',
     moreoptions: 'Mehr Optionen',
@@ -48,5 +51,8 @@ export default {
     permanently_delete: 'Unwiderruflich löschen',
     permanently_delete_thing: '{{thing}} unwiderruflich löschen?',
     move_to_archive: 'Archivieren',
-    unarchive: 'Aus Archiv widerherstellen'
+    unarchive: 'Aus Archiv widerherstellen',
+    restore: 'Widerherstellen',
+    restore_thing: '{{thing}} widerherstellen?',
+    empty_trash: 'Papierkorb leeren'
 }

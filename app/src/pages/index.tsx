@@ -2,11 +2,12 @@ import Layout from '@/layouts/layout'
 import { Media, Uploader, Details, Dialog } from '@/components'
 import { DetailsProvider } from '@/providers'
 import { useMediaQuery } from '@/types/api'
+import { EMediumStatus } from '@/types/app'
 
 const HomePage = () => {
     const media = useMediaQuery({
         variables: {
-            status: 'default'
+            status: EMediumStatus.DEFAULT
         }
     })
 

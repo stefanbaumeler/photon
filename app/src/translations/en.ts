@@ -38,15 +38,21 @@ export default {
     addto_thing: 'Add to {{thing, lowercase}}',
     untitled: 'Untitled',
     newalbum: 'New Album',
+    element_count_one: '{{count}} item',
+    element_count_other: '{{count}} items',
     element_one: 'item',
     element_other: 'items',
+    all_elements: 'all elements',
     move_items_totrash: 'Are you sure you want to move {{count}} {{thing}} to trash?',
     upload: 'Upload',
     moreoptions: 'More Options',
     rotate_left: 'Rotate left',
     delete_thing: 'Delete {{thing}}',
     permanently_delete: 'Permanently delete',
-    permanently_delete_thing: 'Are you sure you want to permanently delete this {{thing}}?',
+    permanently_delete_thing: 'Are you sure you want to permanently delete {{thing}}?',
     move_to_archive: 'Archive',
-    unarchive: 'Unarchive'
+    unarchive: 'Unarchive',
+    restore: 'Restore',
+    restore_thing: 'Restore {{thing}}?',
+    empty_trash: 'Empty trash'
 }

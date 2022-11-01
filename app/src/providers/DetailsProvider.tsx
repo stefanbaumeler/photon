@@ -50,6 +50,8 @@ const DetailsProvider = ({ children }: Props) => {
         close: () => {
             let newUrl = router.pathname
 
+            console.log(newUrl)
+
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/`
             }

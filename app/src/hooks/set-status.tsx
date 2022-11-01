@@ -10,13 +10,16 @@ const useSetMediaStatus = (status: string) => {
     const router = useRouter()
 
     let ids: string[] = []
+    let previousStatus = EMediumStatus.DEFAULT
 
     if (details?.active) {
         ids = [details.medium.id]
+        previousStatus = details.medium.status as EMediumStatus
     }
 
     if (selection.mode === ESelectionMode.SELECT) {
         ids = Array.from(selection.selected).map((selected) => selected.id)
+        previousStatus = Array.from(selection.selected)[0]?.status as EMediumStatus
     }
 
     const [setMediaStatus] = useSetMediaStatusMutation({
@@ -24,12 +27,24 @@ const useSetMediaStatus = (status: string) => {
             media: ids,
             status
         },
-        refetchQueries: [MediaQueryDocument]
+        refetchQueries: [{
+            query: MediaQueryDocument,
+            variables: {
+                status: previousStatus
+            }
+        },
+        {
+            query: MediaQueryDocument,
+            variables: {
+                status
+            }
+        }]
     })
 
     return () => {
         setMediaStatus().then(() => {
             selection.clear()
+            details?.close()
 
             if (status === EMediumStatus.ARCHIVED) {
                 router.push('/archive', null, {

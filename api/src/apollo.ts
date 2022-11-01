@@ -63,6 +63,7 @@ export const createApolloServer = async (app: Express) => {
             rotate(id: ID): ID
             setMediaStatus(media: [ID], status: String): [ID]
             upload(file: [Upload]!): [File]!
+            emptyTrash: Boolean
         }
 
         type Query {
@@ -90,6 +91,15 @@ export const createApolloServer = async (app: Express) => {
             albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
         },
         Mutation: {
+            emptyTrash: async () => {
+                const service = new MediaService()
+
+                await service.readMany({
+                    status: 'trash'
+                }).then(async (results) => {
+                    await service.destroy(results.map((result) => result.id))
+                })
+            },
             upload: async (_: any, { file: files }: { file: any }) => {
                 const service = new MediaService()
 
@@ -128,7 +138,6 @@ export const createApolloServer = async (app: Express) => {
                     status: input.status
                 })
 
-                console.log(res)
                 return res
             },
             rotate: (_: any, input: { id: string }) => {

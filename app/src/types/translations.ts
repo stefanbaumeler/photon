@@ -42,6 +42,7 @@ export enum ETrans {
     UNTITLED = 'untitled',
     NEW_ALBUM = 'newalbum',
     MOVE_ITEMS_TO_TRASH = 'move_items_totrash',
+    ELEMENT_COUNT = 'element_count',
     ELEMENT = 'element',
     UPLOAD = 'upload',
     MORE_OPTIONS = 'moreoptions',
@@ -50,5 +51,9 @@ export enum ETrans {
     PERMANENTLY_DELETE = 'permanently_delete',
     PERMANENTLY_DELETE_THING = 'permanently_delete_thing',
     MOVE_TO_ARCHIVE = 'move_to_archive',
-    UNARCHIVE = 'unarchive'
+    UNARCHIVE = 'unarchive',
+    RESTORE = 'restore',
+    RESTORE_THING = 'restore_thing',
+    EMPTY_TRASH = 'empty_trash',
+    ALL_ELEMENTS = 'all_elements'
 }

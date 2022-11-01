@@ -43,6 +43,7 @@ type Mutation {
     createAlbum(album: AlbumInput, media: [ID]): ID
     deleteAlbum(ids: [ID]): String
     deleteMedia(ids: [ID]): String
+    emptyTrash: Boolean
     removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
     rotate(id: ID): ID
     setMediaStatus(media: [ID], status: String): [ID]
