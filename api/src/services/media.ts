@@ -1,9 +1,27 @@
 import { Knex } from 'knex'
-import { Medium } from '../types'
+import { ImageMeta, Medium, VideoMeta } from '../types'
 import { getDatabase } from '../database'
 import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
+
+const objectifyMeta = <T>(jsonMedium: T & Medium<unknown>[] | T & Medium<unknown>) => {
+    const jsonMedia = Array.isArray(jsonMedium) ? jsonMedium : [jsonMedium]
+
+    const res = jsonMedia.map((json) => {
+        const m = json.meta as string || ''
+        const meta = (typeof m === 'object' ? m : JSON.parse(m)) as ImageMeta | VideoMeta
+
+        meta.__typename = json.mimetype.startsWith('image') ? 'ImageMeta' : 'VideoMeta'
+
+        return {
+            ...json,
+            meta
+        } as Medium
+    })
+
+    return res as unknown as T
+}
 
 export default class MediaService {
     knex: Knex
@@ -23,11 +41,20 @@ export default class MediaService {
                     fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
                 }
                 else {
+                    const meta = medium.meta
+
+                    delete medium.meta
+
                     return trx
-                        .insert(medium)
+                        .insert({
+                            ...medium,
+                            meta: JSON.stringify(meta)
+                        })
                         .into(this.tableName)
                         .returning('id')
-                        .then((result) => result[0].id)
+                        .then((result) => result[0].id).catch((err) => {
+                            console.log(err)
+                        })
                 }
             })
         })
@@ -41,20 +68,24 @@ export default class MediaService {
         })
     }
 
-    async readOne (key: string | number) {
-        return this.knex.from(this.tableName).select().where({
-            id: key
+    async readOne (id: string | number) {
+        const res = await this.knex.from(this.tableName).select<Medium[]>().where({
+            id
         })
+
+        return objectifyMeta(res)
     }
 
-    async readOneFromDisk (key: string | number) {
-        return this.knex.from(this.tableName).select().where({
-            filenameDisk: key
+    async readOneFromDisk (filenameDisk: string | number) {
+        return this.knex.from(this.tableName).select<Medium[]>().where({
+            filenameDisk
         })
     }
 
     async readMany (conditions: Partial<Medium> = {}, limit = 100): Promise<Medium[]> {
-        return this.knex.from(this.tableName).where(conditions).select().limit(limit)
+        const res = await this.knex.from(this.tableName).where(conditions).select().limit(limit)
+
+        return objectifyMeta(res)
     }
 
     async destroy (keys: string[] | number[] | string | number | (string | number)[]) {
@@ -69,17 +100,20 @@ export default class MediaService {
         return this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete()
     }
 
-    async rotate (key: string | number) {
+    async rotate (id: string | number) {
         const newFileName = randomUUID()
 
-        await this.readOne(key).then(async (medium) => {
+        await this.readOne(id).then(async (medium) => {
             await sharp(`./uploads/${medium[0].filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then(async (row) => {
-                fs.unlinkSync(`./uploads/${medium[0].filenameDisk}`)
-
-                await this.update(key, {
-                    width: row.width,
-                    height: row.height,
+                await this.update(id, {
+                    meta: {
+                        ...medium[0].meta,
+                        width: row.width,
+                        height: row.height
+                    },
                     filenameDisk: newFileName
+                }).then(() => {
+                    fs.unlinkSync(`./uploads/${medium[0].filenameDisk}`)
                 })
             })
         })
@@ -90,7 +124,16 @@ export default class MediaService {
 
         const idsToUpdate = Array.isArray(ids) ? ids : [ids]
 
-        return await this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps).returning('id')
+        const meta = newProps.meta
+
+        delete newProps.meta
+
+        const data = meta ? {
+            ...newProps,
+            meta: this.knex.jsonSet('meta', '', JSON.stringify(meta))
+        } : newProps
+
+        return await this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(data).returning('id')
             .then((results) => results.map((result) => result.id))
     }
 }

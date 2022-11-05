@@ -21,5 +21,8 @@ module.exports = withGraphql({
                 destination: '/trash?idMedium=:idMedium'
             }
         ]
+    },
+    images: {
+        domains: ['localhost']
     }
 })

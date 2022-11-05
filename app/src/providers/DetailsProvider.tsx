@@ -9,7 +9,7 @@ type Props = {
 interface DetailsContext {
     active: boolean
     infos: boolean
-    medium: TMedium
+        medium: TMedium
     collection: TMedium[]
     setCollection: Dispatch<SetStateAction<TMedium[]>>
     open: (medium: TMedium) => void
@@ -49,8 +49,6 @@ const DetailsProvider = ({ children }: Props) => {
         },
         close: () => {
             let newUrl = router.pathname
-
-            console.log(newUrl)
 
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/`

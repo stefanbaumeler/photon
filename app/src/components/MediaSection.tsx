@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { SelectionContext } from '@/providers'
 import bem from '@/util/bem'
+import { isEqual } from 'lodash'
 
 type Props = {
     media: TMedium[]
@@ -26,7 +27,7 @@ const MediaSection = ({
             .filter((medium) => selection.mode !== ESelectionMode.DELETE || !selection.selected.has(medium))
             .map((medium) => ({
                 medium,
-                ratio: medium.height > medium.width ? 1 / (medium.height / medium.width) : medium.width / medium.height,
+                ratio: medium.meta.height > medium.meta.width ? 1 / (medium.meta.height / medium.meta.width) : medium.meta.width / medium.meta.height,
                 width: 0,
                 height: 0
             }))

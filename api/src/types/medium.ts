@@ -1,4 +1,4 @@
-export type Medium = {
+export type Medium<T = VideoMeta | ImageMeta> = {
     hash: number
     dateCreated: string
     dateModified: string
@@ -9,6 +9,22 @@ export type Medium = {
     filenameDownload: string
     title: string
     description: string
+    lat: number | null
+    lng: number | null
+    status: string
+    mimetype: string
+    meta?: T
+}
+
+export type VideoMeta = {
+    __typename?: string
+    duration: number
+    width: number
+    height: number
+}
+
+export type ImageMeta = {
+    __typename?: string
     width: number
     height: number
     cameraMake?: string
@@ -16,7 +32,4 @@ export type Medium = {
     flash?: number
     fNumber?: number
     iso?: number
-    lat: number | null
-    lng: number | null
-    status: string
 }

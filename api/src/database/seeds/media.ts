@@ -1,6 +1,6 @@
 import { Knex } from 'knex'
 import fs from 'fs'
-import { exifToMedium } from '../../helpers/exif'
+import { fileToMedium } from '../../helpers/exif'
 import MediaService from '../../services/media'
 import { Medium } from '../../types'
 
@@ -33,7 +33,12 @@ export async function seed (knex: Knex) {
 
             fs.copyFileSync(`../cypress/fixtures/image-${i}.jpg`, fullPath)
 
-            exifToMedium(fullPath, filename, `Test Image ${i}`).then((medium) => {
+            fileToMedium({
+                filePath: fullPath,
+                fileName: filename,
+                originalName: `Test Image ${i}`,
+                type: 'image/jpeg'
+            }).then((medium) => {
                 resolve({
                     id: filename,
                     ...medium

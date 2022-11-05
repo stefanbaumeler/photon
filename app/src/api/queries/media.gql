@@ -8,15 +8,25 @@ query MediaQuery($status: String) {
         filenameDownload
         title
         description
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
         lat
         lng
         status
+        mimetype
+        meta {
+            ...on ImageMeta {
+                width
+                height
+                cameraMake
+                cameraModel
+                flash
+                fNumber
+                iso
+            }
+            ...on VideoMeta {
+                width
+                height
+                duration
+            }
+        }
     }
 }

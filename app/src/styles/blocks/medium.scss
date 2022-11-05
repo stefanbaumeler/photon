@@ -1,29 +1,11 @@
 @mixin medium-root {
-    margin: 2px;
-    position: relative;
-    cursor: pointer;
-    background-color: $color-gray;
+    transition: scale .1s;
+    height: 100%;
+    width: 100%;
 
-    &--removed {
-        display: none;
+    @at-root .teaser--selected & {
+        scale: .925;
     }
-
-    &--shift:before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        box-shadow: inset 0 0 0 4px $color-primary;
-        z-index: 10;
-        pointer-events: none;
-    }
-
-    &--selected:before {
-        display: none;
-    }
-}
-
-@mixin medium-container {
-    pointer-events: all;
 }
 
 @mixin medium-placeholder {
@@ -31,143 +13,82 @@
     top: 0;
     left: 0;
     image-rendering: pixelated;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 1;
+    z-index: 1;
+
+    &--loaded {
+        opacity: 0;
+        transition: opacity .5s;
+    }
+}
+
+//@mixin medium-image-container {
+//    display: flex;
+//    position: relative;
+//    inset: 0;
+//    box-sizing: border-box;
+//
+//    &:before {
+//        content: '';
+//        position: absolute;
+//        inset: 0;
+//        background-image: linear-gradient(rgba($color-black, .2), transparent 50%);
+//        z-index: 2;
+//        transition: opacity .25s;
+//        opacity: 0;
+//        pointer-events: none;
+//
+//        @at-root .medium:hover & {
+//            opacity: 1;
+//        }
+//    }
+//    &:after {
+//        content: '';
+//        position: absolute;
+//        inset: 0;
+//        z-index: 2;
+//        transition: box-shadow .1s;
+//        box-shadow: inset 0 0 0 0 $color-secondary-highlight;
+//        pointer-events: none;
+//
+//        @at-root .teaser--selected & {
+//            box-shadow: inset 0 0 0 16px $color-secondary-highlight;
+//        }
+//    }
+//}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @mixin medium-image-container {
-    display: flex;
-    position: relative;
-    inset: 0;
-    box-sizing: border-box;
-
-    &:before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(rgba($color-black, .2), transparent 50%);
-        z-index: 2;
-        transition: opacity .25s;
-        opacity: 0;
-        pointer-events: none;
-
-        @at-root .medium:hover & {
-            opacity: 1;
-        }
-    }
-    &:after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        transition: box-shadow .1s;
-        box-shadow: inset 0 0 0 0 $color-secondary-highlight;
-        pointer-events: none;
-
-        @at-root .medium--selected & {
-            box-shadow: inset 0 0 0 16px $color-secondary-highlight;
-        }
-    }
 }
 
 @mixin medium-image {
+    object-fit: contain;
+}
+
+@mixin medium-video {
     position: relative;
     z-index: 1;
-    transition: opacity .1s, scale .1s;
-    opacity: 0;
-
-    @at-root .medium--selected & {
-        scale: .9;
-    }
-
-    &--loaded {
-        opacity: 1;
-    }
-}
-
-@mixin medium-check {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 3;
-    transition: opacity .1s, background-color .25s, color .25s;
-    opacity: 0;
-    display: flex;
-
-    @at-root .medium:hover & {
-        opacity: .75;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
-    @at-root .root--selecting & {
-        opacity: .75;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
-    @at-root .medium--selected & {
-        opacity: 1;
-    }
-
-    @at-root .medium--selected:hover & {
-        opacity: 1;
-    }
-
-    @at-root .medium--removable & {
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        opacity: 1;
-    }
-
-    @at-root .medium--removable:hover &:hover {
-        opacity: .75;
-    }
-}
-
-@mixin medium-open-fallback {
-    opacity: 0;
-    pointer-events: none;
-    cursor: pointer;
-    position: absolute;
-    color: $color-white;
-    bottom: 8px;
-    right: 8px;
-    width: 24px;
-    height: 24px;
-    z-index: 2;
-    transition: opacity .1s, translate .1s;
-
-    @at-root .medium--selected & {
-        translate: -20px -20px;
-    }
-
-    > svg {
-        pointer-events: none;
-    }
-
-    &--delete {
-        display: none;
-    }
-
-    @at-root .root--selecting .medium:hover & {
-        opacity: .75;
-        pointer-events: all;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
+    transition: opacity 1s;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 @mixin medium {
     .medium {
         @include medium-root;
-
-        &__container {
-            @include medium-container;
-        }
 
         &__placeholder {
             @include medium-placeholder;
@@ -181,12 +102,8 @@
             @include medium-image;
         }
 
-        &__check {
-            @include medium-check;
-        }
-
-        &__open-fallback {
-            @include medium-open-fallback;
+        &__video {
+            @include medium-video;
         }
     }
 }

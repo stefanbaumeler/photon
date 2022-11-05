@@ -79,3 +79,20 @@ export const toDate = (date?: Date | number | string) => {
 
     return d
 }
+
+export const secondsToTime = (seconds: number) => {
+    const hrs = Math.floor(seconds / 3600)
+    seconds %= 3600
+    const min = Math.floor(seconds / 60)
+    const sec = seconds % 60
+
+    const strSeconds = String(sec).padStart(2, '0')
+    const strMinutes = String(min).padStart(2, '0')
+    const strHours = String(hrs).padStart(2, '0')
+
+    if (hrs === 0) {
+        return `${strMinutes}:${strSeconds}`
+    }
+
+    return `${strHours}:${strMinutes}:${strSeconds}`
+}

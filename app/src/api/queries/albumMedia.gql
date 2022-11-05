@@ -8,14 +8,23 @@ query AlbumMediaQuery($id: ID) {
         filenameDownload
         title
         description
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
         lat
         lng
+        meta {
+            ...on ImageMeta {
+                width
+                height
+                cameraMake
+                cameraModel
+                flash
+                fNumber
+                iso
+            }
+            ...on VideoMeta {
+                width
+                height
+                duration
+            }
+        }
     }
 }

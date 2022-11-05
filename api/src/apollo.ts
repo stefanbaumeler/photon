@@ -7,7 +7,7 @@ import { GraphQLUpload } from 'graphql-upload'
 import fs from 'fs'
 import { randomUUID } from 'crypto'
 import { Medium } from './types'
-import { exifToMedium } from './helpers/exif'
+import { fileToMedium } from './helpers/exif'
 
 export const createApolloServer = async (app: Express) => {
     const typeDefs = gql`
@@ -16,6 +16,24 @@ export const createApolloServer = async (app: Express) => {
         type File {
             url: String
         }
+
+        type ImageMeta {
+            width: Int
+            height: Int
+            cameraMake: String
+            cameraModel: String
+            flash: Int
+            fNumber: Float
+            iso: Int
+        }
+
+        type VideoMeta {
+            width: Int
+            height: Int
+            duration: Int
+        }
+
+        union Meta = VideoMeta | ImageMeta
 
         type Medium {
             dateCreated: String
@@ -27,16 +45,11 @@ export const createApolloServer = async (app: Express) => {
             filenameDownload: String
             title: String
             description: String
-            width: Int
-            height: Int
-            cameraMake: String
-            cameraModel: String
-            flash: Int
-            fNumber: Float
-            iso: Int
             lat: Float
             lng: Float
             status: String
+            mimetype: String
+            meta: Meta
         }
 
         type Album {
@@ -107,19 +120,22 @@ export const createApolloServer = async (app: Express) => {
                     const name = randomUUID()
                     const pathName = `./uploads/${name}`
 
-                    Promise.resolve(file).then(({
-                        createReadStream, filename
-                    }) => {
+                    Promise.resolve(file).then((f) => {
                         const writeFileToDisk = new Promise<string>((r) => {
-                            const stream = createReadStream()
+                            const stream = f.createReadStream()
 
                             stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
-                                r(filename)
+                                r(f.filename)
                             })
                         })
 
                         Promise.resolve(writeFileToDisk).then((filename) => {
-                            exifToMedium(pathName, name, filename).then((medium) => {
+                            fileToMedium({
+                                filePath: pathName,
+                                fileName: name,
+                                originalName: filename,
+                                type: f.mimetype
+                            }).then((medium) => {
                                 resolve(medium)
                             })
                         })
@@ -133,12 +149,10 @@ export const createApolloServer = async (app: Express) => {
                 return []
             },
             setMediaStatus: async (_: any, input: { media: string[], status: string }) => {
-                const res = await new MediaService().update(input.media, {
+                return await new MediaService().update(input.media, {
                     dateModifiedStatus: 'NOW()',
                     status: input.status
                 })
-
-                return res
             },
             rotate: (_: any, input: { id: string }) => {
                 return new MediaService().rotate(input.id)

@@ -36,28 +36,36 @@ export type TFile = {
   url?: Maybe<Scalars['String']>
 }
 
-export type TMedium = {
-  __typename?: 'Medium'
+export type TImageMeta = {
+  __typename?: 'ImageMeta'
   cameraMake?: Maybe<Scalars['String']>
   cameraModel?: Maybe<Scalars['String']>
+  fNumber?: Maybe<Scalars['Float']>
+  flash?: Maybe<Scalars['Int']>
+  height?: Maybe<Scalars['Int']>
+  iso?: Maybe<Scalars['Int']>
+  width?: Maybe<Scalars['Int']>
+}
+
+export type TMedium = {
+  __typename?: 'Medium'
   dateCreated?: Maybe<Scalars['String']>
   dateModified?: Maybe<Scalars['String']>
   dateModifiedStatus?: Maybe<Scalars['String']>
   dateTaken?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
-  fNumber?: Maybe<Scalars['Float']>
   filenameDisk?: Maybe<Scalars['String']>
   filenameDownload?: Maybe<Scalars['String']>
-  flash?: Maybe<Scalars['Int']>
-  height?: Maybe<Scalars['Int']>
   id?: Maybe<Scalars['ID']>
-  iso?: Maybe<Scalars['Int']>
   lat?: Maybe<Scalars['Float']>
   lng?: Maybe<Scalars['Float']>
+  meta?: Maybe<TMeta>
+  mimetype?: Maybe<Scalars['String']>
   status?: Maybe<Scalars['String']>
   title?: Maybe<Scalars['String']>
-  width?: Maybe<Scalars['Int']>
 }
+
+export type TMeta = TImageMeta | TVideoMeta
 
 export type TMutation = {
   __typename?: 'Mutation'
@@ -149,6 +157,13 @@ export type TQueryMediumArgs = {
   id?: InputMaybe<Scalars['ID']>
 }
 
+export type TVideoMeta = {
+  __typename?: 'VideoMeta'
+  duration?: Maybe<Scalars['Int']>
+  height?: Maybe<Scalars['Int']>
+  width?: Maybe<Scalars['Int']>
+}
+
 export type TAddToAlbumVariables = Exact<{
   idAlbum?: InputMaybe<Scalars['ID']>
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
@@ -166,7 +181,7 @@ export type TAlbumMediaQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
 }>
 
-export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null } | null> | null }
+export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null }
 
 export type TAlbumsQueryVariables = Exact<{ [key: string]: never }>
 
@@ -198,13 +213,13 @@ export type TMediaQueryVariables = Exact<{
   status?: InputMaybe<Scalars['String']>
 }>
 
-export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null, status?: string | null } | null> | null }
+export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null }
 
 export type TMediumQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
 }>
 
-export type TMediumQuery = { __typename?: 'Query', medium?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null, lat?: number | null, lng?: number | null, status?: string | null } | null> | null }
+export type TMediumQuery = { __typename?: 'Query', medium?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null }
 
 export type TRemoveFromAlbumVariables = Exact<{
   idAlbum?: InputMaybe<Scalars['ID']>
@@ -293,15 +308,24 @@ export const AlbumMediaQueryDocument = gql`
     filenameDownload
     title
     description
-    width
-    height
-    cameraMake
-    cameraModel
-    flash
-    fNumber
-    iso
     lat
     lng
+    meta {
+      ... on ImageMeta {
+        width
+        height
+        cameraMake
+        cameraModel
+        flash
+        fNumber
+        iso
+      }
+      ... on VideoMeta {
+        width
+        height
+        duration
+      }
+    }
   }
 }
     `
@@ -424,16 +448,26 @@ export const MediaQueryDocument = gql`
     filenameDownload
     title
     description
-    width
-    height
-    cameraMake
-    cameraModel
-    flash
-    fNumber
-    iso
     lat
     lng
     status
+    mimetype
+    meta {
+      ... on ImageMeta {
+        width
+        height
+        cameraMake
+        cameraModel
+        flash
+        fNumber
+        iso
+      }
+      ... on VideoMeta {
+        width
+        height
+        duration
+      }
+    }
   }
 }
     `
@@ -465,16 +499,26 @@ export const MediumQueryDocument = gql`
     filenameDownload
     title
     description
-    width
-    height
-    cameraMake
-    cameraModel
-    flash
-    fNumber
-    iso
     lat
     lng
     status
+    mimetype
+    meta {
+      ... on ImageMeta {
+        width
+        height
+        cameraMake
+        cameraModel
+        flash
+        fNumber
+        iso
+      }
+      ... on VideoMeta {
+        width
+        height
+        duration
+      }
+    }
   }
 }
     `

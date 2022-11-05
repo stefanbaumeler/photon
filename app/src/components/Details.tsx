@@ -17,6 +17,8 @@ import { useRouter } from 'next/router'
 import useSetMediaStatus from '@/hooks/set-status'
 import useMoveToTrashDialog from '@/dialogs/move-to-trash'
 import useRestoreMediaDialog from '@/dialogs/restore-media'
+import { Medium } from '@/components/Medium'
+import { TImageMeta, TMedium } from '@/types/api'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -30,8 +32,6 @@ const Details = () => {
     const moveToTrashDialog = useMoveToTrashDialog()
     const deleteMediaDialog = useDeleteMediaDialog()
     const restoreMediaDialog = useRestoreMediaDialog()
-
-    const [loading, setLoading] = useState(true)
 
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
 
@@ -197,39 +197,78 @@ const Details = () => {
         ['infos', details.infos]
     ])
 
-    const imageClasses = bem('details__image', [
-        ['loaded', !loading]
-    ])
-
     const containerClasses = bem('details__container', [
         // ['rotated', rotated]
     ])
+
+    const previewClasses = bem('details__preview', [
+        ['video', details.medium.mimetype?.startsWith('video')],
+        ['first', details.collection.indexOf(details.medium) === 0],
+        ['last', details.collection.indexOf(details.medium) === details.collection.length - 1]
+    ])
+
+    const ImageMeta = () => {
+        const meta = details.medium.meta as TImageMeta
+        return <>
+            <Detail
+                icon={Icons.mdiCameraIris}
+                title={`${meta.cameraMake} ${meta.cameraModel}`}
+                values={[`f/${meta.fNumber}`, `${meta.iso}`]}
+            />
+            <Detail
+                icon={Icons.mdiMapMarker}
+                title={`${meta.cameraMake} ${meta.cameraModel}`}
+                values={[`f/${meta.fNumber}`, `${meta.iso}`]}
+            />
+        </>
+    }
+
+    const VideoMeta = () => {
+        return <></>
+    }
+
+    const Meta = () => {
+        if (details.medium.mimetype?.startsWith('image')) {
+            return <ImageMeta />
+        }
+
+        if (details.medium.mimetype?.startsWith('image')) {
+            return <VideoMeta />
+        }
+    }
+
+    if (!details.medium || !Object.keys(details.medium).length) {
+        return <></>
+    }
 
     return <div
         className={classes}
         data-cy="details"
     >
-        <div className="details__preview">
-
+        <div className={previewClasses}>
             <button
                 data-cy="prev-medium"
                 className="details__button details__button--prev"
                 onClick={() => slide(-1)}
             >
-                <Icon
-                    path={Icons.mdiChevronLeft}
-                    size={1.75}
-                />
+                <div className="details__button-icon">
+                    <Icon
+                        path={Icons.mdiChevronLeft}
+                        size={1.75}
+                    />
+                </div>
             </button>
             <button
                 data-cy="next-medium"
                 className="details__button details__button--next"
                 onClick={() => slide(1)}
             >
-                <Icon
-                    path={Icons.mdiChevronRight}
-                    size={1.75}
-                />
+                <div className="details__button-icon">
+                    <Icon
+                        path={Icons.mdiChevronRight}
+                        size={1.75}
+                    />
+                </div>
             </button>
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
@@ -245,20 +284,15 @@ const Details = () => {
                     <RightToolbar />
                 </div>
             </div>
-            <div className={containerClasses}>
-                <div className="details__placeholder-container">
-                    <img
-                        className="details__placeholder"
-                        src={`${src}?w=250`}
-                        alt=""
-                    />
-                </div>
-                <img
-                    data-cy="details-image"
-                    className={imageClasses}
-                    src={src}
-                    alt=""
-                    onLoad={() => setLoading(false)}
+            <div
+                className={containerClasses}
+                style={{
+                    aspectRatio: `${details.medium.meta.width} / ${details.medium.meta.height}`
+                }}
+            >
+                <Medium
+                    medium={details.medium}
+                    width={details.medium.meta.width}
                 />
             </div>
         </div>
@@ -280,16 +314,7 @@ const Details = () => {
             </div>
             <div className="details__sidebar-content">
                 <ConditionalDateDetail />
-                <Detail
-                    icon={Icons.mdiCameraIris}
-                    title={`${details.medium.cameraMake} ${details.medium.cameraModel}`}
-                    values={[`f/${details.medium.fNumber}`, `${details.medium.iso}`]}
-                />
-                <Detail
-                    icon={Icons.mdiMapMarker}
-                    title={`${details.medium.cameraMake} ${details.medium.cameraModel}`}
-                    values={[`f/${details.medium.fNumber}`, `${details.medium.iso}`]}
-                />
+                <Meta />
                 <Map
                     lat={details.medium.lat}
                     lng={details.medium.lng}
