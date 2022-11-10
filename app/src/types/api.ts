@@ -127,8 +127,6 @@ export type TQuery = {
   album?: Maybe<Array<Maybe<TAlbum>>>
   albumMedia?: Maybe<Array<Maybe<TMedium>>>
   albums?: Maybe<Array<Maybe<TAlbum>>>
-  deleteAlbum?: Maybe<Scalars['String']>
-  deleteMedia?: Maybe<Scalars['String']>
   media?: Maybe<Array<Maybe<TMedium>>>
   medium?: Maybe<Array<Maybe<TMedium>>>
 }
@@ -139,14 +137,6 @@ export type TQueryAlbumArgs = {
 
 export type TQueryAlbumMediaArgs = {
   id?: InputMaybe<Scalars['ID']>
-}
-
-export type TQueryDeleteAlbumArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
-}
-
-export type TQueryDeleteMediaArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>
 }
 
 export type TQueryMediaArgs = {
