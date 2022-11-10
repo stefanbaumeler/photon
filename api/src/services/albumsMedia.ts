@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
 import { AlbumsMedia } from '../types'
 import { getDatabase } from '../database'
+import { objectifyMeta } from '../helpers/meta'
 
 export default class AlbumsMediaService {
     knex: Knex
@@ -71,15 +72,19 @@ export default class AlbumsMediaService {
     }
 
     async readOne (key: string | number) {
-        return this.knex.from(this.tableName).join('media', 'albums_media.id_medium', 'media.id').select().where({
+        const res = await this.knex.from(this.tableName).join('media', 'albums_media.id_medium', 'media.id').select().where({
             id: key
         })
+
+        return objectifyMeta(res)
     }
 
     async readMany (idAlbum: string | number) {
-        return this.knex.from(this.tableName).select().where({
+        const res = await this.knex.from(this.tableName).select().where({
             id_album: idAlbum || null
         }).join('media', 'media.id', 'albums_media.id_medium')
+
+        return objectifyMeta(res)
     }
 
     async readManyByMedium (idMedium: string | number) {

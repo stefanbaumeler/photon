@@ -35,6 +35,8 @@ const Album = ({ album }: Props) => {
     }
 
     const thumbnail = thumbnailQuery.data?.medium[0] || {}
+    console.log(albumMediaQuery)
+
     const media = albumMediaQuery.data.albumMedia
 
     const moreItems = [

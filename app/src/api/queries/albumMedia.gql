@@ -10,6 +10,8 @@ query AlbumMediaQuery($id: ID) {
         description
         lat
         lng
+        status
+        mimetype
         meta {
             ...on ImageMeta {
                 width

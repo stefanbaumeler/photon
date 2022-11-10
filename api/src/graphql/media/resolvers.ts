@@ -3,6 +3,7 @@ import { Medium } from '../../types'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { fileToMedium } from '../../helpers/exif'
+import { Upload } from 'graphql-upload'
 
 const queries = {
     media: (_: any, input: { status: string }) => {
@@ -23,19 +24,22 @@ const mutations = {
             await service.destroy(results.map((result) => result.id))
         })
     },
-    upload: async (_: any, { file: files }: { file: any }) => {
+    upload: async (_: any, { file: files }: { file: Upload[] }) => {
         const service = new MediaService()
 
-        const writePromises = files.map((file: any) => new Promise<Partial<Medium>> ((resolve) => {
+        const writePromises = files.map((file) => new Promise<Partial<Medium>> ((resolve) => {
             const name = randomUUID()
             const pathName = `./uploads/${name}`
 
-            Promise.resolve(file).then((f) => {
+            Promise.resolve(file).then(async (f) => {
+                const {
+                    createReadStream, filename, mimetype
+                } = await f.promise
                 const writeFileToDisk = new Promise<string>((r) => {
-                    const stream = f.createReadStream()
+                    const stream = createReadStream()
 
                     stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
-                        r(f.filename)
+                        r(filename)
                     })
                 })
 
@@ -44,7 +48,7 @@ const mutations = {
                         filePath: pathName,
                         fileName: name,
                         originalName: filename,
-                        type: f.mimetype
+                        type: mimetype
                     }).then((medium) => {
                         resolve(medium)
                     })

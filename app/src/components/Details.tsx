@@ -18,7 +18,7 @@ import useSetMediaStatus from '@/hooks/set-status'
 import useMoveToTrashDialog from '@/dialogs/move-to-trash'
 import useRestoreMediaDialog from '@/dialogs/restore-media'
 import { Medium } from '@/components/Medium'
-import { TImageMeta, TMedium } from '@/types/api'
+import { TImageMeta } from '@/types/api'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -291,6 +291,7 @@ const Details = () => {
                 }}
             >
                 <Medium
+                    cy="details-image"
                     medium={details.medium}
                     width={details.medium.meta.width}
                 />

@@ -1,27 +1,10 @@
 import { Knex } from 'knex'
-import { ImageMeta, Medium, VideoMeta } from '../types'
+import { Medium } from '../types'
 import { getDatabase } from '../database'
 import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
-
-const objectifyMeta = <T>(jsonMedium: T & Medium<unknown>[] | T & Medium<unknown>) => {
-    const jsonMedia = Array.isArray(jsonMedium) ? jsonMedium : [jsonMedium]
-
-    const res = jsonMedia.map((json) => {
-        const m = json.meta as string || ''
-        const meta = (typeof m === 'object' ? m : JSON.parse(m)) as ImageMeta | VideoMeta
-
-        meta.__typename = json.mimetype.startsWith('image') ? 'ImageMeta' : 'VideoMeta'
-
-        return {
-            ...json,
-            meta
-        } as Medium
-    })
-
-    return res as unknown as T
-}
+import { objectifyMeta } from '../helpers/meta'
 
 export default class MediaService {
     knex: Knex

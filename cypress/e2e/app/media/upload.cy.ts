@@ -25,7 +25,7 @@ describe('Upload', function () {
 
         cy.wait('@MediaQuery')
 
-        cy.get('[data-cy="medium"]').should('have.length', 1)
+        cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
 
     it('uploads one file by button', function () {
@@ -35,7 +35,7 @@ describe('Upload', function () {
 
         cy.wait('@MediaQuery')
 
-        cy.get('[data-cy="medium"]').should('have.length', 1)
+        cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
 
     it('avoids duplicates', function () {
@@ -51,7 +51,7 @@ describe('Upload', function () {
 
         cy.wait('@MediaQuery')
 
-        cy.get('[data-cy="medium"]').should('have.length', 1)
+        cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
 
     it('uploads multiple files per button', function () {
@@ -61,6 +61,6 @@ describe('Upload', function () {
 
         cy.wait('@MediaQuery')
 
-        cy.get('[data-cy="medium"]').should('have.length', 3)
+        cy.get('[data-cy="teaser"]').should('have.length', 3)
     })
 })

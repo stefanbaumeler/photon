@@ -16,8 +16,8 @@ describe('Albums', function () {
         cy.visit('/')
 
         // Add items
-        cy.get('[data-cy="medium-check"]').first().click()
-        cy.get('[data-cy="medium-check"]').last().click()
+        cy.get('[data-cy="teaser-check"]').first().click()
+        cy.get('[data-cy="teaser-check"]').last().click()
 
         // Add to Album dialog
         cy.get('[data-cy="add-to"]').click()
@@ -36,7 +36,7 @@ describe('Albums', function () {
         cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
 
         // Remove one
-        cy.get('[data-cy="medium"]').first().click()
+        cy.get('[data-cy="teaser"]').first().click()
         cy.get('[data-cy="media-section"]').should('have.length', 1)
     }
 
@@ -47,7 +47,7 @@ describe('Albums', function () {
 
         // has redirected
         cy.url().should('contain', '/albums/' )
-        cy.get('[data-cy="medium"]').should('have.length', 2)
+        cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 
     it('restores edit changes', function () {
@@ -98,7 +98,7 @@ describe('Albums', function () {
 
         // has redirected
         cy.url().should('contain', '/albums/' )
-        cy.get('[data-cy="medium"]').should('have.length', 2)
+        cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 
     after(function () {

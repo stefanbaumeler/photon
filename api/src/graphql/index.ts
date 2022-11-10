@@ -15,12 +15,12 @@ const typeDefs = mergeTypeDefs([global, media.typeDefs, albums.typeDefs])
 
 const resolvers = {
     Query: {
-        ...albums.resolvers.queries,
-        ...media.resolvers.queries
+        ...media.resolvers.queries,
+        ...albums.resolvers.queries
     },
     Mutation: {
-        ...albums.resolvers.mutations,
-        ...media.resolvers.mutations
+        ...media.resolvers.mutations,
+        ...albums.resolvers.mutations
     }
 }
 

@@ -1,15 +1,16 @@
 import { TMedium } from '@/types/api'
-import { useContext, useEffect, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import Image from 'next/image'
 import { DetailsContext } from '@/providers'
 
 type Props = {
     medium: TMedium
     width: number
+    cy: string
 }
 
 export const Medium = ({
-    medium, width
+    medium, width, cy
 }: Props) => {
     const details = useContext(DetailsContext)
     const Video = useMemo(() => {
@@ -23,7 +24,7 @@ export const Medium = ({
     const ImageOrVideo = useMemo(() => {
         if (medium.mimetype?.startsWith('image')) {
             return <Image
-                data-cy={'medium-image'}
+                data-cy={cy}
                 className="medium__image"
                 layout={'fill'}
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}

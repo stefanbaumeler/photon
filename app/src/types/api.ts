@@ -171,7 +171,7 @@ export type TAlbumMediaQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>
 }>
 
-export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null }
+export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id?: string | null, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null }
 
 export type TAlbumsQueryVariables = Exact<{ [key: string]: never }>
 
@@ -300,6 +300,8 @@ export const AlbumMediaQueryDocument = gql`
     description
     lat
     lng
+    status
+    mimetype
     meta {
       ... on ImageMeta {
         width

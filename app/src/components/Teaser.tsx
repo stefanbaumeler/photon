@@ -1,5 +1,5 @@
 import { TMedium } from '@/types/api'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
@@ -102,13 +102,13 @@ const Teaser = ({
     }
 
     return <div
-        data-cy="medium"
+        data-cy="teaser"
         className={classes}
         onMouseOver={updateShiftTargets}
     >
         <div
             className="teaser__check"
-            data-cy="medium-check"
+            data-cy="teaser-check"
         >
             <Check
                 onClick={select}
@@ -119,7 +119,7 @@ const Teaser = ({
         </div>
         <Meta />
         <button
-            data-cy="medium-details-fallback"
+            data-cy="teaser-details-fallback"
             className={fallbackButtonClasses}
             onClick={forceOpen}
         >
@@ -140,6 +140,7 @@ const Teaser = ({
                 }}
             >
                 <Medium
+                    cy="teaser-image"
                     medium={medium}
                     width={width}
                 />
