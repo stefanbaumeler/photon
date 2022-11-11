@@ -7,10 +7,11 @@ type Props = {
     medium: TMedium
     width: number
     cy: string
+    priority?: boolean
 }
 
 export const Medium = ({
-    medium, width, cy
+    medium, width, cy, priority = false
 }: Props) => {
     const details = useContext(DetailsContext)
     const Video = useMemo(() => {
@@ -24,6 +25,7 @@ export const Medium = ({
     const ImageOrVideo = useMemo(() => {
         if (medium.mimetype?.startsWith('image')) {
             return <Image
+                priority={priority}
                 data-cy={cy}
                 className="medium__image"
                 layout={'fill'}

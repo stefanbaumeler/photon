@@ -291,6 +291,7 @@ const Details = () => {
                 }}
             >
                 <Medium
+                    priority={true}
                     cy="details-image"
                     medium={details.medium}
                     width={details.medium.meta.width}

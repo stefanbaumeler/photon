@@ -22,6 +22,13 @@ describe('Details', function () {
         cy.visit('/')
     })
 
+    beforeEach( function () {
+        cy.intercept('/graphql', (req) => {
+            console.log(req.body.operationName)
+            req.alias = req.body.operationName
+        })
+    })
+
     it('opens details', function () {
         cy.get('[data-cy="teaser"]').first().click()
         cy.get('[data-cy="details"]').should('be.visible')
