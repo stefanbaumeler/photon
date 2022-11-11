@@ -2,6 +2,7 @@ import { Knex } from 'knex'
 import { Album, Medium } from '../types'
 import { getDatabase } from '../database'
 import AlbumsMediaService from './albumsMedia'
+import { predefinedAlbumUUIDs } from '../database/helpers/ids'
 
 export default class AlbumsService {
     knex: Knex
@@ -12,40 +13,41 @@ export default class AlbumsService {
         this.knex = getDatabase()
     }
 
-    async createOne (album: Partial<Album>, media?: Pick<Medium, 'id'>[]) {
+    createOne = (album: Partial<Album>, media?: Pick<Medium, 'id'>[]) => new Promise((resolve) => {
         if (media?.length) {
             album.idMedium = media[0].id
         }
 
-        return new Promise<string | number>((resolve) => {
-            this.knex.insert(album)
-                .into(this.tableName)
-                .returning<{ id: string | number }[]>('id')
-                .then((result) => result[0].id)
-                .then((result) => {
-                    if (media) {
-                        const albumsMediaService = new AlbumsMediaService()
+        this.knex.insert(album)
+            .into(this.tableName)
+            .returning<{ id: string | number }[]>('id')
+            .then((result) => result[0].id)
+            .then((result) => {
+                if (media) {
+                    const albumsMediaService = new AlbumsMediaService()
 
-                        const albumsMedia = media.map((medium) => ({
-                            idMedium: medium.id,
-                            idAlbum: result
-                        }))
+                    const albumsMedia = media.map((medium) => ({
+                        idMedium: medium.id,
+                        idAlbum: result
+                    }))
 
-                        albumsMediaService.createMany(albumsMedia).then(() => {
-                            resolve(result)
-                        })
-                    }
-                })
+                    albumsMediaService.createMany(albumsMedia).then(() => {
+                        resolve(result)
+                    })
+                }
+                else {
+                    resolve(result)
+                }
+            })
+    })
+
+    createMany = (albums: Partial<Album>[], media?: Pick<Medium, 'id'>[]) => new Promise((resolve) => {
+        const primaryKeys = albums.map((album) => this.createOne(album, media))
+
+        Promise.all(primaryKeys).then((results) => {
+            resolve(results)
         })
-    }
-
-    async createMany (albums: Partial<Album>[]) {
-        const primaryKeys = albums.map((album) => this.createOne(album))
-
-        return await Promise.all(primaryKeys).then((results) => {
-            return results
-        })
-    }
+    })
 
     async readOne (id: string | number) {
         return this.knex.from(this.tableName).select().where({

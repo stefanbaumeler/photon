@@ -69,7 +69,7 @@ const AlbumPage = () => {
     })
 
     useEffect(() => {
-        setTitle(album.title || '')
+        setTitle(album?.title || '')
     }, [album])
 
     useEffect(() => {
@@ -100,7 +100,7 @@ const AlbumPage = () => {
 
         if (edit.state === EEditState.DISCARDED) {
             selection.clear()
-            setTitle(album.title || '')
+            setTitle(album?.title || '')
             edit.setState(EEditState.OFF)
         }
     }, [edit.state])

@@ -24,7 +24,6 @@ describe('Details', function () {
 
     beforeEach( function () {
         cy.intercept('/graphql', (req) => {
-            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
     })

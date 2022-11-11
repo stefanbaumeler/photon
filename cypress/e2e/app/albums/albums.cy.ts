@@ -1,3 +1,5 @@
+import { predefinedAlbumUUIDs } from '@photon/api/src/database/helpers/ids'
+
 describe('Albums', function () {
     const albumTitle = '___T'
 
@@ -7,7 +9,6 @@ describe('Albums', function () {
 
     beforeEach(function () {
         cy.intercept('/graphql', (req) => {
-            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
     })
@@ -30,6 +31,9 @@ describe('Albums', function () {
         cy.get('[data-cy="album-title"]').click()
 
         // Can enter title
+
+        cy.get('[data-cy="album-title"]').clear()
+
         cy.get('[data-cy="album-title"]').type(albumTitle, {
             force: true
         })
@@ -37,84 +41,21 @@ describe('Albums', function () {
 
         // Remove one
         cy.get('[data-cy="teaser"]').first().click()
-        cy.get('[data-cy="media-section"]').should('have.length', 1)
+        cy.get('[data-cy="teaser"]').should('have.length', 6)
     }
-
-    it('creates an album from media selection', function () {
-        select()
-
-        cy.get('[data-cy="thumbnail-new"]').click()
-
-        // has redirected
-        cy.url().should('contain', '/albums/' )
-        cy.get('[data-cy="teaser"]').should('have.length', 2)
-    })
-
-    it('restores edit changes', function () {
-        makeEdits()
-
-        // Restore on discard
-        cy.get('[data-cy="discard-changes"]').click()
-        cy.get('[data-cy="album-title"]').should('not.have.value')
-        cy.get('[data-cy="media-section"]').should('have.length', 2)
-    })
-
-    it('saves edit changes', function () {
-        makeEdits()
-
-        // Save
-        cy.get('[data-cy="save-changes"]').click()
-        cy.wait('@updateAlbumTitle')
-        cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
-        cy.get('[data-cy="media-section"]').should('have.length', 1)
-    })
-
-    it('updates album count on overview page', function () {
-        cy.get('[data-cy="album-back"]').click({
-            force: true
-        })
-
-        cy.url().should('match', /.*\/albums$/)
-
-        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
-            .parents('[data-cy="album-teaser"]')
-            .find('[data-cy="album-teaser-count"]')
-            .should('contain', '1 ')
-
-        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).click()
-    })
-
-    it('persists changes on refresh', function () {
-        cy.reload()
-        cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
-        cy.get('[data-cy="media-section"]').should('have.length', 1)
-    })
-
-    it('adds another medium to the album and avoids duplicates', function () {
-        select()
-
-        cy.get('[data-cy="thumbnail"]').contains(albumTitle).click({
-            force: true
-        })
-
-        // has redirected
-        cy.url().should('contain', '/albums/' )
-        cy.get('[data-cy="teaser"]').should('have.length', 2)
-    })
 
     it('deletes the album', function () {
         cy.visit('/albums/')
-        cy.wait('@AlbumMediaQuery')
-        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
+        cy.get('[data-cy="album-teaser"]').should('have.length', 5)
+
+        cy.get('[data-cy="album-teaser-title"]').contains('Test Album 0')
             .parents('[data-cy="album-teaser"]')
             .find('[data-cy="album-controls"]')
             .click({
                 force: true
             })
 
-        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
-            .parents('[data-cy="album-teaser"]')
-            .find('[data-cy="album-delete"]')
+        cy.get('[data-cy="album-delete"]').first()
             .click({
                 force: true
             })
@@ -123,8 +64,75 @@ describe('Albums', function () {
             force: true
         })
 
+        cy.get('[data-cy="album-teaser"]').should('have.length', 4)
+
         cy.wait('@deleteAlbum')
 
         cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).should('not.exist')
+    })
+
+    it('creates an album from media selection', function () {
+        select()
+
+        cy.get('[data-cy="thumbnail-new"]').click({
+            force: true
+        })
+
+        // has redirected
+        cy.url().should('contain', '/albums/' )
+        cy.get('[data-cy="teaser"]').should('have.length', 2)
+    })
+
+    it('restores edit changes', function () {
+        cy.visit(`/albums/${predefinedAlbumUUIDs[1]}`)
+
+        makeEdits()
+
+        // Restore on discard
+        cy.get('[data-cy="discard-changes"]').click()
+        cy.get('[data-cy="album-title"]').should('have.value', 'Test Album 1')
+        cy.get('[data-cy="teaser"]').should('have.length', 7)
+    })
+
+    it('saves edit changes', function () {
+        cy.visit(`/albums/${predefinedAlbumUUIDs[1]}`)
+
+        makeEdits()
+
+        // Save
+        cy.get('[data-cy="save-changes"]').click()
+        cy.wait('@updateAlbumTitle')
+        cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
+        cy.get('[data-cy="teaser"]').should('have.length', 6)
+
+        cy.get('[data-cy="album-back"]').click({
+            force: true
+        })
+
+        cy.url().should('match', /.*\/albums$/)
+
+        cy.get('[data-cy="album-teaser"]').should('have.length', 5)
+
+        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
+            .parents('[data-cy="album-teaser"]')
+            .find('[data-cy="album-teaser-count"]')
+            .should('contain', '6 ')
+
+        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).click()
+
+        cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
+        cy.get('[data-cy="teaser"]').should('have.length', 6)
+    })
+
+    it('adds another medium to the album and avoids duplicates', function () {
+        select()
+
+        cy.get('[data-cy="thumbnail"]').contains('Test Single').click({
+            force: true
+        })
+
+        // has redirected
+        cy.url().should('contain', '/albums/' )
+        cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 })

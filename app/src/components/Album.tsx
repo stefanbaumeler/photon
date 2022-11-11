@@ -96,7 +96,7 @@ const Album = ({ album }: Props) => {
                         data-cy="album-teaser-title"
                         className="album__title"
                     >
-                        {album.title || t(ETrans.UNTITLED)}
+                        {album?.title || t(ETrans.UNTITLED)}
                     </span>
                     <div className="album__misc">
                         <span

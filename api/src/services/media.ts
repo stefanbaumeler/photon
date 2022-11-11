@@ -68,7 +68,7 @@ export default class MediaService {
     async readMany (conditions: Partial<Medium> = {}, limit = 100): Promise<Medium[]> {
         const res = await this.knex.from(this.tableName).where(conditions).select().limit(limit)
 
-        return objectifyMeta(res)
+        return await objectifyMeta(res)
     }
 
     async destroy (keys: string[] | number[] | string | number | (string | number)[]) {

@@ -12,35 +12,33 @@ export default class AlbumsMediaService {
         this.knex = getDatabase()
     }
 
-    async createOne (albumMedium: Omit<AlbumsMedia, 'id'>) {
-        return new Promise<string | number>((resolve) => {
-            this.knex.select().from(this.tableName).where({
-                id_album: albumMedium.idAlbum,
-                id_medium: albumMedium.idMedium
-            }).then(async (results) => {
-                if (results.length) {
+    createOne = (albumMedium: Omit<AlbumsMedia, 'id'>) => new Promise((resolve) => {
+        this.knex.select().from(this.tableName).where({
+            id_album: albumMedium.idAlbum,
+            id_medium: albumMedium.idMedium
+        }).then((results) => {
+            if (results.length) {
+                resolve(results[0].id)
+                return
+            }
+
+            this.knex
+                .insert(albumMedium)
+                .into(this.tableName)
+                .returning<{ id: string | number }[]>('id')
+                .then((results) => {
                     resolve(results[0].id)
-                    return
-                }
-
-                this.knex
-                    .insert(albumMedium)
-                    .into(this.tableName)
-                    .returning<{ id: string | number }>('id')
-                    .then((result) => {
-                        resolve(result.id)
-                    })
-            })
+                })
         })
-    }
+    })
 
-    async createMany (albumsMedia: Omit<AlbumsMedia, 'id'>[]) {
+    createMany = (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => new Promise((resolve) => {
         const primaryKeys = albumsMedia.map((albumMedium) => this.createOne(albumMedium))
 
-        return await Promise.all(primaryKeys).then((results) => {
-            return results
+        Promise.all(primaryKeys).then((results) => {
+            resolve(results)
         })
-    }
+    })
 
     async destroyOne (albumsMedia: Omit<AlbumsMedia, 'id'> | string | number) {
         return new Promise<string | number>((resolve) => {
@@ -80,7 +78,7 @@ export default class AlbumsMediaService {
     }
 
     async readMany (idAlbum: string | number) {
-        const res = await this.knex.from(this.tableName).select().where({
+        const res = await this.knex.from(this.tableName).select('media.*').where({
             id_album: idAlbum || null
         }).join('media', 'media.id', 'albums_media.id_medium')
 
@@ -88,7 +86,7 @@ export default class AlbumsMediaService {
     }
 
     async readManyByMedium (idMedium: string | number) {
-        return this.knex.from(this.tableName).select().where({
+        return this.knex.from(this.tableName).select('media.*').where({
             id_medium: idMedium || null
         }).join('media', 'media.id', 'albums_media.id_medium')
     }
