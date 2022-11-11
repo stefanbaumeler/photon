@@ -30,17 +30,17 @@ const Album = ({ album }: Props) => {
         }
     })
 
-    if (thumbnailQuery.loading || albumMediaQuery.loading) {
+    if (albumMediaQuery.loading) {
         return <></>
     }
 
     const thumbnail = thumbnailQuery.data?.medium[0] || {}
-    console.log(albumMediaQuery)
 
     const media = albumMediaQuery.data.albumMedia
 
     const moreItems = [
         {
+            cy: 'album-delete',
             label: t(ETrans.DELETE_THING, {
                 thing: t(ETrans.ALBUM)
             }),
@@ -49,6 +49,10 @@ const Album = ({ album }: Props) => {
     ]
 
     const AlbumImage = () => {
+        if (thumbnailQuery.loading) {
+            return <></>
+        }
+
         if (!thumbnail.filenameDisk) {
             return <></>
         }
@@ -60,7 +64,10 @@ const Album = ({ album }: Props) => {
         />
     }
 
-    return <div className="album">
+    return <div
+        className="album"
+        data-cy="album-teaser"
+    >
         <div className="album__controls">
             <Dropdown
                 items={moreItems}
@@ -69,6 +76,7 @@ const Album = ({ album }: Props) => {
                 smallButton={true}
             >
                 <IconButton
+                    cy={'album-controls'}
                     icon={Icons.mdiDotsVertical}
                     white={true}
                     onClick={() => setMoreActive(!moreActive)}
@@ -79,10 +87,7 @@ const Album = ({ album }: Props) => {
         <Link
             href={`albums/${album.id}`}
         >
-            <a
-                className="album__link"
-                data-cy="album-teaser"
-            >
+            <a className="album__link">
                 <div className="album__image-container">
                     <AlbumImage />
                 </div>

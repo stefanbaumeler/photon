@@ -3,6 +3,10 @@ describe('Upload', function () {
         return `cypress/fixtures/image-${id}.jpg`
     }
 
+    const getVideo = (id: number) => {
+        return `cypress/fixtures/video-${id}.mp4`
+    }
+
     beforeEach(function () {
         cy.intercept('/graphql', (req) => {
             req.alias = req.body.operationName
@@ -62,5 +66,15 @@ describe('Upload', function () {
         cy.wait('@MediaQuery')
 
         cy.get('[data-cy="teaser"]').should('have.length', 3)
+    })
+
+    it('uploads a video', function () {
+        cy.get('[data-cy="upload-action"]').selectFile([getVideo(0)], {
+            force: true
+        })
+
+        cy.wait('@MediaQuery')
+
+        cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
 })

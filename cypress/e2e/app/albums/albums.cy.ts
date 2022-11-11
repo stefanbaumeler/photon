@@ -7,6 +7,7 @@ describe('Albums', function () {
 
     beforeEach(function () {
         cy.intercept('/graphql', (req) => {
+            console.log(req.body.operationName)
             req.alias = req.body.operationName
         })
     })
@@ -63,6 +64,7 @@ describe('Albums', function () {
 
         // Save
         cy.get('[data-cy="save-changes"]').click()
+        cy.wait('@updateAlbumTitle')
         cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
         cy.get('[data-cy="media-section"]').should('have.length', 1)
     })
@@ -76,7 +78,7 @@ describe('Albums', function () {
 
         cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
             .parents('[data-cy="album-teaser"]')
-            .get('[data-cy="album-teaser-count"]')
+            .find('[data-cy="album-teaser-count"]')
             .should('contain', '1 ')
 
         cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).click()
@@ -100,7 +102,29 @@ describe('Albums', function () {
         cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 
-    after(function () {
-        // cy.exec('node ./scripts/truncate-db.js')
+    it('deletes the album', function () {
+        cy.visit('/albums/')
+        cy.wait('@AlbumMediaQuery')
+        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
+            .parents('[data-cy="album-teaser"]')
+            .find('[data-cy="album-controls"]')
+            .click({
+                force: true
+            })
+
+        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle)
+            .parents('[data-cy="album-teaser"]')
+            .find('[data-cy="album-delete"]')
+            .click({
+                force: true
+            })
+
+        cy.get('[data-cy="album-confirm-delete"]').click({
+            force: true
+        })
+
+        cy.wait('@deleteAlbum')
+
+        cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).should('not.exist')
     })
 })

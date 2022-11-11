@@ -21,6 +21,7 @@ const Dropdown = ({
                 key={k}
             >
                 <button
+                    data-cy={item.cy}
                     className="dropdown__button"
                     onClick={item.callback}
                 >

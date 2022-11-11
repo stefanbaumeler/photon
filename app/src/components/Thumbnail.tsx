@@ -31,10 +31,6 @@ const Thumbnail = ({
         }
     }, [mediumQuery.data])
 
-    if (mediumQuery.loading) {
-        return <></>
-    }
-
     if (type === EThumbnailType.ADD) {
         return <button
             data-cy="thumbnail-new"
@@ -55,6 +51,10 @@ const Thumbnail = ({
     }
 
     const ThumbnailImage = () => {
+        if (mediumQuery.loading) {
+            return <></>
+        }
+
         if (!medium.filenameDisk) {
             return <></>
         }

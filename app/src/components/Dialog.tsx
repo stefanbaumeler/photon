@@ -17,6 +17,7 @@ const Dialog = () => {
         return <button
             className={classes}
             onClick={btn.action}
+            data-cy={btn.cy}
         >
             {btn.label}
         </button>
@@ -58,6 +59,7 @@ const Dialog = () => {
                     label={button.label}
                     action={button.action}
                     type={button.type}
+                    cy={button.cy}
                 />)}
             </div>
         </div>
