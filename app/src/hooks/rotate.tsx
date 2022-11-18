@@ -3,19 +3,21 @@ import { DetailsContext } from '@/providers'
 import { MediaQueryDocument,
     useRotate as useRotateMutation } from '@/types/api'
 
-const useRotate = () => {
+const useRotate = (idMedium: string) => {
     const details = useContext(DetailsContext)
 
     const [rotate] = useRotateMutation({
         variables: {
-            id: details.medium.id
+            id: idMedium
         },
         refetchQueries: [MediaQueryDocument],
         awaitRefetchQueries: true
     })
 
     return () => {
-        rotate()
+        rotate().then(() => {
+            details.setMedium(details.medium)
+        })
     }
 }
 

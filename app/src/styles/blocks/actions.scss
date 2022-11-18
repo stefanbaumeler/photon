@@ -1,10 +1,7 @@
 @mixin actions-root {
     display: flex;
     margin-left: auto;
-
-    &--labeled {
-        color: $color-secondary;
-    }
+    color: $color-gray-dark;
 }
 
 @mixin actions-count {

@@ -103,7 +103,8 @@
         pointer-events: none;
     }
 
-    &--delete {
+    &--delete,
+    &--single {
         display: none;
     }
 

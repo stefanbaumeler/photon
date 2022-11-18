@@ -53,6 +53,7 @@ type Mutation {
     emptyTrash: Boolean
     removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
     rotate(id: ID): ID
+    setAlbumCover(idAlbum: ID, idMedium: ID): ID
     setMediaStatus(media: [ID], status: String): [ID]
     updateAlbumTitle(id: ID, title: String): ID
     upload(file: [Upload]!): [File]!
@@ -62,8 +63,6 @@ type Query {
     album(id: ID): [Album]
     albumMedia(id: ID): [Medium]
     albums: [Album]
-    deleteAlbum(ids: [ID]): String
-    deleteMedia(ids: [ID]): String
     media(status: String): [Medium]
     medium(id: ID): [Medium]
 }
@@ -74,7 +73,6 @@ type VideoMeta {
     width: Int
 }
 
-"The `Upload` scalar type represents a file upload."
 scalar Upload
 
 input AlbumInput {

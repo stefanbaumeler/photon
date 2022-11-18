@@ -54,5 +54,11 @@ export default {
     unarchive: 'Aus Archiv widerherstellen',
     restore: 'Widerherstellen',
     restore_thing: '{{thing}} widerherstellen?',
-    empty_trash: 'Papierkorb leeren'
+    empty_trash: 'Papierkorb leeren',
+    set_album_cover: 'Albumcover festlegen',
+    set_as_album_cover: 'Als Albumcover festlegen',
+    change_layout: 'Ansicht ändern',
+    map_view: 'Kartenansicht',
+    list_view: 'Listenansicht',
+    gallery_view: 'Galerieansicht'
 }

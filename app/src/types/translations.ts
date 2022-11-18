@@ -55,5 +55,11 @@ export enum ETrans {
     RESTORE = 'restore',
     RESTORE_THING = 'restore_thing',
     EMPTY_TRASH = 'empty_trash',
-    ALL_ELEMENTS = 'all_elements'
+    ALL_ELEMENTS = 'all_elements',
+    SET_ALBUM_COVER = 'set_album_cover',
+    SET_AS_ALBUM_COVER = 'set_as_album_cover',
+    CHANGE_LAYOUT = 'change_layout',
+    MAP_VIEW = 'map_view',
+    LIST_VIEW = 'list_view',
+    GALLERY_VIEW = 'gallery_view'
 }

@@ -76,6 +76,10 @@
 
 @mixin medium-image {
     object-fit: contain;
+
+    @at-root .medium--top & {
+        object-position: top;
+    }
 }
 
 @mixin medium-video {

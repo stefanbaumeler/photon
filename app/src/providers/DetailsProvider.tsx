@@ -9,9 +9,10 @@ type Props = {
 interface DetailsContext {
     active: boolean
     infos: boolean
-        medium: TMedium
+    medium: TMedium
     collection: TMedium[]
     setCollection: Dispatch<SetStateAction<TMedium[]>>
+    setMedium: Dispatch<SetStateAction<TMedium>>
     open: (medium: TMedium) => void
     close: () => void
     openInfos: () => void
@@ -32,6 +33,7 @@ const DetailsProvider = ({ children }: Props) => {
         medium,
         collection,
         setCollection,
+        setMedium,
         open: (newMedium) => {
             setMedium(newMedium)
             setActive(true)

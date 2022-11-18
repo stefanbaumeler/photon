@@ -3,11 +3,10 @@ import { useContext, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
-import { Check } from '@/components'
+import { Check, Medium } from '@/components'
 import { ESelectionMode } from '@/types/app'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
-import { Medium } from '@/components/Medium'
 import { isEqual } from 'lodash'
 import { secondsToTime } from '@/util/date'
 import { VideoMeta } from '@photon/api/src/types'
@@ -39,7 +38,7 @@ const Teaser = ({
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        if (shift) {
+        if (shift && selection.mode === ESelectionMode.SELECT) {
             selection.add(selection.shiftTargets)
             selection.setShiftTargets([])
         }
@@ -62,6 +61,10 @@ const Teaser = ({
     }
 
     const updateShiftTargets = () => {
+        if (selection.mode !== ESelectionMode.SELECT) {
+            return
+        }
+
         const ids = details.collection.map((medium) => medium.id)
         const lastIndex = ids.indexOf(selection.lastAdded?.id)
         const hoverIndex = ids.indexOf(medium.id)
@@ -82,7 +85,8 @@ const Teaser = ({
     ])
 
     const fallbackButtonClasses = bem('teaser__open-fallback', [
-        ['delete', selection.mode === ESelectionMode.DELETE]
+        ['delete', selection.mode === ESelectionMode.DELETE],
+        ['single', selection.mode === ESelectionMode.SINGLE]
     ])
 
     const Meta = () => {

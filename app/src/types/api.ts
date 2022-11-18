@@ -76,6 +76,7 @@ export type TMutation = {
   emptyTrash?: Maybe<Scalars['Boolean']>
   removeFromAlbum?: Maybe<Array<Maybe<Scalars['ID']>>>
   rotate?: Maybe<Scalars['ID']>
+  setAlbumCover?: Maybe<Scalars['ID']>
   setMediaStatus?: Maybe<Array<Maybe<Scalars['ID']>>>
   updateAlbumTitle?: Maybe<Scalars['ID']>
   upload: Array<Maybe<TFile>>
@@ -106,6 +107,11 @@ export type TMutationRemoveFromAlbumArgs = {
 
 export type TMutationRotateArgs = {
   id?: InputMaybe<Scalars['ID']>
+}
+
+export type TMutationSetAlbumCoverArgs = {
+  idAlbum?: InputMaybe<Scalars['ID']>
+  idMedium?: InputMaybe<Scalars['ID']>
 }
 
 export type TMutationSetMediaStatusArgs = {
@@ -223,6 +229,13 @@ export type TRotateVariables = Exact<{
 }>
 
 export type TRotate = { __typename?: 'Mutation', rotate?: string | null }
+
+export type TSetAlbumCoverVariables = Exact<{
+  idAlbum?: InputMaybe<Scalars['ID']>
+  idMedium?: InputMaybe<Scalars['ID']>
+}>
+
+export type TSetAlbumCover = { __typename?: 'Mutation', setAlbumCover?: string | null }
 
 export type TSetMediaStatusVariables = Exact<{
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>
@@ -563,6 +576,22 @@ export function useRotate (baseOptions?: Apollo.MutationHookOptions<TRotate, TRo
 export type RotateHookResult = ReturnType<typeof useRotate>
 export type RotateMutationResult = Apollo.MutationResult<TRotate>
 export type RotateMutationOptions = Apollo.BaseMutationOptions<TRotate, TRotateVariables>
+export const SetAlbumCoverDocument = gql`
+    mutation setAlbumCover($idAlbum: ID, $idMedium: ID) {
+  setAlbumCover(idAlbum: $idAlbum, idMedium: $idMedium)
+}
+    `
+export type TSetAlbumCoverMutationFn = Apollo.MutationFunction<TSetAlbumCover, TSetAlbumCoverVariables>
+export function useSetAlbumCover (baseOptions?: Apollo.MutationHookOptions<TSetAlbumCover, TSetAlbumCoverVariables>) {
+    const options = {
+        ...defaultOptions,
+        ...baseOptions
+    }
+    return Apollo.useMutation<TSetAlbumCover, TSetAlbumCoverVariables>(SetAlbumCoverDocument, options)
+}
+export type SetAlbumCoverHookResult = ReturnType<typeof useSetAlbumCover>
+export type SetAlbumCoverMutationResult = Apollo.MutationResult<TSetAlbumCover>
+export type SetAlbumCoverMutationOptions = Apollo.BaseMutationOptions<TSetAlbumCover, TSetAlbumCoverVariables>
 export const SetMediaStatusDocument = gql`
     mutation setMediaStatus($media: [ID], $status: String) {
   setMediaStatus(media: $media, status: $status)

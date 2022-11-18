@@ -1,23 +1,15 @@
-import { useContext, useEffect, useState } from 'react'
-import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
+import { useContext, useEffect } from 'react'
+import { DetailsContext, DialogContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import Tippy from '@tippyjs/react'
-import { Check, Detail, IconButton, Dropdown } from '@/components'
+import { Detail, IconButton, Medium, DetailsActions } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
-import { EMediumStatus, ESelectionMode } from '@/types/app'
 import { getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
-import useRotate from '@/hooks/rotate'
 import bem from '@/util/bem'
-import useDeleteMediaDialog from '@/dialogs/delete-media'
 import { useRouter } from 'next/router'
-import useSetMediaStatus from '@/hooks/set-status'
-import useMoveToTrashDialog from '@/dialogs/move-to-trash'
-import useRestoreMediaDialog from '@/dialogs/restore-media'
-import { Medium } from '@/components/Medium'
 import { TImageMeta } from '@/types/api'
 
 const Details = () => {
@@ -25,13 +17,8 @@ const Details = () => {
 
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
-    const selection = useContext(SelectionContext)
+
     const router = useRouter()
-    const rotate = useRotate()
-    const archive = useSetMediaStatus(details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
-    const moveToTrashDialog = useMoveToTrashDialog()
-    const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog()
 
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
 
@@ -43,10 +30,6 @@ const Details = () => {
             }
         }
     }, [details.collection])
-
-    const select = () => {
-        selection.toggle(details.medium)
-    }
 
     const slide = (direction: number) => {
         const index = details.collection.indexOf(details.medium)
@@ -70,8 +53,6 @@ const Details = () => {
         }
     }, [dialog.active])
 
-    const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${details.medium.filenameDisk}` : '#'
-
     const OpenInfosButton = () => {
         if (details.infos) {
             return <></>
@@ -89,89 +70,8 @@ const Details = () => {
     }
 
     const RightToolbar = () => {
-        if (selection.mode === ESelectionMode.SELECT) {
-            return <Tippy
-                content={t(ETrans.SELECT)}
-            >
-                <Check
-                    cy="details-select"
-                    onClick={select}
-                    ready={true}
-                    checked={selection.isSelected(details.medium)}
-                    boxSize={48}
-                    hover={true}
-                />
-            </Tippy>
-        }
-
-        const moreItems = [
-            {
-                label: t(ETrans.DELETE),
-                callback: moveToTrashDialog
-            },
-            {
-                label: t(ETrans.ROTATE_LEFT),
-                callback: rotate
-            },
-            {
-                label: details.medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
-                callback: archive
-            }
-        ]
-
-        const [moreActive, setMoreActive] = useState(false)
-
-        const RegularActions = () => {
-            return <>
-                <IconButton
-                    href={`${src}?download=true`}
-                    hint={t(ETrans.DOWNLOAD)}
-                    white={true}
-                    icon={Icons.mdiTrayArrowDown}
-                />
-                <Dropdown
-                    items={moreItems}
-                    active={moreActive}
-                    onClickOutside={() => setMoreActive(false)}
-                >
-                    <IconButton
-                        hint={t(ETrans.MORE_OPTIONS)}
-                        icon={Icons.mdiDotsVertical}
-                        white={true}
-                        onClick={() => setMoreActive(!moreActive)}
-                    />
-                </Dropdown>
-            </>
-        }
-
-        const TrashActions = () => {
-            return <>
-                <IconButton
-                    label={t(ETrans.DELETE)}
-                    onClick={deleteMediaDialog}
-                    icon={Icons.mdiDeleteForever}
-                    white={true}
-                />
-                <IconButton
-                    label={t(ETrans.RESTORE)}
-                    onClick={restoreMediaDialog}
-                    icon={Icons.mdiDeleteRestore}
-                    white={true}
-                />
-            </>
-        }
-
-        const Actions = () => {
-            if (router.pathname === '/trash') {
-                return <TrashActions />
-            }
-            else {
-                return <RegularActions />
-            }
-        }
-
         return <>
-            <Actions />
+            <DetailsActions />
             <OpenInfosButton />
         </>
     }

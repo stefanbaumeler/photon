@@ -28,6 +28,7 @@
     transition: background-color .25s;
     width: 100%;
     text-align: left;
+    white-space: nowrap;
 
     &:hover {
         background-color: $color-gray-light;

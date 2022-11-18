@@ -21,7 +21,7 @@ const EditActions = () => {
         edit.setState(EEditState.DISCARDED)
     }
 
-    if (selection.mode !== ESelectionMode.DELETE) {
+    if (selection.mode !== ESelectionMode.DELETE && selection.mode !== ESelectionMode.SINGLE) {
         return <></>
     }
 

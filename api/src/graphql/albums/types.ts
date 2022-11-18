@@ -27,5 +27,6 @@ export default gql`
         removeFromAlbum(idAlbum: ID, media: [ID]): [ID]
         updateAlbumTitle(id: ID, title: String): ID
         createAlbum(album: AlbumInput, media: [ID]): ID
+        setAlbumCover(idAlbum: ID, idMedium: ID): ID
     }
 `

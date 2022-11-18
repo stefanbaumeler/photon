@@ -74,6 +74,7 @@ export enum ENavItemType {
 export enum ESelectionMode {
     SELECT = 'SELECT',
     DELETE = 'DELETE',
+    SINGLE = 'SINGLE',
     OFF = 'OFF'
 }
 
@@ -98,4 +99,10 @@ export enum EMediumStatus {
     DEFAULT = 'default',
     ARCHIVED = 'archived',
     TRASH = 'trash'
+}
+
+export enum ELayout {
+    MAP = 'map',
+    LIST = 'list',
+    GALLERY = 'gallery'
 }

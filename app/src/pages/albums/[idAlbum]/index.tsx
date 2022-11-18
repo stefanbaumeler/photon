@@ -1,11 +1,14 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/layout'
-import { Details, Dialog, IconButton, Media, Uploader } from '@/components'
+import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
 import { DetailsProvider, EditContext, SelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
-import { AlbumMediaQueryDocument, AlbumQueryDocument, TAlbum, TMedium,
+import { AlbumMediaQueryDocument,
+    AlbumQueryDocument,
+    TAlbum,
+    TMedium,
     useAlbumMediaQuery,
     useAlbumQuery,
     useRemoveFromAlbum,
@@ -13,6 +16,7 @@ import { AlbumMediaQueryDocument, AlbumQueryDocument, TAlbum, TMedium,
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
+import useSetAlbumCover from '@/hooks/set-album-cover'
 
 const AlbumPage = () => {
     const router = useRouter()
@@ -45,7 +49,7 @@ const AlbumPage = () => {
     const [removeFromAlbum] = useRemoveFromAlbum({
         variables: {
             idAlbum: `${id}`,
-            media: Array.from(selection.selected).map((s) => s.id)
+            media: [...selection.selected].map((s) => s.id)
         },
         refetchQueries: [{
             query: AlbumMediaQueryDocument,
@@ -67,6 +71,8 @@ const AlbumPage = () => {
             }
         }]
     })
+
+    const setAlbumCover = useSetAlbumCover(id)
 
     useEffect(() => {
         setTitle(album?.title || '')
@@ -92,10 +98,17 @@ const AlbumPage = () => {
 
     useEffect(() => {
         if (edit.state === EEditState.CONFIRMED) {
+            if (selection.mode === ESelectionMode.DELETE) {
+                Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
+                    selection.clear()
+                })
+            }
+
+            if (selection.mode === ESelectionMode.SINGLE) {
+                setAlbumCover()
+            }
+
             edit.setState(EEditState.OFF)
-            Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
-                selection.clear()
-            })
         }
 
         if (edit.state === EEditState.DISCARDED) {

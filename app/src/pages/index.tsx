@@ -1,5 +1,5 @@
 import Layout from '@/layouts/layout'
-import { Media, Uploader, Details, Dialog } from '@/components'
+import { Uploader, Details, Dialog, Media } from '@/components'
 import { DetailsProvider } from '@/providers'
 import { useMediaQuery } from '@/types/api'
 import { EMediumStatus } from '@/types/app'

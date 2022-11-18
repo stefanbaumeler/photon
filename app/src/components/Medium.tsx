@@ -1,19 +1,22 @@
 import { TMedium } from '@/types/api'
-import { useContext, useMemo } from 'react'
+import { Ref, useContext, useMemo, forwardRef } from 'react'
 import Image from 'next/image'
 import { DetailsContext } from '@/providers'
+import bem from '@/util/bem'
 
 type Props = {
     medium: TMedium
     width: number
-    cy: string
+    cy?: string
     priority?: boolean
+    position?: string
 }
 
-export const Medium = ({
-    medium, width, cy, priority = false
-}: Props) => {
+const Medium = ({
+    medium, width, cy, priority = false, position
+}: Props, ref?: Ref<unknown>) => {
     const details = useContext(DetailsContext)
+
     const Video = useMemo(() => {
         return <video
             controls={details.active}
@@ -40,7 +43,16 @@ export const Medium = ({
         return <></>
     }, [medium, width])
 
-    return <div className="medium">
+    const classes = bem('medium', [
+        [position, !!position]
+    ])
+
+    return <div
+        className={classes}
+        ref={ref as Ref<HTMLDivElement>}
+    >
         {ImageOrVideo}
     </div>
 }
+
+export default forwardRef(Medium)

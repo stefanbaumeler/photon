@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider } from '@/providers'
+import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -12,10 +12,11 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import 'tippy.js/themes/light.css'
 
-import tippy  from 'tippy.js'
+import tippy, { followCursor }  from 'tippy.js'
 
 tippy.setDefaultProps({
-    zIndex: 101
+    zIndex: 101,
+    plugins: [followCursor]
 })
 
 import styles from '../styles/index.scss'
@@ -56,7 +57,7 @@ const Picchu = ({
     Component, pageProps
 }: AppProps) => {
     return <ApolloProvider client={client}>
-        <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider]}>
+        <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider]}>
             <Component {...pageProps} />
         </ProviderProvider>
     </ApolloProvider>

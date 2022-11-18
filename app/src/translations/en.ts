@@ -54,5 +54,11 @@ export default {
     unarchive: 'Unarchive',
     restore: 'Restore',
     restore_thing: 'Restore {{thing}}?',
-    empty_trash: 'Empty trash'
+    empty_trash: 'Empty trash',
+    set_album_cover: 'Set album cover',
+    set_as_album_cover: 'Set as album cover',
+    change_layout: 'Change layout',
+    map_view: 'Map view',
+    list_view: 'List view',
+    gallery_view: 'gallery_view'
 }

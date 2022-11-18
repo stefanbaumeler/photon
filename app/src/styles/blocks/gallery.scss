@@ -1,0 +1,20 @@
+@mixin gallery-root {
+}
+
+@mixin gallery-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+@mixin gallery {
+    .gallery {
+        @include gallery-root;
+
+        &__sections {
+            @include gallery-sections;
+        }
+    }
+}
+
+@include gallery;

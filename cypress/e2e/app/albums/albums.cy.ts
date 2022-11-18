@@ -100,7 +100,9 @@ describe('Albums', function () {
         makeEdits()
 
         // Save
-        cy.get('[data-cy="save-changes"]').click()
+        cy.get('[data-cy="save-changes"]').click({
+            force: true
+        })
         cy.wait('@updateAlbumTitle')
         cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
         cy.get('[data-cy="teaser"]').should('have.length', 6)

@@ -1,18 +1,17 @@
 import { TMedium } from '@/types/api'
 import { ESelectionMode, GalleryItem } from '@/types/app'
-import { Check, Medium } from '@/components'
+import { Check, Teaser } from '@/components'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { SelectionContext } from '@/providers'
 import bem from '@/util/bem'
-import { isEqual } from 'lodash'
 
 type Props = {
     media: TMedium[]
     title: string
 }
 
-const MediaSection = ({
+const GallerySection = ({
     media, title
 }: Props) => {
     const galleryEl = useRef(null)
@@ -74,11 +73,11 @@ const MediaSection = ({
         selection.toggle(media)
     }
 
-    const classes = bem('media-section', [
+    const classes = bem('gallery-section', [
         ['one', media.length === 1]
     ])
 
-    const headerClasses = bem('media-section__header', [
+    const headerClasses = bem('gallery-section__header', [
         ['selecting', selection.mode !== ESelectionMode.OFF]
     ])
 
@@ -87,27 +86,27 @@ const MediaSection = ({
     }
 
     return <div
-        data-cy="media-section"
+        data-cy="gallery-section"
         className={classes}
         ref={galleryEl}
     >
         <div className={headerClasses}>
-            <div className="media-section__check">
+            <div className="gallery-section__check">
                 <Check
-                    cy="media-section-check"
-                    dark={true}
+                    cy="gallery-section-check"
+                    backgroundColor="#F0F0F0"
                     onClick={select}
                     ready={false}
                     checked={selection.isSelected(media)}
                     remove={selection.mode === ESelectionMode.DELETE}
                 />
             </div>
-            <span className="media-section__title">
+            <span className="gallery-section__title">
                 {title}
             </span>
         </div>
-        <div className="media-section__container">
-            {adjustedElements.map((galleryItem, k) => <Medium
+        <div className="gallery-section__container">
+            {adjustedElements.map((galleryItem, k) => <Teaser
                 medium={galleryItem.medium}
                 width={galleryItem.width}
                 height={galleryItem.height}
@@ -117,4 +116,4 @@ const MediaSection = ({
     </div>
 }
 
-export default MediaSection
+export default GallerySection

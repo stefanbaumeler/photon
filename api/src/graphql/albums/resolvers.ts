@@ -38,6 +38,11 @@ const mutations = {
         }))
 
         return await new AlbumsService().createOne({}, media)
+    },
+    setAlbumCover: async (_: any, input: { idAlbum: string | number, idMedium: string | number}) => {
+        return await new AlbumsService().update(input.idAlbum, {
+            idMedium: input.idMedium
+        })
     }
 }
 

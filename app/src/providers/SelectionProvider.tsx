@@ -29,13 +29,13 @@ const SelectionProvider = ({ children }: Props) => {
 
     const add = (items: TMedium | TMedium[]) => {
         const itemsToAdd = Array.isArray(items) ? items : [items]
-        const newSet = new Set(selected)
 
-        itemsToAdd.forEach((item) => {
-            newSet.add(item)
-        })
+        const newSet = mode === ESelectionMode.SINGLE
+            ? new Set(itemsToAdd)
+            : new Set([...selected, ...itemsToAdd])
 
         setSelected(newSet)
+
         if (itemsToAdd.indexOf(lastAdded) === itemsToAdd.length - 1) {
             setLastAdded(itemsToAdd[0])
         }
@@ -49,6 +49,10 @@ const SelectionProvider = ({ children }: Props) => {
     }
 
     const remove = (items: TMedium | TMedium[]) => {
+        if (mode === ESelectionMode.SINGLE) {
+            return
+        }
+
         const itemsToRemove = Array.isArray(items) ? items : [items]
         const newSet = new Set(selected)
 

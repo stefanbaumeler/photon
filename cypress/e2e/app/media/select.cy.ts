@@ -53,14 +53,14 @@ describe('Details', function () {
     })
 
     it('selects by section', function () {
-        cy.get('[data-cy="media-section-check"]').first().click({
+        cy.get('[data-cy="gallery-section-check"]').first().click({
             force: true
         })
-        cy.get('[data-cy="media-section"]').first().find('[data-cy="teaser"]').each((el) => {
+        cy.get('[data-cy="gallery-section"]').first().find('[data-cy="teaser"]').each((el) => {
             cy.wrap(el).should('have.class', 'teaser--selected')
         })
 
-        cy.get('[data-cy="media-section"]').last().find('[data-cy="teaser"]').each((el) => {
+        cy.get('[data-cy="gallery-section"]').last().find('[data-cy="teaser"]').each((el) => {
             cy.wrap(el).should('not.have.class', 'teaser--selected')
         })
 

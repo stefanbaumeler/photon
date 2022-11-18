@@ -1,17 +1,38 @@
 @mixin check-root {
     position: relative;
     transition: background-color .25s;
-    border-radius: 50%;
     cursor: pointer;
+    border-radius: 2px;
 
-    &--hover:hover {
-        background-color: rgba($color-gray, .25);
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: currentColor;
+        opacity: 0;
+        transition: opacity .25s;
+        border-radius: 2px;
+
+    }
+
+    &--hover:hover:before {
+        opacity: .125;
+    }
+
+    &--round {
+        border-radius: 50%;
+
+        &:before {
+            border-radius: 50%;
+        }
     }
 }
 
 @mixin check-icon {
     position: absolute;
-    color: $color-white;
     transition: opacity .1s, background-color .25s, color .25s;
 
     display: flex;
@@ -21,7 +42,7 @@
     left: 50%;
     translate: -50% -50%;
 
-    &--background {
+    &--mark {
         color: $color-black;
 
         @at-root .check--ready & {
@@ -37,25 +58,20 @@
             opacity: 1;
         }
     }
-    &--active {
-        color: $color-white;
 
-        @at-root .check--dark & {
-            color: $color-gray;
-        }
+    &--background {
+        color: $color-primary;
 
         @at-root .check--ready & {
             opacity: 0;
         }
 
         @at-root .check--checked & {
-            color: $color-primary;
             opacity: 1;
         }
     }
 
     &--blank {
-        color: $color-white;
         opacity: 0;
 
         @at-root .check--ready & {
@@ -64,6 +80,10 @@
 
         @at-root .check--checked & {
             opacity: 0;
+        }
+
+        @at-root .check:hover & {
+            color: var(--blank-hover-color);
         }
     }
 

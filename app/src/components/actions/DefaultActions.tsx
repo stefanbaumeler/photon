@@ -3,7 +3,7 @@ import { IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useContext, useRef } from 'react'
-import { NavContext, SelectionContext } from '@/providers'
+import { LayoutContext, NavContext, SelectionContext } from '@/providers'
 import { ENavItemType, ESelectionMode } from '@/types/app'
 import useUpload from '@/hooks/upload'
 import { useRouter } from 'next/router'
@@ -29,12 +29,25 @@ const DefaultActions = () => {
 
     const upload = useUpload()
 
-    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF || nav.pathname === '/albums/[id]') {
+    const layout = useContext(LayoutContext)
+
+    const layoutProps = layout.getLayoutProps(layout.nextLayout)
+
+    const changeLayout = () => {
+        layout.setLayout(layout.nextLayout)
+    }
+
+    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF || nav.pathname === '/albums/[idAlbum]') {
         return <></>
     }
 
     const RegularActions = () => {
         return <>
+            <IconButton
+                hint={layoutProps.name}
+                icon={layoutProps.icon}
+                onClick={changeLayout}
+            />
             <input
                 data-cy="upload-action"
                 type="file"
@@ -57,6 +70,11 @@ const DefaultActions = () => {
                 label={t(ETrans.EMPTY_TRASH)}
                 icon={Icons.mdiDeleteForever}
                 onClick={emptyTrashDialog}
+            />
+            <IconButton
+                hint={layoutProps.name}
+                icon={layoutProps.icon}
+                onClick={changeLayout}
             />
         </>
     }

@@ -4,13 +4,14 @@ import { DialogContext, SelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useSetMediaStatus from '@/hooks/set-status'
 import { EMediumStatus } from '@/types/app'
+import { TMedium } from '@/types/api'
 
-const useRestoreMediaDialog = () => {
+const useRestoreMediaDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const { t } = useTranslation()
 
-    const restore = useSetMediaStatus(EMediumStatus.DEFAULT)
+    const restore = useSetMediaStatus(idMedia, EMediumStatus.DEFAULT)
 
     const confirm = () => {
         restore()

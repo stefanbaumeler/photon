@@ -1,0 +1,81 @@
+@mixin list-view-root {
+
+}
+
+@mixin list-view-table {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@mixin list-view-tbody {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+@mixin list-view-row {
+    display: flex;
+    width: 100%;
+    box-shadow: inset 0 -1px $color-gray-light;
+    transition: background-color .25s;
+
+    &:hover {
+        background-color: $color-secondary-highlight;
+    }
+}
+
+@mixin list-view-cell {
+    min-width: 100px;
+    min-height: 64px;
+    text-align: left;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &--select {
+        width: 50px;
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    &--title {
+        flex-grow: 1;
+    }
+}
+
+@mixin list-view-tip {
+    height: 350px;
+    width: 350px;
+}
+
+@mixin list-view {
+    .list-view {
+        @include list-view-root;
+
+        &__table {
+            @include list-view-table;
+        }
+
+        &__tbody {
+            @include list-view-tbody;
+        }
+
+        &__row {
+            @include list-view-row;
+        }
+
+        &__cell {
+            @include list-view-cell;
+        }
+
+        &__tip {
+            @include list-view-tip;
+        }
+    }
+}
+
+@include list-view;

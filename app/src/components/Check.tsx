@@ -4,25 +4,36 @@ import { Ref, forwardRef } from 'react'
 import bem from '@/util/bem'
 
 type Props = {
+    borderColor?: string
+    backgroundColor?: string
+    blankHoverColor?: string
     checked: boolean
     ready?: boolean
     onClick: () => void
     boxSize?: number
+    iconSize?: number
     hover?: boolean
     remove?: boolean
-    dark?: boolean
     cy?: string
+    round?: boolean
 }
 
 const Check = ({
-    dark, checked, ready, onClick, boxSize, hover, remove, cy
+    borderColor = '#FFFFFF',
+    backgroundColor = '#FFFFFF',
+    blankHoverColor = '#FFFFFF',
+    round = true,
+    checked = false,
+    boxSize = 24,
+    iconSize = 1,
+    ready, onClick, hover, remove, cy
 }: Props, ref: Ref<unknown>) => {
     const classes = bem('check', [
         ['ready', ready],
         ['checked', checked],
         ['hover', hover],
         ['remove', remove],
-        ['dark', dark]
+        ['round', round]
     ])
 
     return <button
@@ -31,32 +42,39 @@ const Check = ({
         ref={ref as Ref<HTMLButtonElement>}
         data-cy={cy}
         style={{
-            width: `${boxSize || 24}px`,
-            height: `${boxSize || 24}px`
+            width: `${boxSize}px`,
+            height: `${boxSize}px`,
+            color: `${borderColor}`
         }}
     >
         <Icon
             className="check__icon check__icon--remove"
-            path={Icons.mdiCloseCircle}
-            size={1}
+            path={round ? Icons.mdiCloseCircle : Icons.mdiClose}
+            size={iconSize}
+        />
+
+        <Icon
+            className="check__icon check__icon--mark"
+            path={round ? Icons.mdiCheckboxBlankCircle : Icons.mdiCheckboxBlank}
+            size={iconSize}
         />
 
         <Icon
             className="check__icon check__icon--background"
-            path={Icons.mdiCheckboxBlankCircle}
-            size={1}
-        />
-
-        <Icon
-            className="check__icon check__icon--active"
-            path={Icons.mdiCheckboxMarkedCircle}
-            size={1}
+            path={round ? Icons.mdiCheckboxMarkedCircle : Icons.mdiCheckboxMarked}
+            size={iconSize}
+            style={checked ? {} : {
+                color: `${backgroundColor}`
+            }}
         />
 
         <Icon
             className="check__icon check__icon--blank"
-            path={Icons.mdiCheckboxBlankCircleOutline}
-            size={1}
+            path={round ? Icons.mdiCheckboxBlankCircleOutline : Icons.mdiCheckboxBlankOutline}
+            size={iconSize}
+            style={{
+                ['--blank-hover-color' as string]: `${blankHoverColor}`
+            }}
         />
     </button>
 }

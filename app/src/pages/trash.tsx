@@ -1,12 +1,13 @@
 import Layout from '@/layouts/layout'
-import { Uploader, Details, Media, Dialog } from '@/components'
+import { Uploader, Details, GalleryView, Dialog, Media } from '@/components'
 import { DetailsProvider } from '@/providers'
 import { useMediaQuery } from '@/types/api'
+import { EMediumStatus } from '@/types/app'
 
 const TrashPage = () => {
     const media = useMediaQuery({
         variables: {
-            status: 'trash'
+            status: EMediumStatus.TRASH
         }
     })
 

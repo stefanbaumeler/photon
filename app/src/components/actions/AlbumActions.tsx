@@ -5,16 +5,28 @@ import { useTranslation } from 'react-i18next'
 import { useContext, useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
 import { useRouter } from 'next/router'
-import { SelectionContext } from '@/providers'
+import { LayoutContext, SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 
-const AlbumsActions = () => {
+const AlbumActions = () => {
     const { t } = useTranslation()
     const selection = useContext(SelectionContext)
+    const layout = useContext(LayoutContext)
 
     const router = useRouter()
 
     const deleteAlbumDialog = useDeleteAlbumDialog()
+
+    const setAlbumCover = () => {
+        setMoreActive(false)
+        selection.setMode(ESelectionMode.SINGLE)
+    }
+
+    const layoutProps = layout.getLayoutProps(layout.nextLayout)
+
+    const changeLayout = () => {
+        layout.setLayout(layout.nextLayout)
+    }
 
     const moreItems = [
         {
@@ -22,16 +34,25 @@ const AlbumsActions = () => {
                 thing: t(ETrans.ALBUM)
             }),
             callback: deleteAlbumDialog
+        },
+        {
+            label: t(ETrans.SET_ALBUM_COVER),
+            callback: setAlbumCover
         }
     ]
 
     const [moreActive, setMoreActive] = useState(false)
 
-    if (router.pathname !== '/albums/[id]' || selection.mode !== ESelectionMode.OFF) {
+    if (router.pathname !== '/albums/[idAlbum]' || selection.mode !== ESelectionMode.OFF) {
         return <></>
     }
 
     return <div className="actions">
+        <IconButton
+            hint={layoutProps.name}
+            icon={layoutProps.icon}
+            onClick={changeLayout}
+        />
         <Dropdown
             items={moreItems}
             active={moreActive}
@@ -46,4 +67,4 @@ const AlbumsActions = () => {
     </div>
 }
 
-export default AlbumsActions
+export default AlbumActions

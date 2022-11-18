@@ -19,10 +19,10 @@ const BulkActions = () => {
 
     const selection = useContext(SelectionContext)
 
-    const trashMediaDialog = useMoveToTrashDialog()
+    const trashMediaDialog = useMoveToTrashDialog(selection.selected)
     const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog()
-    const archive = useSetMediaStatus(Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
+    const restoreMediaDialog = useRestoreMediaDialog(selection.selected)
+    const archive = useSetMediaStatus(selection.selected, Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
     const [moreActive, setMoreActive] = useState(false)
 
     const download = () => {

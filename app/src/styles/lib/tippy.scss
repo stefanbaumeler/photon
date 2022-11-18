@@ -1,11 +1,30 @@
 .tippy-box {
     font-size: 12px;
     overflow: hidden;
+    display: flex;
 
     &[data-theme='light'] {
 
         .tippy-content {
             padding: 0;
+        }
+    }
+
+    &[data-theme='transparent'] {
+        background-color: transparent;
+        border-radius: 0;
+
+        .tippy-content {
+            padding: 0;
+        }
+    }
+
+    .tippy-content {
+        display: flex;
+        width: 100%;
+
+        > div {
+            width: 100%;
         }
     }
 }
