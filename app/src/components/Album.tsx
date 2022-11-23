@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { IconButton, Dropdown } from '@/components'
 import * as Icons from '@mdi/js'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
 
 type Props = {
@@ -30,25 +30,9 @@ const Album = ({ album }: Props) => {
         }
     })
 
-    if (albumMediaQuery.loading) {
-        return <></>
-    }
-
     const thumbnail = thumbnailQuery.data?.medium
 
-    const media = albumMediaQuery.data.albumMedia
-
-    const moreItems = [
-        {
-            cy: 'album-delete',
-            label: t(ETrans.DELETE_THING, {
-                thing: t(ETrans.ALBUM)
-            }),
-            callback: deleteAlbumDialog
-        }
-    ]
-
-    const AlbumImage = () => {
+    const AlbumImage = useMemo(() => {
         if (thumbnailQuery.loading) {
             return <></>
         }
@@ -62,7 +46,23 @@ const Album = ({ album }: Props) => {
             src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${thumbnail.filenameDisk}?w=800`}
             alt=""
         />
+    }, [thumbnail])
+
+    if (albumMediaQuery.loading) {
+        return <></>
     }
+
+    const media = albumMediaQuery.data.albumMedia
+
+    const moreItems = [
+        {
+            cy: 'album-delete',
+            label: t(ETrans.DELETE_THING, {
+                thing: t(ETrans.ALBUM)
+            }),
+            callback: deleteAlbumDialog
+        }
+    ]
 
     return <div
         className="album"
@@ -89,7 +89,7 @@ const Album = ({ album }: Props) => {
         >
             <a className="album__link">
                 <div className="album__image-container">
-                    <AlbumImage />
+                    {AlbumImage}
                 </div>
                 <div className="album__content">
                     <span
