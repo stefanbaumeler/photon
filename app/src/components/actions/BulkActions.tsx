@@ -37,6 +37,7 @@ const BulkActions = () => {
 
     const moreItems = [
         {
+            cy: 'move-to-archive',
             label: Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
             callback: archive
         }
@@ -67,6 +68,7 @@ const BulkActions = () => {
                 onClickOutside={() => setMoreActive(false)}
             >
                 <IconButton
+                    cy="bulk-more"
                     hint={t(ETrans.MORE_OPTIONS)}
                     icon={Icons.mdiDotsVertical}
                     onClick={() => setMoreActive(!moreActive)}
