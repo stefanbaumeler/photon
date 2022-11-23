@@ -42,6 +42,7 @@ const Album = ({ album }: Props) => {
         }
 
         return <img
+            data-cy={'album-image'}
             className="album__image"
             src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${thumbnail.filenameDisk}?w=800`}
             alt=""

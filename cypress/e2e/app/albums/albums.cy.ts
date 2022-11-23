@@ -137,4 +137,22 @@ describe('Albums', function () {
         cy.url().should('contain', '/albums/' )
         cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
+
+    it.only('changes the album cover', function () {
+        cy.visit('/albums/064846fe-6e4e-410d-9baf-db12982d287e')
+        cy.get('[data-cy="album-more"]').click({
+            force: true
+        })
+        cy.get('[data-cy="album-set-cover"]').click()
+        cy.get('[data-cy="teaser-check"]').last().click()
+        cy.get('[data-cy="save-changes"]').click()
+        cy.visit('/albums')
+        cy.url().should('contain', '/albums' )
+        cy.get('[data-cy="album-teaser-title"]').should('have.length', 5)
+        cy.get('[data-cy="album-teaser-title"]').contains('Test Album 1')
+            .parents('[data-cy="album-teaser"]')
+            .find('[data-cy="album-image"]')
+            .should('have.attr', 'src')
+            .and('include', '114d5e91-b89e-4a31-9305-d3753bf64f2c')
+    })
 })
