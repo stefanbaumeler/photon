@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { AlbumsQueryDocument, useCreateAlbum as useCreateAlbumMutation } from '@/types/api'
+import { AlbumsQueryDocument, useCreateAlbum as useCreateAlbumMutation } from '@photon/shared'
 
 const useCreateAlbum = () => {
     const router = useRouter()

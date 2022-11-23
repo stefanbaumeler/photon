@@ -1,6 +1,6 @@
 {
     "name": "Photon App Schema",
-    "schemaPath": "./src/types/schema.graphql",
+    "schemaPath": "./schema.graphql",
     "includes": [
         "client-schema-extension.js",
         "*.graphql",

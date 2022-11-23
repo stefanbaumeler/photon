@@ -1,6 +1,6 @@
 import Layout from '@/layouts/layout'
 import { Albums, Uploader, Dialog } from '@/components'
-import { useAlbumsQuery } from '@/types/api'
+import { useAlbumsQuery } from '@photon/shared'
 
 const AlbumsPage = () => {
     const albums = useAlbumsQuery()

@@ -1,8 +1,8 @@
 import { Knex } from 'knex'
-import { Album, Medium } from '../types'
 import { getDatabase } from '../database'
 import AlbumsMediaService from './albumsMedia'
-import { predefinedAlbumUUIDs } from '../database/helpers/ids'
+import { TAlbum, TMedium, TUser } from '@photon/shared'
+import { DeepPartial } from '../types'
 
 export default class AlbumsService {
     knex: Knex
@@ -13,35 +13,36 @@ export default class AlbumsService {
         this.knex = getDatabase()
     }
 
-    createOne = (album: Partial<Album>, media?: Pick<Medium, 'id'>[]) => new Promise((resolve) => {
+    createOne = (album: DeepPartial<TAlbum>, media?: Pick<TMedium, 'id'>[]) => new Promise<TAlbum>((resolve) => {
         if (media?.length) {
             album.idMedium = media[0].id
         }
 
-        this.knex.insert(album)
+        this.knex.insert({
+            ...album,
+            owner: album.owner?.id || album.owner
+        })
             .into(this.tableName)
-            .returning<{ id: string | number }[]>('id')
-            .then((result) => result[0].id)
+            .returning<TAlbum[]>('*')
             .then((result) => {
-                if (media) {
+                if (media && result) {
                     const albumsMediaService = new AlbumsMediaService()
-
                     const albumsMedia = media.map((medium) => ({
                         idMedium: medium.id,
-                        idAlbum: result
+                        idAlbum: result[0].id
                     }))
 
                     albumsMediaService.createMany(albumsMedia).then(() => {
-                        resolve(result)
+                        resolve(result[0])
                     })
                 }
                 else {
-                    resolve(result)
+                    resolve(result[0])
                 }
             })
     })
 
-    createMany = (albums: Partial<Album>[], media?: Pick<Medium, 'id'>[]) => new Promise((resolve) => {
+    createMany = (albums: DeepPartial<TAlbum>[], media?: Pick<TMedium, 'id'>[]) => new Promise<TAlbum[]>((resolve) => {
         const primaryKeys = albums.map((album) => this.createOne(album, media))
 
         Promise.all(primaryKeys).then((results) => {
@@ -49,27 +50,38 @@ export default class AlbumsService {
         })
     })
 
-    async readOne (id: string | number) {
-        return this.knex.from(this.tableName).select().where({
+    readOne = (id: string | null) => new Promise<TAlbum>((resolve) => {
+        this.knex.from(this.tableName).select().where({
             id
+        }).then((res) => {
+            resolve(res[0])
         })
-    }
+    })
 
-    async readMany (limit = 100) {
-        return this.knex.from(this.tableName).select().limit(limit)
-    }
+    readMany = (limit = 100) => new Promise<TAlbum[]>((resolve) => {
+        this.knex.from(this.tableName).select().limit(limit).then((res) => {
+            resolve(res)
+        })
+    })
 
-    async update (ids: string[] | number[] | string | number, newProps: Partial<Album>) {
+    update = (ids: string[] | string, newProps: Partial<TAlbum>) => new Promise<TAlbum[]>((resolve) => {
         delete newProps.id
 
         const idsToUpdate = Array.isArray(ids) ? ids : [ids]
 
-        return this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(newProps)
-    }
+        this.knex.from(this.tableName).whereIn('id', idsToUpdate)
+            .update(newProps)
+            .returning('*')
+            .then((res) => {
+                resolve(res)
+            })
+    })
 
-    async destroy (keys: string[] | number[] | string | number) {
+    destroy = (keys: (string | null)[] | string) => new Promise<TAlbum[]>((resolve) => {
         const keysToDestroy = Array.isArray(keys) ? keys : [keys]
 
-        return this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete()
-    }
+        this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
+            resolve(res)
+        })
+    })
 }

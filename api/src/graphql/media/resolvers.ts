@@ -1,33 +1,32 @@
 import MediaService from '../../services/media'
-import { Medium } from '../../types'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { fileToMedium } from '../../helpers/exif'
-import { Upload } from 'graphql-upload'
+import { TQueryResolvers, TMedium, TMutationResolvers } from '@photon/shared'
 
-const queries = {
-    media: (_: any, input: { status: string }) => {
+const queries: Partial<TQueryResolvers> = {
+    media: (_, input) => {
         return new MediaService().readMany(input.status ? {
             status: input.status
         } : {})
     },
-    medium: (_: any, input: { id: number }) => new MediaService().readOne(input.id)
+    medium: (_, input) => new MediaService().readOne(input.id)
 }
 
-const mutations = {
-    emptyTrash: async () => {
+const mutations: Partial<TMutationResolvers> = {
+    emptyTrash: () => new Promise<string[]>((resolve) => {
         const service = new MediaService()
 
-        await service.readMany({
+        service.readMany({
             status: 'trash'
         }).then(async (results) => {
-            await service.destroy(results.map((result) => result.id))
+            resolve(service.destroy(results.map((result) => result.id)))
         })
-    },
-    upload: async (_: any, { file: files }: { file: Upload[] }) => {
+    }),
+    upload: async (_, { file: files }) => {
         const service = new MediaService()
 
-        const writePromises = files.map((file) => new Promise<Partial<Medium>> ((resolve) => {
+        const writePromises = files.map((file) => new Promise<Partial<TMedium>> ((resolve) => {
             const name = randomUUID()
             const pathName = `./uploads/${name}`
 
@@ -62,16 +61,16 @@ const mutations = {
 
         return []
     },
-    setMediaStatus: async (_: any, input: { media: string[], status: string }) => {
+    setMediaStatus: async (_, input) => {
         return await new MediaService().update(input.media, {
             dateModifiedStatus: 'NOW()',
             status: input.status
         })
     },
-    rotate: (_: any, input: { id: string }) => {
-        return new MediaService().rotate(input.id)
+    rotate: async (_, input) => {
+        return await new MediaService().rotate(input.id)
     },
-    deleteMedia: async (_: any, input: { ids: string[] }) => {
+    deleteMedia: async (_, input) => {
         return await new MediaService().destroy(input.ids)
     }
 }

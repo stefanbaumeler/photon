@@ -1,0 +1,5 @@
+mutation setAlbumCover($idAlbum: ID!, $idMedium: ID!) {
+    setAlbumCover(idAlbum: $idAlbum, idMedium: $idMedium) {
+        id
+    }
+}

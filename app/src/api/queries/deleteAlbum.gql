@@ -1,3 +1,0 @@
-mutation deleteAlbum($ids: [ID]) {
-    deleteAlbum(ids: $ids)
-}

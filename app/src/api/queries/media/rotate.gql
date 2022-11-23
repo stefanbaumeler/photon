@@ -1,0 +1,5 @@
+mutation rotate($id: ID!) {
+    rotate(id: $id) {
+        id
+    }
+}

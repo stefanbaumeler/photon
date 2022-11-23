@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { Check, ListItemActions, Medium } from '@/components'
 import { formatDate } from '@/util/date'
 import { useContext } from 'react'

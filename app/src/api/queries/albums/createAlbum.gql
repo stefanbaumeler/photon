@@ -1,0 +1,5 @@
+mutation createAlbum($media: [ID]) {
+    createAlbum(media: $media) {
+        id
+    }
+}

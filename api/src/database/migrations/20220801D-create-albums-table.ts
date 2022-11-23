@@ -8,6 +8,7 @@ export async function up (knex: Knex) {
             t.string('title', 100)
             t.text('description')
             t.uuid('id_medium').references('media.id').onDelete('SET NULL')
+            t.uuid('owner').references('users.id').onDelete('CASCADE')
         }),
 
         knex.schema.createTable('albums_media', (t) => {

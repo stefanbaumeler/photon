@@ -1,18 +1,19 @@
 module.exports = {
     overwrite: true,
     schema: 'http://localhost:2000/graphql',
-    documents: '**/*.{gql,graphql}',
+    documents: '../**/*.{gql,graphql}',
     generates: {
-        './src/types/api.ts': {
+        './schema.ts': {
             plugins: [
                 'typescript',
-                // 'typescript-resolvers',
+                'typescript-resolvers',
                 'typescript-operations',
                 'typescript-react-apollo'
                 // 'typescript-document-nodes',
                 // 'fragment-matcher'
             ],
             config: {
+                useTypeImports: true,
                 withMutationFn: true,
                 typesPrefix: 'T',
                 addDocBlocks: false,

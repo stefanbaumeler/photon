@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { ListItem } from '@/components'
 
 type Props = {

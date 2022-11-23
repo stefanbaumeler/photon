@@ -4,7 +4,7 @@ import { DialogContext, SelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useSetMediaStatus from '@/hooks/set-status'
 import { EMediumStatus } from '@/types/app'
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 
 const useMoveToTrashDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useContext(DialogContext)

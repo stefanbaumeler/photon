@@ -24,7 +24,7 @@ export default gql`
         dateModified: String
         dateModifiedStatus: String
         dateTaken: String
-        id: ID
+        id: ID!
         filenameDisk: String
         filenameDownload: String
         title: String
@@ -34,18 +34,21 @@ export default gql`
         status: String
         mimetype: String
         meta: Meta
+        owner: User
+        uploader: User
+        hash: String
     }
 
     type Query {
         media(status: String): [Medium]
-        medium(id: ID): [Medium]
+        medium(id: ID!): Medium
     }
 
     type Mutation {
-        deleteMedia(ids: [ID]): String
-        rotate(id: ID): ID
-        setMediaStatus(media: [ID], status: String): [ID]
+        deleteMedia(ids: [ID]!): [ID]
+        rotate(id: ID!): Medium
+        setMediaStatus(media: [ID]!, status: String): [Medium]
         upload(file: [Upload]!): [File]!
-        emptyTrash: Boolean
+        emptyTrash: [ID]
     }
 `

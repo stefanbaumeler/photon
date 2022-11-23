@@ -1,8 +1,11 @@
-query AlbumQuery($id: ID) {
+query AlbumQuery($id: ID!) {
     album(id: $id) {
         id
         title
         description
         idMedium
+        owner {
+            id
+        }
     }
 }

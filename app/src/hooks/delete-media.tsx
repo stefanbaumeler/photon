@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
 import { AlbumsQueryDocument, MediaQueryDocument,
-    useDeleteMedia as useDeleteMediaMutation } from '@/types/api'
+    useDeleteMedia as useDeleteMediaMutation } from '@photon/shared'
 
 const useDeleteMedia = () => {
     const dialog = useContext(DialogContext)

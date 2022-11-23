@@ -4,7 +4,7 @@ import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import bem from '@/util/bem'
-import { TMedium, useMediumQuery } from '@/types/api'
+import { TMedium, useMediumQuery } from '@photon/shared'
 import { useEffect, useState } from 'react'
 
 const Thumbnail = ({
@@ -13,12 +13,13 @@ const Thumbnail = ({
 }: TThumbnail) => {
     const { t } = useTranslation()
 
-    const [medium, setMedium] = useState<TMedium>({})
+    const [medium, setMedium] = useState<TMedium>()
 
     const mediumQuery = useMediumQuery({
         variables: {
             id: `${idMedium}`
-        }
+        },
+        skip: !idMedium
     })
 
     const labelClasses = bem('thumbnail__label', [
@@ -27,7 +28,7 @@ const Thumbnail = ({
 
     useEffect(() => {
         if (mediumQuery.data) {
-            setMedium(mediumQuery.data.medium[0])
+            setMedium(mediumQuery.data.medium as TMedium)
         }
     }, [mediumQuery.data])
 
@@ -64,6 +65,10 @@ const Thumbnail = ({
             src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=100`}
             alt=""
         />
+    }
+
+    if (!medium) {
+        return <></>
     }
 
     return <button

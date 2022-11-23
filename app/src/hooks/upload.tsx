@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { MediaQueryDocument, useUpload as useUploadMutation } from '@/types/api'
+import { MediaQueryDocument, useUpload as useUploadMutation } from '@photon/shared'
 
 const useUpload = () => {
     const [file, setFile] = useState<FileList>()

@@ -5,7 +5,18 @@ import { typeDefs, resolvers } from './graphql'
 export const createApolloServer = async (app: Express) => {
     const apollo = new ApolloServer({
         typeDefs,
-        resolvers
+        resolvers,
+        context: async ({
+            req, res
+        }) => {
+            const token = req.headers.authorization || ''
+
+            // const user = await getUser(token)
+
+            return {
+                token
+            }
+        }
     })
 
     await apollo.start()

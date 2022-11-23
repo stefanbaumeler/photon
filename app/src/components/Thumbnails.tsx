@@ -5,7 +5,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import useAddToNewAlbum from '../hooks/add-to-new-album'
 import useAddToAlbum from '../hooks/add-to-album'
-import { useAlbumsQuery } from '@/types/api'
+import { useAlbumsQuery } from '@photon/shared'
 
 const Thumbnails = () => {
     const { t } = useTranslation()

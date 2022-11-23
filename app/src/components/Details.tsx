@@ -10,7 +10,7 @@ import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 import { useRouter } from 'next/router'
-import { TImageMeta } from '@/types/api'
+import { TImageMeta } from '@photon/shared'
 
 const Details = () => {
     const { t } = useTranslation()

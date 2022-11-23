@@ -1,0 +1,5 @@
+mutation setMediaStatus($media: [ID]!, $status: String) {
+    setMediaStatus(media: $media, status: $status) {
+        id
+    }
+}

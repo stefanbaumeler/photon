@@ -1,5 +1,5 @@
 import { AlbumQueryDocument,
-    useSetAlbumCover as useSetAlbumCoverMutation } from '@/types/api'
+    useSetAlbumCover as useSetAlbumCoverMutation } from '@photon/shared'
 import { useContext } from 'react'
 import { SelectionContext } from '@/providers'
 

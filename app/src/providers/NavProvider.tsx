@@ -41,7 +41,7 @@ const NavProvider = ({ children }: Props) => {
                 },
                 {
                     label: t(ETrans.ALBUM_PLURAL),
-                    icon: Icons.mdiImageMultipleOutline,
+                    icon: Icons.mdiFolderOpenOutline,
                     href: 'albums',
                     type: ENavItemType.ALBUMS
                 },

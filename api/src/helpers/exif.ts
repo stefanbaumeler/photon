@@ -5,7 +5,7 @@ import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { FormatType, ReadChunkFunc, Result }  from 'mediainfo.js'
 import { type MediaInfo, ResultObject, Track } from 'mediainfo.js/dist/types'
 // import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
-import { Medium, VideoMeta, ImageMeta } from '../types'
+import { TMedium, TVideoMeta, TImageMeta } from '@photon/shared'
 
 export const hash = (str: string, seed = 0) => {
     // https://stackoverflow.com/a/52171480
@@ -148,14 +148,14 @@ const handleImage = async (filePath: string) => {
         const lat = Number.isNaN(rawLat) ? null : rawLat
         const lng = Number.isNaN(rawLng) ? null : rawLng
 
-        const mediumData: Partial<Medium> = {
+        const mediumData: Partial<TMedium> = {
             dateTaken: dateTime,
-            hash: hash(JSON.stringify(rawMeta)),
+            hash: hash(JSON.stringify(rawMeta)).toString(),
             lat,
             lng
         }
 
-        const meta: ImageMeta = {
+        const meta: Partial<TImageMeta> = {
             height: sharpMeta.height || 0,
             width: sharpMeta.width || 0,
             cameraMake: rawMeta.Make?.value[0],
@@ -209,15 +209,15 @@ const handleVideo = async (filePath: string) => {
             const dimensions = getDimensions(result)
             const duration = getDuration(result)
 
-            const meta: VideoMeta = {
+            const meta: TVideoMeta = {
                 duration,
                 height: dimensions.height || 0,
                 width: dimensions.width || 0
             }
 
-            const mediumData: Partial<Medium> = {
+            const mediumData: Partial<TMedium> = {
                 dateTaken: dateTaken.toISOString(),
-                hash: hash(JSON.stringify(result))
+                hash: hash(JSON.stringify(result)).toString()
             }
 
             if (coordinates.length) {
@@ -233,16 +233,16 @@ const handleVideo = async (filePath: string) => {
 
         return {
             data: {},
-            meta: {} as VideoMeta
+            meta: {} as TVideoMeta
         }
     })
 }
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type
-}: { filePath: string, fileName: string, originalName: string, type: string}) => {
+}: { filePath: string, fileName: string, originalName: string, type: string }) => {
     const mediumType = type.split('/')[0]
-    let info: { data?: Partial<Medium>, meta?: ImageMeta | VideoMeta } = {}
+    let info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> } = {}
 
     if (mediumType === 'image') {
         info = await handleImage(filePath)
@@ -260,7 +260,7 @@ export const fileToMedium = async ({
         description: '',
         ...info.data,
         meta: info.meta
-    }
+    } as Partial<TMedium>
 
     // const ff = createFFmpeg()
     //

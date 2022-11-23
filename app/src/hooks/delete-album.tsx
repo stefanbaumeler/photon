@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { DialogContext } from '@/providers'
 import { AlbumsQueryDocument,
-    useDeleteAlbum as useDeleteAlbumMutation } from '@/types/api'
+    useDeleteAlbum as useDeleteAlbumMutation } from '@photon/shared'
 import { useRouter } from 'next/router'
 
 const useDeleteAlbum = (id?: string) => {

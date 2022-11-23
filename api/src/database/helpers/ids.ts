@@ -20,3 +20,7 @@ export const predefinedMediumUUIDs = [
     '6e11ebf1-4d3d-457d-b27b-7fcf66d5bb16',
     '2ef6335e-ef45-400f-97ee-213f2c1e1a48'
 ]
+
+export const predefinedUserUUIDs = [
+    '51dde765-a6de-48c6-b372-41534fb91d55'
+]

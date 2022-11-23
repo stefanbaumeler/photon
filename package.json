@@ -6,7 +6,8 @@
     "license": "MIT",
     "workspaces": [
         "app",
-        "api"
+        "api",
+        "shared"
     ],
     "engines": {
         "node": "^16.16.0"

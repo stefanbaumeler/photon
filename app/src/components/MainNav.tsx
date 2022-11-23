@@ -1,5 +1,5 @@
 import Icon from '@mdi/react'
-import { ESelectionMode, TNav, TNavItem } from '@/types/app'
+import { TNav, TNavItem } from '@/types/app'
 import { useContext } from 'react'
 import { NavContext, SelectionContext } from '@/providers'
 import Link from 'next/link'

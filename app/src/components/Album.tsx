@@ -1,4 +1,4 @@
-import { TAlbum, useAlbumMediaQuery, useMediumQuery } from '@/types/api'
+import { TAlbum, useAlbumMediaQuery, useMediumQuery } from '@photon/shared'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -34,7 +34,7 @@ const Album = ({ album }: Props) => {
         return <></>
     }
 
-    const thumbnail = thumbnailQuery.data?.medium[0] || {}
+    const thumbnail = thumbnailQuery.data?.medium
 
     const media = albumMediaQuery.data.albumMedia
 

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { DetailsContext } from '@/providers'
 import { MediaQueryDocument,
-    useRotate as useRotateMutation } from '@/types/api'
+    useRotate as useRotateMutation } from '@photon/shared'
 
 const useRotate = (idMedium: string) => {
     const details = useContext(DetailsContext)

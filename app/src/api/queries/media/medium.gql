@@ -1,4 +1,4 @@
-query MediumQuery($id: ID) {
+query MediumQuery($id: ID!) {
     medium(id: $id) {
         dateCreated
         dateModified
@@ -12,6 +12,12 @@ query MediumQuery($id: ID) {
         lng
         status
         mimetype
+        owner {
+            id
+        }
+        uploader {
+            id
+        }
         meta {
             ...on ImageMeta {
                 width

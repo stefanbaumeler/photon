@@ -12,7 +12,7 @@ import { AlbumMediaQueryDocument,
     useAlbumMediaQuery,
     useAlbumQuery,
     useRemoveFromAlbum,
-    useUpdateAlbumTitle } from '@/types/api'
+    useUpdateAlbumTitle } from '@photon/shared'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
@@ -29,7 +29,7 @@ const AlbumPage = () => {
     const titleEl = useRef(null)
 
     const [title, setTitle] = useState('')
-    const [album, setAlbum] = useState<TAlbum>({})
+    const [album, setAlbum] = useState<TAlbum>()
     const [media, setMedia] = useState<TMedium[]>([])
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
@@ -80,7 +80,7 @@ const AlbumPage = () => {
 
     useEffect(() => {
         if (albumQuery.data) {
-            setAlbum(albumQuery.data.album[0])
+            setAlbum(albumQuery.data.album)
         }
     }, [albumQuery.data])
 

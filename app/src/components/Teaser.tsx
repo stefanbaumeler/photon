@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium, TVideoMeta } from '@photon/shared'
 import { useContext, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
@@ -9,7 +9,6 @@ import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 import { isEqual } from 'lodash'
 import { secondsToTime } from '@/util/date'
-import { VideoMeta } from '@photon/api/src/types'
 
 type Props = {
     medium: TMedium
@@ -91,7 +90,7 @@ const Teaser = ({
 
     const Meta = () => {
         if (medium.mimetype.startsWith('video')) {
-            const meta = medium.meta as VideoMeta
+            const meta = medium.meta as TVideoMeta
             const seconds = secondsToTime(meta.duration)
             return <div className="teaser__meta">
                 {seconds}

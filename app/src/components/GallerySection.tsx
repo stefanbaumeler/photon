@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { ESelectionMode, GalleryItem } from '@/types/app'
 import { Check, Teaser } from '@/components'
 import { useContext, useEffect, useRef, useState } from 'react'

@@ -18,6 +18,8 @@ export async function up (knex: Knex) {
         t.enum('status', ['default', 'archived', 'trash']).defaultTo('default')
         t.string('mimetype')
         t.jsonb('meta')
+        t.uuid('owner').references('users.id').onDelete('CASCADE')
+        t.uuid('uploader').references('users.id').onDelete('NO ACTION')
     }).then(() => knex.raw(onModifiedTrigger('media')))
 }
 

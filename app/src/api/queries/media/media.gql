@@ -1,5 +1,5 @@
-query AlbumMediaQuery($id: ID) {
-    albumMedia(id: $id) {
+query MediaQuery($status: String) {
+    media(status: $status) {
         dateCreated
         dateModified
         dateTaken
@@ -12,6 +12,12 @@ query AlbumMediaQuery($id: ID) {
         lng
         status
         mimetype
+        owner {
+            id
+        }
+        uploader {
+            id
+        }
         meta {
             ...on ImageMeta {
                 width

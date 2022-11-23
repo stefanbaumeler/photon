@@ -2,8 +2,9 @@ import { Knex } from 'knex'
 import fs from 'fs'
 import { fileToMedium } from '../../helpers/exif'
 import MediaService from '../../services/media'
-import { Medium } from '../../types'
-import { predefinedMediumUUIDs } from '../helpers/ids'
+import { TMedium } from '@photon/shared'
+import { predefinedMediumUUIDs, predefinedUserUUIDs } from '../helpers/ids'
+import { DeepPartial } from '../../types'
 
 export async function seed (knex: Knex) {
     await knex('media').del()
@@ -11,7 +12,7 @@ export async function seed (knex: Knex) {
     const media = []
 
     for (let i = 0; i < 7; i++) {
-        const downloadPromise = new Promise<Partial<Medium>>((resolve) => {
+        const downloadPromise = new Promise<DeepPartial<TMedium>>((resolve) => {
             const filename = predefinedMediumUUIDs[i]
             const fullPath = `uploads/${filename}`
 
@@ -29,6 +30,12 @@ export async function seed (knex: Knex) {
             }).then((medium) => {
                 resolve({
                     id: filename,
+                    owner: {
+                        id: predefinedUserUUIDs[0]
+                    },
+                    uploader: {
+                        id: predefinedUserUUIDs[0]
+                    },
                     ...medium
                 })
             })

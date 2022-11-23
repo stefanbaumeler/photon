@@ -1,3 +1,0 @@
-mutation removeFromAlbum($idAlbum: ID, $media: [ID]) {
-    removeFromAlbum(idAlbum: $idAlbum, media: $media)
-}

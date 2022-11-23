@@ -1,4 +1,4 @@
-import { TAlbum } from '@/types/api'
+import { TAlbum } from '@photon/shared'
 import { Album } from '@/components'
 
 type Props = {

@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { useContext, useEffect } from 'react'
 import { DetailsContext, DialogContext, LayoutContext, SelectionContext } from '@/providers'
 import useKeyboard from '@/hooks/keyboard'

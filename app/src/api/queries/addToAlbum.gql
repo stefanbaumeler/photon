@@ -1,3 +1,0 @@
-mutation addToAlbum($idAlbum: ID, $media: [ID]) {
-    addToAlbum(idAlbum: $idAlbum, media: $media)
-}

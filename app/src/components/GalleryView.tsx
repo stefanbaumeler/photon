@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { GallerySection } from '@/components'
 import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'

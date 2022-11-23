@@ -4,5 +4,8 @@ query AlbumsQuery {
         title
         description
         idMedium
+        owner {
+            id
+        }
     }
 }

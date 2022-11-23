@@ -1,4 +1,4 @@
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { Ref, useContext, useMemo, forwardRef } from 'react'
 import Image from 'next/image'
 import { DetailsContext } from '@/providers'

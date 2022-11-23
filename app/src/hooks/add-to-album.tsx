@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DialogContext, SelectionContext } from '@/providers'
-import { AlbumMediaQueryDocument, useAddToAlbum as useAddToAlbumMutation } from '@/types/api'
+import { AlbumMediaQueryDocument, useAddToAlbum as useAddToAlbumMutation } from '@photon/shared'
 
 const useAddToAlbum = () => {
     const router = useRouter()

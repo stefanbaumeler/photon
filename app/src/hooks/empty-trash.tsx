@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
-import { MediaQueryDocument,
-    useEmptyTrash as useEmptyTrashMutation } from '@/types/api'
+import { MediaQueryDocument, useEmptyTrash as useEmptyTrashMutation } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 
 const useEmptyTrash = () => {

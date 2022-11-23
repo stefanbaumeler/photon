@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 
 export type TMediaInput = {
 

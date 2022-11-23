@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { AlbumsQueryDocument, useCreateAlbum } from '@/types/api'
+import { AlbumsQueryDocument, useCreateAlbum } from '@photon/shared'
 import { DialogContext, SelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
@@ -20,7 +20,7 @@ const useAddToNewAlbum = () => {
         if (newAlbum) {
             setNewAlbum(false)
             createAlbumMutation().then((result) => {
-                router.push(`/albums/${result.data.createAlbum}`).then(() => {
+                router.push(`/albums/${result.data.createAlbum.id}`).then(() => {
                     dialog.close()
                     selection.clear()
                 })

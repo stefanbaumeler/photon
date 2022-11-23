@@ -101,5 +101,6 @@
         "react/jsx-tag-spacing":["error", {
             "beforeSelfClosing": "always"
         }]
-    }
+    },
+    "ignorePatterns": ["shared/*"]
 }

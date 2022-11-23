@@ -1,5 +1,5 @@
-query MediaQuery($status: String) {
-    media(status: $status) {
+query AlbumMediaQuery($id: ID!) {
+    albumMedia(id: $id) {
         dateCreated
         dateModified
         dateTaken

@@ -1,49 +1,56 @@
 import AlbumsService from '../../services/albums'
 import AlbumsMediaService from '../../services/albumsMedia'
+import { TQueryResolvers, TMutationResolvers } from '@photon/shared'
 
-const queries = {
+const queries: Partial<TQueryResolvers> = {
     albums: () => new AlbumsService().readMany(),
-    album: async (_: any, input: { id: number }) => new AlbumsService().readOne(input.id),
-    albumMedia: async (_: any, input: { id: number }) => new AlbumsMediaService().readMany(input.id)
+    album: (_, input) => new AlbumsService().readOne(input.id),
+    albumMedia: (_, input) => new AlbumsMediaService().readMany(input.id)
 }
 
-const mutations = {
-    deleteAlbum: async (_: any, input: { ids: string[] }) => {
-        return await new AlbumsService().destroy(input.ids)
+const mutations: Partial<TMutationResolvers> = {
+    deleteAlbum: (_, input) => {
+        return new AlbumsService().destroy(input.ids)
     },
-    addToAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
+    addToAlbum: (_, input) => {
         const albumsMedia = input.media.map((medium) => ({
             idAlbum: input.idAlbum,
             idMedium: medium
         }))
 
-        return await new AlbumsMediaService().createMany(albumsMedia)
+        return new AlbumsMediaService().createMany(albumsMedia)
     },
-    removeFromAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
+    removeFromAlbum: (_, input) => {
         const itemsToRemove = input.media.map((medium) => ({
             idAlbum: input.idAlbum,
             idMedium: medium
         }))
 
-        return await new AlbumsMediaService().destroyMany(itemsToRemove)
+        return new AlbumsMediaService().destroyMany(itemsToRemove).then(() => {
+            return new AlbumsService().readOne(input.idAlbum)
+        })
     },
-    updateAlbumTitle: async (_: any, input: { id: string | number, title: string}) => {
-        return await new AlbumsService().update(input.id, {
+    updateAlbumTitle: (_, input) => new Promise((resolve) => {
+        new AlbumsService().update(input.id, {
             title: input.title
+        }).then((res) => {
+            resolve(res[0])
         })
-    },
-    createAlbum: async (_: any, input: { idAlbum: string | number, media: (string | number)[]}) => {
-        const media = input.media.map((medium) => ({
-            id: medium
-        }))
+    }),
+    createAlbum: (_, input) => {
+        const media = input.media?.map((medium) => ({
+            id: medium as string
+        })) || []
 
-        return await new AlbumsService().createOne({}, media)
+        return new AlbumsService().createOne({}, media)
     },
-    setAlbumCover: async (_: any, input: { idAlbum: string | number, idMedium: string | number}) => {
-        return await new AlbumsService().update(input.idAlbum, {
+    setAlbumCover: (_, input) => new Promise((resolve) => {
+        new AlbumsService().update(input.idAlbum, {
             idMedium: input.idMedium
+        }).then((res) => {
+            resolve(res[0])
         })
-    }
+    })
 }
 
 export default {

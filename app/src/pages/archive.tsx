@@ -1,7 +1,7 @@
 import Layout from '@/layouts/layout'
 import { Uploader, Details, Dialog, Media } from '@/components'
 import { DetailsProvider } from '@/providers'
-import { useMediaQuery } from '@/types/api'
+import { useMediaQuery } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 
 const ArchivePage = () => {

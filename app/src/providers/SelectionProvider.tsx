@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
-import { TMedium } from '@/types/api'
+import { TMedium } from '@photon/shared'
 import { ESelectionMode } from '@/types/app'
 
 type Props = {

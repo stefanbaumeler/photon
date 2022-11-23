@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
-import { MediaQueryDocument, TMedium, useSetMediaStatus as useSetMediaStatusMutation } from '@/types/api'
+import { MediaQueryDocument, TMedium, useSetMediaStatus as useSetMediaStatusMutation } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
