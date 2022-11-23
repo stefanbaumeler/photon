@@ -138,7 +138,7 @@ describe('Albums', function () {
         cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 
-    it.only('changes the album cover', function () {
+    it('changes the album cover', function () {
         cy.visit('/albums/064846fe-6e4e-410d-9baf-db12982d287e')
         cy.get('[data-cy="album-more"]').click({
             force: true
