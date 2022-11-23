@@ -17,10 +17,6 @@ describe('Upload', function () {
         })
     })
 
-    after(function () {
-        cy.exec('node ./scripts/truncate-db.js')
-    })
-
     it('uploads one file per drag and drop', function () {
         cy.get('[data-cy="uploader"]').selectFile(getImage(0), {
             action: 'drag-drop',
