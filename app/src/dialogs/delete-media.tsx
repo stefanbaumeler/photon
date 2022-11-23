@@ -28,7 +28,8 @@ const useDeleteMediaDialog = () => {
             },
             {
                 label: t(ETrans.MOVE_TO_TRASH),
-                action: confirm
+                action: confirm,
+                cy: 'trash-delete-confirm'
             }
         ]
     })

@@ -56,6 +56,7 @@ const BulkActions = () => {
                 icon={Icons.mdiTrayArrowDown}
             />
             <IconButton
+                cy={'move-to-trash'}
                 hint={t(ETrans.DELETE)}
                 onClick={trashMediaDialog}
                 icon={Icons.mdiTrashCanOutline}
@@ -80,11 +81,13 @@ const BulkActions = () => {
                 label={t(ETrans.DELETE)}
                 onClick={deleteMediaDialog}
                 icon={Icons.mdiDeleteForever}
+                cy={'trash-delete'}
             />
             <IconButton
                 label={t(ETrans.RESTORE)}
                 onClick={restoreMediaDialog}
                 icon={Icons.mdiDeleteRestore}
+                cy={'trash-restore'}
             />
         </>
     }

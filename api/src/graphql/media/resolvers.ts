@@ -14,7 +14,7 @@ const queries: Partial<TQueryResolvers> = {
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    emptyTrash: () => new Promise<string[]>((resolve) => {
+    emptyTrash: () => new Promise<TMedium[]>((resolve) => {
         const service = new MediaService()
 
         service.readMany({

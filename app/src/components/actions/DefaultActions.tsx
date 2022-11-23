@@ -70,6 +70,7 @@ const DefaultActions = () => {
                 label={t(ETrans.EMPTY_TRASH)}
                 icon={Icons.mdiDeleteForever}
                 onClick={emptyTrashDialog}
+                cy={'trash-empty'}
             />
             <IconButton
                 hint={layoutProps.name}

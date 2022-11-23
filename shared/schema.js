@@ -88,13 +88,13 @@ function useUpdateAlbumTitle(baseOptions) {
     return Apollo.useMutation(exports.UpdateAlbumTitleDocument, options);
 }
 exports.useUpdateAlbumTitle = useUpdateAlbumTitle;
-exports.DeleteMediaDocument = (0, client_1.gql)(templateObject_10 || (templateObject_10 = __makeTemplateObject(["\n    mutation deleteMedia($ids: [ID]!) {\n  deleteMedia(ids: $ids)\n}\n    "], ["\n    mutation deleteMedia($ids: [ID]!) {\n  deleteMedia(ids: $ids)\n}\n    "])));
+exports.DeleteMediaDocument = (0, client_1.gql)(templateObject_10 || (templateObject_10 = __makeTemplateObject(["\n    mutation deleteMedia($ids: [ID]!) {\n  deleteMedia(ids: $ids) {\n    id\n  }\n}\n    "], ["\n    mutation deleteMedia($ids: [ID]!) {\n  deleteMedia(ids: $ids) {\n    id\n  }\n}\n    "])));
 function useDeleteMedia(baseOptions) {
     var options = __assign(__assign({}, defaultOptions), baseOptions);
     return Apollo.useMutation(exports.DeleteMediaDocument, options);
 }
 exports.useDeleteMedia = useDeleteMedia;
-exports.EmptyTrashDocument = (0, client_1.gql)(templateObject_11 || (templateObject_11 = __makeTemplateObject(["\n    mutation emptyTrash {\n  emptyTrash\n}\n    "], ["\n    mutation emptyTrash {\n  emptyTrash\n}\n    "])));
+exports.EmptyTrashDocument = (0, client_1.gql)(templateObject_11 || (templateObject_11 = __makeTemplateObject(["\n    mutation emptyTrash {\n  emptyTrash {\n    id\n  }\n}\n    "], ["\n    mutation emptyTrash {\n  emptyTrash {\n    id\n  }\n}\n    "])));
 function useEmptyTrash(baseOptions) {
     var options = __assign(__assign({}, defaultOptions), baseOptions);
     return Apollo.useMutation(exports.EmptyTrashDocument, options);

@@ -45,10 +45,10 @@ export default gql`
     }
 
     type Mutation {
-        deleteMedia(ids: [ID]!): [ID]
+        deleteMedia(ids: [ID]!): [Medium]
         rotate(id: ID!): Medium
         setMediaStatus(media: [ID]!, status: String): [Medium]
         upload(file: [Upload]!): [File]!
-        emptyTrash: [ID]
+        emptyTrash: [Medium]
     }
 `

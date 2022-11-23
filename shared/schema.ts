@@ -79,8 +79,8 @@ export type TMutation = {
   addToAlbum?: Maybe<Array<Maybe<TMedium>>>;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum?: Maybe<Array<Maybe<TAlbum>>>;
-  deleteMedia?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  emptyTrash?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  deleteMedia?: Maybe<Array<Maybe<TMedium>>>;
+  emptyTrash?: Maybe<Array<Maybe<TMedium>>>;
   login?: Maybe<TToken>;
   removeFromAlbum?: Maybe<TAlbum>;
   rotate?: Maybe<TMedium>;
@@ -383,8 +383,8 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   addToAlbum?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
   deleteAlbum?: Resolver<Maybe<Array<Maybe<TResolversTypes['Album']>>>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
-  deleteMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['ID']>>>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
-  emptyTrash?: Resolver<Maybe<Array<Maybe<TResolversTypes['ID']>>>, ParentType, ContextType>;
+  deleteMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
+  emptyTrash?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
   login?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationLoginArgs, 'mail' | 'password'>>;
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
   rotate?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
@@ -517,12 +517,12 @@ export type TDeleteMediaVariables = Exact<{
 }>;
 
 
-export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: Array<string | null> | null };
+export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: Array<{ __typename?: 'Medium', id: string } | null> | null };
 
 export type TEmptyTrashVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TEmptyTrash = { __typename?: 'Mutation', emptyTrash?: Array<string | null> | null };
+export type TEmptyTrash = { __typename?: 'Mutation', emptyTrash?: Array<{ __typename?: 'Medium', id: string } | null> | null };
 
 export type TMediaQueryVariables = Exact<{
   status?: InputMaybe<Scalars['String']>;
@@ -764,7 +764,9 @@ export type UpdateAlbumTitleMutationResult = Apollo.MutationResult<TUpdateAlbumT
 export type UpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>;
 export const DeleteMediaDocument = gql`
     mutation deleteMedia($ids: [ID]!) {
-  deleteMedia(ids: $ids)
+  deleteMedia(ids: $ids) {
+    id
+  }
 }
     `;
 export type TDeleteMediaMutationFn = Apollo.MutationFunction<TDeleteMedia, TDeleteMediaVariables>;
@@ -777,7 +779,9 @@ export type DeleteMediaMutationResult = Apollo.MutationResult<TDeleteMedia>;
 export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia, TDeleteMediaVariables>;
 export const EmptyTrashDocument = gql`
     mutation emptyTrash {
-  emptyTrash
+  emptyTrash {
+    id
+  }
 }
     `;
 export type TEmptyTrashMutationFn = Apollo.MutationFunction<TEmptyTrash, TEmptyTrashVariables>;

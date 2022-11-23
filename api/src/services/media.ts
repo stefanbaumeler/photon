@@ -69,7 +69,7 @@ export default class MediaService {
         })
     })
 
-    async destroy (keys: (string | null)[] | string) {
+    destroy = (keys: (string | null)[] | string) => new Promise<TMedium[]>((resolve) => {
         const keysToDestroy = Array.isArray(keys) ? keys : [keys]
 
         keysToDestroy.forEach((key) => {
@@ -80,8 +80,10 @@ export default class MediaService {
             }
         })
 
-        return this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning<string[]>('id')
-    }
+        this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
+            resolve(res)
+        })
+    })
 
     rotate = (id: string) => new Promise<TMedium>((resolve) => {
         const newFileName = randomUUID()
