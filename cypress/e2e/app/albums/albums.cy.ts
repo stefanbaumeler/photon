@@ -139,7 +139,7 @@ describe('Albums', function () {
     })
 
     it('changes the album cover', function () {
-        cy.visit('/albums/064846fe-6e4e-410d-9baf-db12982d287e')
+        cy.visit('/albums/fd8a10df-5db5-44ad-b131-019c274a1096')
         cy.get('[data-cy="album-more"]').click({
             force: true
         })
@@ -149,7 +149,7 @@ describe('Albums', function () {
         cy.visit('/albums')
         cy.url().should('contain', '/albums' )
         cy.get('[data-cy="album-teaser-title"]').should('have.length', 5)
-        cy.get('[data-cy="album-teaser-title"]').contains('Test Album 1')
+        cy.get('[data-cy="album-teaser-title"]').contains('Test Album 2')
             .parents('[data-cy="album-teaser"]')
             .find('[data-cy="album-image"]')
             .should('have.attr', 'src')
