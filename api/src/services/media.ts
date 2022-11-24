@@ -72,16 +72,19 @@ export default class MediaService {
     destroy = (keys: (string | null)[] | string) => new Promise<TMedium[]>((resolve) => {
         const keysToDestroy = Array.isArray(keys) ? keys : [keys]
 
-        keysToDestroy.forEach((key) => {
+        const promises = keysToDestroy.map((key) => new Promise((resolve) => {
             if (key) {
                 this.readOne(key).then((medium) => {
                     fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+                    resolve(true)
                 })
             }
-        })
+        }))
 
-        this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
-            resolve(res)
+        Promise.all(promises).then(() => {
+            this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
+                resolve(res)
+            })
         })
     })
 
