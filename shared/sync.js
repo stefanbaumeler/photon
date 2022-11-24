@@ -8,11 +8,13 @@ module.exports = {
                 'typescript',
                 'typescript-resolvers',
                 'typescript-operations',
-                'typescript-react-apollo'
+                'typescript-react-apollo',
                 // 'typescript-document-nodes',
                 // 'fragment-matcher'
             ],
             config: {
+                preResolveTypes: false,
+                maybeValue: 'Partial<T> | T | null',
                 useTypeImports: true,
                 withMutationFn: true,
                 typesPrefix: 'T',

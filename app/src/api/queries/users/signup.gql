@@ -1,4 +1,4 @@
-mutation signup (
+mutation MSignup (
     $mail: String!
     $password: String!
     $firstName: String!

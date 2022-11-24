@@ -1,4 +1,4 @@
-mutation login (
+mutation MLogin (
     $mail: String!
     $password: String!
 ) {

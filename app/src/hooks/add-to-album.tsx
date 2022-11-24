@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DialogContext, SelectionContext } from '@/providers'
-import { AlbumMediaQueryDocument, useAddToAlbum as useAddToAlbumMutation } from '@photon/shared'
+import { QAlbumMediaDocument, useMAddToAlbum } from '@photon/shared'
 
 const useAddToAlbum = () => {
     const router = useRouter()
@@ -9,14 +9,14 @@ const useAddToAlbum = () => {
     const selection = useContext(SelectionContext)
     const [activeAlbum, setActiveAlbum] = useState<string | number>()
 
-    const [addToAlbumMutation] = useAddToAlbumMutation({
+    const [addToAlbumMutation] = useMAddToAlbum({
         variables: {
             idAlbum: `${activeAlbum}`,
             media: Array.from(selection.selected).map((s) => s.id)
         },
         refetchQueries: [
             {
-                query: AlbumMediaQueryDocument,
+                query: QAlbumMediaDocument,
                 variables: {
                     id: `${activeAlbum}`
                 }

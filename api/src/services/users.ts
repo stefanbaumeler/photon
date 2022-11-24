@@ -30,7 +30,7 @@ export default class UsersService {
         })
     })
 
-    readOne = (id: string) => new Promise<TUser>((resolve) => {
+    readOne = (id: string) => new Promise<Partial<TUser>>((resolve) => {
         this.knex.select().from(this.tableName).where({
             id
         }).then((res) => {

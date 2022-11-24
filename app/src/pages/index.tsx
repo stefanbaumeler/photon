@@ -1,11 +1,11 @@
 import Layout from '@/layouts/layout'
 import { Uploader, Details, Dialog, Media } from '@/components'
 import { DetailsProvider } from '@/providers'
-import { useMediaQuery } from '@photon/shared'
+import { useQMedia } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 
 const HomePage = () => {
-    const media = useMediaQuery({
+    const media = useQMedia({
         variables: {
             status: EMediumStatus.DEFAULT
         }

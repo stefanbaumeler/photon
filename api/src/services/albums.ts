@@ -1,7 +1,7 @@
 import { Knex } from 'knex'
 import { getDatabase } from '../database'
 import AlbumsMediaService from './albumsMedia'
-import { TAlbum, TMedium, TUser } from '@photon/shared'
+import { TAlbum, TMedium } from '@photon/shared'
 import { DeepPartial } from '../types'
 
 export default class AlbumsService {
@@ -13,7 +13,7 @@ export default class AlbumsService {
         this.knex = getDatabase()
     }
 
-    createOne = (album: DeepPartial<TAlbum>, media?: Pick<TMedium, 'id'>[]) => new Promise<TAlbum>((resolve) => {
+    createOne = (album: DeepPartial<TAlbum>, media?: { id: string }[]) => new Promise<TAlbum>((resolve) => {
         if (media?.length) {
             album.idMedium = media[0].id
         }
@@ -30,7 +30,7 @@ export default class AlbumsService {
                     const albumsMedia = media.map((medium) => ({
                         idMedium: medium.id,
                         idAlbum: result[0].id
-                    }))
+                    })) || []
 
                     albumsMediaService.createMany(albumsMedia).then(() => {
                         resolve(result[0])
@@ -42,7 +42,7 @@ export default class AlbumsService {
             })
     })
 
-    createMany = (albums: DeepPartial<TAlbum>[], media?: Pick<TMedium, 'id'>[]) => new Promise<TAlbum[]>((resolve) => {
+    createMany = (albums: DeepPartial<TAlbum>[], media?: { id: string }[]) => new Promise<TAlbum[]>((resolve) => {
         const primaryKeys = albums.map((album) => this.createOne(album, media))
 
         Promise.all(primaryKeys).then((results) => {

@@ -1,19 +1,18 @@
 import { useContext } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
-import { AlbumsQueryDocument, MediaQueryDocument,
-    useDeleteMedia as useDeleteMediaMutation } from '@photon/shared'
+import { QAlbumsDocument, QMediaDocument, useMDeleteMedia } from '@photon/shared'
 
 const useDeleteMedia = () => {
     const dialog = useContext(DialogContext)
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
 
-    const [deleteMedia] = useDeleteMediaMutation({
+    const [deleteMedia] = useMDeleteMedia({
         variables: {
             ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
         },
-        refetchQueries: [MediaQueryDocument, {
-            query: AlbumsQueryDocument
+        refetchQueries: [QMediaDocument, {
+            query: QAlbumsDocument
         }]
     })
 

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { AlbumsQueryDocument, useCreateAlbum } from '@photon/shared'
+import { QAlbumsDocument, useMCreateAlbum } from '@photon/shared'
 import { DialogContext, SelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
@@ -9,11 +9,11 @@ const useAddToNewAlbum = () => {
     const selection = useContext(SelectionContext)
     const dialog = useContext(DialogContext)
 
-    const [createAlbumMutation] = useCreateAlbum({
+    const [createAlbumMutation] = useMCreateAlbum({
         variables: {
             media: Array.from(selection.selected).map((s) => s.id)
         },
-        refetchQueries: [AlbumsQueryDocument]
+        refetchQueries: [QAlbumsDocument]
     })
 
     useEffect(() => {

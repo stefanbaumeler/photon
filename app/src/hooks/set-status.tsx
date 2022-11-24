@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
-import { MediaQueryDocument, TMedium, useSetMediaStatus as useSetMediaStatusMutation } from '@photon/shared'
+import { QMediaDocument, TMedium, useMSetMediaStatus } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
@@ -25,19 +25,19 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
         previousStatus = (arr[0]?.status || EMediumStatus.DEFAULT) as EMediumStatus
     }
 
-    const [setMediaStatus] = useSetMediaStatusMutation({
+    const [setMediaStatus] = useMSetMediaStatus({
         variables: {
             media: ids,
             status
         },
         refetchQueries: [{
-            query: MediaQueryDocument,
+            query: QMediaDocument,
             variables: {
                 status: previousStatus
             }
         },
         {
-            query: MediaQueryDocument,
+            query: QMediaDocument,
             variables: {
                 status
             }

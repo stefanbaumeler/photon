@@ -1,4 +1,4 @@
-mutation upload($file: [Upload]!) {
+mutation MUpload($file: [Upload]!) {
     upload(file: $file) {
         url
     }

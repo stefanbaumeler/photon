@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { DetailsContext, DialogContext, SelectionContext } from '@/providers'
-import { MediaQueryDocument, useEmptyTrash as useEmptyTrashMutation } from '@photon/shared'
+import { QMediaDocument, useMEmptyTrash } from '@photon/shared'
 import { EMediumStatus } from '@/types/app'
 
 const useEmptyTrash = () => {
@@ -8,9 +8,9 @@ const useEmptyTrash = () => {
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
 
-    const [emptyTrash] = useEmptyTrashMutation({
+    const [emptyTrash] = useMEmptyTrash({
         refetchQueries: [{
-            query: MediaQueryDocument,
+            query: QMediaDocument,
             variables: {
                 status: EMediumStatus.TRASH
             }

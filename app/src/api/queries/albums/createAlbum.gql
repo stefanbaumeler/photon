@@ -1,4 +1,4 @@
-mutation createAlbum($media: [ID]) {
+mutation MCreateAlbum($media: [ID]) {
     createAlbum(media: $media) {
         id
     }

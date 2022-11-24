@@ -20,7 +20,7 @@ const mutations: Partial<TMutationResolvers> = {
         service.readMany({
             status: 'trash'
         }).then(async (results) => {
-            resolve(service.destroy(results.map((result) => result.id)))
+            resolve(service.destroy(results.map((result) => result.id as string)))
         })
     }),
     upload: async (_, { file: files }) => {

@@ -1,8 +1,8 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type Maybe<T> = Partial<T> | T | null;
+export type InputMaybe<T> = Partial<T> | T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -61,7 +61,7 @@ export type TMedium = {
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   lat?: Maybe<Scalars['Float']>;
   lng?: Maybe<Scalars['Float']>;
   meta?: Maybe<TMeta>;
@@ -363,7 +363,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<Maybe<TResolversTypes['ID']>, ParentType, ContextType>;
   lat?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
   lng?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<TResolversTypes['Meta']>, ParentType, ContextType>;
@@ -447,128 +447,271 @@ export type TResolvers<ContextType = any> = {
 };
 
 
-export type TAddToAlbumVariables = Exact<{
+export type TMAddToAlbumVariables = Exact<{
   idAlbum: Scalars['ID'];
   media: Array<Scalars['ID']> | Scalars['ID'];
 }>;
 
 
-export type TAddToAlbum = { __typename?: 'Mutation', addToAlbum?: Array<{ __typename?: 'Medium', id: string } | null> | null };
+export type TMAddToAlbum = (
+  { __typename?: 'Mutation' }
+  & { addToAlbum?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )>>> }
+);
 
-export type TAlbumQueryVariables = Exact<{
+export type TQAlbumVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type TAlbumQuery = { __typename?: 'Query', album?: { __typename?: 'Album', id: string, title?: string | null, description?: string | null, idMedium?: string | null, owner?: { __typename?: 'User', id: string } | null } | null };
+export type TQAlbum = (
+  { __typename?: 'Query' }
+  & { album?: Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id' | 'title' | 'description' | 'idMedium'>
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )> }
+  )> }
+);
 
-export type TAlbumMediaQueryVariables = Exact<{
+export type TQAlbumMediaVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type TAlbumMediaQuery = { __typename?: 'Query', albumMedia?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id: string, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null };
+export type TQAlbumMedia = (
+  { __typename?: 'Query' }
+  & { albumMedia?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+    & { meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    )> }
+  )>>> }
+);
 
-export type TAlbumsQueryVariables = Exact<{ [key: string]: never; }>;
+export type TQAlbumsVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TAlbumsQuery = { __typename?: 'Query', albums?: Array<{ __typename?: 'Album', id: string, title?: string | null, description?: string | null, idMedium?: string | null, owner?: { __typename?: 'User', id: string } | null } | null> | null };
+export type TQAlbums = (
+  { __typename?: 'Query' }
+  & { albums?: Maybe<Array<Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id' | 'title' | 'description' | 'idMedium'>
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )> }
+  )>>> }
+);
 
-export type TCreateAlbumVariables = Exact<{
+export type TMCreateAlbumVariables = Exact<{
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
 }>;
 
 
-export type TCreateAlbum = { __typename?: 'Mutation', createAlbum?: { __typename?: 'Album', id: string } | null };
+export type TMCreateAlbum = (
+  { __typename?: 'Mutation' }
+  & { createAlbum?: Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
+  )> }
+);
 
-export type TDeleteAlbumVariables = Exact<{
+export type TMDeleteAlbumVariables = Exact<{
   ids: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type TDeleteAlbum = { __typename?: 'Mutation', deleteAlbum?: Array<{ __typename?: 'Album', id: string } | null> | null };
+export type TMDeleteAlbum = (
+  { __typename?: 'Mutation' }
+  & { deleteAlbum?: Maybe<Array<Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
+  )>>> }
+);
 
-export type TRemoveFromAlbumVariables = Exact<{
+export type TMRemoveFromAlbumVariables = Exact<{
   idAlbum: Scalars['ID'];
   media: Array<Scalars['ID']> | Scalars['ID'];
 }>;
 
 
-export type TRemoveFromAlbum = { __typename?: 'Mutation', removeFromAlbum?: { __typename?: 'Album', id: string } | null };
+export type TMRemoveFromAlbum = (
+  { __typename?: 'Mutation' }
+  & { removeFromAlbum?: Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
+  )> }
+);
 
-export type TSetAlbumCoverVariables = Exact<{
+export type TMSetAlbumCoverVariables = Exact<{
   idAlbum: Scalars['ID'];
   idMedium: Scalars['ID'];
 }>;
 
 
-export type TSetAlbumCover = { __typename?: 'Mutation', setAlbumCover?: { __typename?: 'Album', id: string } | null };
+export type TMSetAlbumCover = (
+  { __typename?: 'Mutation' }
+  & { setAlbumCover?: Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
+  )> }
+);
 
-export type TUpdateAlbumTitleVariables = Exact<{
+export type TMUpdateAlbumTitleVariables = Exact<{
   id: Scalars['ID'];
   title: Scalars['String'];
 }>;
 
 
-export type TUpdateAlbumTitle = { __typename?: 'Mutation', updateAlbumTitle?: { __typename?: 'Album', id: string } | null };
+export type TMUpdateAlbumTitle = (
+  { __typename?: 'Mutation' }
+  & { updateAlbumTitle?: Maybe<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
+  )> }
+);
 
-export type TDeleteMediaVariables = Exact<{
+export type TMDeleteMediaVariables = Exact<{
   ids: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type TDeleteMedia = { __typename?: 'Mutation', deleteMedia?: Array<{ __typename?: 'Medium', id: string } | null> | null };
+export type TMDeleteMedia = (
+  { __typename?: 'Mutation' }
+  & { deleteMedia?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )>>> }
+);
 
-export type TEmptyTrashVariables = Exact<{ [key: string]: never; }>;
+export type TMEmptyTrashVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TEmptyTrash = { __typename?: 'Mutation', emptyTrash?: Array<{ __typename?: 'Medium', id: string } | null> | null };
+export type TMEmptyTrash = (
+  { __typename?: 'Mutation' }
+  & { emptyTrash?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )>>> }
+);
 
-export type TMediaQueryVariables = Exact<{
+export type TQMediaVariables = Exact<{
   status?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type TMediaQuery = { __typename?: 'Query', media?: Array<{ __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id: string, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, owner?: { __typename?: 'User', id: string } | null, uploader?: { __typename?: 'User', id: string } | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null> | null };
+export type TQMedia = (
+  { __typename?: 'Query' }
+  & { media?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    )> }
+  )>>> }
+);
 
-export type TMediumQueryVariables = Exact<{
+export type TQMediumVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type TMediumQuery = { __typename?: 'Query', medium?: { __typename?: 'Medium', dateCreated?: string | null, dateModified?: string | null, dateTaken?: string | null, id: string, filenameDisk?: string | null, filenameDownload?: string | null, title?: string | null, description?: string | null, lat?: number | null, lng?: number | null, status?: string | null, mimetype?: string | null, owner?: { __typename?: 'User', id: string } | null, uploader?: { __typename?: 'User', id: string } | null, meta?: { __typename?: 'ImageMeta', width?: number | null, height?: number | null, cameraMake?: string | null, cameraModel?: string | null, flash?: number | null, fNumber?: number | null, iso?: number | null } | { __typename?: 'VideoMeta', width?: number | null, height?: number | null, duration?: number | null } | null } | null };
+export type TQMedium = (
+  { __typename?: 'Query' }
+  & { medium?: Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    )> }
+  )> }
+);
 
-export type TRotateVariables = Exact<{
+export type TMRotateVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type TRotate = { __typename?: 'Mutation', rotate?: { __typename?: 'Medium', id: string } | null };
+export type TMRotate = (
+  { __typename?: 'Mutation' }
+  & { rotate?: Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )> }
+);
 
-export type TSetMediaStatusVariables = Exact<{
+export type TMSetMediaStatusVariables = Exact<{
   media: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
   status?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type TSetMediaStatus = { __typename?: 'Mutation', setMediaStatus?: Array<{ __typename?: 'Medium', id: string } | null> | null };
+export type TMSetMediaStatus = (
+  { __typename?: 'Mutation' }
+  & { setMediaStatus?: Maybe<Array<Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )>>> }
+);
 
-export type TUploadVariables = Exact<{
+export type TMUploadVariables = Exact<{
   file: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>;
 }>;
 
 
-export type TUpload = { __typename?: 'Mutation', upload: Array<{ __typename?: 'File', url?: string | null } | null> };
+export type TMUpload = (
+  { __typename?: 'Mutation' }
+  & { upload: Array<Maybe<(
+    { __typename?: 'File' }
+    & Pick<TFile, 'url'>
+  )>> }
+);
 
-export type TLoginVariables = Exact<{
+export type TMLoginVariables = Exact<{
   mail: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type TLogin = { __typename?: 'Mutation', login?: { __typename?: 'Token', accessToken: string } | null };
+export type TMLogin = (
+  { __typename?: 'Mutation' }
+  & { login?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<TToken, 'accessToken'>
+  )> }
+);
 
-export type TSignupVariables = Exact<{
+export type TMSignupVariables = Exact<{
   mail: Scalars['String'];
   password: Scalars['String'];
   firstName: Scalars['String'];
@@ -576,26 +719,32 @@ export type TSignupVariables = Exact<{
 }>;
 
 
-export type TSignup = { __typename?: 'Mutation', signup?: { __typename?: 'Token', accessToken: string } | null };
+export type TMSignup = (
+  { __typename?: 'Mutation' }
+  & { signup?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<TToken, 'accessToken'>
+  )> }
+);
 
 
-export const AddToAlbumDocument = gql`
-    mutation addToAlbum($idAlbum: ID!, $media: [ID!]!) {
+export const MAddToAlbumDocument = gql`
+    mutation MAddToAlbum($idAlbum: ID!, $media: [ID!]!) {
   addToAlbum(idAlbum: $idAlbum, media: $media) {
     id
   }
 }
     `;
-export type TAddToAlbumMutationFn = Apollo.MutationFunction<TAddToAlbum, TAddToAlbumVariables>;
-export function useAddToAlbum(baseOptions?: Apollo.MutationHookOptions<TAddToAlbum, TAddToAlbumVariables>) {
+export type TMAddToAlbumMutationFn = Apollo.MutationFunction<TMAddToAlbum, TMAddToAlbumVariables>;
+export function useMAddToAlbum(baseOptions?: Apollo.MutationHookOptions<TMAddToAlbum, TMAddToAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TAddToAlbum, TAddToAlbumVariables>(AddToAlbumDocument, options);
+        return Apollo.useMutation<TMAddToAlbum, TMAddToAlbumVariables>(MAddToAlbumDocument, options);
       }
-export type AddToAlbumHookResult = ReturnType<typeof useAddToAlbum>;
-export type AddToAlbumMutationResult = Apollo.MutationResult<TAddToAlbum>;
-export type AddToAlbumMutationOptions = Apollo.BaseMutationOptions<TAddToAlbum, TAddToAlbumVariables>;
-export const AlbumQueryDocument = gql`
-    query AlbumQuery($id: ID!) {
+export type MAddToAlbumHookResult = ReturnType<typeof useMAddToAlbum>;
+export type MAddToAlbumMutationResult = Apollo.MutationResult<TMAddToAlbum>;
+export type MAddToAlbumMutationOptions = Apollo.BaseMutationOptions<TMAddToAlbum, TMAddToAlbumVariables>;
+export const QAlbumDocument = gql`
+    query QAlbum($id: ID!) {
   album(id: $id) {
     id
     title
@@ -607,19 +756,19 @@ export const AlbumQueryDocument = gql`
   }
 }
     `;
-export function useAlbumQuery(baseOptions: Apollo.QueryHookOptions<TAlbumQuery, TAlbumQueryVariables>) {
+export function useQAlbum(baseOptions: Apollo.QueryHookOptions<TQAlbum, TQAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TAlbumQuery, TAlbumQueryVariables>(AlbumQueryDocument, options);
+        return Apollo.useQuery<TQAlbum, TQAlbumVariables>(QAlbumDocument, options);
       }
-export function useAlbumQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TAlbumQuery, TAlbumQueryVariables>) {
+export function useQAlbumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbum, TQAlbumVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TAlbumQuery, TAlbumQueryVariables>(AlbumQueryDocument, options);
+          return Apollo.useLazyQuery<TQAlbum, TQAlbumVariables>(QAlbumDocument, options);
         }
-export type AlbumQueryHookResult = ReturnType<typeof useAlbumQuery>;
-export type AlbumQueryLazyQueryHookResult = ReturnType<typeof useAlbumQueryLazyQuery>;
-export type AlbumQueryQueryResult = Apollo.QueryResult<TAlbumQuery, TAlbumQueryVariables>;
-export const AlbumMediaQueryDocument = gql`
-    query AlbumMediaQuery($id: ID!) {
+export type QAlbumHookResult = ReturnType<typeof useQAlbum>;
+export type QAlbumLazyQueryHookResult = ReturnType<typeof useQAlbumLazyQuery>;
+export type QAlbumQueryResult = Apollo.QueryResult<TQAlbum, TQAlbumVariables>;
+export const QAlbumMediaDocument = gql`
+    query QAlbumMedia($id: ID!) {
   albumMedia(id: $id) {
     dateCreated
     dateModified
@@ -652,19 +801,19 @@ export const AlbumMediaQueryDocument = gql`
   }
 }
     `;
-export function useAlbumMediaQuery(baseOptions: Apollo.QueryHookOptions<TAlbumMediaQuery, TAlbumMediaQueryVariables>) {
+export function useQAlbumMedia(baseOptions: Apollo.QueryHookOptions<TQAlbumMedia, TQAlbumMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TAlbumMediaQuery, TAlbumMediaQueryVariables>(AlbumMediaQueryDocument, options);
+        return Apollo.useQuery<TQAlbumMedia, TQAlbumMediaVariables>(QAlbumMediaDocument, options);
       }
-export function useAlbumMediaQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TAlbumMediaQuery, TAlbumMediaQueryVariables>) {
+export function useQAlbumMediaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbumMedia, TQAlbumMediaVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TAlbumMediaQuery, TAlbumMediaQueryVariables>(AlbumMediaQueryDocument, options);
+          return Apollo.useLazyQuery<TQAlbumMedia, TQAlbumMediaVariables>(QAlbumMediaDocument, options);
         }
-export type AlbumMediaQueryHookResult = ReturnType<typeof useAlbumMediaQuery>;
-export type AlbumMediaQueryLazyQueryHookResult = ReturnType<typeof useAlbumMediaQueryLazyQuery>;
-export type AlbumMediaQueryQueryResult = Apollo.QueryResult<TAlbumMediaQuery, TAlbumMediaQueryVariables>;
-export const AlbumsQueryDocument = gql`
-    query AlbumsQuery {
+export type QAlbumMediaHookResult = ReturnType<typeof useQAlbumMedia>;
+export type QAlbumMediaLazyQueryHookResult = ReturnType<typeof useQAlbumMediaLazyQuery>;
+export type QAlbumMediaQueryResult = Apollo.QueryResult<TQAlbumMedia, TQAlbumMediaVariables>;
+export const QAlbumsDocument = gql`
+    query QAlbums {
   albums {
     id
     title
@@ -676,124 +825,124 @@ export const AlbumsQueryDocument = gql`
   }
 }
     `;
-export function useAlbumsQuery(baseOptions?: Apollo.QueryHookOptions<TAlbumsQuery, TAlbumsQueryVariables>) {
+export function useQAlbums(baseOptions?: Apollo.QueryHookOptions<TQAlbums, TQAlbumsVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TAlbumsQuery, TAlbumsQueryVariables>(AlbumsQueryDocument, options);
+        return Apollo.useQuery<TQAlbums, TQAlbumsVariables>(QAlbumsDocument, options);
       }
-export function useAlbumsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TAlbumsQuery, TAlbumsQueryVariables>) {
+export function useQAlbumsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbums, TQAlbumsVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TAlbumsQuery, TAlbumsQueryVariables>(AlbumsQueryDocument, options);
+          return Apollo.useLazyQuery<TQAlbums, TQAlbumsVariables>(QAlbumsDocument, options);
         }
-export type AlbumsQueryHookResult = ReturnType<typeof useAlbumsQuery>;
-export type AlbumsQueryLazyQueryHookResult = ReturnType<typeof useAlbumsQueryLazyQuery>;
-export type AlbumsQueryQueryResult = Apollo.QueryResult<TAlbumsQuery, TAlbumsQueryVariables>;
-export const CreateAlbumDocument = gql`
-    mutation createAlbum($media: [ID]) {
+export type QAlbumsHookResult = ReturnType<typeof useQAlbums>;
+export type QAlbumsLazyQueryHookResult = ReturnType<typeof useQAlbumsLazyQuery>;
+export type QAlbumsQueryResult = Apollo.QueryResult<TQAlbums, TQAlbumsVariables>;
+export const MCreateAlbumDocument = gql`
+    mutation MCreateAlbum($media: [ID]) {
   createAlbum(media: $media) {
     id
   }
 }
     `;
-export type TCreateAlbumMutationFn = Apollo.MutationFunction<TCreateAlbum, TCreateAlbumVariables>;
-export function useCreateAlbum(baseOptions?: Apollo.MutationHookOptions<TCreateAlbum, TCreateAlbumVariables>) {
+export type TMCreateAlbumMutationFn = Apollo.MutationFunction<TMCreateAlbum, TMCreateAlbumVariables>;
+export function useMCreateAlbum(baseOptions?: Apollo.MutationHookOptions<TMCreateAlbum, TMCreateAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TCreateAlbum, TCreateAlbumVariables>(CreateAlbumDocument, options);
+        return Apollo.useMutation<TMCreateAlbum, TMCreateAlbumVariables>(MCreateAlbumDocument, options);
       }
-export type CreateAlbumHookResult = ReturnType<typeof useCreateAlbum>;
-export type CreateAlbumMutationResult = Apollo.MutationResult<TCreateAlbum>;
-export type CreateAlbumMutationOptions = Apollo.BaseMutationOptions<TCreateAlbum, TCreateAlbumVariables>;
-export const DeleteAlbumDocument = gql`
-    mutation deleteAlbum($ids: [ID]!) {
+export type MCreateAlbumHookResult = ReturnType<typeof useMCreateAlbum>;
+export type MCreateAlbumMutationResult = Apollo.MutationResult<TMCreateAlbum>;
+export type MCreateAlbumMutationOptions = Apollo.BaseMutationOptions<TMCreateAlbum, TMCreateAlbumVariables>;
+export const MDeleteAlbumDocument = gql`
+    mutation MDeleteAlbum($ids: [ID]!) {
   deleteAlbum(ids: $ids) {
     id
   }
 }
     `;
-export type TDeleteAlbumMutationFn = Apollo.MutationFunction<TDeleteAlbum, TDeleteAlbumVariables>;
-export function useDeleteAlbum(baseOptions?: Apollo.MutationHookOptions<TDeleteAlbum, TDeleteAlbumVariables>) {
+export type TMDeleteAlbumMutationFn = Apollo.MutationFunction<TMDeleteAlbum, TMDeleteAlbumVariables>;
+export function useMDeleteAlbum(baseOptions?: Apollo.MutationHookOptions<TMDeleteAlbum, TMDeleteAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TDeleteAlbum, TDeleteAlbumVariables>(DeleteAlbumDocument, options);
+        return Apollo.useMutation<TMDeleteAlbum, TMDeleteAlbumVariables>(MDeleteAlbumDocument, options);
       }
-export type DeleteAlbumHookResult = ReturnType<typeof useDeleteAlbum>;
-export type DeleteAlbumMutationResult = Apollo.MutationResult<TDeleteAlbum>;
-export type DeleteAlbumMutationOptions = Apollo.BaseMutationOptions<TDeleteAlbum, TDeleteAlbumVariables>;
-export const RemoveFromAlbumDocument = gql`
-    mutation removeFromAlbum($idAlbum: ID!, $media: [ID!]!) {
+export type MDeleteAlbumHookResult = ReturnType<typeof useMDeleteAlbum>;
+export type MDeleteAlbumMutationResult = Apollo.MutationResult<TMDeleteAlbum>;
+export type MDeleteAlbumMutationOptions = Apollo.BaseMutationOptions<TMDeleteAlbum, TMDeleteAlbumVariables>;
+export const MRemoveFromAlbumDocument = gql`
+    mutation MRemoveFromAlbum($idAlbum: ID!, $media: [ID!]!) {
   removeFromAlbum(idAlbum: $idAlbum, media: $media) {
     id
   }
 }
     `;
-export type TRemoveFromAlbumMutationFn = Apollo.MutationFunction<TRemoveFromAlbum, TRemoveFromAlbumVariables>;
-export function useRemoveFromAlbum(baseOptions?: Apollo.MutationHookOptions<TRemoveFromAlbum, TRemoveFromAlbumVariables>) {
+export type TMRemoveFromAlbumMutationFn = Apollo.MutationFunction<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>;
+export function useMRemoveFromAlbum(baseOptions?: Apollo.MutationHookOptions<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TRemoveFromAlbum, TRemoveFromAlbumVariables>(RemoveFromAlbumDocument, options);
+        return Apollo.useMutation<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>(MRemoveFromAlbumDocument, options);
       }
-export type RemoveFromAlbumHookResult = ReturnType<typeof useRemoveFromAlbum>;
-export type RemoveFromAlbumMutationResult = Apollo.MutationResult<TRemoveFromAlbum>;
-export type RemoveFromAlbumMutationOptions = Apollo.BaseMutationOptions<TRemoveFromAlbum, TRemoveFromAlbumVariables>;
-export const SetAlbumCoverDocument = gql`
-    mutation setAlbumCover($idAlbum: ID!, $idMedium: ID!) {
+export type MRemoveFromAlbumHookResult = ReturnType<typeof useMRemoveFromAlbum>;
+export type MRemoveFromAlbumMutationResult = Apollo.MutationResult<TMRemoveFromAlbum>;
+export type MRemoveFromAlbumMutationOptions = Apollo.BaseMutationOptions<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>;
+export const MSetAlbumCoverDocument = gql`
+    mutation MSetAlbumCover($idAlbum: ID!, $idMedium: ID!) {
   setAlbumCover(idAlbum: $idAlbum, idMedium: $idMedium) {
     id
   }
 }
     `;
-export type TSetAlbumCoverMutationFn = Apollo.MutationFunction<TSetAlbumCover, TSetAlbumCoverVariables>;
-export function useSetAlbumCover(baseOptions?: Apollo.MutationHookOptions<TSetAlbumCover, TSetAlbumCoverVariables>) {
+export type TMSetAlbumCoverMutationFn = Apollo.MutationFunction<TMSetAlbumCover, TMSetAlbumCoverVariables>;
+export function useMSetAlbumCover(baseOptions?: Apollo.MutationHookOptions<TMSetAlbumCover, TMSetAlbumCoverVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TSetAlbumCover, TSetAlbumCoverVariables>(SetAlbumCoverDocument, options);
+        return Apollo.useMutation<TMSetAlbumCover, TMSetAlbumCoverVariables>(MSetAlbumCoverDocument, options);
       }
-export type SetAlbumCoverHookResult = ReturnType<typeof useSetAlbumCover>;
-export type SetAlbumCoverMutationResult = Apollo.MutationResult<TSetAlbumCover>;
-export type SetAlbumCoverMutationOptions = Apollo.BaseMutationOptions<TSetAlbumCover, TSetAlbumCoverVariables>;
-export const UpdateAlbumTitleDocument = gql`
-    mutation updateAlbumTitle($id: ID!, $title: String!) {
+export type MSetAlbumCoverHookResult = ReturnType<typeof useMSetAlbumCover>;
+export type MSetAlbumCoverMutationResult = Apollo.MutationResult<TMSetAlbumCover>;
+export type MSetAlbumCoverMutationOptions = Apollo.BaseMutationOptions<TMSetAlbumCover, TMSetAlbumCoverVariables>;
+export const MUpdateAlbumTitleDocument = gql`
+    mutation MUpdateAlbumTitle($id: ID!, $title: String!) {
   updateAlbumTitle(id: $id, title: $title) {
     id
   }
 }
     `;
-export type TUpdateAlbumTitleMutationFn = Apollo.MutationFunction<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>;
-export function useUpdateAlbumTitle(baseOptions?: Apollo.MutationHookOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>) {
+export type TMUpdateAlbumTitleMutationFn = Apollo.MutationFunction<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>;
+export function useMUpdateAlbumTitle(baseOptions?: Apollo.MutationHookOptions<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>(UpdateAlbumTitleDocument, options);
+        return Apollo.useMutation<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>(MUpdateAlbumTitleDocument, options);
       }
-export type UpdateAlbumTitleHookResult = ReturnType<typeof useUpdateAlbumTitle>;
-export type UpdateAlbumTitleMutationResult = Apollo.MutationResult<TUpdateAlbumTitle>;
-export type UpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TUpdateAlbumTitle, TUpdateAlbumTitleVariables>;
-export const DeleteMediaDocument = gql`
-    mutation deleteMedia($ids: [ID]!) {
+export type MUpdateAlbumTitleHookResult = ReturnType<typeof useMUpdateAlbumTitle>;
+export type MUpdateAlbumTitleMutationResult = Apollo.MutationResult<TMUpdateAlbumTitle>;
+export type MUpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>;
+export const MDeleteMediaDocument = gql`
+    mutation MDeleteMedia($ids: [ID]!) {
   deleteMedia(ids: $ids) {
     id
   }
 }
     `;
-export type TDeleteMediaMutationFn = Apollo.MutationFunction<TDeleteMedia, TDeleteMediaVariables>;
-export function useDeleteMedia(baseOptions?: Apollo.MutationHookOptions<TDeleteMedia, TDeleteMediaVariables>) {
+export type TMDeleteMediaMutationFn = Apollo.MutationFunction<TMDeleteMedia, TMDeleteMediaVariables>;
+export function useMDeleteMedia(baseOptions?: Apollo.MutationHookOptions<TMDeleteMedia, TMDeleteMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TDeleteMedia, TDeleteMediaVariables>(DeleteMediaDocument, options);
+        return Apollo.useMutation<TMDeleteMedia, TMDeleteMediaVariables>(MDeleteMediaDocument, options);
       }
-export type DeleteMediaHookResult = ReturnType<typeof useDeleteMedia>;
-export type DeleteMediaMutationResult = Apollo.MutationResult<TDeleteMedia>;
-export type DeleteMediaMutationOptions = Apollo.BaseMutationOptions<TDeleteMedia, TDeleteMediaVariables>;
-export const EmptyTrashDocument = gql`
-    mutation emptyTrash {
+export type MDeleteMediaHookResult = ReturnType<typeof useMDeleteMedia>;
+export type MDeleteMediaMutationResult = Apollo.MutationResult<TMDeleteMedia>;
+export type MDeleteMediaMutationOptions = Apollo.BaseMutationOptions<TMDeleteMedia, TMDeleteMediaVariables>;
+export const MEmptyTrashDocument = gql`
+    mutation MEmptyTrash {
   emptyTrash {
     id
   }
 }
     `;
-export type TEmptyTrashMutationFn = Apollo.MutationFunction<TEmptyTrash, TEmptyTrashVariables>;
-export function useEmptyTrash(baseOptions?: Apollo.MutationHookOptions<TEmptyTrash, TEmptyTrashVariables>) {
+export type TMEmptyTrashMutationFn = Apollo.MutationFunction<TMEmptyTrash, TMEmptyTrashVariables>;
+export function useMEmptyTrash(baseOptions?: Apollo.MutationHookOptions<TMEmptyTrash, TMEmptyTrashVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TEmptyTrash, TEmptyTrashVariables>(EmptyTrashDocument, options);
+        return Apollo.useMutation<TMEmptyTrash, TMEmptyTrashVariables>(MEmptyTrashDocument, options);
       }
-export type EmptyTrashHookResult = ReturnType<typeof useEmptyTrash>;
-export type EmptyTrashMutationResult = Apollo.MutationResult<TEmptyTrash>;
-export type EmptyTrashMutationOptions = Apollo.BaseMutationOptions<TEmptyTrash, TEmptyTrashVariables>;
-export const MediaQueryDocument = gql`
-    query MediaQuery($status: String) {
+export type MEmptyTrashHookResult = ReturnType<typeof useMEmptyTrash>;
+export type MEmptyTrashMutationResult = Apollo.MutationResult<TMEmptyTrash>;
+export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash, TMEmptyTrashVariables>;
+export const QMediaDocument = gql`
+    query QMedia($status: String) {
   media(status: $status) {
     dateCreated
     dateModified
@@ -832,19 +981,19 @@ export const MediaQueryDocument = gql`
   }
 }
     `;
-export function useMediaQuery(baseOptions?: Apollo.QueryHookOptions<TMediaQuery, TMediaQueryVariables>) {
+export function useQMedia(baseOptions?: Apollo.QueryHookOptions<TQMedia, TQMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TMediaQuery, TMediaQueryVariables>(MediaQueryDocument, options);
+        return Apollo.useQuery<TQMedia, TQMediaVariables>(QMediaDocument, options);
       }
-export function useMediaQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TMediaQuery, TMediaQueryVariables>) {
+export function useQMediaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMedia, TQMediaVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TMediaQuery, TMediaQueryVariables>(MediaQueryDocument, options);
+          return Apollo.useLazyQuery<TQMedia, TQMediaVariables>(QMediaDocument, options);
         }
-export type MediaQueryHookResult = ReturnType<typeof useMediaQuery>;
-export type MediaQueryLazyQueryHookResult = ReturnType<typeof useMediaQueryLazyQuery>;
-export type MediaQueryQueryResult = Apollo.QueryResult<TMediaQuery, TMediaQueryVariables>;
-export const MediumQueryDocument = gql`
-    query MediumQuery($id: ID!) {
+export type QMediaHookResult = ReturnType<typeof useQMedia>;
+export type QMediaLazyQueryHookResult = ReturnType<typeof useQMediaLazyQuery>;
+export type QMediaQueryResult = Apollo.QueryResult<TQMedia, TQMediaVariables>;
+export const QMediumDocument = gql`
+    query QMedium($id: ID!) {
   medium(id: $id) {
     dateCreated
     dateModified
@@ -883,79 +1032,79 @@ export const MediumQueryDocument = gql`
   }
 }
     `;
-export function useMediumQuery(baseOptions: Apollo.QueryHookOptions<TMediumQuery, TMediumQueryVariables>) {
+export function useQMedium(baseOptions: Apollo.QueryHookOptions<TQMedium, TQMediumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TMediumQuery, TMediumQueryVariables>(MediumQueryDocument, options);
+        return Apollo.useQuery<TQMedium, TQMediumVariables>(QMediumDocument, options);
       }
-export function useMediumQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TMediumQuery, TMediumQueryVariables>) {
+export function useQMediumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMedium, TQMediumVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TMediumQuery, TMediumQueryVariables>(MediumQueryDocument, options);
+          return Apollo.useLazyQuery<TQMedium, TQMediumVariables>(QMediumDocument, options);
         }
-export type MediumQueryHookResult = ReturnType<typeof useMediumQuery>;
-export type MediumQueryLazyQueryHookResult = ReturnType<typeof useMediumQueryLazyQuery>;
-export type MediumQueryQueryResult = Apollo.QueryResult<TMediumQuery, TMediumQueryVariables>;
-export const RotateDocument = gql`
-    mutation rotate($id: ID!) {
+export type QMediumHookResult = ReturnType<typeof useQMedium>;
+export type QMediumLazyQueryHookResult = ReturnType<typeof useQMediumLazyQuery>;
+export type QMediumQueryResult = Apollo.QueryResult<TQMedium, TQMediumVariables>;
+export const MRotateDocument = gql`
+    mutation MRotate($id: ID!) {
   rotate(id: $id) {
     id
   }
 }
     `;
-export type TRotateMutationFn = Apollo.MutationFunction<TRotate, TRotateVariables>;
-export function useRotate(baseOptions?: Apollo.MutationHookOptions<TRotate, TRotateVariables>) {
+export type TMRotateMutationFn = Apollo.MutationFunction<TMRotate, TMRotateVariables>;
+export function useMRotate(baseOptions?: Apollo.MutationHookOptions<TMRotate, TMRotateVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TRotate, TRotateVariables>(RotateDocument, options);
+        return Apollo.useMutation<TMRotate, TMRotateVariables>(MRotateDocument, options);
       }
-export type RotateHookResult = ReturnType<typeof useRotate>;
-export type RotateMutationResult = Apollo.MutationResult<TRotate>;
-export type RotateMutationOptions = Apollo.BaseMutationOptions<TRotate, TRotateVariables>;
-export const SetMediaStatusDocument = gql`
-    mutation setMediaStatus($media: [ID]!, $status: String) {
+export type MRotateHookResult = ReturnType<typeof useMRotate>;
+export type MRotateMutationResult = Apollo.MutationResult<TMRotate>;
+export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRotateVariables>;
+export const MSetMediaStatusDocument = gql`
+    mutation MSetMediaStatus($media: [ID]!, $status: String) {
   setMediaStatus(media: $media, status: $status) {
     id
   }
 }
     `;
-export type TSetMediaStatusMutationFn = Apollo.MutationFunction<TSetMediaStatus, TSetMediaStatusVariables>;
-export function useSetMediaStatus(baseOptions?: Apollo.MutationHookOptions<TSetMediaStatus, TSetMediaStatusVariables>) {
+export type TMSetMediaStatusMutationFn = Apollo.MutationFunction<TMSetMediaStatus, TMSetMediaStatusVariables>;
+export function useMSetMediaStatus(baseOptions?: Apollo.MutationHookOptions<TMSetMediaStatus, TMSetMediaStatusVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TSetMediaStatus, TSetMediaStatusVariables>(SetMediaStatusDocument, options);
+        return Apollo.useMutation<TMSetMediaStatus, TMSetMediaStatusVariables>(MSetMediaStatusDocument, options);
       }
-export type SetMediaStatusHookResult = ReturnType<typeof useSetMediaStatus>;
-export type SetMediaStatusMutationResult = Apollo.MutationResult<TSetMediaStatus>;
-export type SetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TSetMediaStatus, TSetMediaStatusVariables>;
-export const UploadDocument = gql`
-    mutation upload($file: [Upload]!) {
+export type MSetMediaStatusHookResult = ReturnType<typeof useMSetMediaStatus>;
+export type MSetMediaStatusMutationResult = Apollo.MutationResult<TMSetMediaStatus>;
+export type MSetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TMSetMediaStatus, TMSetMediaStatusVariables>;
+export const MUploadDocument = gql`
+    mutation MUpload($file: [Upload]!) {
   upload(file: $file) {
     url
   }
 }
     `;
-export type TUploadMutationFn = Apollo.MutationFunction<TUpload, TUploadVariables>;
-export function useUpload(baseOptions?: Apollo.MutationHookOptions<TUpload, TUploadVariables>) {
+export type TMUploadMutationFn = Apollo.MutationFunction<TMUpload, TMUploadVariables>;
+export function useMUpload(baseOptions?: Apollo.MutationHookOptions<TMUpload, TMUploadVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TUpload, TUploadVariables>(UploadDocument, options);
+        return Apollo.useMutation<TMUpload, TMUploadVariables>(MUploadDocument, options);
       }
-export type UploadHookResult = ReturnType<typeof useUpload>;
-export type UploadMutationResult = Apollo.MutationResult<TUpload>;
-export type UploadMutationOptions = Apollo.BaseMutationOptions<TUpload, TUploadVariables>;
-export const LoginDocument = gql`
-    mutation login($mail: String!, $password: String!) {
+export type MUploadHookResult = ReturnType<typeof useMUpload>;
+export type MUploadMutationResult = Apollo.MutationResult<TMUpload>;
+export type MUploadMutationOptions = Apollo.BaseMutationOptions<TMUpload, TMUploadVariables>;
+export const MLoginDocument = gql`
+    mutation MLogin($mail: String!, $password: String!) {
   login(mail: $mail, password: $password) {
     accessToken
   }
 }
     `;
-export type TLoginMutationFn = Apollo.MutationFunction<TLogin, TLoginVariables>;
-export function useLogin(baseOptions?: Apollo.MutationHookOptions<TLogin, TLoginVariables>) {
+export type TMLoginMutationFn = Apollo.MutationFunction<TMLogin, TMLoginVariables>;
+export function useMLogin(baseOptions?: Apollo.MutationHookOptions<TMLogin, TMLoginVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TLogin, TLoginVariables>(LoginDocument, options);
+        return Apollo.useMutation<TMLogin, TMLoginVariables>(MLoginDocument, options);
       }
-export type LoginHookResult = ReturnType<typeof useLogin>;
-export type LoginMutationResult = Apollo.MutationResult<TLogin>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<TLogin, TLoginVariables>;
-export const SignupDocument = gql`
-    mutation signup($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
+export type MLoginHookResult = ReturnType<typeof useMLogin>;
+export type MLoginMutationResult = Apollo.MutationResult<TMLogin>;
+export type MLoginMutationOptions = Apollo.BaseMutationOptions<TMLogin, TMLoginVariables>;
+export const MSignupDocument = gql`
+    mutation MSignup($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
   signup(
     mail: $mail
     password: $password
@@ -966,11 +1115,11 @@ export const SignupDocument = gql`
   }
 }
     `;
-export type TSignupMutationFn = Apollo.MutationFunction<TSignup, TSignupVariables>;
-export function useSignup(baseOptions?: Apollo.MutationHookOptions<TSignup, TSignupVariables>) {
+export type TMSignupMutationFn = Apollo.MutationFunction<TMSignup, TMSignupVariables>;
+export function useMSignup(baseOptions?: Apollo.MutationHookOptions<TMSignup, TMSignupVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TSignup, TSignupVariables>(SignupDocument, options);
+        return Apollo.useMutation<TMSignup, TMSignupVariables>(MSignupDocument, options);
       }
-export type SignupHookResult = ReturnType<typeof useSignup>;
-export type SignupMutationResult = Apollo.MutationResult<TSignup>;
-export type SignupMutationOptions = Apollo.BaseMutationOptions<TSignup, TSignupVariables>;
+export type MSignupHookResult = ReturnType<typeof useMSignup>;
+export type MSignupMutationResult = Apollo.MutationResult<TMSignup>;
+export type MSignupMutationOptions = Apollo.BaseMutationOptions<TMSignup, TMSignupVariables>;

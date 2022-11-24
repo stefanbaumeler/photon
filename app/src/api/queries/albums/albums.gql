@@ -1,4 +1,4 @@
-query AlbumsQuery {
+query QAlbums {
     albums {
         id
         title

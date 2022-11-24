@@ -5,12 +5,12 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import useAddToNewAlbum from '../hooks/add-to-new-album'
 import useAddToAlbum from '../hooks/add-to-album'
-import { useAlbumsQuery } from '@photon/shared'
+import { useQAlbums } from '@photon/shared'
 
 const Thumbnails = () => {
     const { t } = useTranslation()
 
-    const { data: albums } = useAlbumsQuery()
+    const { data: albums } = useQAlbums()
     const addToNewAlbum = useAddToNewAlbum()
     const addToAlbum = useAddToAlbum()
 

@@ -1,4 +1,4 @@
-mutation rotate($id: ID!) {
+mutation MRotate($id: ID!) {
     rotate(id: $id) {
         id
     }

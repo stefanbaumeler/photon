@@ -1,8 +1,8 @@
-import { useLogin, useSignup } from '@photon/shared'
+import { useMLogin, useMSignup } from '@photon/shared'
 
 const LoginPage = () => {
-    const [login] = useLogin()
-    const [signup] = useSignup()
+    const [login] = useMLogin()
+    const [signup] = useMSignup()
 
     const loginUser = () => {
         login({

@@ -1,5 +1,4 @@
-import { AlbumQueryDocument,
-    useSetAlbumCover as useSetAlbumCoverMutation } from '@photon/shared'
+import { QAlbumDocument, useMSetAlbumCover } from '@photon/shared'
 import { useContext } from 'react'
 import { SelectionContext } from '@/providers'
 
@@ -8,13 +7,13 @@ const useSetAlbumCover = (idAlbum: string, idMedium?: string) => {
 
     idMedium = idMedium || [...selection.selected][0]?.id
 
-    const [setAlbumCover] = useSetAlbumCoverMutation({
+    const [setAlbumCover] = useMSetAlbumCover({
         variables: {
             idAlbum,
             idMedium
         },
         refetchQueries: [{
-            query: AlbumQueryDocument,
+            query: QAlbumDocument,
             variables: {
                 id: idAlbum
             }

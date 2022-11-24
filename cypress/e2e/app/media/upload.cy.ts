@@ -23,7 +23,7 @@ describe('Upload', function () {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
@@ -33,7 +33,7 @@ describe('Upload', function () {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
@@ -43,13 +43,13 @@ describe('Upload', function () {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="teaser"]').should('have.length', 1)
     })
@@ -59,7 +59,7 @@ describe('Upload', function () {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="teaser"]').should('have.length', 3)
     })
@@ -69,7 +69,7 @@ describe('Upload', function () {
             force: true
         })
 
-        cy.wait('@MediaQuery')
+        cy.wait('@QMedia')
 
         cy.get('[data-cy="teaser"]').should('have.length', 1)
     })

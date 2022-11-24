@@ -21,7 +21,7 @@ interface DetailsContext {
 const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
-    const [medium, setMedium] = useState<TMedium>({})
+    const [medium, setMedium] = useState<TMedium>()
     const [collection, setCollection] = useState([])
     const [active, setActive] = useState(false)
     const [infos, setInfos] = useState(true)
@@ -60,7 +60,7 @@ const DetailsProvider = ({ children }: Props) => {
                 shallow: true
             }).then(() => {
                 setActive(false)
-                setMedium({})
+                setMedium(undefined)
             })
         },
         openInfos: () => {

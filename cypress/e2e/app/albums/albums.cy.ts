@@ -23,7 +23,7 @@ describe('Albums', function () {
         // Add to Album dialog
         cy.get('[data-cy="add-to"]').click()
         cy.get('[data-cy="add-to-album"]').should('be.visible')
-        cy.wait('@AlbumsQuery')
+        cy.wait('@QAlbums')
     }
 
     const makeEdits = function () {
@@ -66,7 +66,7 @@ describe('Albums', function () {
 
         cy.get('[data-cy="album-teaser"]').should('have.length', 4)
 
-        cy.wait('@deleteAlbum')
+        cy.wait('@MDeleteAlbum')
 
         cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).should('not.exist')
     })
@@ -103,7 +103,7 @@ describe('Albums', function () {
         cy.get('[data-cy="save-changes"]').click({
             force: true
         })
-        cy.wait('@updateAlbumTitle')
+        cy.wait('@MUpdateAlbumTitle')
         cy.get('[data-cy="album-title"]').should('have.value', albumTitle)
         cy.get('[data-cy="teaser"]').should('have.length', 6)
 

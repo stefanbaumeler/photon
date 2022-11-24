@@ -1,14 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { MediaQueryDocument, useUpload as useUploadMutation } from '@photon/shared'
+import { QMediaDocument, useMUpload } from '@photon/shared'
 
 const useUpload = () => {
     const [file, setFile] = useState<FileList>()
 
-    const [upload] = useUploadMutation({
+    const [upload] = useMUpload({
         variables: {
             file
         },
-        refetchQueries: [MediaQueryDocument]
+        refetchQueries: [QMediaDocument]
     })
 
     useEffect(() => {

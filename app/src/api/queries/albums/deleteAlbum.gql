@@ -1,4 +1,4 @@
-mutation deleteAlbum($ids: [ID]!) {
+mutation MDeleteAlbum($ids: [ID]!) {
     deleteAlbum(ids: $ids) {
         id
     }

@@ -1,4 +1,4 @@
-query AlbumMediaQuery($id: ID!) {
+query QAlbumMedia($id: ID!) {
     albumMedia(id: $id) {
         dateCreated
         dateModified

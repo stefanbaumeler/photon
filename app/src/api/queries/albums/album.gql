@@ -1,4 +1,4 @@
-query AlbumQuery($id: ID!) {
+query QAlbum($id: ID!) {
     album(id: $id) {
         id
         title

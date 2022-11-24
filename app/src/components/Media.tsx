@@ -17,7 +17,7 @@ const Media = ({ media }: Props) => {
     const layout = useContext(LayoutContext)
 
     useEffect(() => {
-        if (Object.keys(details.medium).length !== 0) {
+        if (details.medium && Object.keys(details.medium).length) {
             details.setMedium(media.find((m) => m.id === details.medium.id))
         }
     }, [media])

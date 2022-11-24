@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import { AlbumsQueryDocument, useCreateAlbum as useCreateAlbumMutation } from '@photon/shared'
+import { QAlbumsDocument, useMCreateAlbum } from '@photon/shared'
 
 const useCreateAlbum = () => {
     const router = useRouter()
 
-    const [createAlbumMutation] = useCreateAlbumMutation({
+    const [createAlbumMutation] = useMCreateAlbum({
         variables: {
             media: []
         },
-        refetchQueries: [AlbumsQueryDocument]
+        refetchQueries: [QAlbumsDocument]
     })
 
     return () => {

@@ -1,4 +1,4 @@
-import { TAlbum, useAlbumMediaQuery, useMediumQuery } from '@photon/shared'
+import { TAlbum, useQAlbumMedia, useQMedium } from '@photon/shared'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -16,7 +16,7 @@ const Album = ({ album }: Props) => {
 
     const [moreActive, setMoreActive] = useState(false)
 
-    const albumMediaQuery = useAlbumMediaQuery({
+    const albumMediaQuery = useQAlbumMedia({
         variables: {
             id: album.id
         }
@@ -24,7 +24,7 @@ const Album = ({ album }: Props) => {
 
     const deleteAlbumDialog = useDeleteAlbumDialog(album.id)
 
-    const thumbnailQuery = useMediumQuery({
+    const thumbnailQuery = useQMedium({
         variables: {
             id: `${album.idMedium}`
         }

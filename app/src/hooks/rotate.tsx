@@ -1,16 +1,15 @@
 import { useContext } from 'react'
 import { DetailsContext } from '@/providers'
-import { MediaQueryDocument,
-    useRotate as useRotateMutation } from '@photon/shared'
+import { QMediaDocument, useMRotate } from '@photon/shared'
 
 const useRotate = (idMedium: string) => {
     const details = useContext(DetailsContext)
 
-    const [rotate] = useRotateMutation({
+    const [rotate] = useMRotate({
         variables: {
             id: idMedium
         },
-        refetchQueries: [MediaQueryDocument],
+        refetchQueries: [QMediaDocument],
         awaitRefetchQueries: true
     })
 

@@ -5,14 +5,7 @@ import { DetailsProvider, EditContext, SelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
-import { AlbumMediaQueryDocument,
-    AlbumQueryDocument,
-    TAlbum,
-    TMedium,
-    useAlbumMediaQuery,
-    useAlbumQuery,
-    useRemoveFromAlbum,
-    useUpdateAlbumTitle } from '@photon/shared'
+import { QAlbumMediaDocument, QAlbumDocument, TAlbum, TMedium, useQAlbumMedia, useQAlbum, useMRemoveFromAlbum, useMUpdateAlbumTitle } from '@photon/shared'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
@@ -34,38 +27,38 @@ const AlbumPage = () => {
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
 
-    const albumQuery = useAlbumQuery({
+    const albumQuery = useQAlbum({
         variables: {
             id
         }
     })
 
-    const albumMediaQuery = useAlbumMediaQuery({
+    const albumMediaQuery = useQAlbumMedia({
         variables: {
             id
         }
     })
 
-    const [removeFromAlbum] = useRemoveFromAlbum({
+    const [removeFromAlbum] = useMRemoveFromAlbum({
         variables: {
             idAlbum: `${id}`,
             media: [...selection.selected].map((s) => s.id)
         },
         refetchQueries: [{
-            query: AlbumMediaQueryDocument,
+            query: QAlbumMediaDocument,
             variables: {
                 id
             }
         }]
     })
 
-    const [updateAlbumTitle] = useUpdateAlbumTitle({
+    const [updateAlbumTitle] = useMUpdateAlbumTitle({
         variables: {
             id: `${id}`,
             title
         },
         refetchQueries: [{
-            query: AlbumQueryDocument,
+            query: QAlbumDocument,
             variables: {
                 id
             }

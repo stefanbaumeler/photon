@@ -101,6 +101,10 @@ const Details = () => {
         // ['rotated', rotated]
     ])
 
+    if (!details.medium || !Object.keys(details.medium).length) {
+        return <></>
+    }
+
     const previewClasses = bem('details__preview', [
         ['video', details.medium.mimetype?.startsWith('video')],
         ['first', details.collection.indexOf(details.medium) === 0],
@@ -135,10 +139,6 @@ const Details = () => {
         if (details.medium.mimetype?.startsWith('image')) {
             return <VideoMeta />
         }
-    }
-
-    if (!details.medium || !Object.keys(details.medium).length) {
-        return <></>
     }
 
     return <div

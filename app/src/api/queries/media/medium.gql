@@ -1,4 +1,4 @@
-query MediumQuery($id: ID!) {
+query QMedium($id: ID!) {
     medium(id: $id) {
         dateCreated
         dateModified

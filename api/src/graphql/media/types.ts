@@ -24,7 +24,7 @@ export default gql`
         dateModified: String
         dateModifiedStatus: String
         dateTaken: String
-        id: ID!
+        id: ID
         filenameDisk: String
         filenameDownload: String
         title: String

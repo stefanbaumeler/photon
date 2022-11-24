@@ -2,7 +2,7 @@ import { TAlbum } from '@photon/shared'
 import { Album } from '@/components'
 
 type Props = {
-    albums: TAlbum[]
+    albums: Partial<TAlbum>[]
 }
 
 const Albums = ({ albums }: Props) => {

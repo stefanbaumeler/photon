@@ -1,9 +1,9 @@
 import Layout from '@/layouts/layout'
 import { Albums, Uploader, Dialog } from '@/components'
-import { useAlbumsQuery } from '@photon/shared'
+import { useQAlbums } from '@photon/shared'
 
 const AlbumsPage = () => {
-    const albums = useAlbumsQuery()
+    const albums = useQAlbums()
 
     return <Layout>
         <section>

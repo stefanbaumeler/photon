@@ -1,4 +1,4 @@
-mutation setMediaStatus($media: [ID]!, $status: String) {
+mutation MSetMediaStatus($media: [ID]!, $status: String) {
     setMediaStatus(media: $media, status: $status) {
         id
     }

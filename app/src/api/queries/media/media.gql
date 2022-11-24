@@ -1,4 +1,4 @@
-query MediaQuery($status: String) {
+query QMedia($status: String) {
     media(status: $status) {
         dateCreated
         dateModified
