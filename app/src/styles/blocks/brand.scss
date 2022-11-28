@@ -1,7 +1,6 @@
 @mixin brand-root {
     display: flex;
     align-items: center;
-    width: #{$sidebar-width - 10};
 }
 
 @mixin brand-logo {

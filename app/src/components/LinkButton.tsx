@@ -1,25 +1,21 @@
-import Icon from '@mdi/react'
 import Tippy from '@tippyjs/react'
 import { forwardRef, ReactElement, Ref } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
-import bem from '@/util/bem'
 
 type Props = {
     onClick?: () => void
     hint?: string
     hintPlacement?: Placement
     label?: string
+    prefix?: string
+    suffix?: string
     href?: string
-    white?: boolean
-    icon: string
-    solid?: boolean
     cy?: string
-    small?: boolean
 }
 
-const IconButton = ({
-    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, cy, small = false
+const LinkButton = ({
+    onClick, hint, hintPlacement, label, prefix, suffix, href, cy
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -36,12 +32,7 @@ const IconButton = ({
         </>
     }
 
-    const linkClasses = bem('icon-button', [
-        ['white', white],
-        ['solid', solid],
-        ['small', small],
-        ['label', !!label?.length]
-    ])
+    const linkClasses = 'link-button__link'
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
         if (href) {
@@ -71,17 +62,25 @@ const IconButton = ({
 
     const ButtonOrLinkWithRef = forwardRef(ButtonOrLink)
 
+    const Prefix = () => prefix ? <span>
+        {`${prefix} `}
+    </span> : <></>
+
+    const Suffix = () => suffix ? <span>
+        {`${prefix} `}
+    </span> : <></>
+
     return <ConditionalTip>
-        <ButtonOrLinkWithRef>
-            <>
-                <Icon
-                    path={icon}
-                    size={small ? .75 : 1}
-                />
-                {label}
-            </>
-        </ButtonOrLinkWithRef>
+        <div className="link-button">
+            <Prefix />
+            <ButtonOrLinkWithRef>
+                <>
+                    {label}
+                </>
+            </ButtonOrLinkWithRef>
+            <Suffix />
+        </div>
     </ConditionalTip>
 }
 
-export default IconButton
+export default LinkButton

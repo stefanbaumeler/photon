@@ -1,0 +1,133 @@
+@mixin login-root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: $color-secondary-highlight;
+}
+
+@mixin login-container {
+    box-shadow: 0 0 32px rgba($color-secondary, .25);
+    display: flex;
+    width: calc(100vw - 256px);
+    height: calc(100vh - 256px);
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 1200px;
+
+    @at-root .login--reset & {
+        max-width: 500px;
+        height: auto;
+    }
+}
+
+@mixin login-content-container {
+    padding: 64px;
+    background-color: rgba($color-white, .9);
+    width: 50%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @at-root .login--reset & {
+        width: 100%;
+    }
+}
+
+@mixin login-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 640px;
+}
+
+@mixin login-image {
+    width: 50%;
+    background-color: $color-secondary-light;
+}
+
+@mixin login-header {
+    padding-bottom: 32px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+@mixin login-hint {
+    color: $color-gray;
+    text-align: center;
+}
+
+@mixin login-title {
+    width: 100%;
+    text-align: center;
+    color: $color-gray-dark;
+}
+
+@mixin login-footer {
+    display: flex;
+    gap: 8px;
+    padding-top: 32px;
+    justify-content: space-between;
+    align-items: center;
+
+    > *:only-child {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@mixin login-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+}
+
+@mixin login {
+    .login {
+        @include login-root;
+
+        &__container {
+            @include login-container;
+        }
+
+        &__content-container {
+            @include login-content-container;
+        }
+
+        &__content {
+            @include login-content;
+        }
+
+        &__image {
+            @include login-image;
+        }
+
+        &__header {
+            @include login-header;
+        }
+
+        &__hint {
+            @include login-hint;
+        }
+
+        &__title {
+            @include login-title;
+        }
+
+        &__footer {
+            @include login-footer;
+        }
+
+        &__links {
+            @include login-links;
+        }
+    }
+}
+
+@include login;

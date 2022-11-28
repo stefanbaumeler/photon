@@ -18,10 +18,12 @@ export default gql`
 
     type Token {
         accessToken: String!
+        refreshToken: String!
     }
 
     type Mutation {
-        login(mail: String!, password: String!): Token
-        signup(mail: String!, password: String!, firstName: String!, lastName: String!): Token
+        signIn(mail: String!, password: String!): Token
+        signOut: Boolean
+        signUp(mail: String!, password: String!, firstName: String!, lastName: String!): Token
     }
 `

@@ -1,10 +1,10 @@
-mutation MSignup (
+mutation MSignUp (
     $mail: String!
     $password: String!
     $firstName: String!
     $lastName: String!
 ) {
-    signup(
+    signUp(
         mail: $mail
         password: $password
         firstName: $firstName

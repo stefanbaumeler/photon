@@ -10,11 +10,22 @@
     height: $searchbar-height;
     box-sizing: border-box;
     width: 100%;
+    justify-content: space-between;
+}
+
+@mixin searchbar-section {
+    &--left {
+        width: #{$sidebar-width - 10};
+    }
 }
 
 @mixin searchbar {
     .searchbar {
         @include searchbar-root;
+
+        &__section {
+            @include searchbar-section;
+        }
     }
 }
 

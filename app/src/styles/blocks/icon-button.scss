@@ -1,0 +1,54 @@
+@mixin icon-button-root {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color .25s;
+    color: inherit;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 14px;
+
+    &:hover {
+        background-color: rgba($color-gray, .25);
+    }
+
+    &--white {
+        color: $color-white;
+    }
+
+    &--solid {
+        background-color: rgba($color-gray, .125);
+    }
+
+    &--small {
+        width: 32px;
+        height: 32px;
+    }
+
+    &--label {
+        width: auto;
+        border-radius: 4px;
+        padding: 0 8px;
+        margin: 0 4px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+@mixin icon-button {
+    .icon-button {
+        @include icon-button-root;
+    }
+}
+
+@include icon-button;

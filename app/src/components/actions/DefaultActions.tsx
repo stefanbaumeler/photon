@@ -9,6 +9,7 @@ import useUpload from '@/hooks/upload'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import useEmptyTrashDialog from '@/dialogs/empty-trash'
+import { useMSignOut } from '@photon/shared'
 
 const DefaultActions = () => {
     const { t } = useTranslation()
@@ -37,12 +38,25 @@ const DefaultActions = () => {
         layout.setLayout(layout.nextLayout)
     }
 
+    const [out] = useMSignOut()
+
+    const signOut = () => {
+        out().then(() => {
+            router.push('/login')
+        })
+    }
+
     if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF || nav.pathname === '/albums/[idAlbum]') {
         return <></>
     }
 
     const RegularActions = () => {
         return <>
+            <IconButton
+                hint={t(ETrans.SIGN_OUT)}
+                icon={Icons.mdiLogout}
+                onClick={signOut}
+            />
             <IconButton
                 hint={layoutProps.name}
                 icon={layoutProps.icon}

@@ -1,9 +1,7 @@
-import Icon from '@mdi/react'
 import Tippy from '@tippyjs/react'
 import { forwardRef, ReactElement, Ref } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
-import bem from '@/util/bem'
 
 type Props = {
     onClick?: () => void
@@ -11,15 +9,11 @@ type Props = {
     hintPlacement?: Placement
     label?: string
     href?: string
-    white?: boolean
-    icon: string
-    solid?: boolean
     cy?: string
-    small?: boolean
 }
 
-const IconButton = ({
-    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, cy, small = false
+const Button = ({
+    onClick, hint, hintPlacement, label, href, cy
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -36,12 +30,7 @@ const IconButton = ({
         </>
     }
 
-    const linkClasses = bem('icon-button', [
-        ['white', white],
-        ['solid', solid],
-        ['small', small],
-        ['label', !!label?.length]
-    ])
+    const linkClasses = 'button'
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
         if (href) {
@@ -74,14 +63,10 @@ const IconButton = ({
     return <ConditionalTip>
         <ButtonOrLinkWithRef>
             <>
-                <Icon
-                    path={icon}
-                    size={small ? .75 : 1}
-                />
                 {label}
             </>
         </ButtonOrLinkWithRef>
     </ConditionalTip>
 }
 
-export default IconButton
+export default Button

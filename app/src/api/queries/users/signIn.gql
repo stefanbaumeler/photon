@@ -1,8 +1,8 @@
-mutation MLogin (
+mutation MSignIn (
     $mail: String!
     $password: String!
 ) {
-    login(mail: $mail, password: $password) {
+    signIn(mail: $mail, password: $password) {
         accessToken
     }
 }

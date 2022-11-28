@@ -81,12 +81,13 @@ export type TMutation = {
   deleteAlbum?: Maybe<Array<Maybe<TAlbum>>>;
   deleteMedia?: Maybe<Array<Maybe<TMedium>>>;
   emptyTrash?: Maybe<Array<Maybe<TMedium>>>;
-  login?: Maybe<TToken>;
   removeFromAlbum?: Maybe<TAlbum>;
   rotate?: Maybe<TMedium>;
   setAlbumCover?: Maybe<TAlbum>;
   setMediaStatus?: Maybe<Array<Maybe<TMedium>>>;
-  signup?: Maybe<TToken>;
+  signIn?: Maybe<TToken>;
+  signOut?: Maybe<Scalars['Boolean']>;
+  signUp?: Maybe<TToken>;
   updateAlbumTitle?: Maybe<TAlbum>;
   upload: Array<Maybe<TFile>>;
 };
@@ -114,12 +115,6 @@ export type TMutationDeleteMediaArgs = {
 };
 
 
-export type TMutationLoginArgs = {
-  mail: Scalars['String'];
-  password: Scalars['String'];
-};
-
-
 export type TMutationRemoveFromAlbumArgs = {
   idAlbum: Scalars['ID'];
   media: Array<Scalars['ID']>;
@@ -143,7 +138,13 @@ export type TMutationSetMediaStatusArgs = {
 };
 
 
-export type TMutationSignupArgs = {
+export type TMutationSignInArgs = {
+  mail: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type TMutationSignUpArgs = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   mail: Scalars['String'];
@@ -200,6 +201,7 @@ export type TQueryUserArgs = {
 export type TToken = {
   __typename?: 'Token';
   accessToken: Scalars['String'];
+  refreshToken: Scalars['String'];
 };
 
 export type TUser = {
@@ -385,12 +387,13 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   deleteAlbum?: Resolver<Maybe<Array<Maybe<TResolversTypes['Album']>>>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
   deleteMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
   emptyTrash?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
-  login?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationLoginArgs, 'mail' | 'password'>>;
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
   rotate?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
   setAlbumCover?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationSetAlbumCoverArgs, 'idAlbum' | 'idMedium'>>;
   setMediaStatus?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media'>>;
-  signup?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignupArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
+  signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
+  signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
+  signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
   updateAlbumTitle?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumTitleArgs, 'id' | 'title'>>;
   upload?: Resolver<Array<Maybe<TResolversTypes['File']>>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'file'>>;
 };
@@ -407,6 +410,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
 
 export type TTokenResolvers<ContextType = any, ParentType extends TResolversParentTypes['Token'] = TResolversParentTypes['Token']> = {
   accessToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  refreshToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -697,21 +701,29 @@ export type TMUpload = (
   )>> }
 );
 
-export type TMLoginVariables = Exact<{
+export type TMSignInVariables = Exact<{
   mail: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type TMLogin = (
+export type TMSignIn = (
   { __typename?: 'Mutation' }
-  & { login?: Maybe<(
+  & { signIn?: Maybe<(
     { __typename?: 'Token' }
     & Pick<TToken, 'accessToken'>
   )> }
 );
 
-export type TMSignupVariables = Exact<{
+export type TMSignOutVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TMSignOut = (
+  { __typename?: 'Mutation' }
+  & Pick<TMutation, 'signOut'>
+);
+
+export type TMSignUpVariables = Exact<{
   mail: Scalars['String'];
   password: Scalars['String'];
   firstName: Scalars['String'];
@@ -719,9 +731,9 @@ export type TMSignupVariables = Exact<{
 }>;
 
 
-export type TMSignup = (
+export type TMSignUp = (
   { __typename?: 'Mutation' }
-  & { signup?: Maybe<(
+  & { signUp?: Maybe<(
     { __typename?: 'Token' }
     & Pick<TToken, 'accessToken'>
   )> }
@@ -1088,24 +1100,37 @@ export function useMUpload(baseOptions?: Apollo.MutationHookOptions<TMUpload, TM
 export type MUploadHookResult = ReturnType<typeof useMUpload>;
 export type MUploadMutationResult = Apollo.MutationResult<TMUpload>;
 export type MUploadMutationOptions = Apollo.BaseMutationOptions<TMUpload, TMUploadVariables>;
-export const MLoginDocument = gql`
-    mutation MLogin($mail: String!, $password: String!) {
-  login(mail: $mail, password: $password) {
+export const MSignInDocument = gql`
+    mutation MSignIn($mail: String!, $password: String!) {
+  signIn(mail: $mail, password: $password) {
     accessToken
   }
 }
     `;
-export type TMLoginMutationFn = Apollo.MutationFunction<TMLogin, TMLoginVariables>;
-export function useMLogin(baseOptions?: Apollo.MutationHookOptions<TMLogin, TMLoginVariables>) {
+export type TMSignInMutationFn = Apollo.MutationFunction<TMSignIn, TMSignInVariables>;
+export function useMSignIn(baseOptions?: Apollo.MutationHookOptions<TMSignIn, TMSignInVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMLogin, TMLoginVariables>(MLoginDocument, options);
+        return Apollo.useMutation<TMSignIn, TMSignInVariables>(MSignInDocument, options);
       }
-export type MLoginHookResult = ReturnType<typeof useMLogin>;
-export type MLoginMutationResult = Apollo.MutationResult<TMLogin>;
-export type MLoginMutationOptions = Apollo.BaseMutationOptions<TMLogin, TMLoginVariables>;
-export const MSignupDocument = gql`
-    mutation MSignup($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
-  signup(
+export type MSignInHookResult = ReturnType<typeof useMSignIn>;
+export type MSignInMutationResult = Apollo.MutationResult<TMSignIn>;
+export type MSignInMutationOptions = Apollo.BaseMutationOptions<TMSignIn, TMSignInVariables>;
+export const MSignOutDocument = gql`
+    mutation MSignOut {
+  signOut
+}
+    `;
+export type TMSignOutMutationFn = Apollo.MutationFunction<TMSignOut, TMSignOutVariables>;
+export function useMSignOut(baseOptions?: Apollo.MutationHookOptions<TMSignOut, TMSignOutVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TMSignOut, TMSignOutVariables>(MSignOutDocument, options);
+      }
+export type MSignOutHookResult = ReturnType<typeof useMSignOut>;
+export type MSignOutMutationResult = Apollo.MutationResult<TMSignOut>;
+export type MSignOutMutationOptions = Apollo.BaseMutationOptions<TMSignOut, TMSignOutVariables>;
+export const MSignUpDocument = gql`
+    mutation MSignUp($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
+  signUp(
     mail: $mail
     password: $password
     firstName: $firstName
@@ -1115,11 +1140,11 @@ export const MSignupDocument = gql`
   }
 }
     `;
-export type TMSignupMutationFn = Apollo.MutationFunction<TMSignup, TMSignupVariables>;
-export function useMSignup(baseOptions?: Apollo.MutationHookOptions<TMSignup, TMSignupVariables>) {
+export type TMSignUpMutationFn = Apollo.MutationFunction<TMSignUp, TMSignUpVariables>;
+export function useMSignUp(baseOptions?: Apollo.MutationHookOptions<TMSignUp, TMSignUpVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMSignup, TMSignupVariables>(MSignupDocument, options);
+        return Apollo.useMutation<TMSignUp, TMSignUpVariables>(MSignUpDocument, options);
       }
-export type MSignupHookResult = ReturnType<typeof useMSignup>;
-export type MSignupMutationResult = Apollo.MutationResult<TMSignup>;
-export type MSignupMutationOptions = Apollo.BaseMutationOptions<TMSignup, TMSignupVariables>;
+export type MSignUpHookResult = ReturnType<typeof useMSignUp>;
+export type MSignUpMutationResult = Apollo.MutationResult<TMSignUp>;
+export type MSignUpMutationOptions = Apollo.BaseMutationOptions<TMSignUp, TMSignUpVariables>;

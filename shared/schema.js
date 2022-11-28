@@ -15,7 +15,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.useMSignup = exports.MSignupDocument = exports.useMLogin = exports.MLoginDocument = exports.useMUpload = exports.MUploadDocument = exports.useMSetMediaStatus = exports.MSetMediaStatusDocument = exports.useMRotate = exports.MRotateDocument = exports.useQMediumLazyQuery = exports.useQMedium = exports.QMediumDocument = exports.useQMediaLazyQuery = exports.useQMedia = exports.QMediaDocument = exports.useMEmptyTrash = exports.MEmptyTrashDocument = exports.useMDeleteMedia = exports.MDeleteMediaDocument = exports.useMUpdateAlbumTitle = exports.MUpdateAlbumTitleDocument = exports.useMSetAlbumCover = exports.MSetAlbumCoverDocument = exports.useMRemoveFromAlbum = exports.MRemoveFromAlbumDocument = exports.useMDeleteAlbum = exports.MDeleteAlbumDocument = exports.useMCreateAlbum = exports.MCreateAlbumDocument = exports.useQAlbumsLazyQuery = exports.useQAlbums = exports.QAlbumsDocument = exports.useQAlbumMediaLazyQuery = exports.useQAlbumMedia = exports.QAlbumMediaDocument = exports.useQAlbumLazyQuery = exports.useQAlbum = exports.QAlbumDocument = exports.useMAddToAlbum = exports.MAddToAlbumDocument = void 0;
+exports.useMSignUp = exports.MSignUpDocument = exports.useMSignOut = exports.MSignOutDocument = exports.useMSignIn = exports.MSignInDocument = exports.useMUpload = exports.MUploadDocument = exports.useMSetMediaStatus = exports.MSetMediaStatusDocument = exports.useMRotate = exports.MRotateDocument = exports.useQMediumLazyQuery = exports.useQMedium = exports.QMediumDocument = exports.useQMediaLazyQuery = exports.useQMedia = exports.QMediaDocument = exports.useMEmptyTrash = exports.MEmptyTrashDocument = exports.useMDeleteMedia = exports.MDeleteMediaDocument = exports.useMUpdateAlbumTitle = exports.MUpdateAlbumTitleDocument = exports.useMSetAlbumCover = exports.MSetAlbumCoverDocument = exports.useMRemoveFromAlbum = exports.MRemoveFromAlbumDocument = exports.useMDeleteAlbum = exports.MDeleteAlbumDocument = exports.useMCreateAlbum = exports.MCreateAlbumDocument = exports.useQAlbumsLazyQuery = exports.useQAlbums = exports.QAlbumsDocument = exports.useQAlbumMediaLazyQuery = exports.useQAlbumMedia = exports.QAlbumMediaDocument = exports.useQAlbumLazyQuery = exports.useQAlbum = exports.QAlbumDocument = exports.useMAddToAlbum = exports.MAddToAlbumDocument = void 0;
 var client_1 = require("@apollo/client");
 var Apollo = require("@apollo/client");
 var defaultOptions = {};
@@ -140,16 +140,22 @@ function useMUpload(baseOptions) {
     return Apollo.useMutation(exports.MUploadDocument, options);
 }
 exports.useMUpload = useMUpload;
-exports.MLoginDocument = (0, client_1.gql)(templateObject_17 || (templateObject_17 = __makeTemplateObject(["\n    mutation MLogin($mail: String!, $password: String!) {\n  login(mail: $mail, password: $password) {\n    accessToken\n  }\n}\n    "], ["\n    mutation MLogin($mail: String!, $password: String!) {\n  login(mail: $mail, password: $password) {\n    accessToken\n  }\n}\n    "])));
-function useMLogin(baseOptions) {
+exports.MSignInDocument = (0, client_1.gql)(templateObject_17 || (templateObject_17 = __makeTemplateObject(["\n    mutation MSignIn($mail: String!, $password: String!) {\n  signIn(mail: $mail, password: $password) {\n    accessToken\n  }\n}\n    "], ["\n    mutation MSignIn($mail: String!, $password: String!) {\n  signIn(mail: $mail, password: $password) {\n    accessToken\n  }\n}\n    "])));
+function useMSignIn(baseOptions) {
     var options = __assign(__assign({}, defaultOptions), baseOptions);
-    return Apollo.useMutation(exports.MLoginDocument, options);
+    return Apollo.useMutation(exports.MSignInDocument, options);
 }
-exports.useMLogin = useMLogin;
-exports.MSignupDocument = (0, client_1.gql)(templateObject_18 || (templateObject_18 = __makeTemplateObject(["\n    mutation MSignup($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {\n  signup(\n    mail: $mail\n    password: $password\n    firstName: $firstName\n    lastName: $lastName\n  ) {\n    accessToken\n  }\n}\n    "], ["\n    mutation MSignup($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {\n  signup(\n    mail: $mail\n    password: $password\n    firstName: $firstName\n    lastName: $lastName\n  ) {\n    accessToken\n  }\n}\n    "])));
-function useMSignup(baseOptions) {
+exports.useMSignIn = useMSignIn;
+exports.MSignOutDocument = (0, client_1.gql)(templateObject_18 || (templateObject_18 = __makeTemplateObject(["\n    mutation MSignOut {\n  signOut\n}\n    "], ["\n    mutation MSignOut {\n  signOut\n}\n    "])));
+function useMSignOut(baseOptions) {
     var options = __assign(__assign({}, defaultOptions), baseOptions);
-    return Apollo.useMutation(exports.MSignupDocument, options);
+    return Apollo.useMutation(exports.MSignOutDocument, options);
 }
-exports.useMSignup = useMSignup;
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9, templateObject_10, templateObject_11, templateObject_12, templateObject_13, templateObject_14, templateObject_15, templateObject_16, templateObject_17, templateObject_18;
+exports.useMSignOut = useMSignOut;
+exports.MSignUpDocument = (0, client_1.gql)(templateObject_19 || (templateObject_19 = __makeTemplateObject(["\n    mutation MSignUp($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {\n  signUp(\n    mail: $mail\n    password: $password\n    firstName: $firstName\n    lastName: $lastName\n  ) {\n    accessToken\n  }\n}\n    "], ["\n    mutation MSignUp($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {\n  signUp(\n    mail: $mail\n    password: $password\n    firstName: $firstName\n    lastName: $lastName\n  ) {\n    accessToken\n  }\n}\n    "])));
+function useMSignUp(baseOptions) {
+    var options = __assign(__assign({}, defaultOptions), baseOptions);
+    return Apollo.useMutation(exports.MSignUpDocument, options);
+}
+exports.useMSignUp = useMSignUp;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9, templateObject_10, templateObject_11, templateObject_12, templateObject_13, templateObject_14, templateObject_15, templateObject_16, templateObject_17, templateObject_18, templateObject_19;

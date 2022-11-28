@@ -1,0 +1,87 @@
+@mixin checkbox-root {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @at-root {
+        .input + &,
+        .checkbox + & {
+            padding-top: 32px;
+        }
+    }
+}
+
+@mixin checkbox-label {
+    width: 100%;
+    font-size: 14px;
+    color: $color-gray;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+@mixin checkbox-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+@mixin checkbox-box {
+    width: 24px;
+    height: 24px;
+    background: $color-secondary-highlight;
+    box-shadow: inset 0 0 0 1px $color-secondary-light;
+    border-radius: 4px;
+    pointer-events: none;
+    margin-left: -24px;
+    position: relative;
+    transition: box-shadow .125s;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        box-shadow: inset -5px -5px $color-secondary;
+        rotate: 45deg;
+        top: -10%;
+        left: 25%;
+        scale: .75;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .125s;
+    }
+
+    @at-root .checkbox__input:checked + &:before {
+        opacity: 1;
+    }
+
+    @at-root .checkbox__input:focus + & {
+        box-shadow: inset 0 0 0 1px $color-secondary;
+    }
+
+    @at-root .checkbox__label:hover ~ & {
+        box-shadow: inset 0 0 0 1px $color-secondary;
+    }
+}
+
+@mixin checkbox {
+    .checkbox {
+        @include checkbox-root;
+
+        &__label {
+            @include checkbox-label;
+        }
+
+        &__input {
+            @include checkbox-input;
+        }
+
+        &__box {
+            @include checkbox-box;
+        }
+    }
+}
+
+@include checkbox;

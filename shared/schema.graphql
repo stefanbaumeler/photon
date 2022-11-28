@@ -38,7 +38,7 @@ type Medium {
     filenameDisk: String
     filenameDownload: String
     hash: String
-    id: ID!
+    id: ID
     lat: Float
     lng: Float
     meta: Meta
@@ -55,12 +55,13 @@ type Mutation {
     deleteAlbum(ids: [ID]!): [Album]
     deleteMedia(ids: [ID]!): [Medium]
     emptyTrash: [Medium]
-    login(mail: String!, password: String!): Token
     removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album
     rotate(id: ID!): Medium
     setAlbumCover(idAlbum: ID!, idMedium: ID!): Album
     setMediaStatus(media: [ID]!, status: String): [Medium]
-    signup(firstName: String!, lastName: String!, mail: String!, password: String!): Token
+    signIn(mail: String!, password: String!): Token
+    signOut: Boolean
+    signUp(firstName: String!, lastName: String!, mail: String!, password: String!): Token
     updateAlbumTitle(id: ID!, title: String!): Album
     upload(file: [Upload]!): [File]!
 }
@@ -77,6 +78,7 @@ type Query {
 
 type Token {
     accessToken: String!
+    refreshToken: String!
 }
 
 type User {

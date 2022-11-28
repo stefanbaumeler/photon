@@ -1,0 +1,31 @@
+@mixin link-button-root {
+    color: $color-gray;
+    font-size: 14px;
+}
+
+@mixin link-button-prefix {
+
+}
+
+@mixin link-button-link {
+    color: $color-secondary;
+
+    &:focus,
+    &:hover {
+        outline: none;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+@mixin link-button {
+    .link-button {
+        @include link-button-root;
+
+        &__link {
+            @include link-button-link;
+        }
+    }
+}
+
+@include link-button;
