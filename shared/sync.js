@@ -2,6 +2,11 @@ module.exports = {
     overwrite: true,
     schema: 'http://localhost:2000/graphql',
     documents: '../**/*.{gql,graphql}',
+    config: {
+        scalars: {
+            TDate: Date,
+        }
+    },
     generates: {
         './schema.ts': {
             plugins: [
@@ -18,7 +23,7 @@ module.exports = {
                 useTypeImports: true,
                 withMutationFn: true,
                 typesPrefix: 'T',
-                addDocBlocks: false,
+                addDocBlocks: true,
                 dedupeFragments: true,
                 omitOperationSuffix: true,
                 namingConvention: {

@@ -20,11 +20,11 @@ export default gql`
     union Meta = VideoMeta | ImageMeta
 
     type Medium {
-        dateCreated: String
-        dateModified: String
-        dateModifiedStatus: String
-        dateTaken: String
-        id: ID
+        id: ID!
+        dateCreated: Date
+        dateModified: Date
+        dateModifiedStatus: Date
+        dateTaken: Date
         filenameDisk: String
         filenameDownload: String
         title: String
@@ -40,15 +40,19 @@ export default gql`
     }
 
     type Query {
-        media(status: String): [Medium]
-        medium(id: ID!): Medium
+        media(status: String): [Medium!]!
+        medium(id: ID!): Medium!
+    }
+
+    type Count {
+        count: Int
     }
 
     type Mutation {
-        deleteMedia(ids: [ID]!): [Medium]
-        rotate(id: ID!): Medium
-        setMediaStatus(media: [ID]!, status: String): [Medium]
+        deleteMedia(ids: [ID]!): [Medium!]!
+        rotate(id: ID!): Medium!
+        setMediaStatus(media: [ID]!, status: String): Count
         upload(file: [Upload]!): [File]!
-        emptyTrash: [Medium]
+        emptyTrash: [Medium!]!
     }
 `

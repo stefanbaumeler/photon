@@ -1,14 +1,17 @@
-import { Knex } from 'knex'
 import { predefinedUserUUIDs } from '../helpers/ids'
 import UsersService from '../../services/users'
 import { TUser } from '@photon/shared'
 
-export async function seed (knex: Knex) {
-    await knex('users').del()
+export default async (truncateOnly = false) => {
+    const service = new UsersService()
 
-    const usersService = new UsersService()
+    await service.truncate()
 
-    const fakeUsers: Partial<TUser>[] = []
+    if (truncateOnly) {
+        return
+    }
+
+    const fakeUsers: Pick<TUser, 'id' | 'firstName' | 'lastName' | 'mail' | 'password'>[] = []
 
     for (let i = 0; i < 1; i++) {
         fakeUsers.push({
@@ -20,5 +23,5 @@ export async function seed (knex: Knex) {
         })
     }
 
-    await usersService.createMany(fakeUsers)
+    await service.createMany(fakeUsers)
 }

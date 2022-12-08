@@ -6,6 +6,7 @@ const useCreateAlbum = () => {
 
     const [createAlbumMutation] = useMCreateAlbum({
         variables: {
+            album: {},
             media: []
         },
         refetchQueries: [QAlbumsDocument]

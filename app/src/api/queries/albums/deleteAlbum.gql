@@ -1,5 +1,5 @@
 mutation MDeleteAlbum($ids: [ID]!) {
     deleteAlbum(ids: $ids) {
-        id
+        count
     }
 }

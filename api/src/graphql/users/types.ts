@@ -3,8 +3,8 @@ import { gql } from 'apollo-server-express'
 export default gql`
     type User {
         id: ID!
-        dateCreated: String!
-        dateModified: String!
+        dateCreated: Date!
+        dateModified: Date!
         mail: String!
         password: String!
         firstName: String!
@@ -12,8 +12,8 @@ export default gql`
     }
 
     type Query {
-        users: [User]
-        user(id: ID!): User
+        users: [User!]!
+        user(id: ID!): User!
     }
 
     type Token {

@@ -20,7 +20,7 @@ const Thumbnails = () => {
         const albumThumbnails = albums?.albums.map<TThumbnail>((album) => ({
             type: EThumbnailType.DEFAULT,
             title: album.title,
-            idMedium: album.idMedium,
+            idMedium: album.cover.id,
             onClick: () => addToAlbum(album.id)
         })) || []
 

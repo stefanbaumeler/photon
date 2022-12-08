@@ -2,10 +2,10 @@ import sharp from 'sharp'
 import ExifReader from 'exifreader'
 import path from 'path'
 import { promises as fsPromises } from 'fs'
-import MediaInfoFactory, { FormatType, ReadChunkFunc, Result }  from 'mediainfo.js'
+import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { type MediaInfo, ResultObject, Track } from 'mediainfo.js/dist/types'
-// import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
 import { TMedium, TVideoMeta, TImageMeta } from '@photon/shared'
+import { DeepPartial } from '../types'
 
 export const hash = (str: string, seed = 0) => {
     // https://stackoverflow.com/a/52171480
@@ -25,6 +25,7 @@ export const hash = (str: string, seed = 0) => {
 }
 
 const isValidVideoMetadata = (result: ResultObject) => {
+    console.log(result)
     if (typeof result.media === 'undefined') {
         return false
     }
@@ -125,8 +126,8 @@ const getDuration = (result: ResultObject) => {
     return parseInt(durations[0], 10)
 }
 
-const handleImage = async (filePath: string) => {
-    return await ExifReader.load(filePath).then(async (rawMeta) => {
+const handleImage = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TImageMeta> }>((resolve) => {
+    ExifReader.load(filePath).then(async (rawMeta) => {
         const sharpMeta = await sharp(filePath).metadata()
 
         let fNumber = rawMeta.FNumber?.value
@@ -137,7 +138,7 @@ const handleImage = async (filePath: string) => {
 
         const date = rawMeta.DateTime?.value[0].split(' ')[0].split(':').join('-')
         const time = rawMeta.DateTime?.value[0].split(' ')[1]
-        const dateTime = [date, time].join(' ')
+        const dateTime = new Date([date, time].join(' '))
 
         const latRef = rawMeta.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
         const lngRef = rawMeta.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
@@ -164,20 +165,15 @@ const handleImage = async (filePath: string) => {
             fNumber: fNumber
         }
 
-        return {
+        resolve({
             data: mediumData,
             meta
-        }
+        })
     })
-}
+})
 
-const handleVideo = async (filePath: string) => {
+const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TVideoMeta> }>((resolve) => {
     const analyze = async () => {
-        let fileHandle: fsPromises.FileHandle | undefined
-        let fileSize: number
-        let mediainfo: MediaInfo | undefined
-        let result
-
         const readChunk: ReadChunkFunc = async (size, offset) => {
             const buffer = new Uint8Array(size)
 
@@ -186,23 +182,26 @@ const handleVideo = async (filePath: string) => {
             return buffer
         }
 
-        try {
-            fileHandle = await fsPromises.open(filePath, 'r')
-            fileSize = (await fileHandle.stat()).size
-            mediainfo = await MediaInfoFactory({
-                format: 'object',
-                full: true
-            })
-            result = (await mediainfo.analyzeData(() => fileSize, readChunk)) as ResultObject
-        } finally {
-            fileHandle && await fileHandle.close()
-            mediainfo && mediainfo.close()
-        }
+        const fileHandle = await fsPromises.open(filePath, 'r')
 
-        return result
+        const stats = await fileHandle.stat()
+        const mediaInfo = await MediaInfoFactory({
+            coverData: true,
+            format: 'object',
+            full: true
+        })
+
+        return new Promise<ResultObject>((res) => {
+            mediaInfo?.analyzeData(() => stats.size, readChunk, (result) => {
+                fileHandle && fileHandle.close()
+                mediaInfo && mediaInfo.close()
+                res(result as ResultObject)
+            })
+        })
     }
 
-    return await analyze().then(async (result) => {
+    return analyze().then((result) => {
+        console.log(result)
         if (isValidVideoMetadata(result)) {
             const coordinates = getCoordinates(result)
             const dateTaken = getDateTaken(result)
@@ -225,68 +224,46 @@ const handleVideo = async (filePath: string) => {
                 mediumData.lng = coordinates[1]
             }
 
-            return {
+            resolve({
                 data: mediumData,
                 meta
-            }
+            })
         }
 
-        return {
+        resolve({
             data: {},
-            meta: {} as TVideoMeta
-        }
+            meta: {}
+        })
     })
-}
+})
 
 export const fileToMedium = async ({
-    filePath, fileName, originalName, type
-}: { filePath: string, fileName: string, originalName: string, type: string }) => {
+    filePath, fileName, originalName, type, user
+}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => await new Promise<DeepPartial<TMedium> & { id?: string }>(async (resolve) => {
     const mediumType = type.split('/')[0]
-    let info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> } = {}
+    const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
+        resolve({
+            mimetype: type,
+            filenameDisk: fileName,
+            filenameDownload: originalName,
+            title: path.parse(originalName).name,
+            description: '',
+            ...info.data,
+            meta: info.meta,
+            owner: {
+                id: user
+            },
+            uploader: {
+                id: user
+            }
+        } as DeepPartial<TMedium> & { id?: string })
+    }
 
     if (mediumType === 'image') {
-        info = await handleImage(filePath)
+        handleImage(filePath).then(handleMeta)
     }
 
     if (mediumType === 'video') {
-        info = await handleVideo(filePath)
+        handleVideo(filePath).then(handleMeta)
     }
-
-    return {
-        mimetype: type,
-        filenameDisk: fileName,
-        filenameDownload: originalName,
-        title: path.parse(originalName).name,
-        description: '',
-        ...info.data,
-        meta: info.meta
-    } as Partial<TMedium>
-
-    // const ff = createFFmpeg()
-    //
-    // await ff.load().then(async () => {
-    //     ff.FS('writeFile', 'upload.mp4', await fetchFile(filepath))
-    //
-    //     await ff.run('-print_format', 'json', '-i', 'upload.mp4', '-f', 'ffmetadata', 'out.txt')
-    //     const data = ff.FS('readFile', 'out.txt')
-    //     const meta = new TextDecoder().decode(data)
-    //     console.log(meta)
-    //
-    //     // return {
-    //     //     hash: hash(JSON.stringify(meta)),
-    //     //     dateTaken: dateTime,
-    //     //     filenameDisk: filename,
-    //     //     filenameDownload: originalname,
-    //     //     title: path.parse(originalname).name,
-    //     //     description: '',
-    //     //     height: sharpMeta.height || 0,
-    //     //     width: sharpMeta.width || 0,
-    //     //     cameraMake: meta.Make?.value[0],
-    //     //     cameraModel: meta.Model?.value[0],
-    //     //     flash: meta.Flash?.value,
-    //     //     fNumber: fNumber,
-    //     //     lat,
-    //     //     lng
-    //     // }
-    // })
-}
+})

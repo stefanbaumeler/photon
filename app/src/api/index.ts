@@ -1,4 +1,4 @@
-import { ApolloClient, createHttpLink, from } from '@apollo/client'
+import { ApolloClient, from } from '@apollo/client'
 import { cache } from './cache'
 import { onError } from '@apollo/client/link/error'
 import { createUploadLink } from 'apollo-upload-client'
@@ -9,7 +9,7 @@ const errorLink = onError(({
     if (graphQLErrors) {
         graphQLErrors.forEach((err) => {
             console.log(
-                `[GraphQL error]: Message: ${err.message}, Location: ${err.locations?.join(', ')}, Path: ${err.path?.join(', ')}`
+                `[GraphQL error]: Message: ${err.message}, Location: ${JSON.stringify(err.locations)}, Path: ${err.path?.join(', ')}`
             )
         })
     }

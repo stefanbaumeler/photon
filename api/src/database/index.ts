@@ -1,17 +1,13 @@
-import { knex, Knex } from 'knex'
-import knexConfig from '../../knexfile'
-import knexStringCase from 'knex-stringcase'
+import { PrismaClient } from '@prisma/client'
 
-let database: Knex | null = null
+let database: PrismaClient | null = null
 
 export const getDatabase = () => {
     if (database) {
         return database
     }
 
-    const options = knexStringCase(knexConfig)
-
-    database = knex(options)
+    database = new PrismaClient()
 
     return database
 }

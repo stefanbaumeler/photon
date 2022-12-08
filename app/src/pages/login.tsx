@@ -20,8 +20,8 @@ const LoginPage = () => {
     const signInUser = () => {
         signIn({
             variables: {
-                mail: 'foo@bar.com',
-                password: 'mypass'
+                mail: 'test@test.com',
+                password: 'test'
             }
         }).then(() => {
             router.push('/')

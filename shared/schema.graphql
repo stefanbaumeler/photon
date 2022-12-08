@@ -8,11 +8,15 @@ schema {
 union Meta = ImageMeta | VideoMeta
 
 type Album {
+    cover: Medium
     description: String
     id: ID!
-    idMedium: ID
     owner: User
     title: String
+}
+
+type Count {
+    count: Int
 }
 
 type File {
@@ -30,15 +34,15 @@ type ImageMeta {
 }
 
 type Medium {
-    dateCreated: String
-    dateModified: String
-    dateModifiedStatus: String
-    dateTaken: String
+    dateCreated: DateTime
+    dateModified: DateTime
+    dateModifiedStatus: DateTime
+    dateTaken: DateTime
     description: String
     filenameDisk: String
     filenameDownload: String
     hash: String
-    id: ID
+    id: ID!
     lat: Float
     lng: Float
     meta: Meta
@@ -50,15 +54,15 @@ type Medium {
 }
 
 type Mutation {
-    addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium]
+    addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]!
     createAlbum(album: AlbumInput, media: [ID]): Album
-    deleteAlbum(ids: [ID]!): [Album]
-    deleteMedia(ids: [ID]!): [Medium]
-    emptyTrash: [Medium]
+    deleteAlbum(ids: [ID]!): Count
+    deleteMedia(ids: [ID]!): [Medium!]!
+    emptyTrash: [Medium!]!
     removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album
-    rotate(id: ID!): Medium
+    rotate(id: ID!): Medium!
     setAlbumCover(idAlbum: ID!, idMedium: ID!): Album
-    setMediaStatus(media: [ID]!, status: String): [Medium]
+    setMediaStatus(media: [ID]!, status: String): Count
     signIn(mail: String!, password: String!): Token
     signOut: Boolean
     signUp(firstName: String!, lastName: String!, mail: String!, password: String!): Token
@@ -67,13 +71,13 @@ type Mutation {
 }
 
 type Query {
-    album(id: ID!): Album
-    albumMedia(id: ID!): [Medium]
-    albums: [Album]
-    media(status: String): [Medium]
-    medium(id: ID!): Medium
-    user(id: ID!): User
-    users: [User]
+    album(id: ID!): Album!
+    albumMedia(id: ID!): [Medium!]!
+    albums: [Album!]!
+    media(status: String): [Medium!]!
+    medium(id: ID!): Medium!
+    user(id: ID!): User!
+    users: [User!]!
 }
 
 type Token {
@@ -82,8 +86,8 @@ type Token {
 }
 
 type User {
-    dateCreated: String!
-    dateModified: String!
+    dateCreated: DateTime!
+    dateModified: DateTime!
     firstName: String!
     id: ID!
     lastName: String!
@@ -96,6 +100,9 @@ type VideoMeta {
     height: Int
     width: Int
 }
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
+scalar DateTime
 
 scalar Upload
 

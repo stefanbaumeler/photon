@@ -1,16 +1,17 @@
 import { useContext, useEffect } from 'react'
 import { DetailsContext, DialogContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import { Detail, IconButton, Medium, DetailsActions } from '@/components'
+import { Detail, DetailsActions, IconButton, Medium } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
-import { getRelativeTime } from '@/util/date'
+import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 import { useRouter } from 'next/router'
 import { TImageMeta } from '@photon/shared'
+import { EDateFormat } from '@/types/app'
 
 const Details = () => {
     const { t } = useTranslation()
@@ -80,8 +81,8 @@ const Details = () => {
         if (details.medium.dateTaken) {
             return <Detail
                 icon={Icons.mdiCalendar}
-                title={new Date(parseInt(details.medium.dateTaken, 10)).toLocaleString('en-US')}
-                values={getRelativeTime(new Date(parseInt(details.medium.dateTaken, 10)))}
+                title={formatDate(details.medium.dateTaken, EDateFormat.LONG)}
+                values={getRelativeTime(details.medium.dateTaken)}
             />
         }
 

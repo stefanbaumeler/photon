@@ -1,47 +1,53 @@
-import { Knex } from 'knex'
 import { getDatabase } from '../database'
 import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
-import { TMedium } from '@photon/shared'
+import { TMedium, TMeta } from '@photon/shared'
 import { DeepPartial } from '../types'
+import type { Prisma } from '.prisma/client'
 
 export default class MediaService {
-    knex: Knex
+    prisma = getDatabase()
 
     tableName = 'media'
 
-    constructor () {
-        this.knex = getDatabase()
-    }
-
-    async createOne (medium: DeepPartial<TMedium>) {
-        return this.knex.transaction(async (trx) => {
-            return trx.select().from(this.tableName).where({
-                hash: medium.hash
-            }).then((result) => {
-                if (result.length) {
-                    fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-                }
-                else {
-                    return trx
-                        .insert({
-                            ...medium,
-                            owner: medium.owner?.id || medium.owner,
-                            uploader: medium.uploader?.id || medium.uploader,
-                            meta: JSON.stringify(medium.meta)
-                        })
-                        .into(this.tableName)
-                        .returning('id')
-                        .then((result) => result[0].id).catch((err) => {
-                            console.log(err)
-                        })
-                }
-            })
+    async truncate () {
+        await this.prisma.medium.deleteMany({
+            where: {}
         })
     }
 
-    async createMany (media: DeepPartial<TMedium>[]) {
+    async createOne (medium: DeepPartial<TMedium> & { id?: string }) {
+        await this.prisma.medium.findFirst({
+            where: {
+                hash: medium.hash
+            }
+        }).then(async (res) => {
+            if (res) {
+                await fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+            }
+            else {
+                await this.prisma.medium.create({
+                    data: {
+                        ...medium as DeepPartial<TMedium>,
+                        owner: {
+                            connect: {
+                                id: medium.owner?.id
+                            }
+                        },
+                        uploader: {
+                            connect: {
+                                id: medium.uploader?.id
+                            }
+                        },
+                        meta: JSON.stringify(medium.meta)
+                    }
+                })
+            }
+        })
+    }
+
+    async createMany (media: (DeepPartial<TMedium> & { id?: string })[]) {
         const primaryKeys = media.map((medium) => this.createOne(medium))
 
         return await Promise.all(primaryKeys).then((results) => {
@@ -50,77 +56,153 @@ export default class MediaService {
     }
 
     async readOne (id: string) {
-        const res = await this.knex.from(this.tableName).select<TMedium[]>().where({
-            id
+        const res = await this.prisma.medium.findFirst({
+            where: {
+                id
+            },
+            include: {
+                owner: true,
+                uploader: true
+            }
         })
 
-        return res[0]
+        if (res === null) {
+            throw new Error()
+        }
+
+        return res as TMedium
     }
 
     async readOneFromDisk (filenameDisk: string) {
-        return this.knex.from(this.tableName).select<TMedium[]>().where({
-            filenameDisk
+        return this.prisma.medium.findFirst({
+            where: {
+                filenameDisk
+            },
+            include: {
+                owner: true,
+                uploader: true
+            }
         })
     }
 
-    readMany = (conditions: Partial<TMedium> = {}, limit = 100) => new Promise<TMedium[]>((resolve) => {
-        this.knex.from(this.tableName).where(conditions).select().limit(limit).then((res) => {
-            resolve(res)
-        })
-    })
-
-    destroy = (keys: (string | null)[] | string) => new Promise<TMedium[]>((resolve) => {
-        const keysToDestroy = Array.isArray(keys) ? keys : [keys]
-
-        const promises = keysToDestroy.map((key) => new Promise((resolve) => {
-            if (key) {
-                this.readOne(key).then((medium) => {
-                    fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-                    resolve(true)
-                })
+    readMany = async (conditions: Prisma.MediumWhereInput = {}, take = 100) => {
+        const res = await this.prisma.medium.findMany({
+            where: conditions,
+            take,
+            include: {
+                owner: true,
+                uploader: true
             }
-        }))
+        }) as TMedium[]
 
-        Promise.all(promises).then(() => {
-            this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
-                resolve(res)
+        return res
+    }
+
+    destroy = (keys: (string | null)[] | string) => {
+        const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
+
+        return this.readMany({
+            id: {
+                in: keysToDestroy
+            }
+        }).then((itemsToDestroy) => {
+            itemsToDestroy.forEach((item) => {
+                fs.unlinkSync(`./uploads/${item.filenameDisk}`)
             })
-        })
-    })
 
-    rotate = (id: string) => new Promise<TMedium>((resolve) => {
+            return itemsToDestroy
+        }).then(async (itemsToDestroy) => {
+            await this.prisma.medium.deleteMany({
+                where: {
+                    id: {
+                        in: itemsToDestroy.map((item) => item.id)
+                    }
+                }
+            })
+
+            return itemsToDestroy as TMedium[]
+        })
+    }
+
+    rotate = (id: string) => {
         const newFileName = randomUUID()
 
-        this.readOne(id).then((medium) => {
-            sharp(`./uploads/${medium.filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then((row) => {
-                this.update(id, {
+        return this.readOne(id).then((medium) => {
+            if (!medium) {
+                throw new Error()
+            }
+
+            return sharp(`./uploads/${medium.filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then((row) => {
+                return this.update(id, {
                     meta: {
-                        ...medium.meta,
+                        ...medium.meta as TMeta,
                         width: row.width,
                         height: row.height
                     },
                     filenameDisk: newFileName
                 }).then((response) => {
                     fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-                    resolve(response[0])
+                    return response
                 })
             })
         })
-    })
+    }
 
-    update = (ids: (string | null)[] | string, newProps: Partial<TMedium>) => new Promise<TMedium[]>((resolve) => {
+    updateMany = (ids: string[], newProps: Partial<TMedium>) => {
         delete newProps.id
 
-        const idsToUpdate = (Array.isArray(ids) ? ids : [ids]) as string[]
+        const props = newProps as Partial<TMedium> & { meta: string }
 
-        const data = newProps.meta ? {
-            ...newProps,
-            meta: this.knex.jsonSet('meta', '', JSON.stringify(newProps.meta))
-        } : newProps
+        if (props.meta) {
+            props.meta = JSON.stringify(props.meta)
+        }
 
-        this.knex.from(this.tableName).whereIn('id', idsToUpdate).update(data).returning('*')
-            .then((results: TMedium[]) => {
-                resolve(results)
-            })
-    })
+        return this.prisma.medium.updateMany({
+            where: {
+                id: {
+                    in: ids
+                }
+            },
+            data: {
+                ...props
+            }
+        })
+    }
+
+    update = async (id: string, newProps: Partial<TMedium>) => {
+        delete newProps.id
+
+        const data = newProps as Partial<TMedium> & { meta: string, owner: { connect: { id?: string } }, uploader: { connect: { id?: string } } }
+
+        if (data.meta) {
+            data.meta = JSON.stringify(data.meta)
+        }
+
+        if (data.owner) {
+            data.owner = {
+                connect: {
+                    id: data.owner.id
+                }
+            }
+        }
+
+        if (data.uploader) {
+            data.uploader = {
+                connect: {
+                    id: data.uploader.id
+                }
+            }
+        }
+
+        return await this.prisma.medium.update({
+            where: {
+                id
+            },
+            data,
+            include: {
+                owner: true,
+                uploader: true
+            }
+        }) as TMedium
+    }
 }

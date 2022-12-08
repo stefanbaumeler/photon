@@ -16,14 +16,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
   Upload: any;
 };
 
 export type TAlbum = {
   __typename?: 'Album';
+  cover?: Maybe<TMedium>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  idMedium?: Maybe<Scalars['ID']>;
   owner?: Maybe<TUser>;
   title?: Maybe<Scalars['String']>;
 };
@@ -33,6 +34,11 @@ export type TAlbumInput = {
   id?: InputMaybe<Scalars['ID']>;
   idMedium?: InputMaybe<Scalars['ID']>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+export type TCount = {
+  __typename?: 'Count';
+  count?: Maybe<Scalars['Int']>;
 };
 
 export type TFile = {
@@ -53,15 +59,15 @@ export type TImageMeta = {
 
 export type TMedium = {
   __typename?: 'Medium';
-  dateCreated?: Maybe<Scalars['String']>;
-  dateModified?: Maybe<Scalars['String']>;
-  dateModifiedStatus?: Maybe<Scalars['String']>;
-  dateTaken?: Maybe<Scalars['String']>;
+  dateCreated?: Maybe<Scalars['DateTime']>;
+  dateModified?: Maybe<Scalars['DateTime']>;
+  dateModifiedStatus?: Maybe<Scalars['DateTime']>;
+  dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   lat?: Maybe<Scalars['Float']>;
   lng?: Maybe<Scalars['Float']>;
   meta?: Maybe<TMeta>;
@@ -76,15 +82,15 @@ export type TMeta = TImageMeta | TVideoMeta;
 
 export type TMutation = {
   __typename?: 'Mutation';
-  addToAlbum?: Maybe<Array<Maybe<TMedium>>>;
+  addToAlbum: Array<TMedium>;
   createAlbum?: Maybe<TAlbum>;
-  deleteAlbum?: Maybe<Array<Maybe<TAlbum>>>;
-  deleteMedia?: Maybe<Array<Maybe<TMedium>>>;
-  emptyTrash?: Maybe<Array<Maybe<TMedium>>>;
+  deleteAlbum?: Maybe<TCount>;
+  deleteMedia: Array<TMedium>;
+  emptyTrash: Array<TMedium>;
   removeFromAlbum?: Maybe<TAlbum>;
-  rotate?: Maybe<TMedium>;
+  rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
-  setMediaStatus?: Maybe<Array<Maybe<TMedium>>>;
+  setMediaStatus?: Maybe<TCount>;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
@@ -164,13 +170,13 @@ export type TMutationUploadArgs = {
 
 export type TQuery = {
   __typename?: 'Query';
-  album?: Maybe<TAlbum>;
-  albumMedia?: Maybe<Array<Maybe<TMedium>>>;
-  albums?: Maybe<Array<Maybe<TAlbum>>>;
-  media?: Maybe<Array<Maybe<TMedium>>>;
-  medium?: Maybe<TMedium>;
-  user?: Maybe<TUser>;
-  users?: Maybe<Array<Maybe<TUser>>>;
+  album: TAlbum;
+  albumMedia: Array<TMedium>;
+  albums: Array<TAlbum>;
+  media: Array<TMedium>;
+  medium: TMedium;
+  user: TUser;
+  users: Array<TUser>;
 };
 
 
@@ -206,8 +212,8 @@ export type TToken = {
 
 export type TUser = {
   __typename?: 'User';
-  dateCreated: Scalars['String'];
-  dateModified: Scalars['String'];
+  dateCreated: Scalars['DateTime'];
+  dateModified: Scalars['DateTime'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
@@ -294,6 +300,8 @@ export type TResolversTypes = {
   Album: ResolverTypeWrapper<TAlbum>;
   AlbumInput: TAlbumInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Count: ResolverTypeWrapper<TCount>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   File: ResolverTypeWrapper<TFile>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -315,6 +323,8 @@ export type TResolversParentTypes = {
   Album: TAlbum;
   AlbumInput: TAlbumInput;
   Boolean: Scalars['Boolean'];
+  Count: TCount;
+  DateTime: Scalars['DateTime'];
   File: TFile;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
@@ -332,13 +342,22 @@ export type TResolversParentTypes = {
 };
 
 export type TAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Album'] = TResolversParentTypes['Album']> = {
+  cover?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
-  idMedium?: Resolver<Maybe<TResolversTypes['ID']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export type TCountResolvers<ContextType = any, ParentType extends TResolversParentTypes['Count'] = TResolversParentTypes['Count']> = {
+  count?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface TDateTimeScalarConfig extends GraphQLScalarTypeConfig<TResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type TFileResolvers<ContextType = any, ParentType extends TResolversParentTypes['File'] = TResolversParentTypes['File']> = {
   url?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
@@ -357,15 +376,15 @@ export type TImageMetaResolvers<ContextType = any, ParentType extends TResolvers
 };
 
 export type TMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Medium'] = TResolversParentTypes['Medium']> = {
-  dateCreated?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  dateModified?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  dateModifiedStatus?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  dateTaken?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  dateCreated?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateModified?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateModifiedStatus?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateTaken?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<TResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   lat?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
   lng?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<TResolversTypes['Meta']>, ParentType, ContextType>;
@@ -382,15 +401,15 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 };
 
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
-  addToAlbum?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
+  addToAlbum?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
-  deleteAlbum?: Resolver<Maybe<Array<Maybe<TResolversTypes['Album']>>>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
-  deleteMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
-  emptyTrash?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
+  deleteAlbum?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
+  deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
+  emptyTrash?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
-  rotate?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
+  rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
   setAlbumCover?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationSetAlbumCoverArgs, 'idAlbum' | 'idMedium'>>;
-  setMediaStatus?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media'>>;
+  setMediaStatus?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
@@ -399,13 +418,13 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
-  album?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
-  albumMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
-  albums?: Resolver<Maybe<Array<Maybe<TResolversTypes['Album']>>>, ParentType, ContextType>;
-  media?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
-  medium?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
-  user?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
-  users?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
+  album?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
+  albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
+  albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
+  media?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
+  medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
+  user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
+  users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type TTokenResolvers<ContextType = any, ParentType extends TResolversParentTypes['Token'] = TResolversParentTypes['Token']> = {
@@ -419,8 +438,8 @@ export interface TUploadScalarConfig extends GraphQLScalarTypeConfig<TResolversT
 }
 
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
-  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
   firstName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -438,6 +457,8 @@ export type TVideoMetaResolvers<ContextType = any, ParentType extends TResolvers
 
 export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
+  Count?: TCountResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   File?: TFileResolvers<ContextType>;
   ImageMeta?: TImageMetaResolvers<ContextType>;
   Medium?: TMediumResolvers<ContextType>;
@@ -459,10 +480,10 @@ export type TMAddToAlbumVariables = Exact<{
 
 export type TMAddToAlbum = (
   { __typename?: 'Mutation' }
-  & { addToAlbum?: Maybe<Array<Maybe<(
+  & { addToAlbum: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
-  )>>> }
+  )> }
 );
 
 export type TQAlbumVariables = Exact<{
@@ -472,14 +493,17 @@ export type TQAlbumVariables = Exact<{
 
 export type TQAlbum = (
   { __typename?: 'Query' }
-  & { album?: Maybe<(
+  & { album: (
     { __typename?: 'Album' }
-    & Pick<TAlbum, 'id' | 'title' | 'description' | 'idMedium'>
-    & { owner?: Maybe<(
+    & Pick<TAlbum, 'id' | 'title' | 'description'>
+    & { cover?: Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id'>
+    )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
     )> }
-  )> }
+  ) }
 );
 
 export type TQAlbumMediaVariables = Exact<{
@@ -489,7 +513,7 @@ export type TQAlbumMediaVariables = Exact<{
 
 export type TQAlbumMedia = (
   { __typename?: 'Query' }
-  & { albumMedia?: Maybe<Array<Maybe<(
+  & { albumMedia: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
     & { meta?: Maybe<(
@@ -499,7 +523,7 @@ export type TQAlbumMedia = (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
-  )>>> }
+  )> }
 );
 
 export type TQAlbumsVariables = Exact<{ [key: string]: never; }>;
@@ -507,17 +531,21 @@ export type TQAlbumsVariables = Exact<{ [key: string]: never; }>;
 
 export type TQAlbums = (
   { __typename?: 'Query' }
-  & { albums?: Maybe<Array<Maybe<(
+  & { albums: Array<(
     { __typename?: 'Album' }
-    & Pick<TAlbum, 'id' | 'title' | 'description' | 'idMedium'>
-    & { owner?: Maybe<(
+    & Pick<TAlbum, 'id' | 'title' | 'description'>
+    & { cover?: Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id'>
+    )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
     )> }
-  )>>> }
+  )> }
 );
 
 export type TMCreateAlbumVariables = Exact<{
+  album?: InputMaybe<TAlbumInput>;
   media?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
 }>;
 
@@ -537,10 +565,10 @@ export type TMDeleteAlbumVariables = Exact<{
 
 export type TMDeleteAlbum = (
   { __typename?: 'Mutation' }
-  & { deleteAlbum?: Maybe<Array<Maybe<(
-    { __typename?: 'Album' }
-    & Pick<TAlbum, 'id'>
-  )>>> }
+  & { deleteAlbum?: Maybe<(
+    { __typename?: 'Count' }
+    & Pick<TCount, 'count'>
+  )> }
 );
 
 export type TMRemoveFromAlbumVariables = Exact<{
@@ -592,10 +620,10 @@ export type TMDeleteMediaVariables = Exact<{
 
 export type TMDeleteMedia = (
   { __typename?: 'Mutation' }
-  & { deleteMedia?: Maybe<Array<Maybe<(
+  & { deleteMedia: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
-  )>>> }
+  )> }
 );
 
 export type TMEmptyTrashVariables = Exact<{ [key: string]: never; }>;
@@ -603,10 +631,10 @@ export type TMEmptyTrashVariables = Exact<{ [key: string]: never; }>;
 
 export type TMEmptyTrash = (
   { __typename?: 'Mutation' }
-  & { emptyTrash?: Maybe<Array<Maybe<(
+  & { emptyTrash: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
-  )>>> }
+  )> }
 );
 
 export type TQMediaVariables = Exact<{
@@ -616,7 +644,7 @@ export type TQMediaVariables = Exact<{
 
 export type TQMedia = (
   { __typename?: 'Query' }
-  & { media?: Maybe<Array<Maybe<(
+  & { media: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
     & { owner?: Maybe<(
@@ -632,7 +660,7 @@ export type TQMedia = (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
-  )>>> }
+  )> }
 );
 
 export type TQMediumVariables = Exact<{
@@ -642,7 +670,7 @@ export type TQMediumVariables = Exact<{
 
 export type TQMedium = (
   { __typename?: 'Query' }
-  & { medium?: Maybe<(
+  & { medium: (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
     & { owner?: Maybe<(
@@ -658,7 +686,7 @@ export type TQMedium = (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
-  )> }
+  ) }
 );
 
 export type TMRotateVariables = Exact<{
@@ -668,10 +696,10 @@ export type TMRotateVariables = Exact<{
 
 export type TMRotate = (
   { __typename?: 'Mutation' }
-  & { rotate?: Maybe<(
+  & { rotate: (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
-  )> }
+  ) }
 );
 
 export type TMSetMediaStatusVariables = Exact<{
@@ -682,10 +710,10 @@ export type TMSetMediaStatusVariables = Exact<{
 
 export type TMSetMediaStatus = (
   { __typename?: 'Mutation' }
-  & { setMediaStatus?: Maybe<Array<Maybe<(
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
-  )>>> }
+  & { setMediaStatus?: Maybe<(
+    { __typename?: 'Count' }
+    & Pick<TCount, 'count'>
+  )> }
 );
 
 export type TMUploadVariables = Exact<{
@@ -748,6 +776,25 @@ export const MAddToAlbumDocument = gql`
 }
     `;
 export type TMAddToAlbumMutationFn = Apollo.MutationFunction<TMAddToAlbum, TMAddToAlbumVariables>;
+
+/**
+ * __useMAddToAlbum__
+ *
+ * To run a mutation, you first call `useMAddToAlbum` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMAddToAlbum` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mAddToAlbum, { data, loading, error }] = useMAddToAlbum({
+ *   variables: {
+ *      idAlbum: // value for 'idAlbum'
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
 export function useMAddToAlbum(baseOptions?: Apollo.MutationHookOptions<TMAddToAlbum, TMAddToAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMAddToAlbum, TMAddToAlbumVariables>(MAddToAlbumDocument, options);
@@ -761,13 +808,32 @@ export const QAlbumDocument = gql`
     id
     title
     description
-    idMedium
+    cover {
+      id
+    }
     owner {
       id
     }
   }
 }
     `;
+
+/**
+ * __useQAlbum__
+ *
+ * To run a query within a React component, call `useQAlbum` and pass it any options that fit your needs.
+ * When your component renders, `useQAlbum` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQAlbum({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
 export function useQAlbum(baseOptions: Apollo.QueryHookOptions<TQAlbum, TQAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TQAlbum, TQAlbumVariables>(QAlbumDocument, options);
@@ -813,6 +879,23 @@ export const QAlbumMediaDocument = gql`
   }
 }
     `;
+
+/**
+ * __useQAlbumMedia__
+ *
+ * To run a query within a React component, call `useQAlbumMedia` and pass it any options that fit your needs.
+ * When your component renders, `useQAlbumMedia` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQAlbumMedia({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
 export function useQAlbumMedia(baseOptions: Apollo.QueryHookOptions<TQAlbumMedia, TQAlbumMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TQAlbumMedia, TQAlbumMediaVariables>(QAlbumMediaDocument, options);
@@ -830,13 +913,31 @@ export const QAlbumsDocument = gql`
     id
     title
     description
-    idMedium
+    cover {
+      id
+    }
     owner {
       id
     }
   }
 }
     `;
+
+/**
+ * __useQAlbums__
+ *
+ * To run a query within a React component, call `useQAlbums` and pass it any options that fit your needs.
+ * When your component renders, `useQAlbums` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQAlbums({
+ *   variables: {
+ *   },
+ * });
+ */
 export function useQAlbums(baseOptions?: Apollo.QueryHookOptions<TQAlbums, TQAlbumsVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TQAlbums, TQAlbumsVariables>(QAlbumsDocument, options);
@@ -849,13 +950,32 @@ export type QAlbumsHookResult = ReturnType<typeof useQAlbums>;
 export type QAlbumsLazyQueryHookResult = ReturnType<typeof useQAlbumsLazyQuery>;
 export type QAlbumsQueryResult = Apollo.QueryResult<TQAlbums, TQAlbumsVariables>;
 export const MCreateAlbumDocument = gql`
-    mutation MCreateAlbum($media: [ID]) {
-  createAlbum(media: $media) {
+    mutation MCreateAlbum($album: AlbumInput, $media: [ID]) {
+  createAlbum(album: $album, media: $media) {
     id
   }
 }
     `;
 export type TMCreateAlbumMutationFn = Apollo.MutationFunction<TMCreateAlbum, TMCreateAlbumVariables>;
+
+/**
+ * __useMCreateAlbum__
+ *
+ * To run a mutation, you first call `useMCreateAlbum` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMCreateAlbum` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mCreateAlbum, { data, loading, error }] = useMCreateAlbum({
+ *   variables: {
+ *      album: // value for 'album'
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
 export function useMCreateAlbum(baseOptions?: Apollo.MutationHookOptions<TMCreateAlbum, TMCreateAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMCreateAlbum, TMCreateAlbumVariables>(MCreateAlbumDocument, options);
@@ -866,11 +986,29 @@ export type MCreateAlbumMutationOptions = Apollo.BaseMutationOptions<TMCreateAlb
 export const MDeleteAlbumDocument = gql`
     mutation MDeleteAlbum($ids: [ID]!) {
   deleteAlbum(ids: $ids) {
-    id
+    count
   }
 }
     `;
 export type TMDeleteAlbumMutationFn = Apollo.MutationFunction<TMDeleteAlbum, TMDeleteAlbumVariables>;
+
+/**
+ * __useMDeleteAlbum__
+ *
+ * To run a mutation, you first call `useMDeleteAlbum` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMDeleteAlbum` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mDeleteAlbum, { data, loading, error }] = useMDeleteAlbum({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
 export function useMDeleteAlbum(baseOptions?: Apollo.MutationHookOptions<TMDeleteAlbum, TMDeleteAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMDeleteAlbum, TMDeleteAlbumVariables>(MDeleteAlbumDocument, options);
@@ -886,6 +1024,25 @@ export const MRemoveFromAlbumDocument = gql`
 }
     `;
 export type TMRemoveFromAlbumMutationFn = Apollo.MutationFunction<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>;
+
+/**
+ * __useMRemoveFromAlbum__
+ *
+ * To run a mutation, you first call `useMRemoveFromAlbum` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMRemoveFromAlbum` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mRemoveFromAlbum, { data, loading, error }] = useMRemoveFromAlbum({
+ *   variables: {
+ *      idAlbum: // value for 'idAlbum'
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
 export function useMRemoveFromAlbum(baseOptions?: Apollo.MutationHookOptions<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>(MRemoveFromAlbumDocument, options);
@@ -901,6 +1058,25 @@ export const MSetAlbumCoverDocument = gql`
 }
     `;
 export type TMSetAlbumCoverMutationFn = Apollo.MutationFunction<TMSetAlbumCover, TMSetAlbumCoverVariables>;
+
+/**
+ * __useMSetAlbumCover__
+ *
+ * To run a mutation, you first call `useMSetAlbumCover` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMSetAlbumCover` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mSetAlbumCover, { data, loading, error }] = useMSetAlbumCover({
+ *   variables: {
+ *      idAlbum: // value for 'idAlbum'
+ *      idMedium: // value for 'idMedium'
+ *   },
+ * });
+ */
 export function useMSetAlbumCover(baseOptions?: Apollo.MutationHookOptions<TMSetAlbumCover, TMSetAlbumCoverVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMSetAlbumCover, TMSetAlbumCoverVariables>(MSetAlbumCoverDocument, options);
@@ -916,6 +1092,25 @@ export const MUpdateAlbumTitleDocument = gql`
 }
     `;
 export type TMUpdateAlbumTitleMutationFn = Apollo.MutationFunction<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>;
+
+/**
+ * __useMUpdateAlbumTitle__
+ *
+ * To run a mutation, you first call `useMUpdateAlbumTitle` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMUpdateAlbumTitle` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mUpdateAlbumTitle, { data, loading, error }] = useMUpdateAlbumTitle({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
 export function useMUpdateAlbumTitle(baseOptions?: Apollo.MutationHookOptions<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>(MUpdateAlbumTitleDocument, options);
@@ -931,6 +1126,24 @@ export const MDeleteMediaDocument = gql`
 }
     `;
 export type TMDeleteMediaMutationFn = Apollo.MutationFunction<TMDeleteMedia, TMDeleteMediaVariables>;
+
+/**
+ * __useMDeleteMedia__
+ *
+ * To run a mutation, you first call `useMDeleteMedia` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMDeleteMedia` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mDeleteMedia, { data, loading, error }] = useMDeleteMedia({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
 export function useMDeleteMedia(baseOptions?: Apollo.MutationHookOptions<TMDeleteMedia, TMDeleteMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMDeleteMedia, TMDeleteMediaVariables>(MDeleteMediaDocument, options);
@@ -946,6 +1159,23 @@ export const MEmptyTrashDocument = gql`
 }
     `;
 export type TMEmptyTrashMutationFn = Apollo.MutationFunction<TMEmptyTrash, TMEmptyTrashVariables>;
+
+/**
+ * __useMEmptyTrash__
+ *
+ * To run a mutation, you first call `useMEmptyTrash` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMEmptyTrash` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mEmptyTrash, { data, loading, error }] = useMEmptyTrash({
+ *   variables: {
+ *   },
+ * });
+ */
 export function useMEmptyTrash(baseOptions?: Apollo.MutationHookOptions<TMEmptyTrash, TMEmptyTrashVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMEmptyTrash, TMEmptyTrashVariables>(MEmptyTrashDocument, options);
@@ -993,6 +1223,23 @@ export const QMediaDocument = gql`
   }
 }
     `;
+
+/**
+ * __useQMedia__
+ *
+ * To run a query within a React component, call `useQMedia` and pass it any options that fit your needs.
+ * When your component renders, `useQMedia` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQMedia({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
 export function useQMedia(baseOptions?: Apollo.QueryHookOptions<TQMedia, TQMediaVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TQMedia, TQMediaVariables>(QMediaDocument, options);
@@ -1044,6 +1291,23 @@ export const QMediumDocument = gql`
   }
 }
     `;
+
+/**
+ * __useQMedium__
+ *
+ * To run a query within a React component, call `useQMedium` and pass it any options that fit your needs.
+ * When your component renders, `useQMedium` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQMedium({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
 export function useQMedium(baseOptions: Apollo.QueryHookOptions<TQMedium, TQMediumVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TQMedium, TQMediumVariables>(QMediumDocument, options);
@@ -1063,6 +1327,24 @@ export const MRotateDocument = gql`
 }
     `;
 export type TMRotateMutationFn = Apollo.MutationFunction<TMRotate, TMRotateVariables>;
+
+/**
+ * __useMRotate__
+ *
+ * To run a mutation, you first call `useMRotate` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMRotate` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mRotate, { data, loading, error }] = useMRotate({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
 export function useMRotate(baseOptions?: Apollo.MutationHookOptions<TMRotate, TMRotateVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMRotate, TMRotateVariables>(MRotateDocument, options);
@@ -1073,11 +1355,30 @@ export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRota
 export const MSetMediaStatusDocument = gql`
     mutation MSetMediaStatus($media: [ID]!, $status: String) {
   setMediaStatus(media: $media, status: $status) {
-    id
+    count
   }
 }
     `;
 export type TMSetMediaStatusMutationFn = Apollo.MutationFunction<TMSetMediaStatus, TMSetMediaStatusVariables>;
+
+/**
+ * __useMSetMediaStatus__
+ *
+ * To run a mutation, you first call `useMSetMediaStatus` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMSetMediaStatus` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mSetMediaStatus, { data, loading, error }] = useMSetMediaStatus({
+ *   variables: {
+ *      media: // value for 'media'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
 export function useMSetMediaStatus(baseOptions?: Apollo.MutationHookOptions<TMSetMediaStatus, TMSetMediaStatusVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMSetMediaStatus, TMSetMediaStatusVariables>(MSetMediaStatusDocument, options);
@@ -1093,6 +1394,24 @@ export const MUploadDocument = gql`
 }
     `;
 export type TMUploadMutationFn = Apollo.MutationFunction<TMUpload, TMUploadVariables>;
+
+/**
+ * __useMUpload__
+ *
+ * To run a mutation, you first call `useMUpload` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMUpload` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mUpload, { data, loading, error }] = useMUpload({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
 export function useMUpload(baseOptions?: Apollo.MutationHookOptions<TMUpload, TMUploadVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMUpload, TMUploadVariables>(MUploadDocument, options);
@@ -1108,6 +1427,25 @@ export const MSignInDocument = gql`
 }
     `;
 export type TMSignInMutationFn = Apollo.MutationFunction<TMSignIn, TMSignInVariables>;
+
+/**
+ * __useMSignIn__
+ *
+ * To run a mutation, you first call `useMSignIn` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMSignIn` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mSignIn, { data, loading, error }] = useMSignIn({
+ *   variables: {
+ *      mail: // value for 'mail'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
 export function useMSignIn(baseOptions?: Apollo.MutationHookOptions<TMSignIn, TMSignInVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMSignIn, TMSignInVariables>(MSignInDocument, options);
@@ -1121,6 +1459,23 @@ export const MSignOutDocument = gql`
 }
     `;
 export type TMSignOutMutationFn = Apollo.MutationFunction<TMSignOut, TMSignOutVariables>;
+
+/**
+ * __useMSignOut__
+ *
+ * To run a mutation, you first call `useMSignOut` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMSignOut` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mSignOut, { data, loading, error }] = useMSignOut({
+ *   variables: {
+ *   },
+ * });
+ */
 export function useMSignOut(baseOptions?: Apollo.MutationHookOptions<TMSignOut, TMSignOutVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMSignOut, TMSignOutVariables>(MSignOutDocument, options);
@@ -1141,6 +1496,27 @@ export const MSignUpDocument = gql`
 }
     `;
 export type TMSignUpMutationFn = Apollo.MutationFunction<TMSignUp, TMSignUpVariables>;
+
+/**
+ * __useMSignUp__
+ *
+ * To run a mutation, you first call `useMSignUp` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMSignUp` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mSignUp, { data, loading, error }] = useMSignUp({
+ *   variables: {
+ *      mail: // value for 'mail'
+ *      password: // value for 'password'
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *   },
+ * });
+ */
 export function useMSignUp(baseOptions?: Apollo.MutationHookOptions<TMSignUp, TMSignUpVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<TMSignUp, TMSignUpVariables>(MSignUpDocument, options);

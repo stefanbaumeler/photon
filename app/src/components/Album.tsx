@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
 
 type Props = {
-    album: TAlbum
+    album: Partial<TAlbum>
 }
 
 const Album = ({ album }: Props) => {
@@ -26,7 +26,7 @@ const Album = ({ album }: Props) => {
 
     const thumbnailQuery = useQMedium({
         variables: {
-            id: `${album.idMedium}`
+            id: `${album.cover.id}`
         }
     })
 

@@ -3,7 +3,9 @@ query QAlbums {
         id
         title
         description
-        idMedium
+        cover {
+            id
+        }
         owner {
             id
         }

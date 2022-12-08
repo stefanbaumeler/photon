@@ -1,5 +1,5 @@
 mutation MSetMediaStatus($media: [ID]!, $status: String) {
     setMediaStatus(media: $media, status: $status) {
-        id
+        count
     }
 }

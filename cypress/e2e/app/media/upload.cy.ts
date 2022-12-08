@@ -12,7 +12,7 @@ describe('Upload', function () {
             req.alias = req.body.operationName
         })
 
-        cy.exec('node ./scripts/truncate-db.js').then(function () {
+        cy.exec('yarn db:truncate').then(function () {
             cy.visit('/')
         })
     })

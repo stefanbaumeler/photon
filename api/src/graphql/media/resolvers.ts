@@ -3,14 +3,15 @@ import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { fileToMedium } from '../../helpers/exif'
 import { TQueryResolvers, TMedium, TMutationResolvers } from '@photon/shared'
+import { DeepPartial } from '../../types'
 
 const queries: Partial<TQueryResolvers> = {
-    media: (_, input) => {
+    media: async (_, input) => {
         return new MediaService().readMany(input.status ? {
             status: input.status
         } : {})
     },
-    medium: (_, input) => new MediaService().readOne(input.id)
+    medium: async (_, input) => await new MediaService().readOne(input.id)
 }
 
 const mutations: Partial<TMutationResolvers> = {
@@ -23,10 +24,10 @@ const mutations: Partial<TMutationResolvers> = {
             resolve(service.destroy(results.map((result) => result.id as string)))
         })
     }),
-    upload: async (_, { file: files }) => {
+    upload: async (_, { file: files }, context) => {
         const service = new MediaService()
 
-        const writePromises = files.map((file) => new Promise<Partial<TMedium>> ((resolve) => {
+        const writePromises = files.map((file) => new Promise<DeepPartial<TMedium> & { id?: string }> ((resolve) => {
             const name = randomUUID()
             const pathName = `./uploads/${name}`
 
@@ -41,13 +42,13 @@ const mutations: Partial<TMutationResolvers> = {
                         r(filename)
                     })
                 })
-
                 Promise.resolve(writeFileToDisk).then((filename) => {
                     fileToMedium({
                         filePath: pathName,
                         fileName: name,
                         originalName: filename,
-                        type: mimetype
+                        type: mimetype,
+                        user: context.user.id
                     }).then((medium) => {
                         resolve(medium)
                     })
@@ -62,8 +63,8 @@ const mutations: Partial<TMutationResolvers> = {
         return []
     },
     setMediaStatus: async (_, input) => {
-        return await new MediaService().update(input.media, {
-            dateModifiedStatus: 'NOW()',
+        return new MediaService().updateMany(input.media as string[], {
+            dateModifiedStatus: new Date(),
             status: input.status
         })
     },

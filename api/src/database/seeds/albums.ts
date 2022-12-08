@@ -1,13 +1,16 @@
-import { Knex } from 'knex'
 import AlbumsService from '../../services/albums'
 import { TAlbum } from '@photon/shared'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs, predefinedUserUUIDs } from '../helpers/ids'
 import { DeepPartial } from '../../types'
 
-export async function seed (knex: Knex) {
-    await knex('albums').del()
+export default async (truncateOnly = false) => {
+    const service = new AlbumsService()
 
-    const albumsService = new AlbumsService()
+    await service.truncate()
+
+    if (truncateOnly) {
+        return
+    }
 
     const fakeAlbums: DeepPartial<TAlbum>[] = []
 
@@ -22,11 +25,11 @@ export async function seed (knex: Knex) {
         })
     }
 
-    await albumsService.createMany(fakeAlbums, predefinedMediumUUIDs.map((id) => ({
+    await service.createMany(fakeAlbums, predefinedMediumUUIDs.map((id) => ({
         id
     })))
 
-    await albumsService.createOne({
+    await service.createOne({
         id: predefinedAlbumUUIDs[4],
         title: 'Test Single',
         description: 'Test Single Description',

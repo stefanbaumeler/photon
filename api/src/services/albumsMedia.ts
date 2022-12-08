@@ -1,89 +1,73 @@
-import { Knex } from 'knex'
 import { AlbumsMedia } from '../types'
 import { getDatabase } from '../database'
 import { TMedium } from '@photon/shared'
 
 export default class AlbumsMediaService {
-    knex: Knex
+    prisma = getDatabase()
 
     tableName = 'albums_media'
 
-    constructor () {
-        this.knex = getDatabase()
+    createOne = async (albumMedium: Omit<AlbumsMedia, 'id'>) => {
+        return this.prisma.albumMedium.upsert({
+            where: {
+                idAlbum_idMedium: {
+                    idAlbum: albumMedium.idAlbum,
+                    idMedium: albumMedium.idMedium
+                }
+            },
+            create: albumMedium,
+            update: albumMedium
+        })
     }
 
-    createOne = (albumMedium: Omit<AlbumsMedia, 'id'>) => new Promise<TMedium>((resolve) => {
-        this.knex.select().from(this.tableName).where({
-            id_album: albumMedium.idAlbum,
-            id_medium: albumMedium.idMedium
-        }).then((results) => {
-            if (results.length) {
-                resolve(results[0])
-                return
+    createMany = async (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => {
+        const albumsMediaPromises = albumsMedia.map(async (albumMedium) => {
+            return await this.createOne(albumMedium)
+        })
+
+        return await Promise.all(albumsMediaPromises).then((results) => {
+            return results
+        })
+    }
+
+    removeFromAlbum = async (idAlbum: string, mediaIds: string[]) => {
+        return this.prisma.albumMedium.deleteMany({
+            where: {
+                idAlbum,
+                idMedium: {
+                    in: mediaIds
+                }
             }
-
-            this.knex
-                .insert(albumMedium)
-                .into(this.tableName)
-                .returning('*')
-                .then((results) => {
-                    resolve(results[0])
-                })
         })
-    })
+    }
 
-    createMany = (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => new Promise<TMedium[]>((resolve) => {
-        const primaryKeys = albumsMedia.map((albumMedium) => this.createOne(albumMedium))
-
-        Promise.all(primaryKeys).then((results) => {
-            resolve(results)
+    readAlbumsOfMedium = async (idMedium: string) => {
+        const res = await this.prisma.albumMedium.findMany({
+            where: {
+                idMedium
+            },
+            include: {
+                album: true
+            }
         })
-    })
 
-    destroyOne = (albumsMedia: Omit<AlbumsMedia, 'id'> | string | number) => new Promise<string>((resolve) => {
-        if (typeof albumsMedia === 'object') {
-            this.knex.from(this.tableName).delete().where({
-                id_album: albumsMedia.idAlbum,
-                id_medium: albumsMedia.idMedium
-            }).returning('id').then((res) => {
-                resolve(res[0])
-            })
-
-            return
+        if (res === null) {
+            throw new Error()
         }
 
-        this.knex.from(this.tableName).delete().where({
-            id: albumsMedia
-        }).returning('id').then((res) => {
-            resolve(res[0])
-        })
-    })
-
-    destroyMany = (albumsMedia: (Omit<AlbumsMedia, 'id'> | string | number)[]) => new Promise<string[]>((resolve) => {
-        const primaryKeys = albumsMedia.map((albumMedium) => this.destroyOne(albumMedium))
-
-        Promise.all(primaryKeys).then((results) => {
-            resolve(results)
-        })
-    })
-
-    async readOne (key: string | number) {
-        return this.knex.from(this.tableName).join('media', 'albums_media.id_medium', 'media.id').select().where({
-            id: key
-        })
+        return res.map((r) => r.album)
     }
 
-    readMany = (idAlbum: string | number) => new Promise<TMedium[]>((resolve) => {
-        this.knex.from(this.tableName).select('media.*').where({
-            id_album: idAlbum || null
-        }).join('media', 'media.id', 'albums_media.id_medium').then((res) => {
-            resolve(res)
+    readMediaOfAlbum = async (idAlbum: string) => {
+        const res = await this.prisma.albumMedium.findMany({
+            where: {
+                idAlbum
+            },
+            include: {
+                medium: true
+            }
         })
-    })
 
-    async readManyByMedium (idMedium: string | number) {
-        return this.knex.from(this.tableName).select('media.*').where({
-            id_medium: idMedium || null
-        }).join('media', 'media.id', 'albums_media.id_medium')
+        return res.map((r) => r.medium) as TMedium[]
     }
 }

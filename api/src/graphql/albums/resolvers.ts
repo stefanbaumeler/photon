@@ -5,7 +5,7 @@ import { TQueryResolvers, TMutationResolvers } from '@photon/shared'
 const queries: Partial<TQueryResolvers> = {
     albums: () => new AlbumsService().readMany(),
     album: (_, input) => new AlbumsService().readOne(input.id),
-    albumMedia: (_, input) => new AlbumsMediaService().readMany(input.id)
+    albumMedia: (_, input) => new AlbumsMediaService().readMediaOfAlbum(input.id)
 }
 
 const mutations: Partial<TMutationResolvers> = {
@@ -20,35 +20,37 @@ const mutations: Partial<TMutationResolvers> = {
 
         return new AlbumsMediaService().createMany(albumsMedia)
     },
-    removeFromAlbum: (_, input) => {
-        const itemsToRemove = input.media.map((medium) => ({
-            idAlbum: input.idAlbum,
-            idMedium: medium
-        }))
-
-        return new AlbumsMediaService().destroyMany(itemsToRemove).then(() => {
-            return new AlbumsService().readOne(input.idAlbum)
-        })
+    removeFromAlbum: async (_, input) => {
+        await new AlbumsMediaService().removeFromAlbum(input.idAlbum, input.media)
+        return new AlbumsService().readOne(input.idAlbum)
     },
     updateAlbumTitle: (_, input) => new Promise((resolve) => {
         new AlbumsService().update(input.id, {
             title: input.title
         }).then((res) => {
-            resolve(res[0])
+            resolve(res)
         })
     }),
-    createAlbum: (_, input) => {
+    createAlbum: async (_, input, context) => {
         const media = input.media?.map((medium) => ({
             id: medium as string
         })) || []
 
-        return new AlbumsService().createOne({}, media)
+        const album = await new AlbumsService().createOne({
+            owner: {
+                id: context.user.id
+            }
+        }, media)
+
+        return album
     },
     setAlbumCover: (_, input) => new Promise((resolve) => {
         new AlbumsService().update(input.idAlbum, {
-            idMedium: input.idMedium
+            cover: {
+                id: input.idMedium
+            }
         }).then((res) => {
-            resolve(res[0])
+            resolve(res)
         })
     })
 }

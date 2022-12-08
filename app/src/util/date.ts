@@ -1,6 +1,17 @@
 import { EDateFormat } from '@/types/app'
 
-export const getRelativeTime = (d1: Date, d2 = new Date()) => {
+export const getRelativeTime = (d1: Date | string, d2 = new Date()) => {
+    let date1 = d1 as Date
+    let date2 = d2 as Date
+
+    if (typeof d1 === 'string') {
+        date1 = new Date(d1)
+    }
+
+    if (typeof d2 === 'string') {
+        date2 = new Date(d2)
+    }
+
     const units: {
         [key: string]: number
     } = {
@@ -16,7 +27,7 @@ export const getRelativeTime = (d1: Date, d2 = new Date()) => {
         numeric: 'auto'
     })
 
-    const elapsed = d1.getTime() - d2.getTime()
+    const elapsed = date1.getTime() - date2.getTime()
 
     for (const u in units) {
         if (Math.abs(elapsed) > units[u] || u === 'second') {
@@ -28,12 +39,17 @@ export const getRelativeTime = (d1: Date, d2 = new Date()) => {
 export const formatDate = (date?: Date | number | string, format: EDateFormat = EDateFormat.SHORT) => {
     let d = date
 
-    if (typeof date === 'undefined') {
+    if (typeof date === 'undefined' || date === null) {
         return
     }
 
     if (typeof d === 'string') {
-        d = parseInt(d, 10)
+        if (isNaN(d as unknown as number)) {
+            d = new Date(d)
+        }
+        else {
+            d = parseInt(d, 10)
+        }
     }
 
     if (typeof d === 'number') {
@@ -65,7 +81,7 @@ export const formatDate = (date?: Date | number | string, format: EDateFormat = 
 export const toDate = (date?: Date | number | string) => {
     let d = date
 
-    if (typeof date === 'undefined') {
+    if (typeof date === 'undefined' || date === null) {
         return undefined
     }
 

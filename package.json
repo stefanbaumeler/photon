@@ -4,6 +4,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
+    "type": "module",
     "workspaces": [
         "app",
         "api",
@@ -35,7 +36,8 @@
     "scripts": {
         "db:up": "node ./scripts/setup-db.js",
         "db:down": "node ./scripts/teardown-db.js",
-        "db:seed": "node ./scripts/seed-db.js",
+        "db:seed": "yarn workspace @photon/api db:seed",
+        "db:truncate": "yarn workspace @photon/api db:truncate",
         "start": "conc \"yarn start:api\" \"yarn start:app\"",
         "start:app": "yarn workspace @photon/app dev",
         "start:api": "yarn workspace @photon/api dev",

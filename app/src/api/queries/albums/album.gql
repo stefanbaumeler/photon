@@ -3,7 +3,9 @@ query QAlbum($id: ID!) {
         id
         title
         description
-        idMedium
+        cover {
+            id
+        }
         owner {
             id
         }

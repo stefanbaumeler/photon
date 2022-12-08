@@ -1,59 +1,79 @@
-import { Knex } from 'knex'
 import { TUser, TToken } from '@photon/shared'
 import { getDatabase } from '../database'
 import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express'
-import { GraphQLError } from 'graphql/error'
-import { AuthenticationError } from 'apollo-server-express'
 
 export default class UsersService {
-    knex: Knex
+    prisma = getDatabase()
 
-    tableName = 'users'
-
-    constructor () {
-        this.knex = getDatabase()
+    async truncate () {
+        return this.prisma.user.deleteMany({
+            where: {}
+        })
     }
 
-    createOne = (user: Partial<TUser>) => new Promise<TUser>((resolve) => {
-        this.knex
-            .insert(user)
-            .into(this.tableName).returning('*')
-            .then((results: TUser[]) => {
-                resolve(results[0])
+    createOne = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
+        const encryptedPassword = await argon2.hash(user.password)
+
+        return this.prisma.user.create({
+            data: {
+                ...user,
+                password: encryptedPassword
+            }
+        })
+    }
+
+    createMany = (users: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>[]) => new Promise<number>((resolve) => {
+        const hashPromises: Promise<Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>>[] = []
+
+        users.forEach((user) => {
+            const promise = argon2.hash(user.password).then((hashedPassword) => {
+                user.password = hashedPassword
+
+                return user
             })
-    })
 
-    createMany = (users: Partial<TUser>[]) => new Promise((resolve) => {
-        const primaryKeys = users.map((user) => this.createOne(user))
+            hashPromises.push(promise)
+        })
 
-        Promise.all(primaryKeys).then((results) => {
-            resolve(results)
+        Promise.all(hashPromises).then((hashedUsers) => {
+            this.prisma.user.createMany({
+                data: hashedUsers,
+                skipDuplicates: true
+            }).then((res) => {
+                resolve(res.count)
+            })
         })
     })
 
-    readOne = (id: string) => new Promise<Partial<TUser>>((resolve) => {
-        this.knex.select().from(this.tableName).where({
-            id
-        }).then((res) => {
-            resolve(res[0])
+    readOne = async (id: string) => {
+        const res = await this.prisma.user.findFirst({
+            where: {
+                id
+            }
         })
-    })
 
-    readOneByMail = (mail: string) => new Promise<TUser>((resolve) => {
-        this.knex.select().from(this.tableName).where({
-            mail
-        }).then((res) => {
-            resolve(res[0])
-        })
-    })
+        if (res === null) {
+            throw new Error()
+        }
 
-    readMany = (limit = 100) => new Promise<TUser[]>((resolve) => {
-        this.knex.from(this.tableName).select().limit(limit).then((res) => {
-            resolve(res)
+        return res
+    }
+
+    readOneByMail = async (mail: string) => {
+        return this.prisma.user.findFirst({
+            where: {
+                mail
+            }
         })
-    })
+    }
+
+    readMany = async (take = 100) => {
+        return this.prisma.user.findMany({
+            take
+        })
+    }
 
     signup = (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response) => new Promise<TToken>( (resolve) => {
         this.readOneByMail(user.mail).then((oldUser) => {
@@ -65,50 +85,45 @@ export default class UsersService {
                 return
             }
 
-            argon2.hash(user.password).then((encryptedPassword) => {
-                this.createOne({
-                    mail: user.mail,
-                    password: encryptedPassword
-                }).then((user) => {
-                    const accessToken = jwt.sign(
-                        {
-                            id: user.id,
-                            mail: user.mail
-                        },
-                        'MySecret',
-                        {
+            this.createOne(user).then((user) => {
+                const accessToken = jwt.sign(
+                    {
+                        id: user.id,
+                        mail: user.mail
+                    },
+                    'MySecret',
+                    {
 
-                            expiresIn: '10min'
-                        }
-                    )
+                        expiresIn: '10min'
+                    }
+                )
 
-                    const refreshToken = jwt.sign(
-                        {
-                            id: user.id,
-                            mail: user.mail
-                        },
-                        'MySecret',
-                        {
-                            expiresIn: '30d'
-                        }
-                    )
+                const refreshToken = jwt.sign(
+                    {
+                        id: user.id,
+                        mail: user.mail
+                    },
+                    'MySecret',
+                    {
+                        expiresIn: '30d'
+                    }
+                )
 
-                    res.cookie('accessToken', accessToken, {
-                        httpOnly: true,
-                        secure: true,
-                        maxAge: 30 * 24 * 60 * 60 * 1000
-                    })
+                res.cookie('accessToken', accessToken, {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: 30 * 24 * 60 * 60 * 1000
+                })
 
-                    res.cookie('refreshToken', refreshToken, {
-                        httpOnly: true,
-                        secure: true,
-                        maxAge: 30 * 24 * 60 * 60 * 1000
-                    })
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: 30 * 24 * 60 * 60 * 1000
+                })
 
-                    resolve({
-                        accessToken,
-                        refreshToken
-                    })
+                resolve({
+                    accessToken,
+                    refreshToken
                 })
             })
         })
@@ -184,6 +199,7 @@ export default class UsersService {
 
     refresh = (refreshToken: string, accessToken: string, res: Response) => {
         try {
+            console.log(refreshToken)
             const refreshTokenValid = jwt.verify(refreshToken, 'MySecret')
         }
         catch {

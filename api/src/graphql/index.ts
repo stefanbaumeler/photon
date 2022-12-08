@@ -3,11 +3,13 @@ import media from './media'
 import users from './users'
 import { gql } from 'apollo-server-express'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { TMetaResolvers, TVideoMeta } from '@photon/shared'
 import UsersService from '../services/users'
+import { DateTimeScalar } from 'graphql-date-scalars'
+import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '@photon/shared'
 
 const global = gql`
     scalar Upload
+    scalar Date
 
     type File {
         url: String
@@ -17,17 +19,21 @@ const global = gql`
 const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs])
 
 const resolvers = {
+    Date: DateTimeScalar,
     Medium: {
-        owner: (obj: { owner: string }) => {
-            return new UsersService().readOne(obj.owner)
+        owner: (obj: { owner: TUser }) => {
+            return new UsersService().readOne(obj.owner.id)
         },
-        uploader: (obj: { uploader: string }) => {
-            return new UsersService().readOne(obj.uploader)
+        uploader: (obj: { uploader: TUser }) => {
+            return new UsersService().readOne(obj.uploader.id)
+        },
+        meta: (obj: { meta: string }) => {
+            return JSON.parse(obj.meta) as TMeta
         }
     },
     Album: {
-        owner: (obj: { owner: string }) => {
-            return new UsersService().readOne(obj.owner)
+        owner: (obj: { owner: TUser }) => {
+            return new UsersService().readOne(obj.owner.id)
         }
     },
     Meta: {

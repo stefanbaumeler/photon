@@ -1,5 +1,5 @@
-const { exec } = require('child_process')
-const dotenv = require('dotenv')
+import { exec } from 'child_process'
+import dotenv from 'dotenv'
 
 dotenv.config({
     path: process.env.NODE_ENV ? `./api/.env.${process.env.NODE_ENV}` : './api/.env'

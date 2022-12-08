@@ -18,7 +18,11 @@ const GalleryView = ({ media }: Props) => {
     const takenDates = new Set<string>()
 
     media.forEach((medium) => {
-        takenDates.add(formatDate(medium.dateTaken))
+        const dateTaken = formatDate(medium.dateTaken)
+
+        if (dateTaken) {
+            takenDates.add(dateTaken)
+        }
     })
 
     useEffect(() => {
@@ -28,6 +32,7 @@ const GalleryView = ({ media }: Props) => {
     useEffect(() => {
         const unsortedSections = Array.from(takenDates).map((takenDate, key) => {
             const takenOnThisDate = media.filter((medium) => formatDate(medium.dateTaken) === takenDate)
+            console.log(takenDates)
             const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
 
             if (!notRemoved.length) {

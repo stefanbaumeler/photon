@@ -23,7 +23,9 @@ describe('Albums', function () {
         // Add to Album dialog
         cy.get('[data-cy="add-to"]').click()
         cy.get('[data-cy="add-to-album"]').should('be.visible')
-        cy.wait('@QAlbums')
+        cy.wait('@QAlbums').then((res) => {
+            cy.log(JSON.stringify(res.response.body))
+        })
     }
 
     const makeEdits = function () {
@@ -64,9 +66,11 @@ describe('Albums', function () {
             force: true
         })
 
-        cy.get('[data-cy="album-teaser"]').should('have.length', 4)
-
-        cy.wait('@MDeleteAlbum')
+        cy.wait('@MDeleteAlbum').then(() => {
+            cy.wait('@QAlbums').then(() => {
+                cy.get('[data-cy="album-teaser"]').should('have.length', 4)
+            })
+        })
 
         cy.get('[data-cy="album-teaser-title"]').contains(albumTitle).should('not.exist')
     })
@@ -133,9 +137,17 @@ describe('Albums', function () {
             force: true
         })
 
+        cy.url().should('contain', '/albums/' )
+
+        select()
+
+        cy.get('[data-cy="thumbnail"]').contains('Test Single').click({
+            force: true
+        })
+
         // has redirected
         cy.url().should('contain', '/albums/' )
-        cy.get('[data-cy="teaser"]').should('have.length', 2)
+        cy.get('[data-cy="teaser"]').should('have.length', 3)
     })
 
     it('changes the album cover', function () {

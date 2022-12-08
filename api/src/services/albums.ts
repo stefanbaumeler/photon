@@ -1,48 +1,56 @@
-import { Knex } from 'knex'
-import { getDatabase } from '../database'
 import AlbumsMediaService from './albumsMedia'
-import { TAlbum, TMedium } from '@photon/shared'
+import { TAlbum } from '@photon/shared'
 import { DeepPartial } from '../types'
+import UsersService from './users'
+import { getDatabase } from '../database'
 
 export default class AlbumsService {
-    knex: Knex
+    prisma = getDatabase()
 
-    tableName = 'albums'
-
-    constructor () {
-        this.knex = getDatabase()
+    async truncate () {
+        await this.prisma.album.deleteMany({
+            where: {}
+        })
     }
 
-    createOne = (album: DeepPartial<TAlbum>, media?: { id: string }[]) => new Promise<TAlbum>((resolve) => {
+    createOne = async (album: DeepPartial<TAlbum>, media?: { id: string }[]) => {
         if (media?.length) {
-            album.idMedium = media[0].id
+            album.cover = media[0]
         }
 
-        this.knex.insert({
-            ...album,
-            owner: album.owner?.id || album.owner
+        const created = await this.prisma.album.create({
+            data: {
+                ...album,
+                cover: album.cover ? {
+                    connect: {
+                        id: album.cover.id
+                    }
+                } : undefined,
+                owner: album.owner ? {
+                    connect: {
+                        id: album.owner.id
+                    }
+                } : undefined
+            },
+            include: {
+                owner: true
+            }
         })
-            .into(this.tableName)
-            .returning<TAlbum[]>('*')
-            .then((result) => {
-                if (media && result) {
-                    const albumsMediaService = new AlbumsMediaService()
-                    const albumsMedia = media.map((medium) => ({
-                        idMedium: medium.id,
-                        idAlbum: result[0].id
-                    })) || []
 
-                    albumsMediaService.createMany(albumsMedia).then(() => {
-                        resolve(result[0])
-                    })
-                }
-                else {
-                    resolve(result[0])
-                }
-            })
-    })
+        if (media && created) {
+            const albumsMediaService = new AlbumsMediaService()
+            const albumsMedia = media.map((medium) => ({
+                idMedium: medium.id,
+                idAlbum: created.id
+            })) || []
 
-    createMany = (albums: DeepPartial<TAlbum>[], media?: { id: string }[]) => new Promise<TAlbum[]>((resolve) => {
+            await albumsMediaService.createMany(albumsMedia)
+        }
+
+        return created as TAlbum
+    }
+
+    createMany = (albums: (DeepPartial<TAlbum> & { id?: string })[], media?: { id: string }[]) => new Promise<TAlbum[]>((resolve) => {
         const primaryKeys = albums.map((album) => this.createOne(album, media))
 
         Promise.all(primaryKeys).then((results) => {
@@ -50,38 +58,87 @@ export default class AlbumsService {
         })
     })
 
-    readOne = (id: string | null) => new Promise<TAlbum>((resolve) => {
-        this.knex.from(this.tableName).select().where({
-            id
-        }).then((res) => {
-            resolve(res[0])
+    readOne = async (id: string) => {
+        const album = await this.prisma.album.findFirst({
+            where: {
+                id
+            },
+            include: {
+                owner: true,
+                cover: true
+            }
         })
-    })
 
-    readMany = (limit = 100) => new Promise<TAlbum[]>((resolve) => {
-        this.knex.from(this.tableName).select().limit(limit).then((res) => {
-            resolve(res)
+        const asTAlbum = album as TAlbum
+
+        if (album?.owner) {
+            asTAlbum.owner = await new UsersService().readOne(album.owner.id)
+        }
+
+        return asTAlbum
+    }
+
+    readMany = async (take = 100) => {
+        const data = await this.prisma.album.findMany({
+            take,
+            include: {
+                owner: true,
+                cover: true
+            }
         })
-    })
 
-    update = (ids: string[] | string, newProps: Partial<TAlbum>) => new Promise<TAlbum[]>((resolve) => {
+        return data as TAlbum[]
+    }
+
+    updateMany = async (ids: string[], newProps: Partial<TAlbum>) => {
         delete newProps.id
 
-        const idsToUpdate = Array.isArray(ids) ? ids : [ids]
-
-        this.knex.from(this.tableName).whereIn('id', idsToUpdate)
-            .update(newProps)
-            .returning('*')
-            .then((res) => {
-                resolve(res)
-            })
-    })
-
-    destroy = (keys: (string | null)[] | string) => new Promise<TAlbum[]>((resolve) => {
-        const keysToDestroy = Array.isArray(keys) ? keys : [keys]
-
-        this.knex.from(this.tableName).whereIn('id', keysToDestroy).delete().returning('*').then((res) => {
-            resolve(res)
+        return this.prisma.album.updateMany({
+            where: {
+                id: {
+                    in: ids
+                }
+            },
+            data: newProps
         })
-    })
+    }
+
+    update = async (id: string, newProps: Partial<TAlbum>) => {
+        delete newProps.id
+
+        return await this.prisma.album.update({
+            where: {
+                id
+            },
+            data: {
+                ...newProps,
+                owner: newProps.owner ? {
+                    connect: {
+                        id: newProps.owner.id
+                    }
+                } : undefined,
+                cover: newProps.cover ? {
+                    connect: {
+                        id: newProps.cover.id
+                    }
+                } : undefined
+            },
+            include: {
+                owner: true,
+                cover: true
+            }
+        }) as TAlbum
+    }
+
+    destroy = async (keys: (string | null)[] | string) => {
+        const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
+
+        return this.prisma.album.deleteMany({
+            where: {
+                id: {
+                    in: keysToDestroy
+                }
+            }
+        })
+    }
 }
