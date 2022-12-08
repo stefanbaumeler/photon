@@ -44,6 +44,8 @@
         "dev": "ts-node-dev index.ts",
         "db:seed": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} src/database/seeds --schema src/database/schema.prisma",
         "db:truncate": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} src/database/truncate.ts --schema src/database/schema.prisma",
-        "db:pull": "npx prisma db pull --schema src/database/schema.prisma --force && ts-node src/database/fix.ts"
+        "db:pull": "npx prisma db pull --schema src/database/schema.prisma --force && ts-node src/database/fix.ts",
+        "db:push": "npx prisma db push --schema src/database/schema.prisma",
+        "db:generate": "npx prisma generate --schema src/database/schema.prisma"
     }
 }
