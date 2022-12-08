@@ -3,6 +3,7 @@ import { Express } from 'express'
 import { typeDefs, resolvers } from './graphql'
 import jwt from 'jsonwebtoken'
 import UsersService from './services/users'
+import { predefinedUserUUIDs } from './database/helpers/ids'
 
 export const createApolloServer = async (app: Express) => {
     const apollo = new ApolloServer({
@@ -13,8 +14,10 @@ export const createApolloServer = async (app: Express) => {
         }) => {
             const service = new UsersService()
 
+            console.log('THE_NODE_ENV_IS:', process.env.NODE_ENV)
+
             if (process.env.NODE_ENV === 'test') {
-                const user = await service.readOne('51dde765-a6de-48c6-b372-41534fb91d55')
+                const user = await service.readOne(predefinedUserUUIDs[0])
 
                 if (user) {
                     return {

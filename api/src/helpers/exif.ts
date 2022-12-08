@@ -25,7 +25,6 @@ export const hash = (str: string, seed = 0) => {
 }
 
 const isValidVideoMetadata = (result: ResultObject) => {
-    console.log(result)
     if (typeof result.media === 'undefined') {
         return false
     }
@@ -201,7 +200,6 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
     }
 
     return analyze().then((result) => {
-        console.log(result)
         if (isValidVideoMetadata(result)) {
             const coordinates = getCoordinates(result)
             const dateTaken = getDateTaken(result)

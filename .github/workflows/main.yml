@@ -33,8 +33,6 @@ jobs:
               run: yarn workspace @photon/api db:push
             - name: Generate Prisma
               run: yarn workspace @photon/api db:generate
-            - name: Setup DB
-              run: yarn db:up
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
