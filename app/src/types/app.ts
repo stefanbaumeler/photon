@@ -1,16 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
 import { TMedium } from '@photon/shared'
 
-export type TMediaInput = {
-
-}
-
 export type TMediumInput = {
     id: string
-}
-
-export type TAlbumsInput = {
-
 }
 
 export type TAlbumInput = {

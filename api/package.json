@@ -40,6 +40,7 @@
         "yarn": "^1.22.19"
     },
     "scripts": {
+        "build": "npx tsc",
         "dev": "ts-node-dev index.ts",
         "db:seed": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} src/database/seeds --schema src/database/schema.prisma",
         "db:truncate": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} src/database/truncate.ts --schema src/database/schema.prisma",

@@ -25,10 +25,6 @@ const BulkActions = () => {
     const archive = useSetMediaStatus(selection.selected, Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
     const [moreActive, setMoreActive] = useState(false)
 
-    const download = () => {
-
-    }
-
     const addToAlbumDialog = useAddToAlbumDialog()
 
     if (selection.mode !== ESelectionMode.SELECT) {
@@ -53,7 +49,6 @@ const BulkActions = () => {
             />
             <IconButton
                 hint={t(ETrans.DOWNLOAD)}
-                onClick={download}
                 icon={Icons.mdiTrayArrowDown}
             />
             <IconButton
