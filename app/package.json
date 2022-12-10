@@ -17,7 +17,6 @@
         "@types/react-datepicker": "^4.4.2",
         "@types/react-dom": "^18.0.5",
         "apollo-upload-client": "^17.0.0",
-        "graphql": "^16.5.0",
         "graphql-tag": "^2.12.6",
         "i18next": "^21.9.1",
         "leaflet": "^1.8.0",

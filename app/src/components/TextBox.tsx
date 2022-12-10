@@ -1,11 +1,15 @@
+import { ChangeEvent } from 'react'
+
 type Props = {
     id: string
     label?: string
     placeholder?: string
     type?: string
+    value?: string
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 const TextBox = ({
-    id, label, placeholder = '', type = 'text'
+    id, label, placeholder = '', type = 'text', value, onChange
 }: Props) => {
     const Label = () => label ? <label
         htmlFor={id}
@@ -21,6 +25,8 @@ const TextBox = ({
             type={type}
             className="input__input"
             placeholder={placeholder}
+            value={value}
+            onChange={onChange}
         />
     </div>
 }

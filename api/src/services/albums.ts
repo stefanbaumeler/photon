@@ -3,6 +3,7 @@ import { TAlbum } from '@photon/shared'
 import { DeepPartial } from '../types'
 import UsersService from './users'
 import { getDatabase } from '../database'
+import { Prisma } from '.prisma/client'
 
 export default class AlbumsService {
     prisma = getDatabase()
@@ -78,8 +79,9 @@ export default class AlbumsService {
         return asTAlbum
     }
 
-    readMany = async (take = 100) => {
+    readMany = async (conditions: Prisma.AlbumWhereInput = {}, take = 100) => {
         const data = await this.prisma.album.findMany({
+            where: conditions,
             take,
             include: {
                 owner: true,

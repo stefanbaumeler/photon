@@ -4,17 +4,23 @@ import { typeDefs, resolvers } from './graphql'
 import jwt from 'jsonwebtoken'
 import UsersService from './services/users'
 import { predefinedUserUUIDs } from './database/helpers/ids'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { authDirectiveTransformer } from './graphql/directives'
 
 export const createApolloServer = async (app: Express) => {
-    const apollo = new ApolloServer({
+    let schema = makeExecutableSchema({
         typeDefs,
-        resolvers,
+        resolvers
+    })
+
+    schema = authDirectiveTransformer(schema, 'auth')
+
+    const apollo = new ApolloServer({
+        schema,
         context: async ({
             req, res
         }) => {
             const service = new UsersService()
-
-            console.log('THE_NODE_ENV_IS:', process.env.NODE_ENV)
 
             if (process.env.NODE_ENV === 'test') {
                 const user = await service.readOne(predefinedUserUUIDs[0])
@@ -37,7 +43,7 @@ export const createApolloServer = async (app: Express) => {
             let userInfo
 
             try {
-                jwt.verify(accessToken, 'MySecret')
+                jwt.verify(accessToken, process.env.JWT_SECRET as string)
                 userInfo = jwt.decode(accessToken) as { id: string }
                 verified = true
             }

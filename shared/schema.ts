@@ -173,7 +173,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
-  media: Array<TMedium>;
+  media?: Maybe<Array<TMedium>>;
   medium: TMedium;
   user: TUser;
   users: Array<TUser>;
@@ -421,7 +421,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   album?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
-  media?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
+  media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
@@ -644,7 +644,7 @@ export type TQMediaVariables = Exact<{
 
 export type TQMedia = (
   { __typename?: 'Query' }
-  & { media: Array<(
+  & { media?: Maybe<Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
     & { owner?: Maybe<(
@@ -660,7 +660,7 @@ export type TQMedia = (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
-  )> }
+  )>> }
 );
 
 export type TQMediumVariables = Exact<{

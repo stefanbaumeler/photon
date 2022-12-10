@@ -3,7 +3,13 @@ import AlbumsMediaService from '../../services/albumsMedia'
 import { TQueryResolvers, TMutationResolvers } from '@photon/shared'
 
 const queries: Partial<TQueryResolvers> = {
-    albums: () => new AlbumsService().readMany(),
+    albums: (_, input, context) => {
+        return new AlbumsService().readMany({
+            owner: {
+                id: context.user.id
+            }
+        })
+    },
     album: (_, input) => new AlbumsService().readOne(input.id),
     albumMedia: (_, input) => new AlbumsMediaService().readMediaOfAlbum(input.id)
 }

@@ -6,10 +6,17 @@ import { TQueryResolvers, TMedium, TMutationResolvers } from '@photon/shared'
 import { DeepPartial } from '../../types'
 
 const queries: Partial<TQueryResolvers> = {
-    media: async (_, input) => {
+    media: async (_, input, context) => {
         return new MediaService().readMany(input.status ? {
-            status: input.status
-        } : {})
+            status: input.status,
+            owner: {
+                id: context.user.id
+            }
+        } : {
+            owner: {
+                id: context.user.id
+            }
+        })
     },
     medium: async (_, input) => await new MediaService().readOne(input.id)
 }

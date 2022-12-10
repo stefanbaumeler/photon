@@ -32,7 +32,6 @@ const GalleryView = ({ media }: Props) => {
     useEffect(() => {
         const unsortedSections = Array.from(takenDates).map((takenDate, key) => {
             const takenOnThisDate = media.filter((medium) => formatDate(medium.dateTaken) === takenDate)
-            console.log(takenDates)
             const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
 
             if (!notRemoved.length) {

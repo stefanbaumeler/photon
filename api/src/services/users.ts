@@ -1,4 +1,4 @@
-import { TUser, TToken } from '@photon/shared'
+import { TUser } from '@photon/shared'
 import { getDatabase } from '../database'
 import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
@@ -75,120 +75,82 @@ export default class UsersService {
         })
     }
 
-    signup = (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response) => new Promise<TToken>( (resolve) => {
-        this.readOneByMail(user.mail).then((oldUser) => {
-            if (oldUser) {
-                resolve({
-                    accessToken: '',
-                    refreshToken: ''
-                })
-                return
+    setUserCookie = async (user: TUser, res: Response) => {
+        const accessToken = jwt.sign(
+            {
+                id: user.id,
+                mail: user.mail
+            },
+            process.env.JWT_SECRET as string,
+            {
+
+                expiresIn: '10min'
             }
+        )
 
-            this.createOne(user).then((user) => {
-                const accessToken = jwt.sign(
-                    {
-                        id: user.id,
-                        mail: user.mail
-                    },
-                    'MySecret',
-                    {
-
-                        expiresIn: '10min'
-                    }
-                )
-
-                const refreshToken = jwt.sign(
-                    {
-                        id: user.id,
-                        mail: user.mail
-                    },
-                    'MySecret',
-                    {
-                        expiresIn: '30d'
-                    }
-                )
-
-                res.cookie('accessToken', accessToken, {
-                    httpOnly: true,
-                    secure: true,
-                    maxAge: 30 * 24 * 60 * 60 * 1000
-                })
-
-                res.cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: true,
-                    maxAge: 30 * 24 * 60 * 60 * 1000
-                })
-
-                resolve({
-                    accessToken,
-                    refreshToken
-                })
-            })
-        })
-    })
-
-    signIn = (credentials: Pick<TUser, 'mail' | 'password'>, res: Response) => new Promise<TToken>((resolve) => {
-        this.readOneByMail(credentials.mail).then((user) => {
-            if (!user) {
-                resolve({
-                    accessToken: '',
-                    refreshToken: ''
-                })
-                return
+        const refreshToken = jwt.sign(
+            {
+                id: user.id,
+                mail: user.mail
+            },
+            process.env.JWT_SECRET as string,
+            {
+                expiresIn: '30d'
             }
+        )
 
-            argon2.verify(user.password, credentials.password).then((match) => {
-                if (!match) {
-                    resolve({
-                        accessToken: '',
-                        refreshToken: ''
-                    })
-                    return
-                }
-
-                const accessToken = jwt.sign(
-                    {
-                        id: user.id,
-                        mail: user.mail
-                    },
-                    'MySecret',
-                    {
-                        expiresIn: '10min'
-                    }
-                )
-
-                const refreshToken = jwt.sign(
-                    {
-                        id: user.id,
-                        mail: user.mail
-                    },
-                    'MySecret',
-                    {
-                        expiresIn: '30d'
-                    }
-                )
-
-                res.cookie('accessToken', accessToken, {
-                    httpOnly: true,
-                    secure: true,
-                    maxAge: 30 * 24 * 60 * 60 * 1000
-                })
-
-                res.cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: true,
-                    maxAge: 30 * 24 * 60 * 60 * 1000
-                })
-
-                resolve({
-                    accessToken,
-                    refreshToken
-                })
-            })
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000
         })
-    })
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        })
+
+        return {
+            accessToken,
+            refreshToken
+        }
+    }
+
+    signup = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response) => {
+        const oldUser = await this.readOneByMail(user.mail)
+
+        if (oldUser) {
+            return {
+                accessToken: '',
+                refreshToken: ''
+            }
+        }
+
+        const createdUser = await this.createOne(user)
+        return this.setUserCookie(createdUser, res)
+    }
+
+    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>, res: Response) => {
+        const existingUser = await this.readOneByMail(credentials.mail)
+
+        if (!existingUser) {
+            return {
+                accessToken: '',
+                refreshToken: ''
+            }
+        }
+        const match = await argon2.verify(existingUser.password, credentials.password)
+
+        if (!match) {
+            return {
+                accessToken: '',
+                refreshToken: ''
+            }
+        }
+
+        return this.setUserCookie(existingUser, res)
+    }
 
     signOut = (res: Response) => new Promise<boolean>((resolve) => {
         res.clearCookie('accessToken')
@@ -200,7 +162,7 @@ export default class UsersService {
     refresh = (refreshToken: string, accessToken: string, res: Response) => {
         try {
             console.log(refreshToken)
-            const refreshTokenValid = jwt.verify(refreshToken, 'MySecret')
+            const refreshTokenValid = jwt.verify(refreshToken, process.env.JWT_SECRET as string)
         }
         catch {
             return false
@@ -215,7 +177,7 @@ export default class UsersService {
 
         const newAccessToken = jwt.sign(
             payload,
-            'MySecret',
+            process.env.JWT_SECRET as string,
             {
                 expiresIn: '10min'
             }

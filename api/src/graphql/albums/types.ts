@@ -17,17 +17,17 @@ export default gql`
     }
 
     type Query {
-        albums: [Album!]!
-        album(id: ID!): Album!
-        albumMedia(id: ID!): [Medium!]!
+        albums: [Album!]! @auth
+        album(id: ID!): Album! @auth
+        albumMedia(id: ID!): [Medium!]! @auth
     }
 
     type Mutation {
-        deleteAlbum(ids: [ID]!): Count
-        addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]!
-        removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album
-        updateAlbumTitle(id: ID!, title: String!): Album
-        createAlbum(album: AlbumInput, media: [ID]): Album
-        setAlbumCover(idAlbum: ID!, idMedium: ID!): Album
+        deleteAlbum(ids: [ID]!): Count @auth
+        addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]! @auth
+        removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album @auth
+        updateAlbumTitle(id: ID!, title: String!): Album @auth
+        createAlbum(album: AlbumInput, media: [ID]): Album @auth
+        setAlbumCover(idAlbum: ID!, idMedium: ID!): Album @auth
     }
 `

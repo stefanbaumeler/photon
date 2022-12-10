@@ -12,8 +12,8 @@ export default gql`
     }
 
     type Query {
-        users: [User!]!
-        user(id: ID!): User!
+        users: [User!]! @auth
+        user(id: ID!): User! @auth
     }
 
     type Token {

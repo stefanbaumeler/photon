@@ -8,6 +8,8 @@ import { DateTimeScalar } from 'graphql-date-scalars'
 import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '@photon/shared'
 
 const global = gql`
+    directive @auth on OBJECT | FIELD_DEFINITION
+
     scalar Upload
     scalar Date
 

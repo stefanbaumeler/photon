@@ -8,9 +8,7 @@ const errorLink = onError(({
 }) => {
     if (graphQLErrors) {
         graphQLErrors.forEach((err) => {
-            console.log(
-                `[GraphQL error]: Message: ${err.message}, Location: ${JSON.stringify(err.locations)}, Path: ${err.path?.join(', ')}`
-            )
+            console.log(err)
         })
     }
 

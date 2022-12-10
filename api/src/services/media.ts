@@ -86,7 +86,7 @@ export default class MediaService {
     }
 
     readMany = async (conditions: Prisma.MediumWhereInput = {}, take = 100) => {
-        const res = await this.prisma.medium.findMany({
+        return await this.prisma.medium.findMany({
             where: conditions,
             take,
             include: {
@@ -94,8 +94,6 @@ export default class MediaService {
                 uploader: true
             }
         }) as TMedium[]
-
-        return res
     }
 
     destroy = (keys: (string | null)[] | string) => {

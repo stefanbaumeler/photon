@@ -40,8 +40,8 @@ export default gql`
     }
 
     type Query {
-        media(status: String): [Medium!]!
-        medium(id: ID!): Medium!
+        media(status: String): [Medium!] @auth
+        medium(id: ID!): Medium! @auth
     }
 
     type Count {
@@ -49,10 +49,10 @@ export default gql`
     }
 
     type Mutation {
-        deleteMedia(ids: [ID]!): [Medium!]!
-        rotate(id: ID!): Medium!
-        setMediaStatus(media: [ID]!, status: String): Count
-        upload(file: [Upload]!): [File]!
-        emptyTrash: [Medium!]!
+        deleteMedia(ids: [ID]!): [Medium!]! @auth
+        rotate(id: ID!): Medium! @auth
+        setMediaStatus(media: [ID]!, status: String): Count @auth
+        upload(file: [Upload]!): [File]! @auth
+        emptyTrash: [Medium!]! @auth
     }
 `

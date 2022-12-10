@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withGraphql = require('next-plugin-graphql')
+const NextConfig = require('next')
 
 module.exports = withGraphql({
     async rewrites () {

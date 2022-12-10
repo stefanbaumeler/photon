@@ -1,9 +1,10 @@
-import { useMSignIn, useMSignUp } from '@photon/shared'
+import { useMSignIn, useMSignUp, QMediaDocument } from '@photon/shared'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
+import { EMediumStatus } from '@/types/app'
 
 enum ELoginFormMode {
     DEFAULT,
@@ -11,30 +12,68 @@ enum ELoginFormMode {
 }
 
 const LoginPage = () => {
-    const [signIn] = useMSignIn()
+    const [signIn] = useMSignIn({
+        refetchQueries: [{
+            query: QMediaDocument,
+            variables: {
+                status: EMediumStatus.DEFAULT
+            }
+        }]
+    })
     const [signUp] = useMSignUp()
     const { t } = useTranslation()
     const [loginFormMode, setLoginFormMode] = useState<ELoginFormMode>(ELoginFormMode.DEFAULT)
+    const [mail, setMail] = useState('')
+    const [password, setPassword] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+
+    useEffect(() => {
+        const keyDownHandler = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                event.preventDefault()
+
+                if (mail && password) {
+                    if (loginFormMode === ELoginFormMode.DEFAULT) {
+                        submit()
+                    }
+
+                    if (loginFormMode === ELoginFormMode.SIGNUP && firstName && lastName) {
+                        submit()
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('keydown', keyDownHandler)
+
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler)
+        }
+    }, [mail, password, firstName, lastName, loginFormMode])
+
     const router = useRouter()
 
     const signInUser = () => {
         signIn({
             variables: {
-                mail: 'test@test.com',
-                password: 'test'
+                mail,
+                password
             }
-        }).then(() => {
-            router.push('/')
+        }).then(async (res) => {
+            if (res.data.signIn.accessToken.length) {
+                await router.push('/')
+            }
         })
     }
 
-    const signupUser = () => {
+    const signUpUser = () => {
         signUp({
             variables: {
-                firstName: 'Foo',
-                lastName: 'Bar',
-                mail: 'foo@bar.com',
-                password: 'mypass'
+                firstName,
+                lastName,
+                mail,
+                password
             }
         }).then((res) => {
             console.log(res)
@@ -43,17 +82,20 @@ const LoginPage = () => {
 
     const title = loginFormMode === ELoginFormMode.SIGNUP ? t(ETrans.SIGN_UP) : t(ETrans.SIGN_IN)
 
-    const SignUpFields = () => loginFormMode === ELoginFormMode.SIGNUP ? <>
+    const SignUpFields = useMemo(() => loginFormMode === ELoginFormMode.SIGNUP ? <>
         <TextBox
-            id={'fistname'}
+            id={'firstName'}
             label={t(ETrans.FIRST_NAME)}
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
         />
         <TextBox
-            id={'lastname'}
+            id={'lastName'}
             label={t(ETrans.LAST_NAME)}
-            type="password"
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
         />
-    </> : <></>
+    </> : <></>, [loginFormMode, firstName, lastName])
 
     const SignInLinks = () => loginFormMode === ELoginFormMode.DEFAULT ? <>
         <LinkButton
@@ -83,7 +125,14 @@ const LoginPage = () => {
     </> : <></>
 
     const submit = () => {
-        signInUser()
+        console.log(loginFormMode)
+        if (loginFormMode === ELoginFormMode.DEFAULT) {
+            signInUser()
+        }
+
+        if (loginFormMode === ELoginFormMode.SIGNUP) {
+            signUpUser()
+        }
     }
 
     return <section>
@@ -97,15 +146,19 @@ const LoginPage = () => {
                                 {title}
                             </h1>
                         </div>
-                        <SignUpFields />
+                        {SignUpFields}
                         <TextBox
                             id={'mail'}
                             label={t(ETrans.MAIL)}
+                            value={mail}
+                            onChange={(event) => setMail(event.target.value)}
                         />
                         <TextBox
                             id={'password'}
                             label={t(ETrans.PASSWORD)}
                             type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
                         />
                         <RememberMe />
                         <div className="login__footer">

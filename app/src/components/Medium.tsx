@@ -28,6 +28,7 @@ const Medium = ({
     const ImageOrVideo = useMemo(() => {
         if (medium.mimetype?.startsWith('image')) {
             return <Image
+                unoptimized={true}
                 priority={priority}
                 data-cy={cy}
                 className="medium__image"
