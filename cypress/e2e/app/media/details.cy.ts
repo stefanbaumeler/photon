@@ -2,16 +2,14 @@ describe('Details', function () {
     const isFirstImage = (shouldBeFirst = true) => {
         cy.get('[data-cy="teaser-image"]').first().invoke('attr', 'src').then((src1) => {
             cy.get('[data-cy="details-image"]').invoke('attr', 'src').then((src2) => {
-                const split1 = new URL(src1, window.location.origin).search.split(/[?&=]/g)
-                const split2 = new URL(src2, window.location.origin).search.split(/[?&=]/g)
-                const url1 = decodeURIComponent(split1[split1.indexOf('url') + 1]).split('?')[0]
-                const url2 = decodeURIComponent(split2[split2.indexOf('url') + 1]).split('?')[0]
+                const path1 = new URL(src1, window.location.origin).pathname
+                const path2 = new URL(src2, window.location.origin).pathname
 
                 if (shouldBeFirst) {
-                    expect(url1).to.eq(url2)
+                    expect(path1).to.eq(path2)
                 }
                 else {
-                    expect(url1).to.not.eq(url2)
+                    expect(path1).to.not.eq(path2)
                 }
             })
         })

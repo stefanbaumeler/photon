@@ -1,9 +1,4 @@
 import { exec } from 'child_process'
-import dotenv from 'dotenv'
 
-dotenv.config({
-    path: process.env.NODE_ENV ? `./api/.env.${process.env.NODE_ENV}` : './api/.env'
-})
-
-exec(`dropdb ${process.env.PG_DATABASE_NAME}`)
-exec('rm ./api/uploads/*')
+exec(`docker exec photon-db-1 dropdb ${process.env.PG_DATABASE_NAME} -U ${process.env.PG_DATABASE_USER}`)
+exec('rm ./packages/api/uploads/*')

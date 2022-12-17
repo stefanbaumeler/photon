@@ -1,0 +1,64 @@
+version: '3.9'
+
+networks:
+    proxy:
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.5.0.0/16
+
+services:
+    api:
+        platform: linux/x86_64
+        build:
+            context: .
+            target: dev
+        entrypoint: ['yarn', 'start:api']
+        depends_on:
+            - db
+        ports:
+            - "2001:2001"
+        expose:
+            - 2001
+        networks:
+            proxy:
+                ipv4_address: 10.5.0.10
+    app:
+        platform: linux/x86_64
+        build:
+            context: .
+            target: dev
+        entrypoint: ['yarn', 'start:app']
+        ports:
+            - "3030:3030"
+        expose:
+            - 3030
+        networks:
+            proxy:
+                ipv4_address: 10.5.0.12
+
+    db:
+        image: postgres
+        restart: always
+        environment:
+            - POSTGRES_USER=stefanbaumeler
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=photos
+        ports:
+            - "5555:5432"
+        expose:
+            - 5555
+        networks:
+            proxy:
+                ipv4_address: 10.5.0.11
+    cypress:
+        image: 'cypress/included:12.1.0'
+        depends_on:
+            - db
+            - api
+            - app
+        environment:
+            - CYPRESS_baseUrl=http://0.0.0.0:3030
+        volumes:
+            - ./cypress:./cypress
+

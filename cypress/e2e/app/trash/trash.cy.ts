@@ -11,7 +11,6 @@ const moveItemToTrash = () => {
 describe('Trash', function () {
     before(function () {
         cy.exec('yarn db:seed')
-        cy.visit('/')
     })
 
     beforeEach( function () {

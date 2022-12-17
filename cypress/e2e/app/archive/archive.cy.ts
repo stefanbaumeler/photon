@@ -11,7 +11,6 @@ describe('Archive', function () {
     })
 
     it('moves item to archive and restores it', function () {
-        cy.visit('/')
         cy.get('[data-cy="teaser-check"]').first().click()
         cy.get('[data-cy="bulk-more"]').click()
         cy.get('[data-cy="move-to-archive"]').click()

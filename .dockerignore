@@ -1,9 +1,4 @@
-node_modules
-*/node_modules
+**/dist
 **/node_modules
-
-.env
-*/.env
 **/.env
-
-.git
+**/.git

@@ -6,44 +6,44 @@
     "license": "MIT",
     "type": "module",
     "workspaces": [
-        "app",
-        "api",
-        "shared"
+        "packages/*"
     ],
     "engines": {
-        "node": "^16.16.0"
+        "node": "^16.12.0"
     },
     "engineStrict": true,
-    "dependencies": {
-        "@next/eslint-plugin-next": "^12.2.3",
-        "@typescript-eslint/eslint-plugin": "^5.29.0",
-        "@typescript-eslint/parser": "^5.29.0",
-        "dotenv": "^16.0.3",
-        "eslint": "^8.20.0",
-        "eslint-plugin-react": "^7.30.1",
-        "graphql": "^16.6.0",
-        "sharp": "^0.31.1",
-        "typescript": "^4.7.4"
-    },
-    "devDependencies": {
-        "concurrently": "^7.4.0",
-        "cypress": "10.11.0",
-        "cypress-dotenv": "^2.0.0",
-        "cypress-recurse": "^1.23.0",
-        "eslint-plugin-cypress": "^2.12.1",
-        "start-server-and-test": "^1.14.0"
-    },
     "scripts": {
+        "dev": "run-s start:docker watch",
+        "watch": "run-p watch:*",
+        "watch:app": "yarn workspace @photon/app watch",
+        "watch:api": "yarn workspace @photon/api watch",
+        "start:docker": "docker-compose up -d db",
         "db:up": "node ./scripts/setup-db.js",
         "db:down": "node ./scripts/teardown-db.js",
         "db:seed": "yarn workspace @photon/api db:seed",
         "db:truncate": "yarn workspace @photon/api db:truncate",
-        "start": "conc \"yarn start:api\" \"yarn start:app\"",
-        "start:app": "yarn workspace @photon/app dev",
-        "start:api": "yarn workspace @photon/api dev",
         "test": "sh ./scripts/test.sh",
         "test:open": "sh ./scripts/test-open.sh",
         "cy": "npx cypress run --e2e -b 'chrome'",
         "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "graphql": "^16.6.0",
+        "typescript": "^4.7.4"
+    },
+    "devDependencies": {
+        "cypress": "10.11.0",
+        "cypress-dotenv": "^2.0.0",
+        "cypress-recurse": "^1.23.0",
+        "eslint-plugin-cypress": "^2.12.1",
+        "lerna": "^6.1.0",
+        "npm-run-all": "^4.1.5",
+        "start-server-and-test": "^1.14.0",
+        "@next/eslint-plugin-next": "^12.2.3",
+        "@typescript-eslint/eslint-plugin": "^5.29.0",
+        "@typescript-eslint/parser": "^5.29.0",
+        "eslint": "^8.20.0",
+        "eslint-plugin-react": "^7.30.1"
     }
 }

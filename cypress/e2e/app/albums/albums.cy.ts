@@ -30,6 +30,7 @@ describe('Albums', function () {
 
     const makeEdits = function () {
         // Enter edit mode
+        cy.get('[data-cy="album-title"]').should('be.visible')
         cy.get('[data-cy="album-title"]').click()
 
         // Can enter title
@@ -47,7 +48,7 @@ describe('Albums', function () {
     }
 
     it('deletes the album', function () {
-        cy.visit('/albums/')
+        cy.visit('/albums')
         cy.get('[data-cy="album-teaser"]').should('have.length', 5)
 
         cy.get('[data-cy="album-teaser-title"]').contains('Test Album 0')
@@ -83,12 +84,13 @@ describe('Albums', function () {
         })
 
         // has redirected
-        cy.url().should('contain', '/albums/' )
+        cy.wait('@QAlbum')
         cy.get('[data-cy="teaser"]').should('have.length', 2)
     })
 
     it('restores edit changes', function () {
         cy.visit(`/albums/${predefinedAlbumUUIDs[1]}`)
+        cy.wait('@QAlbum')
 
         makeEdits()
 
@@ -100,6 +102,7 @@ describe('Albums', function () {
 
     it('saves edit changes', function () {
         cy.visit(`/albums/${predefinedAlbumUUIDs[1]}`)
+        cy.wait('@QAlbum')
 
         makeEdits()
 
@@ -115,7 +118,7 @@ describe('Albums', function () {
             force: true
         })
 
-        cy.url().should('match', /.*\/albums$/)
+        cy.wait('@QAlbums')
 
         cy.get('[data-cy="album-teaser"]').should('have.length', 5)
 
@@ -150,16 +153,20 @@ describe('Albums', function () {
         cy.get('[data-cy="teaser"]').should('have.length', 3)
     })
 
-    it('changes the album cover', function () {
-        cy.visit('/albums/fd8a10df-5db5-44ad-b131-019c274a1096')
+    it.only('changes the album cover', function () {
+        cy.visit(`/albums/${predefinedAlbumUUIDs[2]}`)
+
+        cy.wait('@QAlbum')
+
         cy.get('[data-cy="album-more"]').click({
             force: true
         })
         cy.get('[data-cy="album-set-cover"]').click()
         cy.get('[data-cy="teaser-check"]').last().click()
         cy.get('[data-cy="save-changes"]').click()
+        cy.wait('@QAlbum')
         cy.visit('/albums')
-        cy.url().should('contain', '/albums' )
+        cy.wait('@QAlbums')
         cy.get('[data-cy="album-teaser-title"]').should('have.length', 5)
         cy.get('[data-cy="album-teaser-title"]').contains('Test Album 2')
             .parents('[data-cy="album-teaser"]')
