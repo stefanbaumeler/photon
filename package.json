@@ -22,19 +22,16 @@
         "start:api": "yarn workspace @photon/api start",
         "start:app": "yarn workspace @photon/app start",
         "start:docker": "docker-compose up -d db",
+        "start:ci": "run-s build start",
         "db:up": "yarn workspace @photon/api db:up",
         "db:down": "yarn workspace @photon/api db:down",
         "db:seed": "yarn workspace @photon/api db:seed",
         "db:truncate": "yarn workspace @photon/api db:truncate",
-        "test": "NODE_ENV=test run-s start:docker db:up build test:run",
-        "test:open": "NODE_ENV=test run-s start:docker db:up build test:run:open",
-        "test:run": "start-server-and-test watch http://localhost:11011 cy",
-        "test:run:open": "run-p watch cy:open",
         "build": "run-p build:*",
         "build:app": "yarn workspace @photon/app build:static",
         "build:api": "yarn workspace @photon/api build",
-        "cy": "npx cypress run --e2e -b 'chrome'",
-        "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
+        "test": "npx cypress run --e2e -b 'chrome'",
+        "test:open": "npx cypress open --e2e -b 'chrome:canary'"
     },
     "dependencies": {
         "dotenv": "^16.0.3",
