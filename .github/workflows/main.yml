@@ -33,7 +33,7 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile --immutable
             - name: Build Servers
-              run: NODE_ENV=test yarn build
+              run: yarn build
               env:
                   NODE_ENV: test
             - name: Cypress Tests
