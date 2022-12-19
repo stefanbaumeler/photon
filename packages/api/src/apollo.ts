@@ -40,7 +40,7 @@ export const createApolloServer = async (app: Express) => {
             const accessToken = req.cookies.accessToken as string
             const refreshToken = req.cookies.refreshToken
 
-            console.log(req.cookies)
+            console.log(req.cookies, req.signedCookies)
             let verified = false
             let userInfo
 
@@ -68,7 +68,8 @@ export const createApolloServer = async (app: Express) => {
 
             return {
                 verified,
-                res
+                res,
+                req
             }
         }
     })
@@ -78,7 +79,7 @@ export const createApolloServer = async (app: Express) => {
     apollo.applyMiddleware({
         app,
         cors: {
-            origin: ['http://0.0.0.0:3030', 'app://-', 'https://127.0.0.1:8001', 'https://studio.apollographql.com'],
+            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
             credentials: true
         }
     })

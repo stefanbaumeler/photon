@@ -74,7 +74,7 @@ export default class UsersService {
         })
     }
 
-    setUserCookie = async (user: TUser, res: Response) => {
+    setUserCookie = async (user: TUser, res: Response, req: Request) => {
         const accessToken = jwt.sign(
             {
                 id: user.id,
@@ -100,14 +100,16 @@ export default class UsersService {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: false,
-            maxAge: 30 * 24 * 60 * 60 * 1000
+            secure: process.env.NODE_ENV !== 'development',
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            sameSite: process.env.NODE_ENV === 'development' ? undefined : 'none'
         })
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
-            maxAge: 30 * 24 * 60 * 60 * 1000
+            secure: process.env.NODE_ENV !== 'development',
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            sameSite: process.env.NODE_ENV === 'development' ? undefined : 'none'
         })
 
         return {
@@ -116,7 +118,7 @@ export default class UsersService {
         }
     }
 
-    signup = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response) => {
+    signUp = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response, req: Request) => {
         const oldUser = await this.readOneByMail(user.mail)
 
         if (oldUser) {
@@ -127,10 +129,10 @@ export default class UsersService {
         }
 
         const createdUser = await this.createOne(user)
-        return this.setUserCookie(createdUser, res)
+        return this.setUserCookie(createdUser, res, req)
     }
 
-    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>, res: Response) => {
+    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>, res: Response, req: Request) => {
         const existingUser = await this.readOneByMail(credentials.mail)
 
         if (!existingUser) {
@@ -148,7 +150,7 @@ export default class UsersService {
             }
         }
 
-        return this.setUserCookie(existingUser, res)
+        return this.setUserCookie(existingUser, res, req)
     }
 
     signOut = (res: Response) => new Promise<boolean>((resolve) => {
@@ -184,8 +186,9 @@ export default class UsersService {
 
         res.cookie('accessToken', newAccessToken, {
             httpOnly: true,
-            secure: false,
-            maxAge: 30 * 24 * 60 * 60 * 1000
+            secure: process.env.NODE_ENV !== 'development',
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            sameSite: 'none'
         })
 
         return newAccessToken

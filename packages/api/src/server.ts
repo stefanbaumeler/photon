@@ -1,12 +1,21 @@
 import { createApp } from './app'
+import * as https from 'https'
 import * as http from 'http'
 import { createApolloServer } from './apollo'
+import fs from 'fs'
 
-export const createServer = async (): Promise<http.Server> => {
+export const createServer = async (): Promise<https.Server|http.Server> => {
     const app = await createApp()
     const apollo = await createApolloServer(app)
 
-    return http.createServer(app)
+    if (process.env.NODE_ENV === 'development') {
+        return http.createServer(app)
+    }
+
+    return https.createServer({
+        key: fs.readFileSync('../../ssl/key.pem'),
+        cert: fs.readFileSync('../../ssl/cert.pem')
+    }, app)
 }
 
 const port = 2001

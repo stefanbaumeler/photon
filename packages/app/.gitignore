@@ -25,3 +25,5 @@ yarn-error.log*
 .next
 
 /node_modules
+/src-tauri/target
+/out

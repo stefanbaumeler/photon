@@ -17,6 +17,14 @@ const GalleryView = ({ media }: Props) => {
 
     const takenDates = new Set<string>()
 
+    let foo
+
+    try {
+        foo = window.location.href
+    } catch (e) {
+        console.log(e)
+    }
+
     media.forEach((medium) => {
         const dateTaken = formatDate(medium.dateTaken)
 
@@ -62,6 +70,7 @@ const GalleryView = ({ media }: Props) => {
 
     return <div className="gallery">
         <div className="gallery__header">
+            {foo}
             sort
         </div>
         <div className="gallery__sections">

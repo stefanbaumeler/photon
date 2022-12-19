@@ -13,7 +13,8 @@
     },
     "engineStrict": true,
     "scripts": {
-        "dev": "run-s start:docker watch",
+        "dev": "NODE_ENV=development run-s start:docker watch",
+        "prod:api": "run-s start:docker watch:api",
         "watch": "run-p watch:*",
         "watch:app": "yarn workspace @photon/app watch",
         "watch:api": "yarn workspace @photon/api watch",
@@ -24,8 +25,7 @@
         "db:truncate": "yarn workspace @photon/api db:truncate",
         "test": "sh ./scripts/test.sh",
         "test:open": "sh ./scripts/test-open.sh",
-        "cy": "npx cypress run --e2e -b 'chrome'",
-        "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
+        "build": "yarn workspace @photon/app build"
     },
     "dependencies": {
         "dotenv": "^16.0.3",

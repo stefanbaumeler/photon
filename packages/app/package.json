@@ -6,8 +6,10 @@
         "watch": "run-p -l watch:*",
         "watch:next": "next dev -p 3030",
         "watch:app-schema": "graphql-codegen -r dotenv/config -c codegen.yml -w",
-        "start": "next start -p 3030",
+        "build": "run-s build:*",
         "build:static": "next build && next export",
+        "build:tauri": "yarn tauri build",
+        "start": "next start -p 3030",
         "lint": "next lint"
     },
     "dependencies": {
@@ -40,6 +42,7 @@
         "@graphql-codegen/cli": "^2.6.2",
         "@graphql-codegen/typescript-operations": "^2.4.2",
         "@graphql-codegen/typescript-react-apollo": "^3.2.16",
+        "@tauri-apps/cli": "^1.2.2",
         "@types/apollo-upload-client": "^17.0.2",
         "@types/leaflet": "^1.8.0",
         "@types/lodash": "^4.14.187",

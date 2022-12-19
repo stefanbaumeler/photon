@@ -35,6 +35,7 @@
         "**.*.css"
     ],
     "exclude": [
+        "src-tauri",
         "node_modules",
         "src/api/schema.ts"
     ],

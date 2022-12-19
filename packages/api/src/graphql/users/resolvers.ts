@@ -7,13 +7,17 @@ const queries: Partial<TQueryResolvers> = {
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    signIn: (_, input, { res }) => {
-        return new UsersService().signIn(input, res)
+    signIn: (_, input, {
+        res, req
+    }) => {
+        return new UsersService().signIn(input, res, req)
     },
     signOut: (_, input, { res }) => {
         return new UsersService().signOut(res)
     },
-    signUp: (_, input, { res }) => new UsersService().signup(input, res)
+    signUp: (_, input, {
+        res, req
+    }) => new UsersService().signUp(input, res, req)
 }
 
 export default {
