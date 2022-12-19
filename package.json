@@ -23,8 +23,11 @@
         "db:down": "yarn workspace @photon/api db:down",
         "db:seed": "yarn workspace @photon/api db:seed",
         "db:truncate": "yarn workspace @photon/api db:truncate",
-        "test": "NODE_ENV=test run-p start:docker cy db:up watch",
-        "test:open": "NODE_ENV=test run-p start:docker cy:open db:up watch",
+        "test": "NODE_ENV=test run-s test:setup test:run",
+        "test:open": "NODE_ENV=test run-s test:setup test:run:open",
+        "test:setup": "run-s start:docker db:up",
+        "test:run": "run-p watch cy",
+        "test:run:open": "run-p watch cy:open",
         "build": "yarn workspace @photon/app build",
         "cy": "npx cypress run --e2e -b 'chrome'",
         "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
