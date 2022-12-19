@@ -32,10 +32,6 @@ jobs:
                   cache: 'yarn'
             - name: Install dependencies
               run: yarn install --frozen-lockfile --immutable
-            - name: Migrate Prisma
-              run: yarn workspace @photon/api db:push
-            - name: Generate Prisma
-              run: yarn workspace @photon/api db:generate
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:

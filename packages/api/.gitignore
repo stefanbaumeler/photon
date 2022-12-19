@@ -1,4 +1,12 @@
-uploads
+.DS_Store
+.idea
+
+.env
+.env.development
+
+yarn-debug.log*
+yarn-error.log*
 
 /node_modules
+/uploads
 /dist
