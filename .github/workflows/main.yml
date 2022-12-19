@@ -37,7 +37,7 @@ jobs:
             - name: Build test servers
               run: NODE_ENV=test yarn build
             - name: Run test servers
-              run: NODE_ENV=test yarn watch
+              run: NODE_ENV=test yarn start
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
               with:
