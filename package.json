@@ -28,7 +28,9 @@
         "test:setup": "run-s start:docker db:up",
         "test:run": "run-p watch cy",
         "test:run:open": "run-p watch cy:open",
-        "build": "yarn workspace @photon/app build",
+        "build": "run-p build:*",
+        "build:app": "yarn workspace @photon/app build:static",
+        "build:api": "yarn workspace @photon/api build",
         "cy": "npx cypress run --e2e -b 'chrome'",
         "cy:open": "npx cypress open --e2e -b 'chrome:canary'"
     },
