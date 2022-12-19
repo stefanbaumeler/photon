@@ -98,18 +98,20 @@ export default class UsersService {
             }
         )
 
+        const secure = !!parseInt(process.env.API_SECURE || '1', 10)
+
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
+            secure,
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            sameSite: process.env.NODE_ENV === 'development' ? undefined : 'none'
+            sameSite: secure ? 'none' : undefined
         })
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
+            secure,
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            sameSite: process.env.NODE_ENV === 'development' ? undefined : 'none'
+            sameSite: secure ? 'none' : undefined
         })
 
         return {

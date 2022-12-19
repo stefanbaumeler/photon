@@ -5,7 +5,7 @@
     "scripts": {
         "watch": "run-p -l watch:*",
         "watch:next": "next dev -p 3030",
-        "watch:app-schema": "graphql-codegen -r dotenv/config -c codegen.yml -w",
+        "watch:app-schema": "graphql-codegen -c codegen.ts -w",
         "build": "run-s build:*",
         "build:static": "next build && next export",
         "build:tauri": "yarn tauri build",
@@ -17,6 +17,7 @@
         "@heroicons/react": "^1.0.6",
         "@mdi/js": "^7.0.96",
         "@mdi/react": "^1.6.1",
+        "@tauri-apps/api": "^1.2.0",
         "@tippyjs/react": "^4.2.6",
         "@types/react": "^18.0.14",
         "@types/react-datepicker": "^4.4.2",

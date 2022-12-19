@@ -2643,6 +2643,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@tauri-apps/api@^1.2.0":
+  version "1.2.0"
+  resolved "https://packages.1up.io:443/@tauri-apps%2fapi/-/api-1.2.0.tgz#1f196b3e012971227f41b98214c846430a4eb477"
+  integrity sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==
+
 "@tauri-apps/cli-darwin-arm64@1.2.2":
   version "1.2.2"
   resolved "https://packages.1up.io:443/@tauri-apps%2fcli-darwin-arm64/-/cli-darwin-arm64-1.2.2.tgz#f18b0689b399b64dc67da41c0fd4da474be324fe"

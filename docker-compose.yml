@@ -17,9 +17,9 @@ services:
         depends_on:
             - db
         ports:
-            - "2001:2001"
+            - "11011:11011"
         expose:
-            - 2001
+            - 11011
         networks:
             proxy:
                 ipv4_address: 10.5.0.10
@@ -58,7 +58,7 @@ services:
             - api
             - app
         environment:
-            - CYPRESS_baseUrl=http://0.0.0.0:3030
+            - CYPRESS_baseUrl=http://localhost:3030
         volumes:
             - ./cypress:./cypress
 

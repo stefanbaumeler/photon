@@ -1,13 +1,18 @@
-import { PrismaClient } from '@prisma/client'
 import dotenv from 'dotenv'
+import { getDatabase, setDbUrl } from '../index'
 
-dotenv.config()
+dotenv.config({
+    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env',
+    override: true
+})
+
+setDbUrl()
 
 import usersSeed from './users'
 import mediaSeed from './media'
 import albumsSeed from './albums'
 
-const prisma = new PrismaClient()
+const prisma = getDatabase()
 
 const run = async () => {
     try {

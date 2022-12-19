@@ -153,7 +153,7 @@ describe('Albums', function () {
         cy.get('[data-cy="teaser"]').should('have.length', 3)
     })
 
-    it.only('changes the album cover', function () {
+    it('changes the album cover', function () {
         cy.visit(`/albums/${predefinedAlbumUUIDs[2]}`)
 
         cy.wait('@QAlbum')

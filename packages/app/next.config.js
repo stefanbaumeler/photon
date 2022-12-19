@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withGraphql = require('next-plugin-graphql')
-const NextConfig = require('next')
 
 module.exports = withGraphql({
     reactStrictMode: true,
@@ -26,7 +25,6 @@ module.exports = withGraphql({
         ]
     },
     images: {
-        unoptimized: true,
-        domains: ['0.0.0.0']
+        unoptimized: true
     }
 })
