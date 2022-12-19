@@ -22,7 +22,6 @@
         "start:api": "yarn workspace @photon/api start",
         "start:app": "yarn workspace @photon/app start",
         "start:docker": "docker-compose up -d db",
-        "start:ci": "run-s build start",
         "db:up": "yarn workspace @photon/api db:up",
         "db:down": "yarn workspace @photon/api db:down",
         "db:seed": "yarn workspace @photon/api db:seed",
