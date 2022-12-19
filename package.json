@@ -29,6 +29,7 @@
         "build": "run-p build:*",
         "build:app": "yarn workspace @photon/app build:static",
         "build:api": "yarn workspace @photon/api build",
+        "build:db": "run-s start:docker db:up",
         "test": "npx cypress run --e2e -b 'chrome'",
         "test:open": "npx cypress open --e2e -b 'chrome:canary'"
     },
