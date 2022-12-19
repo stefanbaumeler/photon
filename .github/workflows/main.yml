@@ -33,9 +33,11 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile --immutable
             - name: Build Servers
-              run: "NODE_ENV=test yarn build"
+              run: NODE_ENV=test yarn build
             - name: Cypress Tests
               uses: cypress-io/github-action@v4.2.0
+              env:
+                  NODE_ENV: test
               with:
-                  start: "NODE_ENV=test yarn start"
-                  test: "yarn test"
+                  start: yarn start
+                  test: yarn test
