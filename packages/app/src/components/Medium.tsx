@@ -28,11 +28,12 @@ const Medium = ({
     const ImageOrVideo = useMemo(() => {
         if (medium.mimetype?.startsWith('image')) {
             return <Image
+                alt=""
                 unoptimized={true}
                 priority={priority}
                 data-cy={cy}
                 className="medium__image"
-                layout={'fill'}
+                fill={true}
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}
             />
         }

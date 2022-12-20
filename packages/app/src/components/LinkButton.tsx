@@ -39,14 +39,11 @@ const LinkButton = ({
             return <Link
                 href={href}
                 onClick={onClick}
+                className={linkClasses}
+                ref={ref as Ref<HTMLAnchorElement>}
+                data-cy={cy}
             >
-                <a
-                    className={linkClasses}
-                    ref={ref as Ref<HTMLAnchorElement>}
-                    data-cy={cy}
-                >
-                    {children}
-                </a>
+                {children}
             </Link>
         }
 

@@ -9,13 +9,13 @@
         "packages/*"
     ],
     "engines": {
-        "node": "^16.12.0"
+        "node": "^18.12.1"
     },
     "engineStrict": true,
     "scripts": {
         "dev": "NODE_ENV=development run-s start:docker watch",
         "prod:api": "run-s start:docker watch:api",
-        "watch": "run-p watch:*",
+        "watch": "NODE_ENV=development run-p watch:*",
         "watch:api": "yarn workspace @photon/api watch",
         "watch:app": "yarn workspace @photon/app watch",
         "start": "run-p start:api start:app",

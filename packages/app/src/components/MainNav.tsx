@@ -27,21 +27,20 @@ const MainNav = ({ nav }: Props) => {
                     key={key}
                     className={`${nav.type}__item`}
                 >
-                    <Link href={`/${item.href || '#'}`}>
-                        <a
-                            className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
-                            onClick={() => click(item)}
-                        >
-                            <span className={`${nav.type}__icon`}>
-                                <Icon
-                                    path={item.icon}
-                                    size={1}
-                                />
-                            </span>
-                            <span className={`${nav.type}__label`}>
-                                {item.label}
-                            </span>
-                        </a>
+                    <Link
+                        href={`/${item.href || '#'}`}
+                        className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
+                        onClick={() => click(item)}
+                    >
+                        <span className={`${nav.type}__icon`}>
+                            <Icon
+                                path={item.icon}
+                                size={1}
+                            />
+                        </span>
+                        <span className={`${nav.type}__label`}>
+                            {item.label}
+                        </span>
                     </Link>
                 </li>
             )}

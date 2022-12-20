@@ -87,31 +87,30 @@ const Album = ({ album }: Props) => {
         </div>
         <Link
             href={`albums/${album.id}`}
+            className="album__link"
         >
-            <a className="album__link">
-                <div className="album__image-container">
-                    {AlbumImage}
-                </div>
-                <div className="album__content">
+            <div className="album__image-container">
+                {AlbumImage}
+            </div>
+            <div className="album__content">
+                <span
+                    data-cy="album-teaser-title"
+                    className="album__title"
+                >
+                    {album?.title || t(ETrans.UNTITLED)}
+                </span>
+                <div className="album__misc">
                     <span
-                        data-cy="album-teaser-title"
-                        className="album__title"
+                        className="album__count"
+                        data-cy="album-teaser-count"
                     >
-                        {album?.title || t(ETrans.UNTITLED)}
+                        {`${media.length} `}
+                        {t(ETrans.ELEMENT, {
+                            count: media.length
+                        })}
                     </span>
-                    <div className="album__misc">
-                        <span
-                            className="album__count"
-                            data-cy="album-teaser-count"
-                        >
-                            {`${media.length} `}
-                            {t(ETrans.ELEMENT, {
-                                count: media.length
-                            })}
-                        </span>
-                    </div>
                 </div>
-            </a>
+            </div>
         </Link>
     </div>
 }
