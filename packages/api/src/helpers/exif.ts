@@ -237,7 +237,7 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type, user
-}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => await new Promise<DeepPartial<TMedium> & { id?: string }>(async (resolve) => {
+}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => await new Promise<DeepPartial<TMedium> & { id?: string }>((resolve) => {
     const mediumType = type.split('/')[0]
     const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
         resolve({
@@ -256,6 +256,10 @@ export const fileToMedium = async ({
             }
         } as DeepPartial<TMedium> & { id?: string })
     }
+
+    console.log(type)
+    console.log(type)
+    console.log(type)
 
     if (mediumType === 'image') {
         handleImage(filePath).then(handleMeta)

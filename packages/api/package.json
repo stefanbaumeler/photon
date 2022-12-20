@@ -6,10 +6,10 @@
     "scripts": {
         "build": "tsc -b ./tsconfig.json",
         "watch": "run-p -l watch:*",
-        "watch:ts": "tsc -b ./tsconfig.json -w",
+        "watch:ts": "tsc -b ./tsconfig.json -w -preserveWatchOutput",
         "watch:api": "ts-node-dev dist",
         "watch:api-schema": "graphql-codegen -c codegen.ts -w",
-        "db:up": "NODE_ENV=test run-s db:down db:setup db:generate db:seed",
+        "db:up": "run-s db:down db:setup db:generate db:seed",
         "db:down": "ts-node src/database/teardown.ts",
         "db:setup": "ts-node src/database/setup.ts",
         "db:seed": "ts-node src/database/seeds",

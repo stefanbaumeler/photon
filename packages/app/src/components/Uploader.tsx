@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import bem from '@/util/bem'
 import useUpload from '@/hooks/upload'
+import tauri from '@/tauri'
 
 const Uploader = () => {
     const [visible, setVisible] = useState(false)
+    // const [tauriDragAndDropListenerRegistered, setTauriDragAndDropListenerRegistered] = useState<boolean>(false)
 
     let dragTimeout = 0
 
@@ -28,6 +30,17 @@ const Uploader = () => {
     }, [])
 
     const upload = useUpload()
+
+    let tauriDragAndDropListenerRegistered = false
+
+    useEffect(() => {
+        if (!tauriDragAndDropListenerRegistered && upload) {
+            tauriDragAndDropListenerRegistered = true
+            tauri.enableDragAndDrop((payload) => {
+                upload(payload)
+            })
+        }
+    }, [upload])
 
     const classes = bem('uploader', [
         ['visible', visible]

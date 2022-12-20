@@ -7,6 +7,7 @@ import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import translationsDe from '@/translations/de'
 import translationsEn from '@/translations/en'
+import tauri from '@/tauri'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -22,6 +23,8 @@ tippy.setDefaultProps({
 import styles from '../styles/index.scss'
 
 styles.length
+
+tauri.createBaseDir()
 
 setDefaultLocale('en-US')
 

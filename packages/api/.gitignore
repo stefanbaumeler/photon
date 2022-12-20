@@ -9,4 +9,5 @@ yarn-error.log*
 
 /node_modules
 /uploads
+/cy-uploads
 /dist

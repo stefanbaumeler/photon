@@ -7,7 +7,6 @@ import { DeepPartial } from '../../types'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
-        console.log('media')
         return new MediaService().readMany(input.status ? {
             status: input.status,
             owner: {
@@ -37,7 +36,7 @@ const mutations: Partial<TMutationResolvers> = {
 
         const writePromises = files.map((file) => new Promise<DeepPartial<TMedium> & { id?: string }> ((resolve) => {
             const name = randomUUID()
-            const pathName = `./uploads/${name}`
+            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
 
             Promise.resolve(file).then(async (f) => {
                 const {
@@ -50,6 +49,7 @@ const mutations: Partial<TMutationResolvers> = {
                         r(filename)
                     })
                 })
+
                 Promise.resolve(writeFileToDisk).then((filename) => {
                     fileToMedium({
                         filePath: pathName,

@@ -1,31 +1,45 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { QMediaDocument, useMUpload } from '@/api'
+import tauri from '@/tauri'
 
 const useUpload = () => {
-    const [file, setFile] = useState<FileList>()
+    const [files, setFiles] = useState<File[]>()
 
     const [upload] = useMUpload({
         variables: {
-            file
+            file: files
         },
         refetchQueries: [QMediaDocument]
     })
 
     useEffect(() => {
-        if (file) {
+        if (files) {
+            tauri.upload(files)
+
             upload().then(() => {
-                setFile(undefined)
+                setFiles(undefined)
             })
         }
-    }, [file])
+    }, [files])
 
-    return (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files
-        if (!file) {
+    return async (event: ChangeEvent<HTMLInputElement> | string[]) => {
+        let files: File[]
+
+        const asChangeEvent = event as ChangeEvent<HTMLInputElement>
+        const asFileDropEvent = event as string[]
+
+        if (asChangeEvent.target) {
+            files = [...asChangeEvent.target.files]
+        }
+        else {
+            files = await tauri.read(asFileDropEvent)
+        }
+
+        if (!files) {
             return
         }
 
-        setFile(file)
+        setFiles(files)
     }
 }
 
