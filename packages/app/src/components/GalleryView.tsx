@@ -22,10 +22,14 @@ const GalleryView = ({ media }: Props) => {
 
         if (dateTaken) {
             takenDates.add(dateTaken)
+        } else {
+            const dateCreated = formatDate(medium.dateCreated)
+
+            if (dateCreated) {
+                takenDates.add(dateCreated)
+            }
         }
     })
-
-    console.log(media)
 
     useEffect(() => {
         details.setCollection(media)
@@ -33,18 +37,21 @@ const GalleryView = ({ media }: Props) => {
 
     useEffect(() => {
         const unsortedSections = Array.from(takenDates).map((takenDate, key) => {
-            const takenOnThisDate = media.filter((medium) => formatDate(medium.dateTaken) === takenDate)
+            const takenOnThisDate = media.filter((medium) => {
+                return formatDate(medium.dateTaken) === takenDate || !medium.dateTaken && formatDate(medium.dateCreated) === takenDate
+            })
             const notRemoved = selection.mode === ESelectionMode.DELETE ? takenOnThisDate.filter((medium) => !selection.selected.has(medium)) : takenOnThisDate
+            const date = toDate(takenOnThisDate[0]?.dateTaken || takenOnThisDate[0]?.dateCreated).getTime()
 
             if (!notRemoved.length) {
                 return {
-                    date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
+                    date,
                     template: <></>
                 }
             }
 
             return {
-                date: toDate(takenOnThisDate[0]?.dateTaken).getTime(),
+                date,
                 template: <GallerySection
                     key={key}
                     title={takenDate}

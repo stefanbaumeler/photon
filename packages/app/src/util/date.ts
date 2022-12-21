@@ -85,11 +85,7 @@ export const toDate = (date?: Date | number | string) => {
         return undefined
     }
 
-    if (typeof d === 'string') {
-        d = parseInt(d, 10)
-    }
-
-    if (typeof d === 'number') {
+    if (typeof d === 'string' || typeof d === 'number') {
         d = new Date(d)
     }
 

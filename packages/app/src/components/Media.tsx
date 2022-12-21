@@ -23,7 +23,17 @@ const Media = ({ media }: Props) => {
     }, [media])
 
     const mediaSortedByDateTaken = Array.from(media)
-        .sort((a, b) => toDate(b.dateTaken)?.getTime() - toDate(a.dateTaken)?.getTime())
+        .sort((a, b) => {
+            const aDateTaken = toDate(a.dateTaken)?.getTime()
+            const bDateTaken = toDate(b.dateTaken)?.getTime()
+            const aDateCreated = toDate(a.dateCreated)?.getTime()
+            const bDateCreated = toDate(b.dateCreated)?.getTime()
+
+            return bDateTaken - aDateTaken
+                || bDateCreated - aDateTaken
+                || bDateTaken - aDateCreated
+                || bDateCreated - aDateCreated
+        })
 
     useKeyboard('keydown', 'Escape', () => {
         if (!details.active && !dialog.active) {
