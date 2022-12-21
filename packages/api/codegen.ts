@@ -1,3 +1,4 @@
+
 import dotenv from 'dotenv'
 
 dotenv.config({
@@ -6,6 +7,7 @@ dotenv.config({
 
 export default {
     overwrite: true,
+    watch: true,
     schema: `${parseInt(process.env.API_SECURE || '1', 10) ? 'https' : 'http'}://${process.env.API_HOST}:${process.env.API_PORT}/graphql`,
     documents: ['../**/*.gql', '../**/*.gql'],
     config: {

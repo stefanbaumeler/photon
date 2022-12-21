@@ -5,7 +5,7 @@
     "scripts": {
         "watch": "run-p -l watch:*",
         "watch:next": "next dev -p 3030",
-        "watch:app-schema": "graphql-codegen -c codegen.ts -w",
+        "watch:app-schema": "graphql-codegen -c codegen.ts",
         "build": "run-s build:*",
         "build:static": "next build && next export",
         "build:tauri": "yarn tauri build",

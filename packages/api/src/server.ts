@@ -1,12 +1,10 @@
 import { createApp } from './app'
 import * as https from 'https'
 import * as http from 'http'
-import { createApolloServer } from './apollo'
 import fs from 'fs'
 
 export const createServer = async (): Promise<https.Server|http.Server> => {
     const app = await createApp()
-    const apollo = await createApolloServer(app)
 
     if (parseInt(process.env.API_SECURE || '1', 10)) {
         return https.createServer({

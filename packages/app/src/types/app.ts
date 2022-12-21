@@ -83,8 +83,15 @@ export enum EEditState {
 }
 
 export enum EDateFormat {
-    SHORT = 'short',
-    LONG = 'long'
+    SHORT = 'SHORT',
+    LONG = 'LONG'
+}
+
+export enum EActionLocation {
+    DETAILS,
+    DETAILS_SELECT,
+    SELECT,
+    MEDIUM_SELECT
 }
 
 export enum EMediumStatus {

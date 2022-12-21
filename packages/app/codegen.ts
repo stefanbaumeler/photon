@@ -6,6 +6,7 @@ dotenv.config({
 
 export default {
     overwrite: true,
+    watch: true,
     schema: `${process.env.NEXT_PUBLIC_API_URL}`,
     documents: ['../**/*.gql', '../**/*.gql'],
     config: {

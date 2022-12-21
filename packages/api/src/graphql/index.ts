@@ -1,7 +1,7 @@
 import albums from './albums'
 import media from './media'
 import users from './users'
-import { gql } from 'apollo-server-express'
+import gql from 'graphql-tag'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
 import { DateTimeScalar } from 'graphql-date-scalars'
