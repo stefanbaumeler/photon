@@ -1,15 +1,155 @@
 @mixin scrollbar-root {
+    margin-top: 24px;
     position: fixed;
     right: 0;
     top: $searchbar-height;
     width: $scrollbar-width;
-    height: calc(100vh - #{$searchbar-height});
-    background: red;
+    padding-left: 16px;
+    height: calc(100vh - #{$searchbar-height} - 24px);
+    opacity: 0;
+    translate: 10%;
+    transition: opacity .25s, translate .25s;
+    cursor: row-resize;
+
+    &:hover ,
+    &--scrolling {
+        opacity: 1;
+        translate: none;
+    }
+}
+
+@mixin scrollbar-years {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+@mixin scrollbar-year {
+    display: flex;
+    min-height: 20px;
+    flex-wrap: wrap;
+    width: $scrollbar-width;
+    position: relative;
+    justify-content: center;
+}
+
+@mixin scrollbar-label {
+    font-size: 13px;
+    color: $color-gray;
+    border-radius: 4px 0 0 0;
+    position: absolute;
+    bottom: 0;
+    pointer-events: none;
+    background-color: $color-white;
+    font-weight: bold;
+    z-index: 1;
+    text-align: center;
+    width: calc(100% - 10px);
+}
+
+@mixin scrollbar-months {
+    position: relative;
+    width: $scrollbar-width;
+    height: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+@mixin scrollbar-month {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: relative;
+    width: 100%;
+
+    &:only-child {
+        height: 100%;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        right: 4px;
+        bottom: 0;
+        height: 4px;
+        width: 4px;
+        background-color: $color-gray;
+        border-radius: 50%;
+    }
+}
+
+@mixin scrollbar-position {
+    position: absolute;
+    width: calc($scrollbar-width - 8px);
+    right: 0;
+    background-color: $color-secondary;
+    height: 1px;
+    z-index: 2;
+}
+
+@mixin scrollbar-cursor {
+    position: absolute;
+    display: block;
+    margin-top: #{0 - $searchbar-height};
+    pointer-events: none;
+    white-space: nowrap;
+    text-align: left;
+    right: 0;
+    z-index: 1;
+    font-size: 14px;
+    padding: 4px;
+    width: 64px;
+    background-color: rgba($color-white, .8);
+    font-weight: 600;
+
+    &:before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        background-color: $color-secondary;
+        width: 100%;
+        left: 0;
+    }
 }
 
 @mixin scrollbar {
     .scrollbar {
         @include scrollbar-root;
+
+        &__years {
+            @include scrollbar-years;
+        }
+
+        &__year {
+            @include scrollbar-year;
+        }
+
+        &__label {
+            @include scrollbar-label;
+        }
+
+        &__months {
+            @include scrollbar-months;
+        }
+
+        &__month {
+            @include scrollbar-month;
+        }
+
+        &__position {
+            @include scrollbar-position;
+        }
+
+        &__cursor {
+            @include scrollbar-cursor;
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 // import usersSeed from './seeds/users'
 import mediaSeed from './seeds/media'
 import albumsSeed from './seeds/albums'
-import { getDatabase } from './index'
+import { getDatabase } from './'
 import dotenv from 'dotenv'
 
 dotenv.config({

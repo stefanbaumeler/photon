@@ -6,7 +6,7 @@ type Props = {
     values: string | string[]
 }
 
-const Detail = ({
+export const Detail = ({
     icon, title, values
 }: Props) => {
     values = Array.isArray(values) ? values : [values]
@@ -33,5 +33,3 @@ const Detail = ({
         </div>
     </div>
 }
-
-export default Detail

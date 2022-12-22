@@ -71,6 +71,13 @@ export const formatDate = (date?: Date | number | string, format: EDateFormat = 
         })
     }
 
+    if (format === EDateFormat.SHORT_NO_DATE) {
+        return d.toLocaleDateString('de-CH', {
+            month: 'short',
+            year: 'numeric'
+        })
+    }
+
     return d.toLocaleDateString('de-CH', {
         day: '2-digit',
         month: '2-digit',

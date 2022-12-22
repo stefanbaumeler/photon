@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { DetailsContext, DialogContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import { Detail, DetailsActions, IconButton, Medium } from '@/components/index'
+import { Detail, DetailsActions, IconButton, Medium } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
@@ -10,10 +10,11 @@ import Icon from '@mdi/react'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 import { useRouter } from 'next/router'
-import { TImageMeta } from '@/api'
 import { EDateFormat } from '@/types/app'
+import { DetailsImageMeta } from './DetailsImageMeta'
+import { DetailsVideoMeta } from './DetailsVideoMeta'
 
-const Details = () => {
+export const Details = () => {
     const { t } = useTranslation()
 
     const details = useContext(DetailsContext)
@@ -70,13 +71,6 @@ const Details = () => {
         />
     }
 
-    const RightToolbar = () => {
-        return <>
-            <DetailsActions />
-            <OpenInfosButton />
-        </>
-    }
-
     const ConditionalDateDetail = () => {
         if (details.medium.dateTaken) {
             return <Detail
@@ -89,9 +83,22 @@ const Details = () => {
         return <></>
     }
 
-    const Map = dynamic(() => import('@/components/DetailsMap'), {
+    const Map = dynamic(() => import('./DetailsMap'), {
         ssr: false
     })
+
+    const DetailsMap = useMemo(() => {
+        if (!details.medium) {
+            return <></>
+        }
+
+        return <>
+            <Map
+                lat={details.medium.lat}
+                lng={details.medium.lng}
+            />
+        </>
+    }, [details.medium])
 
     const classes = bem('details', [
         ['active', details.active],
@@ -111,36 +118,6 @@ const Details = () => {
         ['first', details.collection.indexOf(details.medium) === 0],
         ['last', details.collection.indexOf(details.medium) === details.collection.length - 1]
     ])
-
-    const ImageMeta = () => {
-        const meta = details.medium.meta as TImageMeta
-        return <>
-            <Detail
-                icon={Icons.mdiCameraIris}
-                title={`${meta.cameraMake} ${meta.cameraModel}`}
-                values={[`f/${meta.fNumber}`, `${meta.iso}`]}
-            />
-            <Detail
-                icon={Icons.mdiMapMarker}
-                title={`${meta.cameraMake} ${meta.cameraModel}`}
-                values={[`f/${meta.fNumber}`, `${meta.iso}`]}
-            />
-        </>
-    }
-
-    const VideoMeta = () => {
-        return <></>
-    }
-
-    const Meta = () => {
-        if (details.medium.mimetype?.startsWith('image')) {
-            return <ImageMeta />
-        }
-
-        if (details.medium.mimetype?.startsWith('image')) {
-            return <VideoMeta />
-        }
-    }
 
     return <div
         className={classes}
@@ -182,7 +159,8 @@ const Details = () => {
                     />
                 </div>
                 <div className="toolbar__section toolbar__section--right">
-                    <RightToolbar />
+                    <DetailsActions />
+                    <OpenInfosButton />
                 </div>
             </div>
             <div
@@ -217,14 +195,10 @@ const Details = () => {
             </div>
             <div className="details__sidebar-content">
                 <ConditionalDateDetail />
-                <Meta />
-                <Map
-                    lat={details.medium.lat}
-                    lng={details.medium.lng}
-                />
+                <DetailsImageMeta />
+                <DetailsVideoMeta />
+                {DetailsMap}
             </div>
         </aside>
     </div>
 }
-
-export default Details

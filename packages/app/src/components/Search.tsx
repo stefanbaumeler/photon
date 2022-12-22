@@ -1,4 +1,4 @@
-const Search = () => {
+export const Search = () => {
     return <div className="search">
         <input
             type="text"
@@ -6,5 +6,3 @@ const Search = () => {
         />
     </div>
 }
-
-export default Search

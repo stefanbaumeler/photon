@@ -1,12 +1,12 @@
 import { TAlbum } from '@/api'
-import { Album } from '@/components/index'
+import { AlbumTeaser } from '@/components'
 
 type Props = {
     albums: Partial<TAlbum>[]
 }
 
-const Albums = ({ albums }: Props) => {
-    const albumElements = albums.map((album, k) => <Album
+export const Albums = ({ albums }: Props) => {
+    const albumElements = albums.map((album, k) => <AlbumTeaser
         album={album}
         key={k}
     />)
@@ -17,5 +17,3 @@ const Albums = ({ albums }: Props) => {
         </div>
     </div>
 }
-
-export default Albums

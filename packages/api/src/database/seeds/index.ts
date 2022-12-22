@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { getDatabase, setDbUrl } from '../index'
+import { getDatabase, setDbUrl } from '../'
 
 dotenv.config({
     path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env',

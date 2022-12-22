@@ -14,7 +14,7 @@ type Props = {
     cy?: string
 }
 
-const LinkButton = ({
+export const LinkButton = ({
     onClick, hint, hintPlacement, label, prefix, suffix, href, cy
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
@@ -79,5 +79,3 @@ const LinkButton = ({
         </div>
     </ConditionalTip>
 }
-
-export default LinkButton

@@ -1,0 +1,13 @@
+query QMediaYearCount {
+    mediaCountByYear {
+        years {
+            months {
+                month
+                count
+            }
+            year
+            count
+        }
+        count
+    }
+}

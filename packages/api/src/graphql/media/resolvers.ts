@@ -18,7 +18,14 @@ const queries: Partial<TQueryResolvers> = {
             }
         })
     },
-    medium: async (_, input) => await new MediaService().readOne(input.id)
+    medium: async (_, input) => await new MediaService().readOne(input.id),
+    mediaCountByYear: async (_, input, context) => {
+        return await new MediaService().countByYear({
+            owner: {
+                id: context.user.id
+            }
+        })
+    }
 }
 
 const mutations: Partial<TMutationResolvers> = {
@@ -31,7 +38,7 @@ const mutations: Partial<TMutationResolvers> = {
             resolve(service.destroy(results.map((result) => result.id as string)))
         })
     }),
-    upload: async (_, { file: files }, context) => {
+    upload: async (_, { files }, context) => {
         const service = new MediaService()
 
         const writePromises = files.map((file) => new Promise<DeepPartial<TMedium> & { id?: string }> ((resolve) => {

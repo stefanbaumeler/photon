@@ -6,11 +6,10 @@ import { EEditState, ESelectionMode } from '@/types/app'
 import { useContext } from 'react'
 import { EditContext, SelectionContext } from '@/providers'
 
-const EditActions = () => {
+export const EditActions = () => {
     const { t } = useTranslation()
 
     const edit = useContext(EditContext)
-
     const selection = useContext(SelectionContext)
 
     const confirm = () => {
@@ -40,5 +39,3 @@ const EditActions = () => {
         />
     </div>
 }
-
-export default EditActions

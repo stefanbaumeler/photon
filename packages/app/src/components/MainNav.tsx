@@ -8,7 +8,7 @@ type Props = {
     nav: TNav
 }
 
-const MainNav = ({ nav }: Props) => {
+export const MainNav = ({ nav }: Props) => {
     const navs = useContext(NavContext)
     const selection = useContext(SelectionContext)
 
@@ -47,5 +47,3 @@ const MainNav = ({ nav }: Props) => {
         </ul>
     </nav>
 }
-
-export default MainNav

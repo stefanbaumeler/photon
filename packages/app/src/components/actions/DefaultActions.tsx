@@ -11,7 +11,7 @@ import bem from '@/util/bem'
 import useEmptyTrashDialog from '@/dialogs/empty-trash'
 import { useMSignOut } from '@/api'
 
-const DefaultActions = () => {
+export const DefaultActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
@@ -111,5 +111,3 @@ const DefaultActions = () => {
         <Actions />
     </div>
 }
-
-export default DefaultActions

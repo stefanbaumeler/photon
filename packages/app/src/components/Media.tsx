@@ -3,14 +3,14 @@ import { useContext, useEffect } from 'react'
 import { DetailsContext, DialogContext, LayoutContext, SelectionContext } from '@/providers'
 import useKeyboard from '@/hooks/keyboard'
 import { ELayout } from '@/types/app'
-import { GalleryView, ListView } from '@/components/index'
+import { GalleryView, ListView } from '@/components'
 import { toDate } from '@/util/date'
 
 type Props = {
     media: TMedium[]
 }
 
-const Media = ({ media }: Props) => {
+export const Media = ({ media }: Props) => {
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
@@ -53,5 +53,3 @@ const Media = ({ media }: Props) => {
         {layout.layout}
     </>
 }
-
-export default Media

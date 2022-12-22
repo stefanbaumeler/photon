@@ -4,7 +4,7 @@ import { TDialogButton } from '@/types/app'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 
-const Dialog = () => {
+export const Dialog = () => {
     const dialog = useContext(DialogContext)
 
     useKeyboard('keydown', 'Escape', () => {
@@ -65,5 +65,3 @@ const Dialog = () => {
         </div>
     </div>
 }
-
-export default Dialog

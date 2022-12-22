@@ -11,6 +11,8 @@ const HomePage = () => {
         }
     })
 
+    console.log(media)
+
     if (media.loading) {
         return <></>
     }

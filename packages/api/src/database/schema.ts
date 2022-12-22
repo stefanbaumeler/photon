@@ -162,7 +162,7 @@ export type TMutationUpdateAlbumTitleArgs = {
 
 
 export type TMutationUploadArgs = {
-  file: Array<InputMaybe<Scalars['Upload']>>;
+  files: Array<InputMaybe<Scalars['Upload']>>;
 };
 
 export type TQuery = {
@@ -171,6 +171,7 @@ export type TQuery = {
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
   media?: Maybe<Array<TMedium>>;
+  mediaCountByYear: TYearCountResult;
   medium: TMedium;
   user: TUser;
   users: Array<TUser>;
@@ -223,6 +224,25 @@ export type TVideoMeta = {
   duration?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['Int']>;
   width?: Maybe<Scalars['Int']>;
+};
+
+export type TYearCountEntry = {
+  __typename?: 'YearCountEntry';
+  count: Scalars['Int'];
+  months: Array<TYearCountMonth>;
+  year: Scalars['Int'];
+};
+
+export type TYearCountMonth = {
+  __typename?: 'YearCountMonth';
+  count: Scalars['Int'];
+  month: Scalars['Int'];
+};
+
+export type TYearCountResult = {
+  __typename?: 'YearCountResult';
+  count: Scalars['Int'];
+  years: Array<TYearCountEntry>;
 };
 
 
@@ -313,6 +333,9 @@ export type TResolversTypes = {
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<TUser>;
   VideoMeta: ResolverTypeWrapper<TVideoMeta>;
+  YearCountEntry: ResolverTypeWrapper<TYearCountEntry>;
+  YearCountMonth: ResolverTypeWrapper<TYearCountMonth>;
+  YearCountResult: ResolverTypeWrapper<TYearCountResult>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -336,6 +359,9 @@ export type TResolversParentTypes = {
   Upload: Scalars['Upload'];
   User: TUser;
   VideoMeta: TVideoMeta;
+  YearCountEntry: TYearCountEntry;
+  YearCountMonth: TYearCountMonth;
+  YearCountResult: TYearCountResult;
 };
 
 export type TAuthDirectiveArgs = { };
@@ -415,7 +441,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
   updateAlbumTitle?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumTitleArgs, 'id' | 'title'>>;
-  upload?: Resolver<Array<Maybe<TResolversTypes['File']>>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'file'>>;
+  upload?: Resolver<Array<Maybe<TResolversTypes['File']>>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
@@ -423,6 +449,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
+  mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
   medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
@@ -456,6 +483,25 @@ export type TVideoMetaResolvers<ContextType = any, ParentType extends TResolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TYearCountEntryResolvers<ContextType = any, ParentType extends TResolversParentTypes['YearCountEntry'] = TResolversParentTypes['YearCountEntry']> = {
+  count?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
+  months?: Resolver<Array<TResolversTypes['YearCountMonth']>, ParentType, ContextType>;
+  year?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TYearCountMonthResolvers<ContextType = any, ParentType extends TResolversParentTypes['YearCountMonth'] = TResolversParentTypes['YearCountMonth']> = {
+  count?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
+  month?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TYearCountResultResolvers<ContextType = any, ParentType extends TResolversParentTypes['YearCountResult'] = TResolversParentTypes['YearCountResult']> = {
+  count?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
+  years?: Resolver<Array<TResolversTypes['YearCountEntry']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
   Count?: TCountResolvers<ContextType>;
@@ -470,6 +516,9 @@ export type TResolvers<ContextType = any> = {
   Upload?: GraphQLScalarType;
   User?: TUserResolvers<ContextType>;
   VideoMeta?: TVideoMetaResolvers<ContextType>;
+  YearCountEntry?: TYearCountEntryResolvers<ContextType>;
+  YearCountMonth?: TYearCountMonthResolvers<ContextType>;
+  YearCountResult?: TYearCountResultResolvers<ContextType>;
 };
 
 export type TDirectiveResolvers<ContextType = any> = {

@@ -18,7 +18,7 @@ type Props = {
     small?: boolean
 }
 
-const IconButton = ({
+export const IconButton = ({
     onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, cy, small = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
@@ -80,5 +80,3 @@ const IconButton = ({
         </ButtonOrLinkWithRef>
     </ConditionalTip>
 }
-
-export default IconButton

@@ -1,22 +1,12 @@
 import { createContext, ReactNode, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
-import { TNav, TNavContext, TNavItem } from '@/types/app'
+import { ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 
 type Props = {
     children?: ReactNode
-}
-
-enum ENavs {
-    HOME = 'HOME',
-    SETTINGS = 'SETTINGS',
-    USER = 'USER'
-}
-
-enum ENavItemType {
-    ALBUMS = 'ALBUMS'
 }
 
 const NavContext = createContext<TNavContext>(null)
@@ -27,7 +17,7 @@ const NavProvider = ({ children }: Props) => {
 
     const defaultNav = router.route.split('/')[1].toUpperCase()
 
-    const [active, setActive] = useState([Object.values(ENavs).includes(defaultNav.toUpperCase() as ENavs) ? defaultNav : ENavs.HOME])
+    const [active, setActive] = useState([Object.keys(ENavs).includes(defaultNav.toUpperCase()) ? defaultNav : ENavs.HOME])
 
     const navs = [
         {

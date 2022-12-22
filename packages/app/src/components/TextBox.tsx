@@ -8,7 +8,8 @@ type Props = {
     value?: string
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
-const TextBox = ({
+
+export const TextBox = ({
     id, label, placeholder = '', type = 'text', value, onChange
 }: Props) => {
     const Label = () => label ? <label
@@ -30,5 +31,3 @@ const TextBox = ({
         />
     </div>
 }
-
-export default TextBox

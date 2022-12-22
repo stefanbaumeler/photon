@@ -22,11 +22,11 @@ export type TNavItem = {
     active?: boolean
     subNav?: string
     href?: string
-    type?: string
+    type?: ENavItemType
 }
 
 export type TNav = {
-    id: string
+    id: ENavs
     type: string
     items: TNavItem[]
 }
@@ -59,6 +59,12 @@ export type TDropdownItem = {
     cy?: string
 }
 
+export enum ENavs {
+    HOME = 'HOME',
+    SETTINGS = 'SETTINGS',
+    USER = 'USER'
+}
+
 export enum ENavItemType {
     ALBUMS = 'ALBUMS'
 }
@@ -72,7 +78,7 @@ export enum ESelectionMode {
 
 export enum EThumbnailType {
     DEFAULT = 'DEFAULT',
-    ADD ='ADD'
+    ADD = 'ADD'
 }
 
 export enum EEditState {
@@ -84,14 +90,15 @@ export enum EEditState {
 
 export enum EDateFormat {
     SHORT = 'SHORT',
-    LONG = 'LONG'
+    LONG = 'LONG',
+    SHORT_NO_DATE = 'SHORT_NO_DATE'
 }
 
 export enum EActionLocation {
-    DETAILS,
-    DETAILS_SELECT,
-    SELECT,
-    MEDIUM_SELECT
+    DETAILS = 'DETAILS',
+    DETAILS_SELECT = 'DETAILS_SELECT',
+    SELECT = 'SELECT',
+    MEDIUM_SELECT = 'MEDIUM_SELECT'
 }
 
 export enum EMediumStatus {
@@ -101,7 +108,7 @@ export enum EMediumStatus {
 }
 
 export enum ELayout {
-    MAP = 'map',
-    LIST = 'list',
-    GALLERY = 'gallery'
+    MAP = 'MAP',
+    LIST = 'LIST',
+    GALLERY = 'GALLERY'
 }

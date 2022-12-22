@@ -1,6 +1,6 @@
 import { TMedium } from '@/api'
 import { ESelectionMode, GalleryItem } from '@/types/app'
-import { Check, Teaser } from '@/components/index'
+import { Check, Teaser } from '@/components'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { SelectionContext } from '@/providers'
@@ -11,7 +11,7 @@ type Props = {
     title: string
 }
 
-const GallerySection = ({
+export const GallerySection = ({
     media, title
 }: Props) => {
     const galleryEl = useRef(null)
@@ -36,12 +36,12 @@ const GallerySection = ({
     const resize = () => {
         if (!galleryEl.current) {return}
 
-        const maxHeight = window.innerWidth < 1024 ? 400 : 500
-        const targetRowHeight = window.innerWidth < 1024 ? 300 : 250
+        const maxHeight = window.innerWidth < 1024 ? 400 : 340
+        const targetRowHeight = window.innerWidth < 1024 ? 300 : 225
         setWindowWidth(window.innerWidth)
 
         generateGallery({
-            containerWidth: window.innerWidth - 300,
+            containerWidth: window.innerWidth - 268,
             images: elements,
             targetRowHeight,
             margin: 2,
@@ -115,5 +115,3 @@ const GallerySection = ({
         </div>
     </div>
 }
-
-export default GallerySection

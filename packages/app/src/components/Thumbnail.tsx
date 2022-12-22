@@ -7,7 +7,7 @@ import bem from '@/util/bem'
 import { TMedium, useQMedium } from '@/api'
 import { useEffect, useState } from 'react'
 
-const Thumbnail = ({
+export const Thumbnail = ({
     idMedium, title, onClick,
     type = EThumbnailType.DEFAULT
 }: TThumbnail) => {
@@ -84,5 +84,3 @@ const Thumbnail = ({
         </div>
     </button>
 }
-
-export default Thumbnail

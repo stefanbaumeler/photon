@@ -1,6 +1,6 @@
-import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions } from '@/components/index'
+import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions } from '@/components'
 
-const SearchBar = () => {
+export const SearchBar = () => {
     return <div className="searchbar">
         <div className="searchbar__section searchbar__section--left">
             <Brand />
@@ -9,13 +9,11 @@ const SearchBar = () => {
             <Search />
         </div>
         <div className="searchbar__section searchbar__section--right">
-            <AlbumActions />
             <BulkActions />
             <EditActions />
             <AlbumsActions />
+            <AlbumActions />
             <DefaultActions />
         </div>
     </div>
 }
-
-export default SearchBar

@@ -1,4 +1,4 @@
-import { Thumbnail } from '@/components/index'
+import { Thumbnail } from '@/components'
 import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useEffect, useState } from 'react'
 import { ETrans } from '@/types/translations'
@@ -7,7 +7,7 @@ import useAddToNewAlbum from '../hooks/add-to-new-album'
 import useAddToAlbum from '../hooks/add-to-album'
 import { useQAlbums } from '@/api'
 
-const Thumbnails = () => {
+export const Thumbnails = () => {
     const { t } = useTranslation()
 
     const { data: albums } = useQAlbums()
@@ -43,5 +43,3 @@ const Thumbnails = () => {
         />)}
     </div>
 }
-
-export default Thumbnails

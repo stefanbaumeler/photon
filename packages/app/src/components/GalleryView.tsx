@@ -1,5 +1,5 @@
 import { TMedium } from '@/api'
-import { GallerySection } from '@/components/index'
+import { GallerySection } from '@/components'
 import { useContext, useEffect, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
@@ -9,7 +9,7 @@ type Props = {
     media: TMedium[]
 }
 
-const GalleryView = ({ media }: Props) => {
+export const GalleryView = ({ media }: Props) => {
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
 
@@ -68,13 +68,8 @@ const GalleryView = ({ media }: Props) => {
     }, [media])
 
     return <div className="gallery">
-        <div className="gallery__header">
-            sort
-        </div>
         <div className="gallery__sections">
             {sections}
         </div>
     </div>
 }
-
-export default GalleryView

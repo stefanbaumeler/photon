@@ -38,6 +38,8 @@ export const createApp = async () => {
         })]
     })
 
+    await apollo.start()
+
     app.use(
         cookieParser(),
         cors({
@@ -63,10 +65,12 @@ export const createApp = async () => {
         next()
     })
 
-    await apollo.start()
-
     app.use(
         '/graphql',
+        cors({
+            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
+            credentials: true
+        }),
         expressMiddleware(apollo, {
             context
         })

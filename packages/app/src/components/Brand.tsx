@@ -1,4 +1,4 @@
-const Brand = () => {
+export const Brand = () => {
     return <div className="brand">
         <div className="brand__logo">
             Pi
@@ -8,5 +8,3 @@ const Brand = () => {
         </div>
     </div>
 }
-
-export default Brand

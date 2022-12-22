@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { QMediaDocument, useMUpload } from '@/api'
+import { QMediaDocument, QMediaYearCountDocument, useMUpload } from '@/api'
 import tauri from '@/tauri'
 
 const useUpload = () => {
@@ -7,9 +7,9 @@ const useUpload = () => {
 
     const [upload] = useMUpload({
         variables: {
-            file: files
+            files
         },
-        refetchQueries: [QMediaDocument]
+        refetchQueries: [QMediaDocument, QMediaYearCountDocument]
     })
 
     useEffect(() => {

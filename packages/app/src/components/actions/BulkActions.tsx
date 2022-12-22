@@ -9,19 +9,16 @@ import useAddToAlbumDialog from '@/dialogs/add-to-album'
 import useSetMediaStatus from '@/hooks/set-status'
 import useMoveToTrashDialog from '@/dialogs/move-to-trash'
 import { useRouter } from 'next/router'
-import useDeleteMediaDialog from '@/dialogs/delete-media'
-import useRestoreMediaDialog from '@/dialogs/restore-media'
 import bem from '@/util/bem'
+import TrashActions from './TrashActions'
 
-const BulkActions = () => {
+export const BulkActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
     const selection = useContext(SelectionContext)
 
     const trashMediaDialog = useMoveToTrashDialog(selection.selected)
-    const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(selection.selected)
     const archive = useSetMediaStatus(selection.selected, Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
     const [moreActive, setMoreActive] = useState(false)
 
@@ -72,23 +69,6 @@ const BulkActions = () => {
         </>
     }
 
-    const TrashActions = () => {
-        return <>
-            <IconButton
-                label={t(ETrans.DELETE)}
-                onClick={deleteMediaDialog}
-                icon={Icons.mdiDeleteForever}
-                cy={'trash-delete'}
-            />
-            <IconButton
-                label={t(ETrans.RESTORE)}
-                onClick={restoreMediaDialog}
-                icon={Icons.mdiDeleteRestore}
-                cy={'trash-restore'}
-            />
-        </>
-    }
-
     const Actions = () => {
         if (router.pathname === '/trash') {
             return <TrashActions />
@@ -114,5 +94,3 @@ const BulkActions = () => {
         <Actions />
     </div>
 }
-
-export default BulkActions

@@ -1,5 +1,5 @@
 import { ReactNode, useContext } from 'react'
-import { SearchBar, Sidebar } from '@/components'
+import { Scrollbar, SearchBar, Sidebar } from '@/components'
 import { SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '@/util/bem'
@@ -28,7 +28,7 @@ const Layout = ({ children }: Props) => {
             >
                 {children}
             </main>
-            <div className="scrollbar"></div>
+            <Scrollbar />
         </div>
     </>
 }

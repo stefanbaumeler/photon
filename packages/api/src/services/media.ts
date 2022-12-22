@@ -84,6 +84,68 @@ export default class MediaService {
         })
     }
 
+    countByYear = async (conditions: Prisma.MediumWhereInput = {}) => {
+        const [{ _count: count }, dateSets] = await this.prisma.$transaction([
+            this.prisma.medium.aggregate({
+                _count: true
+            }),
+            this.prisma.medium.findMany({
+                where: conditions,
+                select: {
+                    dateTaken: true,
+                    dateCreated: true
+                }
+            })
+        ])
+
+        const years: { count: number, year: number, months: { month: number, count: number }[]}[] = []
+
+        dateSets.forEach((dateSet) => {
+            const date = new Date(dateSet.dateTaken ?? dateSet.dateCreated)
+
+            const year = date.getFullYear()
+            const month = date.getMonth()
+
+            const existingYear = years.find((y) => y.year === year)
+
+            if (existingYear) {
+                existingYear.count++
+                const existingMonth = existingYear.months.find((m) => m.month === month)
+
+                if (existingMonth) {
+                    existingMonth.count++
+                }
+                else {
+                    existingYear.months.push({
+                        month,
+                        count: 1
+                    })
+                }
+            }
+            else {
+                years.push({
+                    year,
+                    count: 1,
+                    months: [
+                        {
+                            month,
+                            count: 1
+                        }
+                    ]
+                })
+            }
+        })
+
+        years.forEach((year) => {
+            year.months = year.months.sort((a, b) => b.month - a.month)
+        })
+
+        return {
+            count,
+            years: years.sort((a, b) => b.year - a.year)
+        }
+    }
+
     readMany = async (conditions: Prisma.MediumWhereInput = {}, take = 100) => {
         return await this.prisma.medium.findMany({
             where: conditions,

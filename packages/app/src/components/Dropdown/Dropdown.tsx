@@ -2,6 +2,7 @@ import { TDropdownItem } from '@/types/app'
 import bem from '@/util/bem'
 import { ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import DropdownItems from './DropdownItems'
 
 type Props = {
     items: TDropdownItem[]
@@ -11,26 +12,9 @@ type Props = {
     smallButton?: boolean
 }
 
-const Dropdown = ({
+export const Dropdown = ({
     items, active, children, onClickOutside, smallButton = false
 }: Props) => {
-    const DropdownItems = () => {
-        return <>
-            {items.map((item, k) => <li
-                className="dropdown__item"
-                key={k}
-            >
-                <button
-                    data-cy={item.cy}
-                    className="dropdown__button"
-                    onClick={item.callback}
-                >
-                    {item.label}
-                </button>
-            </li>)}
-        </>
-    }
-
     const classes = bem('dropdown', [
         ['active', active]
     ])
@@ -39,7 +23,7 @@ const Dropdown = ({
         <Tippy
             content={<div className="dropdown__container">
                 <ul className="dropdown__list">
-                    <DropdownItems />
+                    <DropdownItems items={items} />
                 </ul>
             </div>}
             visible={active}
@@ -57,5 +41,3 @@ const Dropdown = ({
 
     </div>
 }
-
-export default Dropdown

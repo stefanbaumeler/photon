@@ -12,7 +12,7 @@ type Props = {
     cy?: string
 }
 
-const Checkbox = ({
+export const Checkbox = ({
     id, onClick, hint, hintPlacement, label, href, cy
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
@@ -62,5 +62,3 @@ const Checkbox = ({
         </CheckboxWithRef>
     </ConditionalTip>
 }
-
-export default Checkbox

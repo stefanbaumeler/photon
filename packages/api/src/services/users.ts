@@ -164,8 +164,7 @@ export default class UsersService {
 
     refresh = (refreshToken: string, accessToken: string, res: Response) => {
         try {
-            console.log(refreshToken)
-            const refreshTokenValid = jwt.verify(refreshToken, process.env.JWT_SECRET as string)
+            jwt.verify(refreshToken, process.env.JWT_SECRET as string)
         }
         catch {
             return false

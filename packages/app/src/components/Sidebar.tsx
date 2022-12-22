@@ -1,15 +1,8 @@
-import { MainNav } from '@/components/index'
+import { MainNav } from '@/components'
 import { useContext } from 'react'
 import { NavContext } from '@/providers'
 
-// Sync
-// API
-// Partner
-// Defaults
-// Import / Export
-// Notifications
-
-const Sidebar = () => {
+export const Sidebar = () => {
     const navs = useContext(NavContext)
 
     return <aside className="sidebar">
@@ -19,5 +12,3 @@ const Sidebar = () => {
         />)}
     </aside>
 }
-
-export default Sidebar

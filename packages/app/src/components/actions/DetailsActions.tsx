@@ -8,13 +8,12 @@ import { DetailsContext, LayoutContext, SelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
 import useSetAlbumCover from '@/hooks/set-album-cover'
 import useMoveToTrashDialog from '@/dialogs/move-to-trash'
-import useDeleteMediaDialog from '@/dialogs/delete-media'
-import useRestoreMediaDialog from '@/dialogs/restore-media'
 import useRotate from '@/hooks/rotate'
 import { useRouter } from 'next/router'
 import useSetMediaStatus from '@/hooks/set-status'
+import TrashActions from '@/components/actions/TrashActions'
 
-const DetailsActions = () => {
+export const DetailsActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
@@ -26,8 +25,6 @@ const DetailsActions = () => {
     const layout = useContext(LayoutContext)
 
     const moveToTrashDialog = useMoveToTrashDialog(details.medium)
-    const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(details.medium)
 
     const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
 
@@ -102,26 +99,9 @@ const DetailsActions = () => {
         </>
     }
 
-    const TrashActions = () => {
-        return <>
-            <IconButton
-                label={t(ETrans.DELETE)}
-                onClick={deleteMediaDialog}
-                icon={Icons.mdiDeleteForever}
-                white={true}
-            />
-            <IconButton
-                label={t(ETrans.RESTORE)}
-                onClick={restoreMediaDialog}
-                icon={Icons.mdiDeleteRestore}
-                white={true}
-            />
-        </>
-    }
-
     const Actions = () => {
         if (router.pathname === '/trash') {
-            return <TrashActions />
+            return <TrashActions white={true} />
         }
         else {
             return <RegularActions />
@@ -132,5 +112,3 @@ const DetailsActions = () => {
         <Actions />
     </>
 }
-
-export default DetailsActions

@@ -1,17 +1,18 @@
-import { TAlbum, useQAlbumMedia, useQMedium } from '@/api'
+import { TAlbum, useQAlbumMedia } from '@/api'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { IconButton, Dropdown } from '@/components/index'
+import { IconButton, Dropdown, Teaser } from '@/components'
 import * as Icons from '@mdi/js'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
+import AlbumTeaserImage from './AlbumTeaserImage'
 
 type Props = {
     album: Partial<TAlbum>
 }
 
-const Album = ({ album }: Props) => {
+export const AlbumTeaser = ({ album }: Props) => {
     const { t } = useTranslation()
 
     const [moreActive, setMoreActive] = useState(false)
@@ -23,31 +24,6 @@ const Album = ({ album }: Props) => {
     })
 
     const deleteAlbumDialog = useDeleteAlbumDialog(album.id)
-
-    const thumbnailQuery = useQMedium({
-        variables: {
-            id: `${album.cover.id}`
-        }
-    })
-
-    const thumbnail = thumbnailQuery.data?.medium
-
-    const AlbumImage = useMemo(() => {
-        if (thumbnailQuery.loading) {
-            return <></>
-        }
-
-        if (!thumbnail.filenameDisk) {
-            return <></>
-        }
-
-        return <img
-            data-cy={'album-image'}
-            className="album__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${thumbnail.filenameDisk}?w=800`}
-            alt=""
-        />
-    }, [thumbnail])
 
     if (albumMediaQuery.loading) {
         return <></>
@@ -90,7 +66,7 @@ const Album = ({ album }: Props) => {
             className="album__link"
         >
             <div className="album__image-container">
-                {AlbumImage}
+                <AlbumTeaserImage id={album.cover.id} />
             </div>
             <div className="album__content">
                 <span
@@ -114,5 +90,3 @@ const Album = ({ album }: Props) => {
         </Link>
     </div>
 }
-
-export default Album

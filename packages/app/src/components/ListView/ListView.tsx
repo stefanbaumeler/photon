@@ -1,28 +1,19 @@
 import { TMedium } from '@/api'
-import { ListItem } from '@/components/index'
+import ListItems from './ListItems'
 
 type Props = {
     media: TMedium[]
 }
 
-const ListView = ({ media }: Props) => {
-    const listItems = media.map((medium, k) => {
-        return <ListItem
-            medium={medium}
-            key={k}
-        />
-    })
-
+export const ListView = ({ media }: Props) => {
     return <div className="list-view">
         <div className="list-view__header">
             sort
         </div>
         <table className="list-view__table">
             <tbody className="list-view__tbody">
-                {listItems}
+                <ListItems media={media} />
             </tbody>
         </table>
     </div>
 }
-
-export default ListView

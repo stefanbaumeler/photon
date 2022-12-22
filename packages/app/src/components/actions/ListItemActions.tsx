@@ -13,7 +13,7 @@ type Props = {
     medium: TMedium
 }
 
-const ListItemActions = ({ medium }: Props) => {
+export const ListItemActions = ({ medium }: Props) => {
     const { t } = useTranslation()
 
     const [moreActive, setMoreActive] = useState(false)
@@ -62,5 +62,3 @@ const ListItemActions = ({ medium }: Props) => {
         </Dropdown>
     </div>
 }
-
-export default ListItemActions

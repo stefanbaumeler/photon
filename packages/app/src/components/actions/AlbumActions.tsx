@@ -8,11 +8,10 @@ import { useRouter } from 'next/router'
 import { LayoutContext, SelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 
-const AlbumActions = () => {
+export const AlbumActions = () => {
     const { t } = useTranslation()
     const selection = useContext(SelectionContext)
     const layout = useContext(LayoutContext)
-
     const router = useRouter()
 
     const deleteAlbumDialog = useDeleteAlbumDialog()
@@ -68,5 +67,3 @@ const AlbumActions = () => {
         </Dropdown>
     </div>
 }
-
-export default AlbumActions

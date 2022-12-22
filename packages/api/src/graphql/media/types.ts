@@ -39,20 +39,37 @@ export default gql`
         hash: String
     }
 
-    type Query {
-        media(status: String): [Medium!] @auth
-        medium(id: ID!): Medium! @auth
+    type YearCountMonth {
+        month: Int!
+        count: Int!
+    }
+
+    type YearCountEntry {
+        year: Int!
+        count: Int!
+        months: [YearCountMonth!]!
+    }
+
+    type YearCountResult {
+        years: [YearCountEntry!]!
+        count: Int!
     }
 
     type Count {
         count: Int
     }
 
+    type Query {
+        media(status: String): [Medium!] @auth
+        medium(id: ID!): Medium! @auth
+        mediaCountByYear: YearCountResult! @auth
+    }
+
     type Mutation {
         deleteMedia(ids: [ID]!): [Medium!]! @auth
         rotate(id: ID!): Medium! @auth
         setMediaStatus(media: [ID]!, status: String): Count @auth
-        upload(file: [Upload]!): [File]! @auth
+        upload(files: [Upload]!): [File]! @auth
         emptyTrash: [Medium!]! @auth
     }
 `

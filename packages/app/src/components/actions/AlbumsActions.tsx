@@ -7,7 +7,7 @@ import { NavContext } from '@/providers'
 import { ENavItemType } from '@/types/app'
 import useCreateAlbum from '@/hooks/create-album'
 
-const AlbumsActions = () => {
+export const AlbumsActions = () => {
     const { t } = useTranslation()
 
     const nav = useContext(NavContext)
@@ -30,5 +30,3 @@ const AlbumsActions = () => {
         />
     </div>
 }
-
-export default AlbumsActions

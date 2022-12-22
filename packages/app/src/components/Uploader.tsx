@@ -3,9 +3,8 @@ import bem from '@/util/bem'
 import useUpload from '@/hooks/upload'
 import tauri from '@/tauri'
 
-const Uploader = () => {
+export const Uploader = () => {
     const [visible, setVisible] = useState(false)
-    // const [tauriDragAndDropListenerRegistered, setTauriDragAndDropListenerRegistered] = useState<boolean>(false)
 
     let dragTimeout = 0
 
@@ -59,5 +58,3 @@ const Uploader = () => {
         />
     </div>
 }
-
-export default Uploader

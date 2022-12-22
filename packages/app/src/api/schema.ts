@@ -162,7 +162,7 @@ export type TMutationUpdateAlbumTitleArgs = {
 
 
 export type TMutationUploadArgs = {
-  file: Array<InputMaybe<Scalars['Upload']>>;
+  files: Array<InputMaybe<Scalars['Upload']>>;
 };
 
 export type TQuery = {
@@ -171,6 +171,7 @@ export type TQuery = {
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
   media?: Maybe<Array<TMedium>>;
+  mediaCountByYear: TYearCountResult;
   medium: TMedium;
   user: TUser;
   users: Array<TUser>;
@@ -223,6 +224,25 @@ export type TVideoMeta = {
   duration?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['Int']>;
   width?: Maybe<Scalars['Int']>;
+};
+
+export type TYearCountEntry = {
+  __typename?: 'YearCountEntry';
+  count: Scalars['Int'];
+  months: Array<TYearCountMonth>;
+  year: Scalars['Int'];
+};
+
+export type TYearCountMonth = {
+  __typename?: 'YearCountMonth';
+  count: Scalars['Int'];
+  month: Scalars['Int'];
+};
+
+export type TYearCountResult = {
+  __typename?: 'YearCountResult';
+  count: Scalars['Int'];
+  years: Array<TYearCountEntry>;
 };
 
 export type TMAddToAlbumVariables = Exact<{
@@ -416,6 +436,25 @@ export type TQMedia = (
   )>> }
 );
 
+export type TQMediaYearCountVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TQMediaYearCount = (
+  { __typename?: 'Query' }
+  & { mediaCountByYear: (
+    { __typename?: 'YearCountResult' }
+    & Pick<TYearCountResult, 'count'>
+    & { years: Array<(
+      { __typename?: 'YearCountEntry' }
+      & Pick<TYearCountEntry, 'year' | 'count'>
+      & { months: Array<(
+        { __typename?: 'YearCountMonth' }
+        & Pick<TYearCountMonth, 'month' | 'count'>
+      )> }
+    )> }
+  ) }
+);
+
 export type TQMediumVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -470,7 +509,7 @@ export type TMSetMediaStatus = (
 );
 
 export type TMUploadVariables = Exact<{
-  file: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>;
+  files: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>;
 }>;
 
 
@@ -1004,6 +1043,48 @@ export function useQMediaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQM
 export type QMediaHookResult = ReturnType<typeof useQMedia>;
 export type QMediaLazyQueryHookResult = ReturnType<typeof useQMediaLazyQuery>;
 export type QMediaQueryResult = Apollo.QueryResult<TQMedia, TQMediaVariables>;
+export const QMediaYearCountDocument = gql`
+    query QMediaYearCount {
+  mediaCountByYear {
+    years {
+      months {
+        month
+        count
+      }
+      year
+      count
+    }
+    count
+  }
+}
+    `;
+
+/**
+ * __useQMediaYearCount__
+ *
+ * To run a query within a React component, call `useQMediaYearCount` and pass it any options that fit your needs.
+ * When your component renders, `useQMediaYearCount` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQMediaYearCount({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQMediaYearCount(baseOptions?: Apollo.QueryHookOptions<TQMediaYearCount, TQMediaYearCountVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TQMediaYearCount, TQMediaYearCountVariables>(QMediaYearCountDocument, options);
+      }
+export function useQMediaYearCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMediaYearCount, TQMediaYearCountVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TQMediaYearCount, TQMediaYearCountVariables>(QMediaYearCountDocument, options);
+        }
+export type QMediaYearCountHookResult = ReturnType<typeof useQMediaYearCount>;
+export type QMediaYearCountLazyQueryHookResult = ReturnType<typeof useQMediaYearCountLazyQuery>;
+export type QMediaYearCountQueryResult = Apollo.QueryResult<TQMediaYearCount, TQMediaYearCountVariables>;
 export const QMediumDocument = gql`
     query QMedium($id: ID!) {
   medium(id: $id) {
@@ -1140,8 +1221,8 @@ export type MSetMediaStatusHookResult = ReturnType<typeof useMSetMediaStatus>;
 export type MSetMediaStatusMutationResult = Apollo.MutationResult<TMSetMediaStatus>;
 export type MSetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TMSetMediaStatus, TMSetMediaStatusVariables>;
 export const MUploadDocument = gql`
-    mutation MUpload($file: [Upload]!) {
-  upload(file: $file) {
+    mutation MUpload($files: [Upload]!) {
+  upload(files: $files) {
     url
   }
 }
@@ -1161,7 +1242,7 @@ export type TMUploadMutationFn = Apollo.MutationFunction<TMUpload, TMUploadVaria
  * @example
  * const [mUpload, { data, loading, error }] = useMUpload({
  *   variables: {
- *      file: // value for 'file'
+ *      files: // value for 'files'
  *   },
  * });
  */

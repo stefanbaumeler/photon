@@ -1,5 +1,5 @@
 import { TMedium } from '@/api'
-import { Check, ListItemActions, Medium } from '@/components/index'
+import { Check, ListItemActions, Medium } from '@/components'
 import { formatDate } from '@/util/date'
 import { useContext } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
