@@ -1,4 +1,4 @@
-import { QMediaDocument, useMAddToFavorites } from '@/api'
+import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '@/api'
 import { useContext } from 'react'
 import { SelectionContext } from '@/providers'
 
@@ -9,7 +9,7 @@ const useAddToFavorites = (media: string[]) => {
         variables: {
             media
         },
-        refetchQueries: [QMediaDocument]
+        refetchQueries: [QMediaDocument, QFavoritesDocument]
     })
 
     return () => {

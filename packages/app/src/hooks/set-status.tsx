@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
-import { QMediaDocument, TMedium, useMSetMediaStatus } from '@/api'
+import { QFavoritesDocument, QMediaDocument, TMedium, useMSetMediaStatus } from '@/api'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
@@ -41,7 +41,8 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
             variables: {
                 status
             }
-        }]
+        },
+        QFavoritesDocument]
     })
 
     return () => {

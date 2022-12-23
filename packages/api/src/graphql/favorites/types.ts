@@ -8,7 +8,7 @@ export default gql`
     }
 
     type Query {
-        favorites: [Favorite!]! @auth
+        favorites: [Medium!]! @auth
     }
 
     type Mutation {

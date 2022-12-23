@@ -118,6 +118,18 @@
     }
 }
 
+@mixin teaser-categories {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 4px;
+    z-index: 1;
+}
+
+@mixin teaser-favorite {
+    color: $color-white;
+}
+
 @mixin teaser {
     .teaser {
         @include teaser-root;
@@ -136,6 +148,14 @@
 
         &__open-fallback {
             @include teaser-open-fallback;
+        }
+        
+        &__categories {
+            @include teaser-categories;
+        }
+
+        &__favorite {
+            @include teaser-favorite;
         }
     }
 }

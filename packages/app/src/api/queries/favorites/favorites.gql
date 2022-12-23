@@ -1,44 +1,41 @@
 query QFavorites {
     favorites {
+        dateCreated
+        dateModified
+        dateTaken
         id
-        medium {
-            dateCreated
-            dateModified
-            dateTaken
+        filenameDisk
+        filenameDownload
+        title
+        description
+        lat
+        lng
+        status
+        mimetype
+        favorites {
             id
-            filenameDisk
-            filenameDownload
-            title
-            description
-            lat
-            lng
-            status
-            mimetype
-            owner {
-                id
-            }
-            uploader {
-                id
-            }
-            meta {
-                ...on ImageMeta {
-                    width
-                    height
-                    cameraMake
-                    cameraModel
-                    flash
-                    fNumber
-                    iso
-                }
-                ...on VideoMeta {
-                    width
-                    height
-                    duration
-                }
-            }
         }
-        user {
+        owner {
             id
+        }
+        uploader {
+            id
+        }
+        meta {
+            ...on ImageMeta {
+                width
+                height
+                cameraMake
+                cameraModel
+                flash
+                fNumber
+                iso
+            }
+            ...on VideoMeta {
+                width
+                height
+                duration
+            }
         }
     }
 }

@@ -1,17 +1,41 @@
-import { getDatabase, TFavorite } from '../database'
-import { Prisma } from '.prisma/client'
+import { getDatabase, TFavorite, TMedium } from '../database'
 
 export default class FavoritesService {
     prisma = getDatabase()
 
-    readMany = async (conditions: Prisma.FavoriteWhereInput) => {
-        return await this.prisma.favorite.findMany({
-            where: conditions,
+    context
+
+    constructor (context?: { user: { id: string } }) {
+        this.context = context
+    }
+
+    readMany = async () => {
+        const favorites = await this.prisma.favorite.findMany({
+            where: {
+                medium: {
+                    status: {
+                        not: 'trash'
+                    }
+                }
+            },
             include: {
-                user: true,
-                medium: true
+                medium: {
+                    include: {
+                        owner: true,
+                        uploader: true,
+                        favorites: {
+                            where: {
+                                user: {
+                                    id: this.context?.user.id
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }) as TFavorite[]
+
+        return favorites.map((favorite) => favorite.medium) as TMedium[]
     }
 
     createOne = async (idUser: string, idMedium: string) => {

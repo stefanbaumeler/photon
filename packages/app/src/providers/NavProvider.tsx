@@ -36,6 +36,11 @@ const NavProvider = ({ children }: Props) => {
                     type: ENavItemType.ALBUMS
                 },
                 {
+                    label: t(ETrans.FAVORITES),
+                    icon: Icons.mdiStar,
+                    href: 'favorites'
+                },
+                {
                     label: t(ETrans.SHARING),
                     icon: Icons.mdiShareVariant,
                     href: 'sharing'

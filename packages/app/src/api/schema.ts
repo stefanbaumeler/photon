@@ -190,7 +190,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
-  favorites: Array<TFavorite>;
+  favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
   medium: TMedium;
@@ -449,27 +449,23 @@ export type TQFavoritesVariables = Exact<{ [key: string]: never; }>;
 export type TQFavorites = (
   { __typename?: 'Query' }
   & { favorites: Array<(
-    { __typename?: 'Favorite' }
-    & Pick<TFavorite, 'id'>
-    & { medium?: Maybe<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-      & { owner?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>, uploader?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>, meta?: Maybe<(
-        { __typename?: 'ImageMeta' }
-        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-      ) | (
-        { __typename?: 'VideoMeta' }
-        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
-      )> }
-    )>, user?: Maybe<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+    & { favorites?: Maybe<Array<Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<TFavorite, 'id'>
+    )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
   )> }
 );
@@ -1095,45 +1091,42 @@ export type MAddToFavoritesMutationOptions = Apollo.BaseMutationOptions<TMAddToF
 export const QFavoritesDocument = gql`
     query QFavorites {
   favorites {
+    dateCreated
+    dateModified
+    dateTaken
     id
-    medium {
-      dateCreated
-      dateModified
-      dateTaken
+    filenameDisk
+    filenameDownload
+    title
+    description
+    lat
+    lng
+    status
+    mimetype
+    favorites {
       id
-      filenameDisk
-      filenameDownload
-      title
-      description
-      lat
-      lng
-      status
-      mimetype
-      owner {
-        id
-      }
-      uploader {
-        id
-      }
-      meta {
-        ... on ImageMeta {
-          width
-          height
-          cameraMake
-          cameraModel
-          flash
-          fNumber
-          iso
-        }
-        ... on VideoMeta {
-          width
-          height
-          duration
-        }
-      }
     }
-    user {
+    owner {
       id
+    }
+    uploader {
+      id
+    }
+    meta {
+      ... on ImageMeta {
+        width
+        height
+        cameraMake
+        cameraModel
+        flash
+        fNumber
+        iso
+      }
+      ... on VideoMeta {
+        width
+        height
+        duration
+      }
     }
   }
 }

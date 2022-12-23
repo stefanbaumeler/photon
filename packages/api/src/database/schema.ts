@@ -190,7 +190,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
-  favorites: Array<TFavorite>;
+  favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
   medium: TMedium;
@@ -481,7 +481,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   album?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
-  favorites?: Resolver<Array<TResolversTypes['Favorite']>, ParentType, ContextType>;
+  favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
   medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;

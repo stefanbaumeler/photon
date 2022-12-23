@@ -81,5 +81,6 @@ export default {
     reset_password_set: 'Wir konnten deine Identität bestätigen. Gib dein neues Passwort unten ein.',
     reset_password_confirmed: 'Dein Passwort wurde erfolgreich zurückgesetzt.',
     favorite: 'Zu Favoriten hinzufügen',
-    unfavorite: 'Von Favoriten entfernen'
+    unfavorite: 'Von Favoriten entfernen',
+    favorites: 'Favoriten'
 }

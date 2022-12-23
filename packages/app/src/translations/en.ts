@@ -81,5 +81,6 @@ export default {
     reset_password_set: 'Your identity has been confirmed. Enter your new credentials below.',
     reset_password_confirmed: 'Your new password has been reset successfully.',
     favorite: 'Favorite',
-    unfavorite: 'Remove from favorites'
+    unfavorite: 'Remove from favorites',
+    favorites: 'Favorites'
 }

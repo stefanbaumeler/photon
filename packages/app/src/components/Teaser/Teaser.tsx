@@ -81,6 +81,18 @@ const Teaser = () => {
         ['single', selection.mode === ESelectionMode.SINGLE]
     ])
 
+    const Favorite = () => {
+        if (!teaser.medium.favorites.length) {
+            return <></>
+        }
+
+        return <Icon
+            path={Icons.mdiStar}
+            className="teaser__favorite"
+            size={1}
+        />
+    }
+
     return <div
         data-cy="teaser"
         className={classes}
@@ -108,6 +120,9 @@ const Teaser = () => {
                 size={1}
             />
         </button>
+        <div className="teaser__categories">
+            <Favorite />
+        </div>
         <div
             className="teaser__container"
             onClick={open}
