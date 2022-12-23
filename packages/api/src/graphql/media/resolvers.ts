@@ -7,7 +7,7 @@ import { DeepPartial } from '../../types'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
-        return new MediaService().readMany(input.status ? {
+        return new MediaService(context).readMany(input.status ? {
             status: input.status,
             owner: {
                 id: context.user.id
@@ -18,9 +18,9 @@ const queries: Partial<TQueryResolvers> = {
             }
         })
     },
-    medium: async (_, input) => await new MediaService().readOne(input.id),
+    medium: async (_, input, context) => await new MediaService(context).readOne(input.id),
     mediaCountByYear: async (_, input, context) => {
-        return await new MediaService().countByYear({
+        return await new MediaService(context).countByYear({
             owner: {
                 id: context.user.id
             }
@@ -29,17 +29,17 @@ const queries: Partial<TQueryResolvers> = {
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    emptyTrash: () => new Promise<TMedium[]>((resolve) => {
-        const service = new MediaService()
+    emptyTrash: (_, input, context) => new Promise<TMedium[]>((resolve) => {
+        const service = new MediaService(context)
 
         service.readMany({
             status: 'trash'
-        }).then(async (results) => {
+        }, context.owner.id).then(async (results) => {
             resolve(service.destroy(results.map((result) => result.id as string)))
         })
     }),
     upload: async (_, { files }, context) => {
-        const service = new MediaService()
+        const service = new MediaService(context)
 
         const writePromises = files.map((file) => new Promise<DeepPartial<TMedium> & { id?: string }> ((resolve) => {
             const name = randomUUID()
@@ -77,17 +77,17 @@ const mutations: Partial<TMutationResolvers> = {
 
         return []
     },
-    setMediaStatus: async (_, input) => {
-        return new MediaService().updateMany(input.media as string[], {
+    setMediaStatus: async (_, input, context) => {
+        return new MediaService(context).updateMany(input.media as string[], {
             dateModifiedStatus: new Date(),
             status: input.status
         })
     },
-    rotate: async (_, input) => {
-        return await new MediaService().rotate(input.id)
+    rotate: async (_, input, context) => {
+        return await new MediaService(context).rotate(input.id)
     },
-    deleteMedia: async (_, input) => {
-        return await new MediaService().destroy(input.ids)
+    deleteMedia: async (_, input, context) => {
+        return await new MediaService(context).destroy(input.ids)
     }
 }
 

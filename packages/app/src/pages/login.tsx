@@ -61,7 +61,6 @@ const LoginPage = () => {
                 password
             }
         }).then(async (res) => {
-            console.log(res)
             if (res.data.signIn.accessToken.length) {
                 await router.push('/')
             }
@@ -76,8 +75,6 @@ const LoginPage = () => {
                 mail,
                 password
             }
-        }).then((res) => {
-            console.log(res)
         })
     }
 

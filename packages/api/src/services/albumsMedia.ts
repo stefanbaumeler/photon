@@ -4,8 +4,6 @@ import { getDatabase, TMedium } from '../database'
 export default class AlbumsMediaService {
     prisma = getDatabase()
 
-    tableName = 'albums_media'
-
     createOne = async (albumMedium: Omit<AlbumsMedia, 'id'>) => {
         return this.prisma.albumMedium.upsert({
             where: {
@@ -15,7 +13,14 @@ export default class AlbumsMediaService {
                 }
             },
             create: albumMedium,
-            update: albumMedium
+            update: albumMedium,
+            include: {
+                medium: {
+                    include: {
+                        favorites: true
+                    }
+                }
+            }
         })
     }
 
@@ -25,7 +30,9 @@ export default class AlbumsMediaService {
         })
 
         return await Promise.all(albumsMediaPromises).then((results) => {
-            return results
+            return results.map((result) => {
+                return result.medium as TMedium
+            })
         })
     }
 
@@ -63,7 +70,11 @@ export default class AlbumsMediaService {
                 idAlbum
             },
             include: {
-                medium: true
+                medium: {
+                    include: {
+                        favorites: true
+                    }
+                }
             }
         })
 

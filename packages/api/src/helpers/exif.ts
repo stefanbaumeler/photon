@@ -257,10 +257,6 @@ export const fileToMedium = async ({
         } as DeepPartial<TMedium> & { id?: string })
     }
 
-    console.log(type)
-    console.log(type)
-    console.log(type)
-
     if (mediumType === 'image') {
         handleImage(filePath).then(handleMeta)
     }

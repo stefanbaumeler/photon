@@ -11,6 +11,8 @@ import useMoveToTrashDialog from '@/dialogs/move-to-trash'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import TrashActions from './TrashActions'
+import useAddToFavorites from '@/hooks/add-to-favorites'
+import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
 
 export const BulkActions = () => {
     const { t } = useTranslation()
@@ -23,16 +25,27 @@ export const BulkActions = () => {
     const [moreActive, setMoreActive] = useState(false)
 
     const addToAlbumDialog = useAddToAlbumDialog()
+    const addToFavorites = useAddToFavorites(Array.from(selection.selected).map((selected) => selected.id))
+    const removeFromFavorites = useRemoveFromFavorites(Array.from(selection.selected).map((selected) => selected.id))
 
     if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
+
+    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favorites.length === 0)
 
     const moreItems = [
         {
             cy: 'move-to-archive',
             label: Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
             callback: archive
+        },
+        selectionContainsUnfavorited ? {
+            label: t(ETrans.FAVORITE),
+            callback: addToFavorites
+        } : {
+            label: t(ETrans.UNFAVORITE),
+            callback: removeFromFavorites
         }
     ]
 

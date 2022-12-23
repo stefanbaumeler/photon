@@ -79,5 +79,7 @@ export default {
     reset_password_hint: 'Gib deine E-Mail Adresse unten ein und wir senden dir einen Link um dein Passwort zurückzusetzen.',
     reset_password_sent: 'Falls ein Account mit der eingegebenen E-Mail Adresse existiert, haben wir dir eine E-Mail mit einem Link zum Zurücksetzen deines Passworts geschickt.',
     reset_password_set: 'Wir konnten deine Identität bestätigen. Gib dein neues Passwort unten ein.',
-    reset_password_confirmed: 'Dein Passwort wurde erfolgreich zurückgesetzt.'
+    reset_password_confirmed: 'Dein Passwort wurde erfolgreich zurückgesetzt.',
+    favorite: 'Zu Favoriten hinzufügen',
+    unfavorite: 'Von Favoriten entfernen'
 }

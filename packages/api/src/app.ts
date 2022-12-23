@@ -52,6 +52,17 @@ export const createApp = async () => {
 
     app.disable('x-powered-by')
 
+    app.use(
+        '/graphql',
+        cors({
+            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
+            credentials: true
+        }),
+        expressMiddleware(apollo, {
+            context
+        })
+    )
+
     app.use('/uploads', uploadsRouter)
     app.use('/media', mediaRouter)
     app.use('/albums', albumsRouter)
@@ -64,17 +75,6 @@ export const createApp = async () => {
 
         next()
     })
-
-    app.use(
-        '/graphql',
-        cors({
-            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
-            credentials: true
-        }),
-        expressMiddleware(apollo, {
-            context
-        })
-    )
 
     return app
 }

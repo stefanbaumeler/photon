@@ -12,6 +12,9 @@ query QAlbumMedia($id: ID!) {
         lng
         status
         mimetype
+        favorites {
+            id
+        }
         meta {
             ...on ImageMeta {
                 width

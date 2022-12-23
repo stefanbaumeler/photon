@@ -27,7 +27,6 @@ export const context: ContextFunction<[ExpressContextFunctionArgument], BaseCont
     const accessToken = req.cookies.accessToken as string
     const refreshToken = req.cookies.refreshToken
 
-    console.log(req.cookies, req.signedCookies)
     let verified = false
     let userInfo
 

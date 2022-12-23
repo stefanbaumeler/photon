@@ -12,6 +12,9 @@ query QMedia($status: String) {
         lng
         status
         mimetype
+        favorites {
+            id
+        }
         owner {
             id
         }

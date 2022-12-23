@@ -7,7 +7,8 @@
         "strict": true,
         "skipLibCheck": true,
         "outDir": "./dist",
-        "isolatedModules": true
+        "isolatedModules": true,
+        "noEmitOnError": false
     },
     "include": ["**/*.ts"]
 }

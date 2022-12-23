@@ -37,6 +37,7 @@ export default gql`
         owner: User
         uploader: User
         hash: String
+        favorites: [Favorite]
     }
 
     type YearCountMonth {

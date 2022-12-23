@@ -81,4 +81,6 @@ export enum ETrans {
     RESET_PASSWORD_SENT = 'reset_password_sent',
     RESET_PASSWORD_SET = 'reset_password_set',
     RESET_PASSWORD_CONFIRMED = 'reset_password_confirmed',
+    FAVORITE = 'favorite',
+    UNFAVORITE = 'unfavorite'
 }

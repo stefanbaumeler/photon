@@ -6,8 +6,7 @@
     "scripts": {
         "build": "tsc -b ./tsconfig.json",
         "watch": "run-p -l watch:*",
-        "watch:ts": "tsc -b ./tsconfig.json -w -preserveWatchOutput",
-        "watch:api": "ts-node-dev dist",
+        "watch:api": "ts-node-dev index.ts",
         "watch:api-schema": "graphql-codegen -c codegen.ts -w",
         "db:up": "run-s db:down db:setup db:generate db:seed",
         "db:down": "ts-node src/database/teardown.ts",

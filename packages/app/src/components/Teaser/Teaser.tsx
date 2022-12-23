@@ -1,4 +1,3 @@
-import { TMedium } from '@/api'
 import { useContext, useState } from 'react'
 import { DetailsContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'

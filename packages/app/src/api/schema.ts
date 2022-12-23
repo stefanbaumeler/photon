@@ -38,6 +38,13 @@ export type TCount = {
   count?: Maybe<Scalars['Int']>;
 };
 
+export type TFavorite = {
+  __typename?: 'Favorite';
+  id: Scalars['ID'];
+  medium?: Maybe<TMedium>;
+  user?: Maybe<TUser>;
+};
+
 export type TFile = {
   __typename?: 'File';
   url?: Maybe<Scalars['String']>;
@@ -61,6 +68,7 @@ export type TMedium = {
   dateModifiedStatus?: Maybe<Scalars['DateTime']>;
   dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
+  favorites?: Maybe<Array<Maybe<TFavorite>>>;
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
@@ -80,11 +88,13 @@ export type TMeta = TImageMeta | TVideoMeta;
 export type TMutation = {
   __typename?: 'Mutation';
   addToAlbum: Array<TMedium>;
+  addToFavorites: Array<TFavorite>;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum?: Maybe<TCount>;
   deleteMedia: Array<TMedium>;
   emptyTrash: Array<TMedium>;
   removeFromAlbum?: Maybe<TAlbum>;
+  removeFromFavorites?: Maybe<TCount>;
   rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
   setMediaStatus?: Maybe<TCount>;
@@ -98,6 +108,11 @@ export type TMutation = {
 
 export type TMutationAddToAlbumArgs = {
   idAlbum: Scalars['ID'];
+  media: Array<Scalars['ID']>;
+};
+
+
+export type TMutationAddToFavoritesArgs = {
   media: Array<Scalars['ID']>;
 };
 
@@ -120,6 +135,11 @@ export type TMutationDeleteMediaArgs = {
 
 export type TMutationRemoveFromAlbumArgs = {
   idAlbum: Scalars['ID'];
+  media: Array<Scalars['ID']>;
+};
+
+
+export type TMutationRemoveFromFavoritesArgs = {
   media: Array<Scalars['ID']>;
 };
 
@@ -170,6 +190,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
+  favorites: Array<TFavorite>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
   medium: TMedium;
@@ -289,7 +310,10 @@ export type TQAlbumMedia = (
   & { albumMedia: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { meta?: Maybe<(
+    & { favorites?: Maybe<Array<Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<TFavorite, 'id'>
+    )>>>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
@@ -386,6 +410,83 @@ export type TMUpdateAlbumTitle = (
   )> }
 );
 
+export type TMAddToFavoritesVariables = Exact<{
+  media: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type TMAddToFavorites = (
+  { __typename?: 'Mutation' }
+  & { addToFavorites: Array<(
+    { __typename?: 'Favorite' }
+    & Pick<TFavorite, 'id'>
+    & { medium?: Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+      & { owner?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, uploader?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, meta?: Maybe<(
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+      )> }
+    )>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )> }
+  )> }
+);
+
+export type TQFavoritesVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TQFavorites = (
+  { __typename?: 'Query' }
+  & { favorites: Array<(
+    { __typename?: 'Favorite' }
+    & Pick<TFavorite, 'id'>
+    & { medium?: Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
+      & { owner?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, uploader?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, meta?: Maybe<(
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+      )> }
+    )>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )> }
+  )> }
+);
+
+export type TMRemoveFromFavoritesVariables = Exact<{
+  media: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type TMRemoveFromFavorites = (
+  { __typename?: 'Mutation' }
+  & { removeFromFavorites?: Maybe<(
+    { __typename?: 'Count' }
+    & Pick<TCount, 'count'>
+  )> }
+);
+
 export type TMDeleteMediaVariables = Exact<{
   ids: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
 }>;
@@ -420,7 +521,10 @@ export type TQMedia = (
   & { media?: Maybe<Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { owner?: Maybe<(
+    & { favorites?: Maybe<Array<Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<TFavorite, 'id'>
+    )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
     )>, uploader?: Maybe<(
@@ -465,7 +569,10 @@ export type TQMedium = (
   & { medium: (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { owner?: Maybe<(
+    & { favorites?: Maybe<Array<Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<TFavorite, 'id'>
+    )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
     )>, uploader?: Maybe<(
@@ -652,6 +759,9 @@ export const QAlbumMediaDocument = gql`
     lng
     status
     mimetype
+    favorites {
+      id
+    }
     meta {
       ... on ImageMeta {
         width
@@ -910,6 +1020,184 @@ export function useMUpdateAlbumTitle(baseOptions?: Apollo.MutationHookOptions<TM
 export type MUpdateAlbumTitleHookResult = ReturnType<typeof useMUpdateAlbumTitle>;
 export type MUpdateAlbumTitleMutationResult = Apollo.MutationResult<TMUpdateAlbumTitle>;
 export type MUpdateAlbumTitleMutationOptions = Apollo.BaseMutationOptions<TMUpdateAlbumTitle, TMUpdateAlbumTitleVariables>;
+export const MAddToFavoritesDocument = gql`
+    mutation MAddToFavorites($media: [ID!]!) {
+  addToFavorites(media: $media) {
+    id
+    medium {
+      dateCreated
+      dateModified
+      dateTaken
+      id
+      filenameDisk
+      filenameDownload
+      title
+      description
+      lat
+      lng
+      status
+      mimetype
+      owner {
+        id
+      }
+      uploader {
+        id
+      }
+      meta {
+        ... on ImageMeta {
+          width
+          height
+          cameraMake
+          cameraModel
+          flash
+          fNumber
+          iso
+        }
+        ... on VideoMeta {
+          width
+          height
+          duration
+        }
+      }
+    }
+    user {
+      id
+    }
+  }
+}
+    `;
+export type TMAddToFavoritesMutationFn = Apollo.MutationFunction<TMAddToFavorites, TMAddToFavoritesVariables>;
+
+/**
+ * __useMAddToFavorites__
+ *
+ * To run a mutation, you first call `useMAddToFavorites` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMAddToFavorites` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mAddToFavorites, { data, loading, error }] = useMAddToFavorites({
+ *   variables: {
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
+export function useMAddToFavorites(baseOptions?: Apollo.MutationHookOptions<TMAddToFavorites, TMAddToFavoritesVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TMAddToFavorites, TMAddToFavoritesVariables>(MAddToFavoritesDocument, options);
+      }
+export type MAddToFavoritesHookResult = ReturnType<typeof useMAddToFavorites>;
+export type MAddToFavoritesMutationResult = Apollo.MutationResult<TMAddToFavorites>;
+export type MAddToFavoritesMutationOptions = Apollo.BaseMutationOptions<TMAddToFavorites, TMAddToFavoritesVariables>;
+export const QFavoritesDocument = gql`
+    query QFavorites {
+  favorites {
+    id
+    medium {
+      dateCreated
+      dateModified
+      dateTaken
+      id
+      filenameDisk
+      filenameDownload
+      title
+      description
+      lat
+      lng
+      status
+      mimetype
+      owner {
+        id
+      }
+      uploader {
+        id
+      }
+      meta {
+        ... on ImageMeta {
+          width
+          height
+          cameraMake
+          cameraModel
+          flash
+          fNumber
+          iso
+        }
+        ... on VideoMeta {
+          width
+          height
+          duration
+        }
+      }
+    }
+    user {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useQFavorites__
+ *
+ * To run a query within a React component, call `useQFavorites` and pass it any options that fit your needs.
+ * When your component renders, `useQFavorites` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQFavorites({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQFavorites(baseOptions?: Apollo.QueryHookOptions<TQFavorites, TQFavoritesVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TQFavorites, TQFavoritesVariables>(QFavoritesDocument, options);
+      }
+export function useQFavoritesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQFavorites, TQFavoritesVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TQFavorites, TQFavoritesVariables>(QFavoritesDocument, options);
+        }
+export type QFavoritesHookResult = ReturnType<typeof useQFavorites>;
+export type QFavoritesLazyQueryHookResult = ReturnType<typeof useQFavoritesLazyQuery>;
+export type QFavoritesQueryResult = Apollo.QueryResult<TQFavorites, TQFavoritesVariables>;
+export const MRemoveFromFavoritesDocument = gql`
+    mutation MRemoveFromFavorites($media: [ID!]!) {
+  removeFromFavorites(media: $media) {
+    count
+  }
+}
+    `;
+export type TMRemoveFromFavoritesMutationFn = Apollo.MutationFunction<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>;
+
+/**
+ * __useMRemoveFromFavorites__
+ *
+ * To run a mutation, you first call `useMRemoveFromFavorites` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMRemoveFromFavorites` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mRemoveFromFavorites, { data, loading, error }] = useMRemoveFromFavorites({
+ *   variables: {
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
+export function useMRemoveFromFavorites(baseOptions?: Apollo.MutationHookOptions<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>(MRemoveFromFavoritesDocument, options);
+      }
+export type MRemoveFromFavoritesHookResult = ReturnType<typeof useMRemoveFromFavorites>;
+export type MRemoveFromFavoritesMutationResult = Apollo.MutationResult<TMRemoveFromFavorites>;
+export type MRemoveFromFavoritesMutationOptions = Apollo.BaseMutationOptions<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>;
 export const MDeleteMediaDocument = gql`
     mutation MDeleteMedia($ids: [ID]!) {
   deleteMedia(ids: $ids) {
@@ -990,6 +1278,9 @@ export const QMediaDocument = gql`
     lng
     status
     mimetype
+    favorites {
+      id
+    }
     owner {
       id
     }
@@ -1100,6 +1391,9 @@ export const QMediumDocument = gql`
     lng
     status
     mimetype
+    favorites {
+      id
+    }
     owner {
       id
     }

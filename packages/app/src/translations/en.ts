@@ -79,5 +79,7 @@ export default {
     reset_password_hint: 'Enter the email address of your account below and we\'ll send you a link to reset your password.',
     reset_password_sent: 'An email has been sent to the address you entered, if there is an account associated with it. Click the link in the email to reset your password.',
     reset_password_set: 'Your identity has been confirmed. Enter your new credentials below.',
-    reset_password_confirmed: 'Your new password has been reset successfully.'
+    reset_password_confirmed: 'Your new password has been reset successfully.',
+    favorite: 'Favorite',
+    unfavorite: 'Remove from favorites'
 }

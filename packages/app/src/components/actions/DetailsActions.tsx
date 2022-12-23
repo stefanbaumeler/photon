@@ -12,6 +12,8 @@ import useRotate from '@/hooks/rotate'
 import { useRouter } from 'next/router'
 import useSetMediaStatus from '@/hooks/set-status'
 import TrashActions from '@/components/actions/TrashActions'
+import useAddToFavorites from '@/hooks/add-to-favorites'
+import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
 
 export const DetailsActions = () => {
     const { t } = useTranslation()
@@ -25,6 +27,8 @@ export const DetailsActions = () => {
     const layout = useContext(LayoutContext)
 
     const moveToTrashDialog = useMoveToTrashDialog(details.medium)
+    const addToFavorites = useAddToFavorites([details.medium.id])
+    const removeFromFavorites = useRemoveFromFavorites([details.medium.id])
 
     const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
 
@@ -83,6 +87,12 @@ export const DetailsActions = () => {
                 hint={t(ETrans.DOWNLOAD)}
                 white={true}
                 icon={Icons.mdiTrayArrowDown}
+            />
+            <IconButton
+                onClick={() => details.medium.favorites.length ? removeFromFavorites() : addToFavorites()}
+                hint={details.medium.favorites.length ? t(ETrans.UNFAVORITE) : t(ETrans.FAVORITE)}
+                white={true}
+                icon={details.medium.favorites.length ? Icons.mdiStar : Icons.mdiStarOutline}
             />
             <Dropdown
                 items={moreItems}

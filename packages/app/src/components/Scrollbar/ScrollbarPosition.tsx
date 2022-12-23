@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
-export const ScrollbarPosition = () => {
+const SBP = () => {
     const [scrollPosition, setScrollPosition] = useState(0)
 
     const scroll = () => {
@@ -20,3 +21,7 @@ export const ScrollbarPosition = () => {
         }}
     ></span>
 }
+
+export const ScrollbarPosition = dynamic(() => Promise.resolve(SBP), {
+    ssr: false
+})
