@@ -15,9 +15,8 @@ const useUpload = () => {
         refetchQueries: [{
             query: QMediaDocument,
             variables: {
-                sort: {
-                    sort: media.sort
-                }
+                status: media.status,
+                sort: media.sort
             }
         }, QMediaYearCountDocument]
     })

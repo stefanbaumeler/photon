@@ -24,8 +24,6 @@ import styles from '../styles/index.scss'
 
 styles.length
 
-console.log(process.env.NODE_ENV)
-
 tauri.createBaseDir()
 
 setDefaultLocale('en-US')
