@@ -7,14 +7,21 @@ import { DeepPartial } from '../../types'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
-        return new MediaService(context).readMany(input.status ? {
-            status: input.status,
-            owner: {
-                id: context.user.id
-            }
-        } : {
-            owner: {
-                id: context.user.id
+        return new MediaService(context).readMany({
+            conditions: input.status ? {
+                status: input.status,
+                owner: {
+                    id: context.user.id
+                }
+            } : {
+                owner: {
+                    id: context.user.id
+                }
+            },
+            orderBy: input.sort === 'recent' ? {
+                dateCreated: 'desc'
+            } : {
+                dateTaken: input.sort === 'newest' ? 'desc' : 'asc'
             }
         })
     },
@@ -33,8 +40,10 @@ const mutations: Partial<TMutationResolvers> = {
         const service = new MediaService(context)
 
         service.readMany({
-            status: 'trash'
-        }, context.owner.id).then(async (results) => {
+            conditions: {
+                status: 'trash'
+            }
+        }).then(async (results) => {
             resolve(service.destroy(results.map((result) => result.id as string)))
         })
     }),

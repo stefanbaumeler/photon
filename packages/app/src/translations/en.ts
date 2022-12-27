@@ -60,7 +60,7 @@ export default {
     change_layout: 'Change layout',
     map_view: 'Map view',
     list_view: 'List view',
-    gallery_view: 'gallery_view',
+    gallery_view: 'Gallery view',
     mail: 'Email address',
     password: 'Password',
     sign_in: 'Sign In',
@@ -82,5 +82,10 @@ export default {
     reset_password_confirmed: 'Your new password has been reset successfully.',
     favorite: 'Favorite',
     unfavorite: 'Remove from favorites',
-    favorites: 'Favorites'
+    favorites: 'Favorites',
+    sort: 'Sort',
+    sort_by: 'Sort by',
+    newest_first: 'Newest first',
+    oldest_first: 'Oldest first',
+    most_recent: 'Recently added'
 }

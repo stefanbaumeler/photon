@@ -61,7 +61,7 @@ export default gql`
     }
 
     type Query {
-        media(status: String): [Medium!] @auth
+        media(status: String, sort: String): [Medium!] @auth
         medium(id: ID!): Medium! @auth
         mediaCountByYear: YearCountResult! @auth
     }

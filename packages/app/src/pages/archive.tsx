@@ -1,20 +1,8 @@
 import Layout from '@/layouts/layout'
-import { Uploader, Details, Dialog, Media } from '@/components'
+import { Details, Dialog, Media, Uploader } from '@/components'
 import { DetailsProvider } from '@/providers'
-import { useQMedia } from '@/api'
-import { EMediumStatus } from '@/types/app'
 
 const ArchivePage = () => {
-    const media = useQMedia({
-        variables: {
-            status: EMediumStatus.ARCHIVED
-        }
-    })
-
-    if (media.loading) {
-        return <></>
-    }
-
     return <Layout>
         <section>
             <div>
@@ -22,7 +10,7 @@ const ArchivePage = () => {
                 <Uploader />
                 <DetailsProvider>
                     <Details />
-                    <Media media={media.data?.media || []} />
+                    <Media />
                 </DetailsProvider>
             </div>
         </section>

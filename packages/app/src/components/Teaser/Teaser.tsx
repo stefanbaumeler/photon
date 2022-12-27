@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { DetailsContext, SelectionContext } from '@/providers'
+import { DetailsContext, MediaContext, SelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check, Medium } from '@/components'
@@ -14,6 +14,7 @@ const Teaser = () => {
     const details = useContext(DetailsContext)
     const selection = useContext(SelectionContext)
     const teaser = useContext(TeaserContext)
+    const media = useContext(MediaContext)
 
     const [shift, setShift] = useState(false)
 
@@ -57,11 +58,11 @@ const Teaser = () => {
             return
         }
 
-        const ids = details.collection.map((medium) => medium.id)
+        const ids = media.media.map((medium) => medium.id)
         const lastIndex = ids.indexOf(selection.lastAdded?.id)
         const hoverIndex = ids.indexOf(teaser.medium.id)
 
-        const newShiftTargets = lastIndex < hoverIndex ? details.collection.slice(lastIndex, hoverIndex + 1) : details.collection.slice(hoverIndex, lastIndex + 1)
+        const newShiftTargets = lastIndex < hoverIndex ? media.media.slice(lastIndex, hoverIndex + 1) : media.media.slice(hoverIndex, lastIndex + 1)
 
         if (shift && !isEqual(selection.shiftTargets, newShiftTargets)) {
             selection.setShiftTargets(newShiftTargets)

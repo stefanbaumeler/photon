@@ -50,7 +50,12 @@ export default class AlbumsMediaService {
     readAlbumsOfMedium = async (idMedium: string) => {
         const res = await this.prisma.albumMedium.findMany({
             where: {
-                idMedium
+                medium: {
+                    id: idMedium,
+                    status: {
+                        in: ['archived', 'all']
+                    }
+                }
             },
             include: {
                 album: true
@@ -67,7 +72,14 @@ export default class AlbumsMediaService {
     readMediaOfAlbum = async (idAlbum: string) => {
         const res = await this.prisma.albumMedium.findMany({
             where: {
-                idAlbum
+                album: {
+                    id: idAlbum
+                },
+                medium: {
+                    status: {
+                        in: ['archived', 'all']
+                    }
+                }
             },
             include: {
                 medium: {

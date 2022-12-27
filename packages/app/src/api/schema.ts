@@ -210,6 +210,7 @@ export type TQueryAlbumMediaArgs = {
 
 
 export type TQueryMediaArgs = {
+  sort?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
 };
 
@@ -509,6 +510,7 @@ export type TMEmptyTrash = (
 
 export type TQMediaVariables = Exact<{
   status?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1257,8 +1259,8 @@ export type MEmptyTrashHookResult = ReturnType<typeof useMEmptyTrash>;
 export type MEmptyTrashMutationResult = Apollo.MutationResult<TMEmptyTrash>;
 export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash, TMEmptyTrashVariables>;
 export const QMediaDocument = gql`
-    query QMedia($status: String) {
-  media(status: $status) {
+    query QMedia($status: String, $sort: String) {
+  media(status: $status, sort: $sort) {
     dateCreated
     dateModified
     dateTaken
@@ -1313,6 +1315,7 @@ export const QMediaDocument = gql`
  * const { data, loading, error } = useQMedia({
  *   variables: {
  *      status: // value for 'status'
+ *      sort: // value for 'sort'
  *   },
  * });
  */

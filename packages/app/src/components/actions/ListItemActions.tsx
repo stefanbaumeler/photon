@@ -21,7 +21,7 @@ export const ListItemActions = ({ medium }: Props) => {
     const moveToTrashDialog = useMoveToTrashDialog(medium)
 
     const rotate = useRotate(medium.id)
-    const archive = useSetMediaStatus(medium, medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
+    const archive = useSetMediaStatus(medium, medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
 
     const moreItems = [
         {

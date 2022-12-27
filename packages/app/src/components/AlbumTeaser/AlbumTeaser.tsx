@@ -2,7 +2,7 @@ import { TAlbum, useQAlbumMedia } from '@/api'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { IconButton, Dropdown, Teaser } from '@/components'
+import { IconButton, Dropdown } from '@/components'
 import * as Icons from '@mdi/js'
 import { useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
@@ -20,7 +20,8 @@ export const AlbumTeaser = ({ album }: Props) => {
     const albumMediaQuery = useQAlbumMedia({
         variables: {
             id: album.id
-        }
+        },
+        fetchPolicy: 'no-cache'
     })
 
     const deleteAlbumDialog = useDeleteAlbumDialog(album.id)
@@ -66,7 +67,7 @@ export const AlbumTeaser = ({ album }: Props) => {
             className="album__link"
         >
             <div className="album__image-container">
-                <AlbumTeaserImage id={album.cover.id} />
+                <AlbumTeaserImage id={album.cover?.id} />
             </div>
             <div className="album__content">
                 <span

@@ -82,5 +82,10 @@ export default {
     reset_password_confirmed: 'Dein Passwort wurde erfolgreich zurückgesetzt.',
     favorite: 'Zu Favoriten hinzufügen',
     unfavorite: 'Von Favoriten entfernen',
-    favorites: 'Favoriten'
+    favorites: 'Favoriten',
+    sort: 'Sortierung',
+    sort_by: 'Sortieren nach',
+    newest_first: 'Neueste zuerst',
+    oldest_first: 'Älteste zuerst',
+    most_recent: 'Kürzlich hinzugefügt'
 }

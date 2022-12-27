@@ -10,8 +10,6 @@ interface DetailsContext {
     active: boolean
     infos: boolean
     medium: TMedium
-    collection: TMedium[]
-    setCollection: Dispatch<SetStateAction<TMedium[]>>
     setMedium: Dispatch<SetStateAction<TMedium>>
     open: (medium: TMedium) => void
     close: () => void
@@ -22,7 +20,6 @@ const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
     const [medium, setMedium] = useState<TMedium>()
-    const [collection, setCollection] = useState([])
     const [active, setActive] = useState(false)
     const [infos, setInfos] = useState(true)
     const router = useRouter()
@@ -31,8 +28,6 @@ const DetailsProvider = ({ children }: Props) => {
         active,
         infos,
         medium,
-        collection,
-        setCollection,
         setMedium,
         open: (newMedium) => {
             setMedium(newMedium)
@@ -43,6 +38,10 @@ const DetailsProvider = ({ children }: Props) => {
 
             if (router.query.idAlbum) {
                 newUrl = `/albums/${router.query.idAlbum}/media/${newMedium.id}`
+            }
+
+            if (path.includes('favorites')) {
+                newUrl = `${path}/${newMedium.id}`
             }
 
             router.push(newUrl, null, {

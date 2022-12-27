@@ -14,7 +14,7 @@ const useCreateAlbum = () => {
 
     return () => {
         createAlbumMutation().then((result) => {
-            router.push(`/albums/${result.data.createAlbum}`)
+            router.push(`/albums/${result.data.createAlbum.id}`)
         })
     }
 }

@@ -1,39 +1,22 @@
-import { TMedium } from '@/api'
 import { useContext, useEffect } from 'react'
-import { DetailsContext, DialogContext, LayoutContext, SelectionContext } from '@/providers'
+import { DetailsContext, DialogContext, LayoutContext, MediaContext, SelectionContext } from '@/providers'
 import useKeyboard from '@/hooks/keyboard'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView } from '@/components'
-import { toDate } from '@/util/date'
 
-type Props = {
-    media: TMedium[]
-}
-
-export const Media = ({ media }: Props) => {
+export const Media = () => {
     const selection = useContext(SelectionContext)
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
     const layout = useContext(LayoutContext)
+    const media = useContext(MediaContext)
 
     useEffect(() => {
         if (details.medium && Object.keys(details.medium).length) {
-            details.setMedium(media.find((m) => m.id === details.medium.id))
+            if (media)
+            {details.setMedium(media.media.find((m) => m.id === details.medium.id))}
         }
     }, [media])
-
-    const mediaSortedByDateTaken = Array.from(media)
-        .sort((a, b) => {
-            const aDateTaken = toDate(a.dateTaken)?.getTime()
-            const bDateTaken = toDate(b.dateTaken)?.getTime()
-            const aDateCreated = toDate(a.dateCreated)?.getTime()
-            const bDateCreated = toDate(b.dateCreated)?.getTime()
-
-            return bDateTaken - aDateTaken
-                || bDateCreated - aDateTaken
-                || bDateTaken - aDateCreated
-                || bDateCreated - aDateCreated
-        })
 
     useKeyboard('keydown', 'Escape', () => {
         if (!details.active && !dialog.active) {
@@ -42,11 +25,11 @@ export const Media = ({ media }: Props) => {
     }, [details.active, dialog.active])
 
     if (layout.layout === ELayout.GALLERY) {
-        return <GalleryView media={mediaSortedByDateTaken} />
+        return <GalleryView />
     }
 
     if (layout.layout === ELayout.LIST) {
-        return <ListView media={mediaSortedByDateTaken} />
+        return <ListView />
     }
 
     return <>

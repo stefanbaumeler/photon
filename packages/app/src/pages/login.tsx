@@ -2,9 +2,10 @@ import { useMSignIn, useMSignUp, QMediaDocument } from '@/api'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { EMediumStatus } from '@/types/app'
+import { MediaContext } from '@/providers'
 
 enum ELoginFormMode {
     DEFAULT,
@@ -12,11 +13,14 @@ enum ELoginFormMode {
 }
 
 const LoginPage = () => {
+    const media = useContext(MediaContext)
+
     const [signIn] = useMSignIn({
         refetchQueries: [{
             query: QMediaDocument,
             variables: {
-                status: EMediumStatus.DEFAULT
+                sort: media.sort,
+                status: EMediumStatus.ALL
             }
         }]
     })

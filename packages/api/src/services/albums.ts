@@ -23,7 +23,7 @@ export default class AlbumsService {
                 ...album,
                 cover: album.cover ? {
                     connect: {
-                        id: album.cover.id
+                        id: album.cover?.id
                     }
                 } : undefined,
                 owner: album.owner ? {

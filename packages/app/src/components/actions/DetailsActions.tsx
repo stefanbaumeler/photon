@@ -30,7 +30,7 @@ export const DetailsActions = () => {
     const addToFavorites = useAddToFavorites([details.medium.id])
     const removeFromFavorites = useRemoveFromFavorites([details.medium.id])
 
-    const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.DEFAULT : EMediumStatus.ARCHIVED)
+    const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
 
     const rotate = useRotate(details.medium.id)
 

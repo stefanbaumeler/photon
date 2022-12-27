@@ -15,31 +15,31 @@ describe('Details', function () {
         })
     }
 
+    const open = () => {
+        cy.get('[data-cy="teaser"]').first().click()
+        cy.get('[data-cy="details"]').should('be.visible')
+    }
+
     before(function () {
         cy.exec('yarn db:seed')
-        cy.visit('/')
     })
 
     beforeEach( function () {
+        cy.visit('/')
+        open()
+
         cy.intercept('/graphql', (req) => {
             req.alias = req.body.operationName
         })
     })
 
-    it('opens details', function () {
-        cy.get('[data-cy="teaser"]').first().click()
-        cy.get('[data-cy="details"]').should('be.visible')
-    })
-
-    it('closes details', function () {
+    it('opens and closes details', function () {
         cy.get('[data-cy="close-details"]').click({
             force: true
         })
         cy.get('[data-cy="details"]').should('not.exist')
         cy.url().should('not.contain', '/media/')
-    })
 
-    it('closes with esc', function () {
         cy.get('[data-cy="teaser"]').first().click()
         cy.url().should('contain', '/media/')
         cy.get('[data-cy="details"]').should('be.visible')
@@ -49,8 +49,6 @@ describe('Details', function () {
     })
 
     it('hides infos', function () {
-        cy.get('[data-cy="teaser"]').first().click()
-        cy.get('[data-cy="details"]').should('be.visible')
         cy.url().should('contain', '/media/')
         cy.get('[data-cy="hide-infos"]').click({
             force: true

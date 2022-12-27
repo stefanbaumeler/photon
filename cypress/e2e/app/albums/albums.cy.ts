@@ -8,6 +8,7 @@ describe('Albums', function () {
     })
 
     beforeEach(function () {
+        cy.log(process.env.NODE_ENV)
         cy.intercept('/graphql', (req) => {
             req.alias = req.body.operationName
         })

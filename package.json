@@ -12,10 +12,10 @@
     },
     "engineStrict": true,
     "scripts": {
-        "dev": "NODE_ENV=development run-s start:docker watch",
+        "dev": "NODE_ENV=test run-s start:docker watch",
         "prod:api": "run-s start:docker watch:api",
-        "watch": "NODE_ENV=development run-p watch:*",
-        "watch:api": "yarn workspace @photon/api watch",
+        "watch": "NODE_ENV=test run-p watch:*",
+        "watch:api": "NODE_ENV=test yarn workspace @photon/api watch",
         "watch:app": "yarn workspace @photon/app watch",
         "start": "run-p start:api start:app",
         "start:api": "yarn workspace @photon/api start",
@@ -29,8 +29,8 @@
         "build:app": "yarn workspace @photon/app build:static",
         "build:api": "yarn workspace @photon/api build",
         "build:db": "run-s start:docker db:up",
-        "test": "npx cypress run --e2e -b 'chrome'",
-        "test:open": "npx cypress open --e2e -b 'chrome:canary'"
+        "test": "NODE_ENV=test npx cypress run --e2e -b 'chrome'",
+        "test:open": "NODE_ENV=test npx cypress open --e2e -b 'chrome:canary'"
     },
     "dependencies": {
         "dotenv": "^16.0.3",
@@ -38,17 +38,17 @@
         "typescript": "^4.7.4"
     },
     "devDependencies": {
-        "cypress": "10.11.0",
-        "cypress-dotenv": "^2.0.0",
-        "cypress-recurse": "^1.23.0",
-        "eslint-plugin-cypress": "^2.12.1",
-        "lerna": "^6.1.0",
-        "npm-run-all": "^4.1.5",
-        "start-server-and-test": "^1.14.0",
         "@next/eslint-plugin-next": "^12.2.3",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
+        "cypress": "12.2.0",
+        "cypress-dotenv": "^2.0.0",
+        "cypress-recurse": "^1.23.0",
         "eslint": "^8.20.0",
-        "eslint-plugin-react": "^7.30.1"
+        "eslint-plugin-cypress": "^2.12.1",
+        "eslint-plugin-react": "^7.30.1",
+        "lerna": "^6.1.0",
+        "npm-run-all": "^4.1.5",
+        "start-server-and-test": "^1.14.0"
     }
 }

@@ -5,30 +5,26 @@ describe('Details', function () {
     })
 
     beforeEach( function () {
+        cy.visit('/')
+
         cy.intercept('/graphql', (req) => {
             req.alias = req.body.operationName
         })
     })
 
-    it('selects one item by checkbox', function () {
+    it('selects and unselects', function () {
         cy.get('[data-cy="teaser-check"]').first().click()
         cy.get('[data-cy="teaser"]').first().should('have.class', 'teaser--selected')
         cy.get('[data-cy="select-count"]').should('contain', '1 ')
-    })
 
-    it('selects another item by clicking anywhere', function () {
         cy.get('[data-cy="teaser"]').last().click()
         cy.get('[data-cy="teaser"]').last().should('have.class', 'teaser--selected')
         cy.get('[data-cy="select-count"]').should('contain', '2 ')
-    })
 
-    it('unselects item by clicking', function () {
         cy.get('[data-cy="teaser"]').last().click()
         cy.get('[data-cy="teaser"]').last().should('not.have.class', 'teaser--selected')
         cy.get('[data-cy="select-count"]').should('contain', '1 ')
-    })
 
-    it('clears by clicking esc', function () {
         cy.get('body').type('{esc}')
         cy.get('[data-cy="teaser"]').first().should('not.have.class', 'teaser--selected')
     })

@@ -1,5 +1,5 @@
-query QMedia($status: String) {
-    media(status: $status) {
+query QMedia($status: String, $sort: String) {
+    media(status: $status, sort: $sort) {
         dateCreated
         dateModified
         dateTaken

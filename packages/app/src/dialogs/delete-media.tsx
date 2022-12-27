@@ -27,7 +27,7 @@ const useDeleteMediaDialog = () => {
                 type: 'secondary'
             },
             {
-                label: t(ETrans.MOVE_TO_TRASH),
+                label: t(ETrans.PERMANENTLY_DELETE),
                 action: confirm,
                 cy: 'trash-delete-confirm'
             }

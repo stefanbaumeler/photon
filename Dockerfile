@@ -1,4 +1,4 @@
-FROM node:16.12-alpine as base
+FROM node:18.12-alpine as base
 
 RUN apk add --update libc6-compat openssl openssl-dev g++ make py3-pip
 

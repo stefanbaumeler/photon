@@ -10,8 +10,6 @@ const ArchivePage = () => {
         return <></>
     }
 
-    const media = favorites.data?.favorites
-
     return <Layout>
         <section>
             <div>
@@ -19,7 +17,7 @@ const ArchivePage = () => {
                 <Uploader />
                 <DetailsProvider>
                     <Details />
-                    <Media media={media || []} />
+                    <Media />
                 </DetailsProvider>
             </div>
         </section>

@@ -1,7 +1,7 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/layout'
 import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
-import { DetailsProvider, EditContext, SelectionContext } from '@/providers'
+import { DetailsProvider, EditContext, MediaContext, SelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
@@ -18,23 +18,16 @@ const AlbumPage = () => {
 
     const selection = useContext(SelectionContext)
     const edit = useContext(EditContext)
+    const media = useContext(MediaContext)
 
     const titleEl = useRef(null)
 
     const [title, setTitle] = useState('')
     const [album, setAlbum] = useState<TAlbum>()
-    const [media, setMedia] = useState<TMedium[]>([])
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
 
     const albumQuery = useQAlbum({
-        variables: {
-            id
-        },
-        skip: !router.isReady
-    })
-
-    const albumMediaQuery = useQAlbumMedia({
         variables: {
             id
         },
@@ -80,12 +73,6 @@ const AlbumPage = () => {
     }, [albumQuery.data])
 
     useEffect(() => {
-        if (albumMediaQuery.data) {
-            setMedia(albumMediaQuery.data.albumMedia)
-        }
-    }, [albumMediaQuery.data])
-
-    useEffect(() => {
         if (selection.mode === ESelectionMode.OFF) {
             titleEl.current?.blur()
         }
@@ -114,12 +101,12 @@ const AlbumPage = () => {
     }, [edit.state])
 
     useEffect(() => {
-        const mediaSortedByDateTaken = Array.from(media)
+        const mediaSortedByDateTaken = Array.from(media.media)
             .sort((a, b) => new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime())
 
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
-    }, [media])
+    }, [media.media])
 
     const editAlbum = () => {
         selection.setMode(ESelectionMode.DELETE)
@@ -129,7 +116,7 @@ const AlbumPage = () => {
         setTitle(event.target.value)
     }
 
-    if (albumQuery.loading || albumMediaQuery.loading) {
+    if (albumQuery.loading) {
         return <></>
     }
 
@@ -188,7 +175,7 @@ const AlbumPage = () => {
                 <Uploader />
                 <DetailsProvider>
                     <Details />
-                    <Media media={media} />
+                    <Media />
                 </DetailsProvider>
             </div>
         </section>

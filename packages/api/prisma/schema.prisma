@@ -44,7 +44,7 @@ model Medium {
   description        String?
   lat                Float?        @db.Real
   lng                Float?        @db.Real
-  status             String?       @default("default")
+  status             String?       @default("all")
   mimetype           String?       @db.VarChar(255)
   meta               Json?         @db.Json
   idOwner            String?       @db.Uuid

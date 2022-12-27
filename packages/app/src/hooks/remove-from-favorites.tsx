@@ -1,15 +1,21 @@
 import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '@/api'
 import { useContext } from 'react'
-import { SelectionContext } from '@/providers'
+import { SelectionContext, MediaContext } from '@/providers'
 
-const useRemoveFromFavorites = (media: string[]) => {
+const useRemoveFromFavorites = (mediaIds: string[]) => {
     const selection = useContext(SelectionContext)
+    const media = useContext(MediaContext)
 
     const [removeFromFavorites] = useMRemoveFromFavorites({
         variables: {
-            media
+            media: mediaIds
         },
-        refetchQueries: [QMediaDocument, QFavoritesDocument]
+        refetchQueries: [{
+            query: QMediaDocument,
+            variables: {
+                sort: media.sort
+            }
+        }, QFavoritesDocument]
     })
 
     return () => {

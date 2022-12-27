@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo } from 'react'
-import { DetailsContext, DialogContext } from '@/providers'
+import { DetailsContext, DialogContext, MediaContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '@/components'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +19,7 @@ export const Details = () => {
 
     const details = useContext(DetailsContext)
     const dialog = useContext(DialogContext)
+    const media = useContext(MediaContext)
 
     const router = useRouter()
 
@@ -26,28 +27,28 @@ export const Details = () => {
 
     useEffect(() => {
         if (idMedium) {
-            const mediumToOpen = details.collection.find((medium) => medium.id === idMedium)
+            const mediumToOpen = media.media.find((medium) => medium.id === idMedium)
             if (mediumToOpen) {
                 details.open(mediumToOpen)
             }
         }
-    }, [details.collection])
+    }, [media.media])
 
     const slide = (direction: number) => {
-        const index = details.collection.indexOf(details.medium)
+        const index = media.media.indexOf(details.medium)
 
-        if (details.collection[index + direction] && details.active) {
-            details.open(details.collection[index + direction])
+        if (media.media[index + direction] && details.active) {
+            details.open(media.media[index + direction])
         }
     }
 
     useKeyboard('keydown', 'ArrowLeft', () => {
         slide(-1)
-    }, [details.collection, details.medium])
+    }, [media.media, details.medium])
 
     useKeyboard('keydown', 'ArrowRight', () => {
         slide(1)
-    }, [details.collection, details.medium])
+    }, [media.media, details.medium])
 
     useKeyboard('keydown', 'Escape', () => {
         if (!dialog.active) {
@@ -115,8 +116,8 @@ export const Details = () => {
 
     const previewClasses = bem('details__preview', [
         ['video', details.medium.mimetype?.startsWith('video')],
-        ['first', details.collection.indexOf(details.medium) === 0],
-        ['last', details.collection.indexOf(details.medium) === details.collection.length - 1]
+        ['first', media.media.indexOf(details.medium) === 0],
+        ['last', media.media.indexOf(details.medium) === media.media.length - 1]
     ])
 
     return <div

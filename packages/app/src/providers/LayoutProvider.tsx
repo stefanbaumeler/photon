@@ -42,7 +42,7 @@ const LayoutProvider = ({ children }: Props) => {
         case ELayout.MAP:
             return {
                 name: t(ETrans.MAP_VIEW),
-                icon: Icons.mdiMapOutline
+                icon: Icons.mdiMapMarker
             }
         }
     }

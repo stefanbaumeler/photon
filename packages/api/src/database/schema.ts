@@ -210,6 +210,7 @@ export type TQueryAlbumMediaArgs = {
 
 
 export type TQueryMediaArgs = {
+  sort?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
 };
 

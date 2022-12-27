@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider } from '@/providers'
+import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, MediaProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -23,6 +23,8 @@ tippy.setDefaultProps({
 import styles from '../styles/index.scss'
 
 styles.length
+
+console.log(process.env.NODE_ENV)
 
 tauri.createBaseDir()
 
@@ -60,7 +62,7 @@ const Picchu = ({
     Component, pageProps
 }: AppProps) => {
     return <ApolloProvider client={client}>
-        <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider]}>
+        <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, MediaProvider]}>
             <Component {...pageProps} />
         </ProviderProvider>
     </ApolloProvider>

@@ -15,6 +15,10 @@ module.exports = withGraphql({
                 destination: '/?idMedium=:idMedium'
             },
             {
+                source: '/favorites/:idMedium',
+                destination: '/favorites?idMedium=:idMedium'
+            },
+            {
                 source: '/archive/media/:idMedium',
                 destination: '/archive?idMedium=:idMedium'
             },

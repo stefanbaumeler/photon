@@ -1,12 +1,11 @@
 import ListItem from './ListItem'
-import { TMedium } from '@/api'
+import { useContext } from 'react'
+import { MediaContext } from '@/providers'
 
-type Props = {
-    media: TMedium[]
-}
+const ListItems = () => {
+    const media = useContext(MediaContext)
 
-const ListItems = ({ media }: Props) => {
-    const items = media.map((medium, k) => {
+    const items = media.media.map((medium, k) => {
         return <ListItem
             medium={medium}
             key={k}

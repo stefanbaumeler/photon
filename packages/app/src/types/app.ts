@@ -102,9 +102,15 @@ export enum EActionLocation {
 }
 
 export enum EMediumStatus {
-    DEFAULT = 'default',
+    ALL = 'all',
     ARCHIVED = 'archived',
     TRASH = 'trash'
+}
+
+export enum EMediumSort {
+    NEWEST = 'newest',
+    OLDEST = 'oldest',
+    RECENT = 'recent'
 }
 
 export enum ELayout {

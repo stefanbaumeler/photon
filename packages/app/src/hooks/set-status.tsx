@@ -1,28 +1,36 @@
 import { useContext } from 'react'
-import { DetailsContext, SelectionContext } from '@/providers'
-import { QFavoritesDocument, QMediaDocument, TMedium, useMSetMediaStatus } from '@/api'
+import { DetailsContext, SelectionContext, MediaContext } from '@/providers'
+import { QAlbumMediaDocument, QAlbumsDocument,
+    QFavoritesDocument,
+    QMediaDocument,
+    TMedium,
+    useMSetMediaStatus } from '@/api'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
 const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {
     const details = useContext(DetailsContext)
     const selection = useContext(SelectionContext)
+    const media = useContext(MediaContext)
+
     const router = useRouter()
+
+    const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     let ids: string[]
     let previousStatus
 
     const idMediaAsMedium = idMedia as TMedium
 
-    if (typeof idMediaAsMedium.id !== 'undefined') {
-        ids = [idMediaAsMedium.id]
-        previousStatus = idMediaAsMedium.status as EMediumStatus
-    }
-    else {
+    if (typeof idMediaAsMedium.id === 'undefined') {
         const arr = Array.from(idMedia as TMedium[] | Set<TMedium>)
 
-        ids = arr.map((medium: TMedium) => medium.id)
-        previousStatus = (arr[0]?.status || EMediumStatus.DEFAULT) as EMediumStatus
+        ids = arr.map((medium) => medium.id)
+        previousStatus = (arr[0]?.status || EMediumStatus.ALL) as EMediumStatus
+    }
+    else {
+        ids = [idMediaAsMedium.id]
+        previousStatus = idMediaAsMedium.status as EMediumStatus
     }
 
     const [setMediaStatus] = useMSetMediaStatus({
@@ -30,19 +38,30 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
             media: ids,
             status
         },
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                status: previousStatus
-            }
-        },
-        {
-            query: QMediaDocument,
-            variables: {
-                status
-            }
-        },
-        QFavoritesDocument]
+        refetchQueries: [
+            idAlbum ? {
+                query: QAlbumMediaDocument,
+                variables: {
+                    id: idAlbum
+                }
+            } : undefined,
+            {
+                query: QMediaDocument,
+                variables: {
+                    status: previousStatus,
+                    sort: media.sort
+                }
+            },
+            {
+                query: QMediaDocument,
+                variables: {
+                    status,
+                    sort: media.sort
+                }
+            },
+            QFavoritesDocument,
+            QAlbumsDocument
+        ]
     })
 
     return () => {

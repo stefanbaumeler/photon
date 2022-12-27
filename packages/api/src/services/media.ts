@@ -4,6 +4,8 @@ import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { DeepPartial } from '../types'
 import { Favorite, Prisma } from '.prisma/client'
+import Enumerable = Prisma.Enumerable
+import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 
 export default class MediaService {
     prisma = getDatabase()
@@ -165,9 +167,12 @@ export default class MediaService {
         }
     }
 
-    readMany = async (conditions: Prisma.MediumWhereInput = {}, take = 100) => {
+    readMany = async ({
+        conditions, orderBy, take = 100
+    }: { conditions?: Prisma.MediumWhereInput, orderBy?: Enumerable<MediumOrderByWithRelationInput>, take?: number } = {}) => {
         return await this.prisma.medium.findMany({
             where: conditions,
+            orderBy,
             take,
             include: {
                 owner: true,
@@ -187,8 +192,10 @@ export default class MediaService {
         const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
 
         return this.readMany({
-            id: {
-                in: keysToDestroy
+            conditions: {
+                id: {
+                    in: keysToDestroy
+                }
             }
         }).then((itemsToDestroy) => {
             itemsToDestroy.forEach((item) => {

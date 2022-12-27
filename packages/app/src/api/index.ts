@@ -5,15 +5,6 @@ import { createUploadLink } from 'apollo-upload-client'
 
 const errorLink = onError((error) => {
     console.log(error.operation.variables, error.operation.operationName, error.networkError, error.graphQLErrors)
-    // if (graphQLErrors) {
-    //     graphQLErrors.forEach((err) => {
-    //         console.log(err)
-    //     })
-    // }
-    //
-    // if (networkError) {
-    //     console.log(networkError)
-    // }
 })
 
 const uploadLink = createUploadLink({
