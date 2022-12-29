@@ -17,7 +17,7 @@ export default class AlbumsMediaService {
             include: {
                 medium: {
                     include: {
-                        favorites: true
+                        favoredBy: true
                     }
                 }
             }
@@ -84,7 +84,7 @@ export default class AlbumsMediaService {
             include: {
                 medium: {
                     include: {
-                        favorites: true
+                        favoredBy: true
                     }
                 }
             }

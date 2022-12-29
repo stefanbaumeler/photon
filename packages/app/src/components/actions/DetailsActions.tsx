@@ -89,10 +89,10 @@ export const DetailsActions = () => {
                 icon={Icons.mdiTrayArrowDown}
             />
             <IconButton
-                onClick={() => details.medium.favorites.length ? removeFromFavorites() : addToFavorites()}
-                hint={details.medium.favorites.length ? t(ETrans.UNFAVORITE) : t(ETrans.FAVORITE)}
+                onClick={() => details.medium.favoredBy?.length ? removeFromFavorites() : addToFavorites()}
+                hint={details.medium.favoredBy?.length ? t(ETrans.UNFAVORITE) : t(ETrans.FAVORITE)}
                 white={true}
-                icon={details.medium.favorites.length ? Icons.mdiStar : Icons.mdiStarOutline}
+                icon={details.medium.favoredBy?.length ? Icons.mdiStar : Icons.mdiStarOutline}
             />
             <Dropdown
                 items={moreItems}

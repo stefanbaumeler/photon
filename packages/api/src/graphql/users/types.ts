@@ -9,6 +9,7 @@ export default gql`
         password: String!
         firstName: String!
         lastName: String!
+        favorites: [Medium]
     }
 
     type Query {

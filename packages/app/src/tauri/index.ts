@@ -34,6 +34,8 @@ const upload = async (files: File[]) => {
     await tauri.fs.writeBinaryFile('test.jpg', bin, {
         dir: tauri.fs.BaseDirectory.AppData
     })
+
+    await tauri.invoke('upload')
 }
 
 const read = async (filePaths: string[]) => {

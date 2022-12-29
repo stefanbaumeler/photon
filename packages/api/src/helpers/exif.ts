@@ -126,9 +126,8 @@ const getDuration = (result: ResultObject) => {
 }
 
 const handleImage = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TImageMeta> }>((resolve) => {
-    ExifReader.load(filePath).then(async (rawMeta) => {
-        const sharpMeta = await sharp(filePath).metadata()
-
+    sharp(filePath).metadata().then(async (sharpMeta) => {
+        const rawMeta = await ExifReader.load(filePath)
         let fNumber = rawMeta.FNumber?.value
 
         if (fNumber && Array.isArray(fNumber)) {

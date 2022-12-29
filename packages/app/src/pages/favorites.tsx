@@ -1,15 +1,8 @@
 import Layout from '@/layouts/layout'
 import { Uploader, Details, Dialog, Media } from '@/components'
 import { DetailsProvider } from '@/providers'
-import { useQFavorites } from '@/api'
 
-const ArchivePage = () => {
-    const favorites = useQFavorites()
-
-    if (favorites.loading) {
-        return <></>
-    }
-
+const FavoritesPage = () => {
     return <Layout>
         <section>
             <div>
@@ -24,4 +17,4 @@ const ArchivePage = () => {
     </Layout>
 }
 
-export default ArchivePage
+export default FavoritesPage

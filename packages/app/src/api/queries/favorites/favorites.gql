@@ -12,7 +12,7 @@ query QFavorites {
         lng
         status
         mimetype
-        favorites {
+        favoredBy {
             id
         }
         owner {

@@ -12,7 +12,7 @@ query QAlbumMedia($id: ID!) {
         lng
         status
         mimetype
-        favorites {
+        favoredBy {
             id
         }
         meta {

@@ -9,5 +9,6 @@ yarn-error.log*
 
 /node_modules
 /src-tauri/target
+/src-tauri/**/target
 /out
 /.next

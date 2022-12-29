@@ -3,7 +3,7 @@ import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { DeepPartial } from '../types'
-import { Favorite, Prisma } from '.prisma/client'
+import { Prisma } from '.prisma/client'
 import Enumerable = Prisma.Enumerable
 import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 
@@ -35,7 +35,6 @@ export default class MediaService {
                 await this.prisma.medium.create({
                     data: {
                         ...medium as DeepPartial<TMedium>,
-                        favorites: undefined,
                         owner: {
                             connect: {
                                 id: medium.owner?.id
@@ -46,7 +45,8 @@ export default class MediaService {
                                 id: medium.uploader?.id
                             }
                         },
-                        meta: JSON.stringify(medium.meta)
+                        meta: JSON.stringify(medium.meta),
+                        favoredBy: {}
                     }
                 })
             }
@@ -69,10 +69,15 @@ export default class MediaService {
             include: {
                 owner: true,
                 uploader: true,
-                favorites: {
+                favoredBy: {
                     where: {
-                        user: {
-                            id: this.context?.user.id
+                        id: this.context?.user.id
+                    },
+                    include: {
+                        favorites: {
+                            where: {
+                                id: this.context?.user.id
+                            }
                         }
                     }
                 }
@@ -94,11 +99,9 @@ export default class MediaService {
             include: {
                 owner: true,
                 uploader: true,
-                favorites: {
+                favoredBy: {
                     where: {
-                        user: {
-                            id: this.context?.user.id
-                        }
+                        id: this.context?.user.id
                     }
                 }
             }
@@ -177,11 +180,9 @@ export default class MediaService {
             include: {
                 owner: true,
                 uploader: true,
-                favorites: {
+                favoredBy: {
                     where: {
-                        user: {
-                            id: this.context?.user.id
-                        }
+                        id: this.context?.user.id
                     }
                 }
             }
@@ -264,7 +265,7 @@ export default class MediaService {
     update = async (id: string, newProps: Partial<TMedium>) => {
         delete newProps.id
 
-        const data = newProps as Partial<TMedium> & { meta: string, owner: { connect: { id?: string } }, uploader: { connect: { id?: string } }, favorites: Favorite[] }
+        const data = newProps as Partial<TMedium> & { meta: string, owner: { connect: { id?: string } }, uploader: { connect: { id?: string } }, favoredBy: { connect: { id?: string } } }
 
         if (data.meta) {
             data.meta = JSON.stringify(data.meta)
@@ -291,17 +292,14 @@ export default class MediaService {
                 id
             },
             data: {
-                ...data,
-                favorites: undefined
+                ...data
             },
             include: {
                 owner: true,
                 uploader: true,
-                favorites: {
+                favoredBy: {
                     where: {
-                        user: {
-                            id: this.context?.user.id
-                        }
+                        id: this.context?.user.id
                     }
                 }
             }

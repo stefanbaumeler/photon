@@ -21,6 +21,7 @@
         "@ffmpeg/core": "^0.11.0",
         "@ffmpeg/ffmpeg": "^0.11.6",
         "@prisma/client": "4.7.1",
+        "@types/exif-reader": "^1.0.0",
         "argon2": "^0.30.2",
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.0.3",

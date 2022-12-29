@@ -2836,6 +2836,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/exif-reader@^1.0.0":
+  version "1.0.0"
+  resolved "https://packages.1up.io:443/@types%2fexif-reader/-/exif-reader-1.0.0.tgz#c80e8ddb98c6319e350f49168f81c129a5895c9a"
+  integrity sha512-LRdFMxMD8z7vmfVSMwP9U0yENM7J7hbIyXgoNhRqraAAYdUrQuE9CaK8nL1YCIhWedFg4C1gGE75+AbbCO4l8A==
+  dependencies:
+    "@types/node" "*"
+
 "@types/express-serve-static-core@^4.17.18", "@types/express-serve-static-core@^4.17.30":
   version "4.17.31"
   resolved "https://packages.1up.io:443/@types%2fexpress-serve-static-core/-/express-serve-static-core-4.17.31.tgz#a1139efeab4e7323834bb0226e62ac019f474b2f"

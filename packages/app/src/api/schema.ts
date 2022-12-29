@@ -38,11 +38,18 @@ export type TCount = {
   count?: Maybe<Scalars['Int']>;
 };
 
-export type TFavorite = {
-  __typename?: 'Favorite';
+export type TDevice = {
+  __typename?: 'Device';
+  dateCreated: Scalars['DateTime'];
+  dateModified: Scalars['DateTime'];
   id: Scalars['ID'];
-  medium?: Maybe<TMedium>;
-  user?: Maybe<TUser>;
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type TDeviceInput = {
+  name: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type TFile = {
@@ -68,7 +75,7 @@ export type TMedium = {
   dateModifiedStatus?: Maybe<Scalars['DateTime']>;
   dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
-  favorites?: Maybe<Array<Maybe<TFavorite>>>;
+  favoredBy?: Maybe<Array<Maybe<TUser>>>;
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
@@ -88,13 +95,14 @@ export type TMeta = TImageMeta | TVideoMeta;
 export type TMutation = {
   __typename?: 'Mutation';
   addToAlbum: Array<TMedium>;
-  addToFavorites: Array<TFavorite>;
+  addToFavorites: Array<TMedium>;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum?: Maybe<TCount>;
   deleteMedia: Array<TMedium>;
   emptyTrash: Array<TMedium>;
+  register: TDevice;
   removeFromAlbum?: Maybe<TAlbum>;
-  removeFromFavorites?: Maybe<TCount>;
+  removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
   setMediaStatus?: Maybe<TCount>;
@@ -130,6 +138,11 @@ export type TMutationDeleteAlbumArgs = {
 
 export type TMutationDeleteMediaArgs = {
   ids: Array<InputMaybe<Scalars['ID']>>;
+};
+
+
+export type TMutationRegisterArgs = {
+  device: TDeviceInput;
 };
 
 
@@ -190,6 +203,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
+  devices: Array<TDevice>;
   favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
@@ -234,6 +248,7 @@ export type TUser = {
   __typename?: 'User';
   dateCreated: Scalars['DateTime'];
   dateModified: Scalars['DateTime'];
+  favorites?: Maybe<Array<Maybe<TMedium>>>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
@@ -311,9 +326,9 @@ export type TQAlbumMedia = (
   & { albumMedia: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { favorites?: Maybe<Array<Maybe<(
-      { __typename?: 'Favorite' }
-      & Pick<TFavorite, 'id'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
     )>>>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -419,28 +434,8 @@ export type TMAddToFavoritesVariables = Exact<{
 export type TMAddToFavorites = (
   { __typename?: 'Mutation' }
   & { addToFavorites: Array<(
-    { __typename?: 'Favorite' }
-    & Pick<TFavorite, 'id'>
-    & { medium?: Maybe<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-      & { owner?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>, uploader?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>, meta?: Maybe<(
-        { __typename?: 'ImageMeta' }
-        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-      ) | (
-        { __typename?: 'VideoMeta' }
-        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
-      )> }
-    )>, user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )> }
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
   )> }
 );
 
@@ -452,9 +447,9 @@ export type TQFavorites = (
   & { favorites: Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { favorites?: Maybe<Array<Maybe<(
-      { __typename?: 'Favorite' }
-      & Pick<TFavorite, 'id'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -478,9 +473,9 @@ export type TMRemoveFromFavoritesVariables = Exact<{
 
 export type TMRemoveFromFavorites = (
   { __typename?: 'Mutation' }
-  & { removeFromFavorites?: Maybe<(
-    { __typename?: 'Count' }
-    & Pick<TCount, 'count'>
+  & { removeFromFavorites: Array<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
   )> }
 );
 
@@ -519,9 +514,9 @@ export type TQMedia = (
   & { media?: Maybe<Array<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { favorites?: Maybe<Array<Maybe<(
-      { __typename?: 'Favorite' }
-      & Pick<TFavorite, 'id'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -567,9 +562,9 @@ export type TQMedium = (
   & { medium: (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'lat' | 'lng' | 'status' | 'mimetype'>
-    & { favorites?: Maybe<Array<Maybe<(
-      { __typename?: 'Favorite' }
-      & Pick<TFavorite, 'id'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -757,7 +752,7 @@ export const QAlbumMediaDocument = gql`
     lng
     status
     mimetype
-    favorites {
+    favoredBy {
       id
     }
     meta {
@@ -1022,45 +1017,6 @@ export const MAddToFavoritesDocument = gql`
     mutation MAddToFavorites($media: [ID!]!) {
   addToFavorites(media: $media) {
     id
-    medium {
-      dateCreated
-      dateModified
-      dateTaken
-      id
-      filenameDisk
-      filenameDownload
-      title
-      description
-      lat
-      lng
-      status
-      mimetype
-      owner {
-        id
-      }
-      uploader {
-        id
-      }
-      meta {
-        ... on ImageMeta {
-          width
-          height
-          cameraMake
-          cameraModel
-          flash
-          fNumber
-          iso
-        }
-        ... on VideoMeta {
-          width
-          height
-          duration
-        }
-      }
-    }
-    user {
-      id
-    }
   }
 }
     `;
@@ -1105,7 +1061,7 @@ export const QFavoritesDocument = gql`
     lng
     status
     mimetype
-    favorites {
+    favoredBy {
       id
     }
     owner {
@@ -1163,7 +1119,7 @@ export type QFavoritesQueryResult = Apollo.QueryResult<TQFavorites, TQFavoritesV
 export const MRemoveFromFavoritesDocument = gql`
     mutation MRemoveFromFavorites($media: [ID!]!) {
   removeFromFavorites(media: $media) {
-    count
+    id
   }
 }
     `;
@@ -1273,7 +1229,7 @@ export const QMediaDocument = gql`
     lng
     status
     mimetype
-    favorites {
+    favoredBy {
       id
     }
     owner {
@@ -1387,7 +1343,7 @@ export const QMediumDocument = gql`
     lng
     status
     mimetype
-    favorites {
+    favoredBy {
       id
     }
     owner {

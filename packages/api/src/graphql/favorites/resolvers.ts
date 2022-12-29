@@ -1,19 +1,13 @@
-import FavoritesService from '../../services/favorites'
 import { TQueryResolvers, TMutationResolvers } from '../../database'
+import FavoritesService from '../../services/favorites'
 
 const queries: Partial<TQueryResolvers> = {
-    favorites: () => {
-        return new FavoritesService().readMany()
-    }
+    favorites: (_, input, context) => new FavoritesService(context).readMany()
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    addToFavorites: (_, input, context) => {
-        return new FavoritesService().createMany(context.user.id, input.media)
-    },
-    removeFromFavorites: (_, input) => {
-        return new FavoritesService().destroyMany(input.media)
-    }
+    addToFavorites: (_, input, context) => new FavoritesService(context).create(input.media),
+    removeFromFavorites: (_, input, context) => new FavoritesService(context).remove(input.media)
 }
 
 export default {

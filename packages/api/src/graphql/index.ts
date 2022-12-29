@@ -2,11 +2,12 @@ import albums from './albums'
 import media from './media'
 import users from './users'
 import favorites from './favorites'
+import devices from './devices'
 import gql from 'graphql-tag'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
 import { DateTimeScalar } from 'graphql-date-scalars'
-import { TUser, TMeta, TMetaResolvers, TVideoMeta, TFavorite } from '../database'
+import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '../database'
 
 const global = gql`
     directive @auth on OBJECT | FIELD_DEFINITION
@@ -19,7 +20,7 @@ const global = gql`
     }
 `
 
-const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs, favorites.typeDefs])
+const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs, favorites.typeDefs, devices.typeDefs])
 
 const resolvers = {
     Date: DateTimeScalar,
@@ -54,13 +55,15 @@ const resolvers = {
         ...users.resolvers.queries,
         ...media.resolvers.queries,
         ...albums.resolvers.queries,
-        ...favorites.resolvers.queries
+        ...favorites.resolvers.queries,
+        ...devices.resolvers.queries
     },
     Mutation: {
         ...users.resolvers.mutations,
         ...media.resolvers.mutations,
         ...albums.resolvers.mutations,
-        ...favorites.resolvers.mutations
+        ...favorites.resolvers.mutations,
+        ...devices.resolvers.mutations
     }
 }
 

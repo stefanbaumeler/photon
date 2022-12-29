@@ -12,7 +12,7 @@ query QMedium($id: ID!) {
         lng
         status
         mimetype
-        favorites {
+        favoredBy {
             id
         }
         owner {

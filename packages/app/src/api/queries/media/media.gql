@@ -12,7 +12,7 @@ query QMedia($status: String, $sort: String) {
         lng
         status
         mimetype
-        favorites {
+        favoredBy {
             id
         }
         owner {

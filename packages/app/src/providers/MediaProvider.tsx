@@ -107,7 +107,7 @@ const MediaProvider = ({ children }: Props) => {
     }
 
     if (topLevelRoute === 'favorites') {
-        media = favoritesQuery.data?.favorites || []
+        media = favoritesQuery.data?.favorites as TMedium[] || []
     }
 
     useEffect(() => {

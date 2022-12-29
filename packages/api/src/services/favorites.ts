@@ -1,87 +1,94 @@
-import { getDatabase, TFavorite, TMedium } from '../database'
+import { getDatabase, TMedium } from '../database'
+import { Response } from 'express'
 
 export default class FavoritesService {
     prisma = getDatabase()
 
     context
 
-    constructor (context?: { user: { id: string } }) {
+    constructor (context?: { user: { id: string }, res: Response, req: Request }) {
         this.context = context
     }
 
-    readMany = async () => {
-        const favorites = await this.prisma.favorite.findMany({
-            where: {
-                medium: {
-                    status: {
-                        not: 'trash'
-                    }
-                }
-            },
-            include: {
-                medium: {
-                    include: {
-                        owner: true,
-                        uploader: true,
-                        favorites: {
-                            where: {
-                                user: {
-                                    id: this.context?.user.id
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }) as TFavorite[]
-
-        return favorites.map((favorite) => favorite.medium) as TMedium[]
+    async truncate () {
+        return this.prisma.user.deleteMany({
+            where: {}
+        })
     }
 
-    createOne = async (idUser: string, idMedium: string) => {
-        return await this.prisma.favorite.upsert({
+    readMany = async () => {
+        const res = await this.prisma.user.findFirst({
             where: {
-                idUser_idMedium: {
-                    idUser,
-                    idMedium
-                }
-            },
-            create: {
-                idUser,
-                idMedium
-            },
-            update: {
-                idUser,
-                idMedium
+                id: this.context?.user.id
             },
             include: {
-                medium: {
+                favorites: {
                     include: {
                         owner: true,
                         uploader: true
                     }
-                },
-                user: true
+                }
             }
-        }) as TFavorite
-    }
-    createMany = async (idUser: string, idMedia: string[]) => {
-        const primaryKeys = idMedia.map((idMedium) => this.createOne(idUser, idMedium))
-
-        return await Promise.all(primaryKeys).then((results) => {
-            return results
         })
+
+        if (res === null) {
+            throw new Error()
+        }
+
+        return res.favorites as TMedium[]
     }
 
-    destroyMany = async (ids: string[]) => {
-        return this.prisma.favorite.deleteMany({
+    create = async (idMedia: string[]) => {
+        const idMediaArray = Array.isArray(idMedia) ? idMedia : [idMedia]
+
+        const updatedUser = await this.prisma.user.update({
             where: {
-                medium: {
-                    id: {
-                        in: ids
+                id: this.context?.user.id
+            },
+            data: {
+                favorites: {
+                    connect: idMediaArray.map((id) => ({
+                        id
+                    }))
+                }
+            },
+            include: {
+                favorites: {
+                    include: {
+                        owner: true,
+                        uploader: true
                     }
                 }
             }
         })
+
+        return updatedUser.favorites as TMedium[]
+    }
+
+    remove = async (idMedia: string[] | string) => {
+        const idMediaArray = Array.isArray(idMedia) ? idMedia : [idMedia]
+
+        const updatedUser = await this.prisma.user.update({
+            where: {
+                id: this.context?.user.id
+            },
+            data: {
+                favorites: {
+                    disconnect: idMediaArray.map((id) => ({
+                        id
+                    }))
+                }
+            },
+            include: {
+                favorites: {
+                    include: {
+                        owner: true,
+                        uploader: true
+                    }
+                }
+            }
+        })
+
+        return updatedUser.favorites as TMedium[]
     }
 }

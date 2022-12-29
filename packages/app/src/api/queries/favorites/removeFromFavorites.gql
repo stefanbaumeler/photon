@@ -1,5 +1,5 @@
 mutation MRemoveFromFavorites($media: [ID!]!) {
     removeFromFavorites(media: $media) {
-        count
+        id
     }
 }

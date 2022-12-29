@@ -6,6 +6,12 @@ import { Response } from 'express'
 export default class UsersService {
     prisma = getDatabase()
 
+    context
+
+    constructor (context?: { user: { id: string }, res: Response, req: Request }) {
+        this.context = context
+    }
+
     async truncate () {
         return this.prisma.user.deleteMany({
             where: {}
@@ -74,7 +80,7 @@ export default class UsersService {
         })
     }
 
-    setUserCookie = async (user: TUser, res: Response, req: Request) => {
+    setUserCookie = async (user: TUser, res?: Response) => {
         const accessToken = jwt.sign(
             {
                 id: user.id,
@@ -100,14 +106,14 @@ export default class UsersService {
 
         const secure = !!parseInt(process.env.API_SECURE || '1', 10)
 
-        res.cookie('accessToken', accessToken, {
+        res?.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure,
             maxAge: 30 * 24 * 60 * 60 * 1000,
             sameSite: secure ? 'none' : undefined
         })
 
-        res.cookie('refreshToken', refreshToken, {
+        res?.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure,
             maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -120,7 +126,7 @@ export default class UsersService {
         }
     }
 
-    signUp = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>, res: Response, req: Request) => {
+    signUp = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
         const oldUser = await this.readOneByMail(user.mail)
 
         if (oldUser) {
@@ -131,10 +137,10 @@ export default class UsersService {
         }
 
         const createdUser = await this.createOne(user)
-        return this.setUserCookie(createdUser, res, req)
+        return this.setUserCookie(createdUser, this.context?.res)
     }
 
-    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>, res: Response, req: Request) => {
+    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>) => {
         const existingUser = await this.readOneByMail(credentials.mail)
 
         if (!existingUser) {
@@ -143,6 +149,7 @@ export default class UsersService {
                 refreshToken: ''
             }
         }
+
         const match = await argon2.verify(existingUser.password, credentials.password)
 
         if (!match) {
@@ -152,12 +159,12 @@ export default class UsersService {
             }
         }
 
-        return this.setUserCookie(existingUser, res, req)
+        return this.setUserCookie(existingUser, this.context?.res)
     }
 
-    signOut = (res: Response) => new Promise<boolean>((resolve) => {
-        res.clearCookie('accessToken')
-        res.clearCookie('refreshToken')
+    signOut = () => new Promise<boolean>((resolve) => {
+        this.context?.res.clearCookie('accessToken')
+        this.context?.res.clearCookie('refreshToken')
 
         resolve(true)
     })

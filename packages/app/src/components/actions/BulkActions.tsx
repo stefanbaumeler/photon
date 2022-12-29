@@ -32,7 +32,7 @@ export const BulkActions = () => {
         return <></>
     }
 
-    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favorites.length === 0)
+    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favoredBy.length === 0)
 
     const moreItems = [
         {

@@ -38,11 +38,18 @@ export type TCount = {
   count?: Maybe<Scalars['Int']>;
 };
 
-export type TFavorite = {
-  __typename?: 'Favorite';
+export type TDevice = {
+  __typename?: 'Device';
+  dateCreated: Scalars['DateTime'];
+  dateModified: Scalars['DateTime'];
   id: Scalars['ID'];
-  medium?: Maybe<TMedium>;
-  user?: Maybe<TUser>;
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type TDeviceInput = {
+  name: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type TFile = {
@@ -68,7 +75,7 @@ export type TMedium = {
   dateModifiedStatus?: Maybe<Scalars['DateTime']>;
   dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
-  favorites?: Maybe<Array<Maybe<TFavorite>>>;
+  favoredBy?: Maybe<Array<Maybe<TUser>>>;
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
@@ -88,13 +95,14 @@ export type TMeta = TImageMeta | TVideoMeta;
 export type TMutation = {
   __typename?: 'Mutation';
   addToAlbum: Array<TMedium>;
-  addToFavorites: Array<TFavorite>;
+  addToFavorites: Array<TMedium>;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum?: Maybe<TCount>;
   deleteMedia: Array<TMedium>;
   emptyTrash: Array<TMedium>;
+  register: TDevice;
   removeFromAlbum?: Maybe<TAlbum>;
-  removeFromFavorites?: Maybe<TCount>;
+  removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
   setMediaStatus?: Maybe<TCount>;
@@ -130,6 +138,11 @@ export type TMutationDeleteAlbumArgs = {
 
 export type TMutationDeleteMediaArgs = {
   ids: Array<InputMaybe<Scalars['ID']>>;
+};
+
+
+export type TMutationRegisterArgs = {
+  device: TDeviceInput;
 };
 
 
@@ -190,6 +203,7 @@ export type TQuery = {
   album: TAlbum;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
+  devices: Array<TDevice>;
   favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
@@ -234,6 +248,7 @@ export type TUser = {
   __typename?: 'User';
   dateCreated: Scalars['DateTime'];
   dateModified: Scalars['DateTime'];
+  favorites?: Maybe<Array<Maybe<TMedium>>>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
@@ -341,7 +356,8 @@ export type TResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Count: ResolverTypeWrapper<TCount>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
-  Favorite: ResolverTypeWrapper<TFavorite>;
+  Device: ResolverTypeWrapper<TDevice>;
+  DeviceInput: TDeviceInput;
   File: ResolverTypeWrapper<TFile>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -368,7 +384,8 @@ export type TResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Count: TCount;
   DateTime: Scalars['DateTime'];
-  Favorite: TFavorite;
+  Device: TDevice;
+  DeviceInput: TDeviceInput;
   File: TFile;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
@@ -410,10 +427,12 @@ export interface TDateTimeScalarConfig extends GraphQLScalarTypeConfig<TResolver
   name: 'DateTime';
 }
 
-export type TFavoriteResolvers<ContextType = any, ParentType extends TResolversParentTypes['Favorite'] = TResolversParentTypes['Favorite']> = {
+export type TDeviceResolvers<ContextType = any, ParentType extends TResolversParentTypes['Device'] = TResolversParentTypes['Device']> = {
+  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
-  medium?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
+  name?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -439,7 +458,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   dateModifiedStatus?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   dateTaken?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  favorites?: Resolver<Maybe<Array<Maybe<TResolversTypes['Favorite']>>>, ParentType, ContextType>;
+  favoredBy?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
   filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
@@ -461,13 +480,14 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
   addToAlbum?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
-  addToFavorites?: Resolver<Array<TResolversTypes['Favorite']>, ParentType, ContextType, RequireFields<TMutationAddToFavoritesArgs, 'media'>>;
+  addToFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToFavoritesArgs, 'media'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
   deleteAlbum?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
   deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
   emptyTrash?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
+  register?: Resolver<TResolversTypes['Device'], ParentType, ContextType, RequireFields<TMutationRegisterArgs, 'device'>>;
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
-  removeFromFavorites?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
+  removeFromFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
   rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
   setAlbumCover?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationSetAlbumCoverArgs, 'idAlbum' | 'idMedium'>>;
   setMediaStatus?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media'>>;
@@ -482,6 +502,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   album?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
+  devices?: Resolver<Array<TResolversTypes['Device']>, ParentType, ContextType>;
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
@@ -503,6 +524,7 @@ export interface TUploadScalarConfig extends GraphQLScalarTypeConfig<TResolversT
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
   dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
   dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  favorites?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
   firstName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -541,7 +563,7 @@ export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
   Count?: TCountResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
-  Favorite?: TFavoriteResolvers<ContextType>;
+  Device?: TDeviceResolvers<ContextType>;
   File?: TFileResolvers<ContextType>;
   ImageMeta?: TImageMetaResolvers<ContextType>;
   Medium?: TMediumResolvers<ContextType>;

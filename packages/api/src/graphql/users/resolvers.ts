@@ -2,22 +2,18 @@ import UsersService from '../../services/users'
 import { TQueryResolvers, TMutationResolvers } from '../../database'
 
 const queries: Partial<TQueryResolvers> = {
-    users: () =>  new UsersService().readMany(),
-    user: (_, input) => new UsersService().readOne(input.id)
+    users: (_, input, context) =>  new UsersService(context).readMany(),
+    user: (_, input, context) => new UsersService(context).readOne(input.id)
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    signIn: (_, input, {
-        res, req
-    }) => {
-        return new UsersService().signIn(input, res, req)
+    signIn: (_, input, context) => {
+        return new UsersService(context).signIn(input)
     },
-    signOut: (_, input, { res }) => {
-        return new UsersService().signOut(res)
+    signOut: (_, input, context) => {
+        return new UsersService(context).signOut()
     },
-    signUp: (_, input, {
-        res, req
-    }) => new UsersService().signUp(input, res, req)
+    signUp: (_, input, context) => new UsersService(context).signUp(input)
 }
 
 export default {

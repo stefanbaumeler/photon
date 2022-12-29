@@ -1,44 +1,5 @@
 mutation MAddToFavorites($media: [ID!]!) {
     addToFavorites(media: $media) {
         id
-        medium {
-            dateCreated
-            dateModified
-            dateTaken
-            id
-            filenameDisk
-            filenameDownload
-            title
-            description
-            lat
-            lng
-            status
-            mimetype
-            owner {
-                id
-            }
-            uploader {
-                id
-            }
-            meta {
-                ...on ImageMeta {
-                    width
-                    height
-                    cameraMake
-                    cameraModel
-                    flash
-                    fNumber
-                    iso
-                }
-                ...on VideoMeta {
-                    width
-                    height
-                    duration
-                }
-            }
-        }
-        user {
-            id
-        }
     }
 }

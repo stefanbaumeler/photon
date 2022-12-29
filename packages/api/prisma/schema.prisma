@@ -16,8 +16,6 @@ model Album {
   cover       Medium?       @relation(fields: [idCover], references: [id], onUpdate: NoAction, map: "album_id_medium_foreign")
   owner       User?         @relation(fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_owner_foreign")
   albumMedia  AlbumMedium[]
-
-  @@map("picchu_album")
 }
 
 model AlbumMedium {
@@ -28,7 +26,6 @@ model AlbumMedium {
   medium   Medium @relation(fields: [idMedium], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_medium_id_medium_foreign")
 
   @@unique([idAlbum, idMedium])
-  @@map("picchu_album_medium")
 }
 
 model Medium {
@@ -53,34 +50,29 @@ model Medium {
   uploader           User?         @relation("medium_uploader", fields: [idUploader], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medium_uploader_foreign")
   albums             Album[]
   albumMedia         AlbumMedium[]
-  favorites          Favorite[]    @relation("favorite_medium")
-
-  @@map("picchu_medium")
+  favoredBy          User[]
 }
 
-model Favorite {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idUser   String @map("id_user") @db.Uuid
-  user     User   @relation("favorite_user", fields: [idUser], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "favorite_user_foreign")
-  idMedium String @map("id_medium") @db.Uuid
-  medium   Medium @relation("favorite_medium", fields: [idMedium], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "favorite_medium_foreign")
-
-  @@unique([idUser, idMedium])
-  @@map("picchu_favorite")
+model Device {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dateCreated  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
+  users        User[]
+  name         String
+  type         String
 }
 
 model User {
-  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dateCreated   DateTime   @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
-  dateModified  DateTime   @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
-  mail          String     @db.VarChar(255)
-  password      String     @db.VarChar(255)
-  firstName     String     @map("first_name") @db.VarChar(255)
-  lastName      String     @map("last_name") @db.VarChar(255)
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dateCreated   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
+  mail          String   @db.VarChar(255)
+  password      String   @db.VarChar(255)
+  firstName     String   @map("first_name") @db.VarChar(255)
+  lastName      String   @map("last_name") @db.VarChar(255)
   albums        Album[]
-  media         Medium[]   @relation("medium_owner")
-  favorites     Favorite[] @relation("favorite_user")
-  uploadedMedia Medium[]   @relation("medium_uploader")
-
-  @@map("picchu_user")
+  media         Medium[] @relation("medium_owner")
+  uploadedMedia Medium[] @relation("medium_uploader")
+  devices       Device[]
+  favorites     Medium[]
 }

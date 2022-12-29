@@ -83,7 +83,7 @@ const Teaser = () => {
     ])
 
     const Favorite = () => {
-        if (!teaser.medium.favorites.length) {
+        if (!teaser.medium.favoredBy?.length) {
             return <></>
         }
 
