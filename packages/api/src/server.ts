@@ -3,7 +3,7 @@ import * as https from 'https'
 import * as http from 'http'
 import fs from 'fs'
 
-export const createServer = async (): Promise<https.Server|http.Server> => {
+export const createServer = async () => {
     const app = await createApp()
 
     if (parseInt(process.env.API_SECURE || '1', 10)) {

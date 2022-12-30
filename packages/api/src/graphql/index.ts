@@ -8,6 +8,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
 import { DateTimeScalar } from 'graphql-date-scalars'
 import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '../database'
+import { GraphQLUpload } from 'graphql-upload-minimal'
 
 const global = gql`
     directive @auth on OBJECT | FIELD_DEFINITION
@@ -23,6 +24,7 @@ const global = gql`
 const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs, favorites.typeDefs, devices.typeDefs])
 
 const resolvers = {
+    Upload: GraphQLUpload,
     Date: DateTimeScalar,
     Medium: {
         owner: (obj: { owner: TUser }) => {

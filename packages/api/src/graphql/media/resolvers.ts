@@ -36,61 +36,24 @@ const queries: Partial<TQueryResolvers> = {
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    emptyTrash: (_, input, context) => new Promise<TMedium[]>((resolve) => {
+    emptyTrash: async (_, input, context) => {
         const service = new MediaService(context)
 
-        service.readMany({
+        const media = await service.readMany({
             conditions: {
                 status: 'trash'
             }
-        }).then(async (results) => {
-            resolve(service.destroy(results.map((result) => result.id as string)))
         })
-    }),
+
+        return service.destroy(media.map((medium) => medium.id as string))
+    },
     upload: async (_, { files }, context) => {
         const service = new MediaService(context)
-
-        const writePromises = files.map((file) => new Promise<DeepPartial<TMedium> & { id?: string }> ((resolve) => {
-            const name = randomUUID()
-            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
-
-            Promise.resolve(file).then(async (f) => {
-                const {
-                    createReadStream, filename, mimetype
-                } = await f.promise
-                const writeFileToDisk = new Promise<string>((r) => {
-                    const stream = createReadStream()
-
-                    stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
-                        r(filename)
-                    })
-                })
-
-                Promise.resolve(writeFileToDisk).then((filename) => {
-                    fileToMedium({
-                        filePath: pathName,
-                        fileName: name,
-                        originalName: filename,
-                        type: mimetype,
-                        user: context.user.id
-                    }).then((medium) => {
-                        resolve(medium)
-                    })
-                })
-            })
-        }))
-
-        await Promise.all(writePromises).then(async (data) => {
-            await service.createMany(data)
-        })
-
-        return []
+        const media = await service.writeToDisk(files)
+        return service.createMany(media)
     },
     setMediaStatus: async (_, input, context) => {
-        return new MediaService(context).updateMany(input.media as string[], {
-            dateModifiedStatus: new Date(),
-            status: input.status
-        })
+        return new MediaService(context).setStatus(input.media as string[], input.status)
     },
     rotate: async (_, input, context) => {
         return await new MediaService(context).rotate(input.id)

@@ -25,15 +25,27 @@ export default class AlbumsMediaService {
     }
 
     createMany = async (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => {
-        const albumsMediaPromises = albumsMedia.map(async (albumMedium) => {
-            return await this.createOne(albumMedium)
-        })
-
-        return await Promise.all(albumsMediaPromises).then((results) => {
-            return results.map((result) => {
-                return result.medium as TMedium
+        return await this.prisma.$transaction(
+            albumsMedia.map((albumMedium) => {
+                return this.prisma.albumMedium.upsert({
+                    where: {
+                        idAlbum_idMedium: {
+                            idAlbum: albumMedium.idAlbum,
+                            idMedium: albumMedium.idMedium
+                        }
+                    },
+                    create: albumMedium,
+                    update: albumMedium,
+                    include: {
+                        medium: {
+                            include: {
+                                favoredBy: true
+                            }
+                        }
+                    }
+                })
             })
-        })
+        )
     }
 
     removeFromAlbum = async (idAlbum: string, mediaIds: string[]) => {

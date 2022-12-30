@@ -125,50 +125,50 @@ const getDuration = (result: ResultObject) => {
     return parseInt(durations[0], 10)
 }
 
-const handleImage = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TImageMeta> }>((resolve) => {
-    sharp(filePath).metadata().then(async (sharpMeta) => {
-        const rawMeta = await ExifReader.load(filePath)
-        let fNumber = rawMeta.FNumber?.value
+const handleImage = async (filePath: string) => {
+    const sharpMeta = await sharp(filePath).metadata()
+    const rawMeta = await ExifReader.load(filePath)
 
-        if (fNumber && Array.isArray(fNumber)) {
-            fNumber = fNumber.reduce((a, b) => a / b)
-        }
+    let fNumber = rawMeta.FNumber?.value
 
-        const date = rawMeta.DateTime?.value[0].split(' ')[0].split(':').join('-')
-        const time = rawMeta.DateTime?.value[0].split(' ')[1]
-        const dateTime = new Date([date, time].join(' '))
+    if (fNumber && Array.isArray(fNumber)) {
+        fNumber = fNumber.reduce((a, b) => a / b)
+    }
 
-        const latRef = rawMeta.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
-        const lngRef = rawMeta.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
+    const date = rawMeta.DateTime?.value[0].split(' ')[0].split(':').join('-')
+    const time = rawMeta.DateTime?.value[0].split(' ')[1]
+    const dateTime = new Date([date, time].join(' '))
 
-        const rawLat = parseFloat(rawMeta.GPSLatitude?.description || '') * latRef
-        const rawLng = parseFloat(rawMeta.GPSLongitude?.description || '') * lngRef
+    const latRef = rawMeta.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
+    const lngRef = rawMeta.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
 
-        const lat = Number.isNaN(rawLat) ? null : rawLat
-        const lng = Number.isNaN(rawLng) ? null : rawLng
+    const rawLat = parseFloat(rawMeta.GPSLatitude?.description || '') * latRef
+    const rawLng = parseFloat(rawMeta.GPSLongitude?.description || '') * lngRef
 
-        const mediumData: Partial<TMedium> = {
-            dateTaken: dateTime,
-            hash: hash(JSON.stringify(rawMeta)).toString(),
-            lat,
-            lng
-        }
+    const lat = Number.isNaN(rawLat) ? null : rawLat
+    const lng = Number.isNaN(rawLng) ? null : rawLng
 
-        const meta: Partial<TImageMeta> = {
-            height: sharpMeta.height || 0,
-            width: sharpMeta.width || 0,
-            cameraMake: rawMeta.Make?.value[0],
-            cameraModel: rawMeta.Model?.value[0],
-            flash: rawMeta.Flash?.value,
-            fNumber: fNumber
-        }
+    const mediumData: Partial<TMedium> = {
+        dateTaken: dateTime,
+        hash: hash(JSON.stringify(rawMeta)).toString(),
+        lat,
+        lng
+    }
 
-        resolve({
-            data: mediumData,
-            meta
-        })
-    })
-})
+    const meta: Partial<TImageMeta> = {
+        height: sharpMeta.height || 0,
+        width: sharpMeta.width || 0,
+        cameraMake: rawMeta.Make?.value[0],
+        cameraModel: rawMeta.Model?.value[0],
+        flash: rawMeta.Flash?.value,
+        fNumber: fNumber
+    }
+
+    return {
+        data: mediumData,
+        meta
+    }
+}
 
 const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TVideoMeta> }>((resolve) => {
     const analyze = async () => {
@@ -236,10 +236,10 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type, user
-}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => await new Promise<DeepPartial<TMedium> & { id?: string }>((resolve) => {
+}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => {
     const mediumType = type.split('/')[0]
     const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
-        resolve({
+        return {
             mimetype: type,
             filenameDisk: fileName,
             filenameDownload: originalName,
@@ -253,14 +253,14 @@ export const fileToMedium = async ({
             uploader: {
                 id: user
             }
-        } as DeepPartial<TMedium> & { id?: string })
+        } as DeepPartial<TMedium> & { id?: string }
     }
 
     if (mediumType === 'image') {
-        handleImage(filePath).then(handleMeta)
+        return handleImage(filePath).then(handleMeta)
     }
 
     if (mediumType === 'video') {
-        handleVideo(filePath).then(handleMeta)
+        return handleVideo(filePath).then(handleMeta)
     }
-})
+}

@@ -1,4 +1,5 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { FileUpload } from 'graphql-upload-minimal'
 export type Maybe<T> = Partial<T> | T | null;
 export type InputMaybe<T> = Partial<T> | T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,7 +15,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  Upload: any;
+  Upload: Promise<FileUpload>;
 };
 
 export type TAlbum = {
@@ -35,7 +36,7 @@ export type TAlbumInput = {
 
 export type TCount = {
   __typename?: 'Count';
-  count?: Maybe<Scalars['Int']>;
+  count: Scalars['Int'];
 };
 
 export type TDevice = {
@@ -105,12 +106,12 @@ export type TMutation = {
   removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
-  setMediaStatus?: Maybe<TCount>;
+  setMediaStatus: TCount;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
   updateAlbumTitle?: Maybe<TAlbum>;
-  upload: Array<Maybe<TFile>>;
+  upload: Array<TMedium>;
 };
 
 
@@ -137,7 +138,7 @@ export type TMutationDeleteAlbumArgs = {
 
 
 export type TMutationDeleteMediaArgs = {
-  ids: Array<InputMaybe<Scalars['ID']>>;
+  ids: Array<Scalars['ID']>;
 };
 
 
@@ -170,7 +171,7 @@ export type TMutationSetAlbumCoverArgs = {
 
 export type TMutationSetMediaStatusArgs = {
   media: Array<InputMaybe<Scalars['ID']>>;
-  status?: InputMaybe<Scalars['String']>;
+  status: Scalars['String'];
 };
 
 
@@ -195,7 +196,7 @@ export type TMutationUpdateAlbumTitleArgs = {
 
 
 export type TMutationUploadArgs = {
-  files: Array<InputMaybe<Scalars['Upload']>>;
+  files: Array<Scalars['Upload']>;
 };
 
 export type TQuery = {
@@ -419,7 +420,7 @@ export type TAlbumResolvers<ContextType = any, ParentType extends TResolversPare
 };
 
 export type TCountResolvers<ContextType = any, ParentType extends TResolversParentTypes['Count'] = TResolversParentTypes['Count']> = {
-  count?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
+  count?: Resolver<TResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -490,12 +491,12 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   removeFromFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
   rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
   setAlbumCover?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationSetAlbumCoverArgs, 'idAlbum' | 'idMedium'>>;
-  setMediaStatus?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media'>>;
+  setMediaStatus?: Resolver<TResolversTypes['Count'], ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
   updateAlbumTitle?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumTitleArgs, 'id' | 'title'>>;
-  upload?: Resolver<Array<Maybe<TResolversTypes['File']>>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
+  upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {

@@ -57,7 +57,7 @@ export default gql`
     }
 
     type Count {
-        count: Int
+        count: Int!
     }
 
     type Query {
@@ -67,10 +67,10 @@ export default gql`
     }
 
     type Mutation {
-        deleteMedia(ids: [ID]!): [Medium!]! @auth
+        deleteMedia(ids: [ID!]!): [Medium!]! @auth
         rotate(id: ID!): Medium! @auth
-        setMediaStatus(media: [ID]!, status: String): Count @auth
-        upload(files: [Upload]!): [File]! @auth
+        setMediaStatus(media: [ID]!, status: String!): Count! @auth
+        upload(files: [Upload!]!): [Medium!]! @auth
         emptyTrash: [Medium!]! @auth
     }
 `

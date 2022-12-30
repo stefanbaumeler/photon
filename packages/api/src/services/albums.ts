@@ -7,8 +7,8 @@ import { Prisma } from '.prisma/client'
 export default class AlbumsService {
     prisma = getDatabase()
 
-    async truncate () {
-        await this.prisma.album.deleteMany({
+    truncate = async () => {
+        return this.prisma.album.deleteMany({
             where: {}
         })
     }
@@ -49,14 +49,6 @@ export default class AlbumsService {
 
         return created as TAlbum
     }
-
-    createMany = (albums: (DeepPartial<TAlbum> & { id?: string })[], media?: { id: string }[]) => new Promise<TAlbum[]>((resolve) => {
-        const primaryKeys = albums.map((album) => this.createOne(album, media))
-
-        Promise.all(primaryKeys).then((results) => {
-            resolve(results)
-        })
-    })
 
     readOne = async (id: string) => {
         const album = await this.prisma.album.findFirst({

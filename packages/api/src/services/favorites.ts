@@ -10,7 +10,7 @@ export default class FavoritesService {
         this.context = context
     }
 
-    async truncate () {
+    truncate = async () => {
         return this.prisma.user.deleteMany({
             where: {}
         })

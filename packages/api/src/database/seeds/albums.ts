@@ -1,7 +1,5 @@
 import AlbumsService from '../../services/albums'
-import { TAlbum } from '../'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs, predefinedUserUUIDs } from '../helpers/ids'
-import { DeepPartial } from '../../types'
 
 export default async (truncateOnly = false) => {
     const service = new AlbumsService()
@@ -12,22 +10,18 @@ export default async (truncateOnly = false) => {
         return
     }
 
-    const fakeAlbums: DeepPartial<TAlbum>[] = []
-
     for (let i = 0; i < 4; i++) {
-        fakeAlbums.push({
+        await service.createOne({
             id: predefinedAlbumUUIDs[i],
             title: `Test Album ${i}`,
             description: `Test Description ${i}`,
             owner: {
                 id: predefinedUserUUIDs[0]
             }
-        })
+        }, predefinedMediumUUIDs.map((id) => ({
+            id
+        })))
     }
-
-    await service.createMany(fakeAlbums, predefinedMediumUUIDs.map((id) => ({
-        id
-    })))
 
     await service.createOne({
         id: predefinedAlbumUUIDs[4],

@@ -12,7 +12,7 @@ export default class UsersService {
         this.context = context
     }
 
-    async truncate () {
+    truncate = async () => {
         return this.prisma.user.deleteMany({
             where: {}
         })
@@ -29,8 +29,8 @@ export default class UsersService {
         })
     }
 
-    createMany = (users: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>[]) => new Promise<number>((resolve) => {
-        const hashPromises: Promise<Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>>[] = []
+    createMany = async (users: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>[]) => {
+        const hashPromises: Promise<typeof users[0]>[] = []
 
         users.forEach((user) => {
             const promise = argon2.hash(user.password).then((hashedPassword) => {
@@ -42,15 +42,14 @@ export default class UsersService {
             hashPromises.push(promise)
         })
 
-        Promise.all(hashPromises).then((hashedUsers) => {
-            this.prisma.user.createMany({
-                data: hashedUsers,
-                skipDuplicates: true
-            }).then((res) => {
-                resolve(res.count)
-            })
+        const hashedUsers = await Promise.all(hashPromises)
+        const createdUsers = await this.prisma.user.createMany({
+            data: hashedUsers,
+            skipDuplicates: true
         })
-    })
+
+        return createdUsers.count as number
+    }
 
     readOne = async (id: string) => {
         const res = await this.prisma.user.findFirst({
@@ -162,12 +161,12 @@ export default class UsersService {
         return this.setUserCookie(existingUser, this.context?.res)
     }
 
-    signOut = () => new Promise<boolean>((resolve) => {
+    signOut = () => {
         this.context?.res.clearCookie('accessToken')
         this.context?.res.clearCookie('refreshToken')
 
-        resolve(true)
-    })
+        return true
+    }
 
     refresh = (refreshToken: string, accessToken: string, res: Response) => {
         try {

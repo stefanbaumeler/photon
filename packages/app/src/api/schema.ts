@@ -35,7 +35,7 @@ export type TAlbumInput = {
 
 export type TCount = {
   __typename?: 'Count';
-  count?: Maybe<Scalars['Int']>;
+  count: Scalars['Int'];
 };
 
 export type TDevice = {
@@ -105,12 +105,12 @@ export type TMutation = {
   removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
   setAlbumCover?: Maybe<TAlbum>;
-  setMediaStatus?: Maybe<TCount>;
+  setMediaStatus: TCount;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
   updateAlbumTitle?: Maybe<TAlbum>;
-  upload: Array<Maybe<TFile>>;
+  upload: Array<TMedium>;
 };
 
 
@@ -137,7 +137,7 @@ export type TMutationDeleteAlbumArgs = {
 
 
 export type TMutationDeleteMediaArgs = {
-  ids: Array<InputMaybe<Scalars['ID']>>;
+  ids: Array<Scalars['ID']>;
 };
 
 
@@ -170,7 +170,7 @@ export type TMutationSetAlbumCoverArgs = {
 
 export type TMutationSetMediaStatusArgs = {
   media: Array<InputMaybe<Scalars['ID']>>;
-  status?: InputMaybe<Scalars['String']>;
+  status: Scalars['String'];
 };
 
 
@@ -195,7 +195,7 @@ export type TMutationUpdateAlbumTitleArgs = {
 
 
 export type TMutationUploadArgs = {
-  files: Array<InputMaybe<Scalars['Upload']>>;
+  files: Array<Scalars['Upload']>;
 };
 
 export type TQuery = {
@@ -480,7 +480,7 @@ export type TMRemoveFromFavorites = (
 );
 
 export type TMDeleteMediaVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
+  ids: Array<Scalars['ID']> | Scalars['ID'];
 }>;
 
 
@@ -596,29 +596,29 @@ export type TMRotate = (
 
 export type TMSetMediaStatusVariables = Exact<{
   media: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
-  status?: InputMaybe<Scalars['String']>;
+  status: Scalars['String'];
 }>;
 
 
 export type TMSetMediaStatus = (
   { __typename?: 'Mutation' }
-  & { setMediaStatus?: Maybe<(
+  & { setMediaStatus: (
     { __typename?: 'Count' }
     & Pick<TCount, 'count'>
-  )> }
+  ) }
 );
 
 export type TMUploadVariables = Exact<{
-  files: Array<InputMaybe<Scalars['Upload']>> | InputMaybe<Scalars['Upload']>;
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
 }>;
 
 
 export type TMUpload = (
   { __typename?: 'Mutation' }
-  & { upload: Array<Maybe<(
-    { __typename?: 'File' }
-    & Pick<TFile, 'url'>
-  )>> }
+  & { upload: Array<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )> }
 );
 
 export type TMSignInVariables = Exact<{
@@ -1150,7 +1150,7 @@ export type MRemoveFromFavoritesHookResult = ReturnType<typeof useMRemoveFromFav
 export type MRemoveFromFavoritesMutationResult = Apollo.MutationResult<TMRemoveFromFavorites>;
 export type MRemoveFromFavoritesMutationOptions = Apollo.BaseMutationOptions<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>;
 export const MDeleteMediaDocument = gql`
-    mutation MDeleteMedia($ids: [ID]!) {
+    mutation MDeleteMedia($ids: [ID!]!) {
   deleteMedia(ids: $ids) {
     id
   }
@@ -1433,7 +1433,7 @@ export type MRotateHookResult = ReturnType<typeof useMRotate>;
 export type MRotateMutationResult = Apollo.MutationResult<TMRotate>;
 export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRotateVariables>;
 export const MSetMediaStatusDocument = gql`
-    mutation MSetMediaStatus($media: [ID]!, $status: String) {
+    mutation MSetMediaStatus($media: [ID]!, $status: String!) {
   setMediaStatus(media: $media, status: $status) {
     count
   }
@@ -1467,9 +1467,9 @@ export type MSetMediaStatusHookResult = ReturnType<typeof useMSetMediaStatus>;
 export type MSetMediaStatusMutationResult = Apollo.MutationResult<TMSetMediaStatus>;
 export type MSetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TMSetMediaStatus, TMSetMediaStatusVariables>;
 export const MUploadDocument = gql`
-    mutation MUpload($files: [Upload]!) {
+    mutation MUpload($files: [Upload!]!) {
   upload(files: $files) {
-    url
+    id
   }
 }
     `;

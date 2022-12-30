@@ -51,6 +51,9 @@ model Medium {
   albums             Album[]
   albumMedia         AlbumMedium[]
   favoredBy          User[]
+  generatedTags      String?
+
+  @@unique(hash)
 }
 
 model Device {

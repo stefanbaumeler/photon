@@ -6,6 +6,9 @@ import { DeepPartial } from '../types'
 import { Prisma } from '.prisma/client'
 import Enumerable = Prisma.Enumerable
 import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
+import { DetectLabelsCommand, RekognitionClient } from '@aws-sdk/client-rekognition'
+import { fileToMedium } from '../helpers/exif'
+import { FileUpload } from 'graphql-upload-minimal'
 
 export default class MediaService {
     prisma = getDatabase()
@@ -16,48 +19,130 @@ export default class MediaService {
         this.context = context
     }
 
-    async truncate () {
-        await this.prisma.medium.deleteMany({
+    truncate = async () => {
+        return this.prisma.medium.deleteMany({
             where: {}
         })
     }
 
-    async createOne (medium: DeepPartial<TMedium> & { id?: string }) {
-        await this.prisma.medium.findFirst({
+    createOne = async (medium: DeepPartial<TMedium> & { id?: string }) => {
+        const existing = await this.prisma.medium.findFirst({
             where: {
                 hash: medium.hash
             }
-        }).then(async (res) => {
-            if (res) {
-                await fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-            }
-            else {
-                await this.prisma.medium.create({
-                    data: {
-                        ...medium as DeepPartial<TMedium>,
-                        owner: {
-                            connect: {
-                                id: medium.owner?.id
-                            }
-                        },
-                        uploader: {
-                            connect: {
-                                id: medium.uploader?.id
-                            }
-                        },
-                        meta: JSON.stringify(medium.meta),
-                        favoredBy: {}
+        })
+
+        if (existing) {
+            await fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+            return
+        }
+
+        return await this.prisma.medium.create({
+            data: {
+                ...medium as DeepPartial<TMedium>,
+                owner: {
+                    connect: {
+                        id: medium.owner?.id
                     }
-                })
+                },
+                uploader: {
+                    connect: {
+                        id: medium.uploader?.id
+                    }
+                },
+                meta: JSON.stringify(medium.meta),
+                favoredBy: {}
             }
+        }) as TMedium
+    }
+
+    createMany = async (media: (DeepPartial<TMedium> & { id?: string })[]) => {
+        const promises = media.map((medium) => {
+            return this.createOne(medium)
+        })
+
+        return Promise.all(promises).then((results) => {
+            return results.filter((result) => result !== undefined) as TMedium[]
         })
     }
 
-    async createMany (media: (DeepPartial<TMedium> & { id?: string })[]) {
-        const primaryKeys = media.map((medium) => this.createOne(medium))
+    writeToDisk = async (filePromises: Promise<FileUpload>[]) => {
+        const promises = filePromises.map(async (filePromise) => {
+            const name = randomUUID()
+            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
+            const file = await filePromise
+            const stream = file.createReadStream()
 
-        return await Promise.all(primaryKeys).then((results) => {
-            return results
+            return await new Promise<Promise<TMedium>>((resolve) => {
+                stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
+                    this.generateTags(pathName, name)
+
+                    if (!this.context?.user.id) {
+                        return {} as DeepPartial<TMedium>
+                    }
+
+                    const m = fileToMedium({
+                        filePath: pathName,
+                        fileName: name,
+                        originalName: file.filename,
+                        type: file.mimetype,
+                        user: this.context.user.id
+                    }) as Promise<TMedium>
+
+                    resolve(m)
+                })
+            }) as TMedium
+        })
+
+        return await Promise.all(promises) as TMedium[]
+    }
+
+    generateTags = async (pathName: string, filenameDisk: string) => {
+        if (!process.env.AWS_REKOGNITION_ACCESS_KEY_ID || !process.env.AWS_REKOGNITION_SECRET_ACCESS_KEY || !process.env.AWS_REKOGNITION_REGION) {
+            return false
+        }
+
+        const buffer = await fs.promises.readFile(pathName)
+
+        const client = new RekognitionClient({
+            region: process.env.AWS_REKOGNITION_REGION,
+            credentials: {
+                accessKeyId: process.env.AWS_REKOGNITION_ACCESS_KEY_ID as string,
+                secretAccessKey: process.env.AWS_REKOGNITION_SECRET_ACCESS_KEY as string
+            }
+        })
+
+        const command = new DetectLabelsCommand({
+            Image: {
+                Bytes: buffer
+            },
+            MinConfidence: 80
+        })
+
+        const rekognitionResponse = await client.send(command)
+        const tags = rekognitionResponse.Labels?.map((label) => label.Name)
+
+        if (tags) {
+            const noUndefinedTags = tags.filter((tag) => typeof tag !== 'undefined') as string[]
+
+            await this.writeGeneratedTags(noUndefinedTags, filenameDisk)
+        }
+    }
+
+    writeGeneratedTags = async (tags: string[], filenameDisk: string) => {
+        const medium = await this.readOneFromDisk(filenameDisk)
+
+        if (!medium) {
+            return
+        }
+
+        await this.prisma.medium.update({
+            where: {
+                id: medium.id
+            },
+            data: {
+                generatedTags: tags.join(', ')
+            }
         })
     }
 
@@ -189,67 +274,58 @@ export default class MediaService {
         }) as TMedium[]
     }
 
-    destroy = (keys: (string | null)[] | string) => {
-        const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
+    destroy = async (ids: string[] | string) => {
+        const idsToDestroy = Array.isArray(ids) ? ids : [ids]
 
-        return this.readMany({
+        const media = await this.readMany({
             conditions: {
                 id: {
-                    in: keysToDestroy
+                    in: idsToDestroy
                 }
             }
-        }).then((itemsToDestroy) => {
-            itemsToDestroy.forEach((item) => {
-                fs.unlinkSync(`./uploads/${item.filenameDisk}`)
-            })
-
-            return itemsToDestroy
-        }).then(async (itemsToDestroy) => {
-            await this.prisma.medium.deleteMany({
-                where: {
-                    id: {
-                        in: itemsToDestroy.map((item) => item.id)
-                    }
-                }
-            })
-
-            return itemsToDestroy as TMedium[]
         })
+
+        media.forEach((medium) => {
+            fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+        })
+
+        await this.prisma.medium.deleteMany({
+            where: {
+                id: {
+                    in: idsToDestroy
+                }
+            }
+        })
+
+        return media
     }
 
-    rotate = (id: string) => {
+    rotate = async (id: string) => {
         const newFileName = randomUUID()
 
-        return this.readOne(id).then((medium) => {
-            if (!medium) {
-                throw new Error()
-            }
+        const medium = await this.readOne(id)
+        const row = await sharp(`./uploads/${medium.filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`)
 
-            return sharp(`./uploads/${medium.filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`).then((row) => {
-                return this.update(id, {
-                    meta: {
-                        ...medium.meta as TMeta,
-                        width: row.width,
-                        height: row.height
-                    },
-                    filenameDisk: newFileName
-                }).then((response) => {
-                    fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-                    return response
+        const response = await this.prisma.medium.update({
+            where: {
+                id
+            },
+            data: {
+                filenameDisk: newFileName,
+                meta: JSON.stringify({
+                    ...medium.meta as TMeta,
+                    width: row.width,
+                    height: row.height
                 })
-            })
+            }
         })
+
+        fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+
+        return response as TMedium
     }
 
-    updateMany = (ids: string[], newProps: Partial<TMedium>) => {
-        delete newProps.id
-
-        const props = newProps as Partial<TMedium> & { meta: string }
-
-        if (props.meta) {
-            props.meta = JSON.stringify(props.meta)
-        }
-
+    setStatus = (ids: string[], status: string) => {
         return this.prisma.medium.updateMany({
             where: {
                 id: {
@@ -257,52 +333,8 @@ export default class MediaService {
                 }
             },
             data: {
-                ...props
+                status
             }
         })
-    }
-
-    update = async (id: string, newProps: Partial<TMedium>) => {
-        delete newProps.id
-
-        const data = newProps as Partial<TMedium> & { meta: string, owner: { connect: { id?: string } }, uploader: { connect: { id?: string } }, favoredBy: { connect: { id?: string } } }
-
-        if (data.meta) {
-            data.meta = JSON.stringify(data.meta)
-        }
-
-        if (data.owner) {
-            data.owner = {
-                connect: {
-                    id: data.owner.id
-                }
-            }
-        }
-
-        if (data.uploader) {
-            data.uploader = {
-                connect: {
-                    id: data.uploader.id
-                }
-            }
-        }
-
-        return await this.prisma.medium.update({
-            where: {
-                id
-            },
-            data: {
-                ...data
-            },
-            include: {
-                owner: true,
-                uploader: true,
-                favoredBy: {
-                    where: {
-                        id: this.context?.user.id
-                    }
-                }
-            }
-        }) as TMedium
     }
 }

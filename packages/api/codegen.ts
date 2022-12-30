@@ -1,5 +1,7 @@
 
 import dotenv from 'dotenv'
+import { GraphQLUpload } from 'graphql-upload-minimal'
+import { DateTimeScalar } from 'graphql-date-scalars'
 
 dotenv.config({
     path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
@@ -19,9 +21,17 @@ export default {
         './src/database/schema.ts': {
             plugins: [
                 'typescript',
-                'typescript-resolvers'
+                'typescript-resolvers',
+                {
+                    add: {
+                        content: 'import { FileUpload } from \'graphql-upload-minimal\''
+                    }
+                }
             ],
             config: {
+                scalars: {
+                    Upload: 'Promise<FileUpload>'
+                },
                 preResolveTypes: false,
                 maybeValue: 'Partial<T> | T | null',
                 useTypeImports: true,

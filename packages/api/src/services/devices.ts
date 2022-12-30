@@ -10,7 +10,7 @@ export default class DevicesService {
         this.context = context
     }
 
-    async truncate () {
+    truncate = async () => {
         return this.prisma.user.deleteMany({
             where: {}
         })
