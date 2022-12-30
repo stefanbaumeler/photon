@@ -6,9 +6,9 @@ import { DeepPartial } from '../types'
 import { Prisma } from '.prisma/client'
 import Enumerable = Prisma.Enumerable
 import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
-import { DetectLabelsCommand, RekognitionClient } from '@aws-sdk/client-rekognition'
 import { fileToMedium } from '../helpers/exif'
 import { FileUpload } from 'graphql-upload-minimal'
+import { getCV } from '../../drivers'
 
 export default class MediaService {
     prisma = getDatabase()
@@ -98,34 +98,17 @@ export default class MediaService {
     }
 
     generateTags = async (pathName: string, filenameDisk: string) => {
-        if (!process.env.AWS_REKOGNITION_ACCESS_KEY_ID || !process.env.AWS_REKOGNITION_SECRET_ACCESS_KEY || !process.env.AWS_REKOGNITION_REGION) {
+        if (!process.env.CV_REKOGNITION_ACCESS_KEY_ID || !process.env.CV_REKOGNITION_SECRET_ACCESS_KEY || !process.env.CV_REKOGNITION_REGION) {
             return false
         }
 
         const buffer = await fs.promises.readFile(pathName)
 
-        const client = new RekognitionClient({
-            region: process.env.AWS_REKOGNITION_REGION,
-            credentials: {
-                accessKeyId: process.env.AWS_REKOGNITION_ACCESS_KEY_ID as string,
-                secretAccessKey: process.env.AWS_REKOGNITION_SECRET_ACCESS_KEY as string
-            }
-        })
+        const recognize = await getCV()
+        const labels = await recognize.labels(buffer)
 
-        const command = new DetectLabelsCommand({
-            Image: {
-                Bytes: buffer
-            },
-            MinConfidence: 80
-        })
-
-        const rekognitionResponse = await client.send(command)
-        const tags = rekognitionResponse.Labels?.map((label) => label.Name)
-
-        if (tags) {
-            const noUndefinedTags = tags.filter((tag) => typeof tag !== 'undefined') as string[]
-
-            await this.writeGeneratedTags(noUndefinedTags, filenameDisk)
+        if (labels) {
+            await this.writeGeneratedTags(labels, filenameDisk)
         }
     }
 

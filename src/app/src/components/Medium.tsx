@@ -1,5 +1,5 @@
 import { TMedium } from '@/api'
-import { Ref, useContext, useMemo, forwardRef } from 'react'
+import { Ref, useContext, useMemo, forwardRef, useState } from 'react'
 import Image from 'next/image'
 import { DetailsContext } from '@/providers'
 import bem from '@/util/bem'
@@ -10,12 +10,15 @@ type Props = {
     cy?: string
     priority?: boolean
     position?: string
+    placeholder?: boolean
 }
 
 const Medium = ({
-    medium, width, cy, priority = false, position
+    medium, width, cy, priority = false, position, placeholder
 }: Props, ref?: Ref<unknown>) => {
     const details = useContext(DetailsContext)
+
+    const [loaded, setLoaded] = useState(false)
 
     const Video = useMemo(() => {
         return <video
@@ -26,8 +29,10 @@ const Medium = ({
     }, [medium, width])
 
     const ImageOrVideo = useMemo(() => {
+        let el
+
         if (medium.mimetype?.startsWith('image')) {
-            return <Image
+            el = <Image
                 alt=""
                 unoptimized={true}
                 priority={priority}
@@ -35,18 +40,28 @@ const Medium = ({
                 className="medium__image"
                 fill={true}
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}
+                onLoad={() => {
+                    setLoaded(true)
+                }}
             />
+        } else if (medium.mimetype?.startsWith('video')) {
+            el = Video
+        }
+        else {
+            el = <></>
         }
 
-        if (medium.mimetype?.startsWith('video')) {
-            return Video
+        if (details.active) {
+            setLoaded(false)
         }
 
-        return <></>
+        return el
     }, [medium, width])
 
     const classes = bem('medium', [
-        [position, !!position]
+        ['position', !!position],
+        ['placeholder', !!placeholder],
+        ['loading', !loaded]
     ])
 
     return <div

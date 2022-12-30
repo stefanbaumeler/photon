@@ -12,9 +12,8 @@ export const Media = () => {
     const media = useContext(MediaContext)
 
     useEffect(() => {
-        if (details.medium && Object.keys(details.medium).length) {
-            if (media)
-            {details.setMedium(media.media.find((m) => m.id === details.medium.id))}
+        if (details.medium && Object.keys(details.medium).length && media) {
+            details.setMedium(media.media.find((m) => m.id === details.medium.id))
         }
     }, [media])
 

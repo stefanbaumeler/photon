@@ -9,6 +9,15 @@
 .idea
 .DS_Store
 
-/node_modules
 cypress/screenshots
+dist
+node_modules
+.env
+.env.*
+.vs
+.vscode
+*.tsbuildinfo
+yarn-debug.log*
+yarn-error.log*
+
 /ssl

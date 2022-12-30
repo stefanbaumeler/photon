@@ -171,10 +171,16 @@ export const Details = () => {
                 }}
             >
                 <Medium
+                    placeholder={true}
+                    priority={true}
+                    medium={details.medium}
+                    width={details.medium.meta.width / 20}
+                />
+                <Medium
                     priority={true}
                     cy="details-image"
                     medium={details.medium}
-                    width={details.medium.meta.width}
+                    width={details.medium.meta.width / 2}
                 />
             </div>
         </div>

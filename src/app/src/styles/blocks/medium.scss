@@ -1,0 +1,68 @@
+@mixin medium-root {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: opacity .5s, scale .1s;
+
+    &--placeholder {
+        position: absolute;
+    }
+
+    @at-root .teaser--selected & {
+        scale: .925;
+    }
+
+    &--loading:not(.medium--placeholder) {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@mixin medium-image-container {
+}
+
+@mixin medium-image {
+    object-fit: contain;
+
+    @at-root .medium--top & {
+        object-position: top;
+    }
+}
+
+@mixin medium-video {
+    position: relative;
+    z-index: 1;
+    transition: opacity 1s;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@mixin medium {
+    .medium {
+        @include medium-root;
+
+        &__image-container {
+            @include medium-image-container;
+        }
+
+        &__image {
+            @include medium-image;
+        }
+
+        &__video {
+            @include medium-video;
+        }
+    }
+}
+
+@include medium;
