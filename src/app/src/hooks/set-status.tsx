@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import { DetailsContext, SelectionContext, MediaContext } from '@/providers'
+import { useDetailsContext, useSelectionContext, useMediaContext } from '@/providers'
 import { QAlbumMediaDocument, QAlbumsDocument,
     QFavoritesDocument,
     QMediaDocument,
@@ -9,9 +8,9 @@ import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
 const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {
-    const details = useContext(DetailsContext)
-    const selection = useContext(SelectionContext)
-    const media = useContext(MediaContext)
+    const details = useDetailsContext()
+    const selection = useSelectionContext()
+    const media = useMediaContext()
 
     const router = useRouter()
 

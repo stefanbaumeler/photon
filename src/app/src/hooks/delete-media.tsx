@@ -1,12 +1,11 @@
-import { useContext } from 'react'
-import { DetailsContext, DialogContext, SelectionContext, MediaContext } from '@/providers'
+import { useDialogContext, useSelectionContext, useMediaContext, useDetailsContext } from '@/providers'
 import { QAlbumsDocument, QMediaDocument, useMDeleteMedia } from '@/api'
 
 const useDeleteMedia = () => {
-    const dialog = useContext(DialogContext)
-    const selection = useContext(SelectionContext)
-    const details = useContext(DetailsContext)
-    const media = useContext(MediaContext)
+    const dialog = useDialogContext()
+    const selection = useSelectionContext()
+    const details = useDetailsContext()
+    const media = useMediaContext()
 
     const [deleteMedia] = useMDeleteMedia({
         variables: {

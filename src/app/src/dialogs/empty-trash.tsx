@@ -1,11 +1,10 @@
 import { ETrans } from '@/types/translations'
-import { useContext } from 'react'
-import { DialogContext } from '@/providers'
+import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useEmptyTrash from '@/hooks/empty-trash'
 
 const useEmptyTrashDialog = () => {
-    const dialog = useContext(DialogContext)
+    const dialog = useDialogContext()
     const { t } = useTranslation()
 
     const emptyTrash = useEmptyTrash()

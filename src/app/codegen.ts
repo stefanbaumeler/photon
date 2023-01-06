@@ -1,13 +1,11 @@
-import dotenv from 'dotenv'
+import { getEnv } from './env'
 
-dotenv.config({
-    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
-})
+const env = getEnv()
 
 export default {
     overwrite: true,
     watch: true,
-    schema: `${process.env.NEXT_PUBLIC_API_URL}`,
+    schema: `${env.NEXT_PUBLIC_API_URL}`,
     documents: ['../**/*.gql', '../**/*.gql'],
     config: {
         scalars: {

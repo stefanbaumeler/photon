@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { EEditState } from '@/types/app'
 
 type Props = {
@@ -24,6 +24,9 @@ const EditProvider = ({ children }: Props) => {
     </EditContext.Provider>
 }
 
+const useEditContext = () => {
+    return useContext(EditContext)
+}
 export {
-    EditProvider, EditContext
+    EditProvider, useEditContext
 }

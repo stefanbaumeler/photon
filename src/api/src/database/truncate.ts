@@ -2,12 +2,9 @@
 import mediaSeed from './seeds/media'
 import albumsSeed from './seeds/albums'
 import { getDatabase } from './'
-import dotenv from 'dotenv'
+import { getEnv } from '../../env'
 
-dotenv.config({
-    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env',
-    override: true
-})
+getEnv()
 
 const prisma = getDatabase()
 

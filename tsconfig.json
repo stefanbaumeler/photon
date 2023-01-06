@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
+        "baseUrl": "./",
         "noImplicitAny": true,
         "allowJs": true,
         "skipLibCheck": true,
@@ -11,21 +11,21 @@
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "jsx": "preserve",
+        "jsx": "react-jsx",
         "noEmit": true,
-        "types": ["cypress", "node"],
+        "types": ["node", "jest"],
         "isolatedModules": false,
-
+        "paths": {
+            "@/*": ["src/app/*", "src/app/src/*"]
+        }
     },
     "include": [
         "node_modules/cypress",
-        "./cypress/**/*.ts",
+        "./tests/**/*.ts",
+        "src/app/*",
+        "src/api/*"
     ],
     "exclude": [
         "node_modules"
-    ],
-    "files": [
-        "./*.**.ts",
-        "./*.**.tsx"
     ]
 }

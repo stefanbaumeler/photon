@@ -1,9 +1,5 @@
 import { defineConfig } from 'cypress'
-import dotenv from 'dotenv'
-
-dotenv.config({
-    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
-})
+import { getEnv } from './src/api/env'
 
 export default defineConfig({
     e2e: {
@@ -11,7 +7,7 @@ export default defineConfig({
         video: false,
         setupNodeEvents (on, config) {
             config.env = {
-                ...process.env,
+                ...getEnv(),
                 ...config.env
             }
 
@@ -23,8 +19,10 @@ export default defineConfig({
             })
 
             return config
-        }
+        },
+        fixturesFolder: './tests/fixtures',
+        supportFile: './tests/cypress/support/e2e.ts',
+        specPattern: './tests/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}'
     },
-    nodeVersion: 'system',
-    fixturesFolder: './cypress/fixtures'
+    nodeVersion: 'system'
 })

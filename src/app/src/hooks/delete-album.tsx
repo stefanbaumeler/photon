@@ -1,10 +1,9 @@
-import { useContext } from 'react'
-import { DialogContext } from '@/providers'
+import { useDialogContext } from '@/providers'
 import { QAlbumsDocument, useMDeleteAlbum } from '@/api'
 import { useRouter } from 'next/router'
 
 const useDeleteAlbum = (id?: string) => {
-    const dialog = useContext(DialogContext)
+    const dialog = useDialogContext()
     const router = useRouter()
 
     const idToDelete = id ? id : Array.isArray(router.query.id) ? router.query.id.join('') : router.query.id

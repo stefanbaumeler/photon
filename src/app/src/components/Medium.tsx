@@ -1,7 +1,7 @@
 import { TMedium } from '@/api'
-import { Ref, useContext, useMemo, forwardRef, useState } from 'react'
+import { Ref, useMemo, forwardRef, useState } from 'react'
 import Image from 'next/image'
-import { DetailsContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 import bem from '@/util/bem'
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 const Medium = ({
     medium, width, cy, priority = false, position, placeholder
 }: Props, ref?: Ref<unknown>) => {
-    const details = useContext(DetailsContext)
+    const details = useDetailsContext()
 
     const [loaded, setLoaded] = useState(false)
 
@@ -36,7 +36,7 @@ const Medium = ({
                 alt=""
                 unoptimized={true}
                 priority={priority}
-                data-cy={cy}
+                data-testid={cy}
                 className="medium__image"
                 fill={true}
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}

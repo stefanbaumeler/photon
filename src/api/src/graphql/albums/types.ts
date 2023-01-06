@@ -13,12 +13,11 @@ export default gql`
         id: ID
         title: String
         description: String
-        idMedium: ID
     }
 
     type Query {
         albums: [Album!]! @auth
-        album(id: ID!): Album! @auth
+        album(id: ID!): Album @auth
         albumMedia(id: ID!): [Medium!]! @auth
     }
 

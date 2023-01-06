@@ -1,7 +1,7 @@
 import * as Icons from '@mdi/js'
 import { Dropdown, IconButton } from '@/components'
-import { useContext, useState } from 'react'
-import { SelectionContext } from '@/providers'
+import {  useState } from 'react'
+import { useSelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EMediumStatus, ESelectionMode } from '@/types/app'
@@ -18,7 +18,7 @@ export const BulkActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
-    const selection = useContext(SelectionContext)
+    const selection = useSelectionContext()
 
     const trashMediaDialog = useMoveToTrashDialog(selection.selected)
     const archive = useSetMediaStatus(selection.selected, Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
@@ -98,7 +98,7 @@ export const BulkActions = () => {
     return <div className={classes}>
         <span
             className="actions__count"
-            data-cy="select-count"
+            data-testid="select-count"
         >
             {t(ETrans.N_SELECTED, {
                 n: selection.selected.size

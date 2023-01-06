@@ -1,14 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 import { TMedium } from '@/api'
 
-export type TMediumInput = {
-    id: string
-}
-
-export type TAlbumInput = {
-    id: string
-}
-
 export type TDialogButton = {
     label: string
     action: () => void

@@ -3,8 +3,8 @@ import { Check, Dropdown, IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { ELayout, EMediumStatus, ESelectionMode } from '@/types/app'
-import { useContext, useState } from 'react'
-import { DetailsContext, LayoutContext, SelectionContext } from '@/providers'
+import { useState } from 'react'
+import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
 import useSetAlbumCover from '@/hooks/set-album-cover'
 import useMoveToTrashDialog from '@/dialogs/move-to-trash'
@@ -22,9 +22,9 @@ export const DetailsActions = () => {
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
     const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
-    const details = useContext(DetailsContext)
-    const selection = useContext(SelectionContext)
-    const layout = useContext(LayoutContext)
+    const details = useDetailsContext()
+    const selection = useSelectionContext()
+    const layout = useLayoutContext()
 
     const moveToTrashDialog = useMoveToTrashDialog(details.medium)
     const addToFavorites = useAddToFavorites([details.medium.id])

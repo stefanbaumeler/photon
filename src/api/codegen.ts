@@ -1,16 +1,11 @@
+import { getEnv } from './env'
 
-import dotenv from 'dotenv'
-import { GraphQLUpload } from 'graphql-upload-minimal'
-import { DateTimeScalar } from 'graphql-date-scalars'
-
-dotenv.config({
-    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
-})
+const env = getEnv()
 
 export default {
     overwrite: true,
     watch: true,
-    schema: `${parseInt(process.env.API_SECURE || '1', 10) ? 'https' : 'http'}://${process.env.API_HOST}:${process.env.API_PORT}/graphql`,
+    schema: `${parseInt(env.API_SECURE || '1', 10) ? 'https' : 'http'}://${env.API_HOST}:${env.API_PORT}/graphql`,
     documents: ['../**/*.gql', '../**/*.gql'],
     config: {
         scalars: {

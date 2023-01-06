@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
 import { ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
@@ -182,6 +182,10 @@ const NavProvider = ({ children }: Props) => {
     </NavContext.Provider>
 }
 
+const useNavContext = () => {
+    return useContext(NavContext)
+}
+
 export {
-    NavProvider, NavContext
+    NavProvider, useNavContext
 }

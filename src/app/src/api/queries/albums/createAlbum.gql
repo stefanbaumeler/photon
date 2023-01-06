@@ -1,5 +1,5 @@
-mutation MCreateAlbum($album: AlbumInput, $media: [ID]) {
-    createAlbum(album: $album, media: $media) {
-        id
+    mutation MCreateAlbum($album: AlbumInput, $media: [ID]) {
+        createAlbum(album: $album, media: $media) {
+            id
+        }
     }
-}

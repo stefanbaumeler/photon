@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { TMedium } from '@/api'
 import { useRouter } from 'next/router'
 
@@ -74,6 +74,10 @@ const DetailsProvider = ({ children }: Props) => {
     </DetailsContext.Provider>
 }
 
+const useDetailsContext = () => {
+    return useContext(DetailsContext)
+}
+
 export {
-    DetailsProvider, DetailsContext
+    DetailsProvider, useDetailsContext
 }

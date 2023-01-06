@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { DetailsContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 
 export const DetailsVideoMeta = () => {
-    const details = useContext(DetailsContext)
+    const details = useDetailsContext()
 
     if (!details.medium.mimetype?.startsWith('video')) {
         return <></>

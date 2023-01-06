@@ -44,7 +44,7 @@ export const AlbumTeaser = ({ album }: Props) => {
 
     return <div
         className="album"
-        data-cy="album-teaser"
+        data-testid="album-teaser"
     >
         <div className="album__controls">
             <Dropdown
@@ -71,7 +71,7 @@ export const AlbumTeaser = ({ album }: Props) => {
             </div>
             <div className="album__content">
                 <span
-                    data-cy="album-teaser-title"
+                    data-testid="album-teaser-title"
                     className="album__title"
                 >
                     {album?.title || t(ETrans.UNTITLED)}
@@ -79,7 +79,7 @@ export const AlbumTeaser = ({ album }: Props) => {
                 <div className="album__misc">
                     <span
                         className="album__count"
-                        data-cy="album-teaser-count"
+                        data-testid="album-teaser-count"
                     >
                         {`${media.length} `}
                         {t(ETrans.ELEMENT, {

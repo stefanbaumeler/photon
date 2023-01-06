@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 import { TDialogButton } from '@/types/app'
 
 type Props = {
@@ -58,6 +58,10 @@ const DialogProvider = ({ children }: Props) => {
     </DialogContext.Provider>
 }
 
+const useDialogContext = () => {
+    return useContext(DialogContext)
+}
+
 export {
-    DialogProvider, DialogContext
+    DialogProvider, useDialogContext
 }

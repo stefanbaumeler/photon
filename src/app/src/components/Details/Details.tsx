@@ -1,5 +1,5 @@
-import { useContext, useEffect, useMemo } from 'react'
-import { DetailsContext, DialogContext, MediaContext } from '@/providers'
+import { useEffect, useMemo } from 'react'
+import { useDetailsContext, useDialogContext, useMediaContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '@/components'
 import { useTranslation } from 'react-i18next'
@@ -17,9 +17,9 @@ import { DetailsVideoMeta } from './DetailsVideoMeta'
 export const Details = () => {
     const { t } = useTranslation()
 
-    const details = useContext(DetailsContext)
-    const dialog = useContext(DialogContext)
-    const media = useContext(MediaContext)
+    const details = useDetailsContext()
+    const dialog = useDialogContext()
+    const media = useMediaContext()
 
     const router = useRouter()
 
@@ -122,11 +122,11 @@ export const Details = () => {
 
     return <div
         className={classes}
-        data-cy="details"
+        data-testid="details"
     >
         <div className={previewClasses}>
             <button
-                data-cy="prev-medium"
+                data-testid="prev-medium"
                 className="details__button details__button--prev"
                 onClick={() => slide(-1)}
             >
@@ -138,7 +138,7 @@ export const Details = () => {
                 </div>
             </button>
             <button
-                data-cy="next-medium"
+                data-testid="next-medium"
                 className="details__button details__button--next"
                 onClick={() => slide(1)}
             >
@@ -185,7 +185,7 @@ export const Details = () => {
             </div>
         </div>
         <aside
-            data-cy="details-sidebar"
+            data-testid="details-sidebar"
             className="details__sidebar"
         >
             <div className="toolbar">

@@ -1,12 +1,11 @@
 import { ETrans } from '@/types/translations'
-import { useContext } from 'react'
-import { DialogContext, SelectionContext } from '@/providers'
+import { useDialogContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useDeleteMedia from '@/hooks/delete-media'
 
 const useDeleteMediaDialog = () => {
-    const dialog = useContext(DialogContext)
-    const selection = useContext(SelectionContext)
+    const dialog = useDialogContext()
+    const selection = useSelectionContext()
     const { t } = useTranslation()
 
     const confirm = useDeleteMedia()

@@ -34,7 +34,7 @@ export const Thumbnail = ({
 
     if (type === EThumbnailType.ADD) {
         return <button
-            data-cy="thumbnail-new"
+            data-testid="thumbnail-new"
             className="thumbnail thumbnail--new"
             onClick={onClick}
         >
@@ -72,7 +72,7 @@ export const Thumbnail = ({
     }
 
     return <button
-        data-cy="thumbnail"
+        data-testid="thumbnail"
         className="thumbnail"
         onClick={onClick}
     >

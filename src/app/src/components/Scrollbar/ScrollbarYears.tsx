@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import { ScrollbarContext } from '@/components/Scrollbar/ScrollbarContext'
-import ScrollbarMonths from '@/components/Scrollbar/ScrollbarMonths'
+import { useScrollbarContext } from './ScrollbarContext'
+import ScrollbarMonths from './ScrollbarMonths'
 
 const ScrollbarYears = () => {
-    const scrollbar = useContext(ScrollbarContext)
+    const scrollbar = useScrollbarContext()
 
     if (!scrollbar.years) {
         return <></>

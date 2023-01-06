@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react'
-import { DetailsContext, MediaContext, SelectionContext } from '@/providers'
+import { useState } from 'react'
+import { useDetailsContext, useMediaContext, useSelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check, Medium } from '@/components'
@@ -8,13 +8,13 @@ import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 import { isEqual } from 'lodash'
 import TeaserMeta from './TeaserMeta'
-import { TeaserContext } from './TeaserContext'
+import { useTeaserContext } from './TeaserContext'
 
 const Teaser = () => {
-    const details = useContext(DetailsContext)
-    const selection = useContext(SelectionContext)
-    const teaser = useContext(TeaserContext)
-    const media = useContext(MediaContext)
+    const details = useDetailsContext()
+    const selection = useSelectionContext()
+    const teaser = useTeaserContext()
+    const media = useMediaContext()
 
     const [shift, setShift] = useState(false)
 
@@ -95,13 +95,13 @@ const Teaser = () => {
     }
 
     return <div
-        data-cy="teaser"
+        data-testid="teaser"
         className={classes}
         onMouseOver={updateShiftTargets}
     >
         <div
             className="teaser__check"
-            data-cy="teaser-check"
+            data-testid="teaser-check"
         >
             <Check
                 onClick={select}
@@ -112,7 +112,7 @@ const Teaser = () => {
         </div>
         <TeaserMeta />
         <button
-            data-cy="teaser-details-fallback"
+            data-testid="teaser-details-fallback"
             className={fallbackButtonClasses}
             onClick={forceOpen}
         >

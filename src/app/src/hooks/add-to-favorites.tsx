@@ -1,10 +1,9 @@
 import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '@/api'
-import { useContext } from 'react'
-import { SelectionContext, MediaContext } from '@/providers'
+import { useSelectionContext, useMediaContext } from '@/providers'
 
 const useAddToFavorites = (mediaIds: string[]) => {
-    const selection = useContext(SelectionContext)
-    const media = useContext(MediaContext)
+    const selection = useSelectionContext()
+    const media = useMediaContext()
 
     const [addToFavorites] = useMAddToFavorites({
         variables: {

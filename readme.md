@@ -1,6 +1,6 @@
 ## Introduction
 
-Self-hosted, open source photo management, sync and api for developers. Fuck Google Photos
+Self-hosted, open source photo management, sync and api for developers.
 
 ## Features
 

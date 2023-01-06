@@ -10,6 +10,18 @@ export default async (truncateOnly = false) => {
         return
     }
 
+    const mediaToAdd = [
+        {
+            id: predefinedMediumUUIDs[0]
+        },
+        {
+            id: predefinedMediumUUIDs[1]
+        },
+        {
+            id: predefinedMediumUUIDs[2]
+        }
+    ]
+
     for (let i = 0; i < 4; i++) {
         await service.createOne({
             id: predefinedAlbumUUIDs[i],
@@ -18,9 +30,7 @@ export default async (truncateOnly = false) => {
             owner: {
                 id: predefinedUserUUIDs[0]
             }
-        }, predefinedMediumUUIDs.map((id) => ({
-            id
-        })))
+        }, mediaToAdd)
     }
 
     await service.createOne({

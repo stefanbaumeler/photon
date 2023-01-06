@@ -1,9 +1,7 @@
-
-import { useContext } from 'react'
-import { MediaContext } from '@/providers'
+import { useMediaContext } from '@/providers'
 
 export const GalleryView = () => {
-    const media = useContext(MediaContext)
+    const media = useMediaContext()
 
     return <div className="gallery">
         <div className="gallery__sections">

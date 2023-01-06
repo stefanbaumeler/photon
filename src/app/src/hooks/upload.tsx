@@ -1,12 +1,12 @@
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { QMediaDocument, QMediaYearCountDocument, useMUpload } from '@/api'
 import tauri from '@/tauri'
-import { MediaContext } from '@/providers'
+import { useMediaContext } from '@/providers'
 
 const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
 
-    const media = useContext(MediaContext)
+    const media = useMediaContext()
 
     const [upload] = useMUpload({
         variables: {

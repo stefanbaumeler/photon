@@ -1,7 +1,7 @@
 describe('Details', function () {
     const isFirstImage = (shouldBeFirst = true) => {
-        cy.get('[data-cy="teaser-image"]').first().invoke('attr', 'src').then((src1) => {
-            cy.get('[data-cy="details-image"]').invoke('attr', 'src').then((src2) => {
+        cy.get('[data-testid="teaser-image"]').first().invoke('attr', 'src').then((src1) => {
+            cy.get('[data-testid="details-image"]').invoke('attr', 'src').then((src2) => {
                 const path1 = new URL(src1, window.location.origin).pathname
                 const path2 = new URL(src2, window.location.origin).pathname
 
@@ -16,8 +16,8 @@ describe('Details', function () {
     }
 
     const open = () => {
-        cy.get('[data-cy="teaser"]').first().click()
-        cy.get('[data-cy="details"]').should('be.visible')
+        cy.get('[data-testid="teaser"]').first().click()
+        cy.get('[data-testid="details"]').should('be.visible')
     }
 
     before(function () {
@@ -34,31 +34,31 @@ describe('Details', function () {
     })
 
     it('opens and closes details', function () {
-        cy.get('[data-cy="close-details"]').click({
+        cy.get('[data-testid="close-details"]').click({
             force: true
         })
-        cy.get('[data-cy="details"]').should('not.exist')
+        cy.get('[data-testid="details"]').should('not.exist')
         cy.url().should('not.contain', '/media/')
 
-        cy.get('[data-cy="teaser"]').first().click()
+        cy.get('[data-testid="teaser"]').first().click()
         cy.url().should('contain', '/media/')
-        cy.get('[data-cy="details"]').should('be.visible')
+        cy.get('[data-testid="details"]').should('be.visible')
         cy.get('body').type('{esc}')
-        cy.get('[data-cy="details"]').should('not.exist')
+        cy.get('[data-testid="details"]').should('not.exist')
         cy.url().should('not.contain', '/media/')
     })
 
     it('hides infos', function () {
         cy.url().should('contain', '/media/')
-        cy.get('[data-cy="hide-infos"]').click({
+        cy.get('[data-testid="hide-infos"]').click({
             force: true
         })
-        cy.get('[data-cy="details-sidebar"]').should('not.be.visible')
+        cy.get('[data-testid="details-sidebar"]').should('not.be.visible')
 
-        cy.get('[data-cy="show-infos"]').click({
+        cy.get('[data-testid="show-infos"]').click({
             force: true
         })
-        cy.get('[data-cy="details-sidebar"]').should('be.visible')
+        cy.get('[data-testid="details-sidebar"]').should('be.visible')
     })
 
     it('navigates with keyboard arrows', function () {
@@ -69,9 +69,9 @@ describe('Details', function () {
     })
 
     it('navigates with on screen arrows', function () {
-        cy.get('[data-cy="next-medium"]').click()
+        cy.get('[data-testid="next-medium"]').click()
         isFirstImage(false)
-        cy.get('[data-cy="prev-medium"]').click()
+        cy.get('[data-testid="prev-medium"]').click()
         isFirstImage()
     })
 })

@@ -18,59 +18,59 @@ describe('Upload', function () {
     })
 
     it('uploads one file per drag and drop', function () {
-        cy.get('[data-cy="uploader"]').selectFile(getImage(0), {
+        cy.get('[data-testid="uploader"]').selectFile(getImage(0), {
             action: 'drag-drop',
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="teaser"]').should('have.length', 1)
+        cy.get('[data-testid="teaser"]').should('have.length', 1)
     })
 
     it('uploads one file by button', function () {
-        cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
+        cy.get('[data-testid="upload-action"]').selectFile(getImage(0), {
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="teaser"]').should('have.length', 1)
+        cy.get('[data-testid="teaser"]').should('have.length', 1)
     })
 
     it('avoids duplicates', function () {
-        cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
+        cy.get('[data-testid="upload-action"]').selectFile(getImage(0), {
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="upload-action"]').selectFile(getImage(0), {
+        cy.get('[data-testid="upload-action"]').selectFile(getImage(0), {
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="teaser"]').should('have.length', 1)
+        cy.get('[data-testid="teaser"]').should('have.length', 1)
     })
 
     it('uploads multiple files per button', function () {
-        cy.get('[data-cy="upload-action"]').selectFile([getImage(0), getImage(1), getImage(2)], {
+        cy.get('[data-testid="upload-action"]').selectFile([getImage(0), getImage(1), getImage(2)], {
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="teaser"]').should('have.length', 3)
+        cy.get('[data-testid="teaser"]').should('have.length', 3)
     })
 
     it('uploads a video', function () {
-        cy.get('[data-cy="upload-action"]').selectFile([getVideo(0)], {
+        cy.get('[data-testid="upload-action"]').selectFile([getVideo(0)], {
             force: true
         })
 
         cy.wait('@QMedia')
 
-        cy.get('[data-cy="teaser"]').should('have.length', 1)
+        cy.get('[data-testid="teaser"]').should('have.length', 1)
     })
 })

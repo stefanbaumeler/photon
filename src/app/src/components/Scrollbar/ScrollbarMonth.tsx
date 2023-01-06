@@ -1,7 +1,7 @@
 import { formatDate } from '@/util/date'
 import { EDateFormat } from '@/types/app'
-import { MouseEventHandler, useContext } from 'react'
-import { ScrollbarContext } from '@/components/Scrollbar/ScrollbarContext'
+import { MouseEventHandler } from 'react'
+import { useScrollbarContext } from './ScrollbarContext'
 
 type Props = {
     percentage?: number
@@ -12,7 +12,7 @@ type Props = {
 const ScrollbarMonth = ({
     percentage, year, month
 }: Props) => {
-    const scrollbar = useContext(ScrollbarContext)
+    const scrollbar = useScrollbarContext()
 
     const click: MouseEventHandler<HTMLDivElement> = (event) => {
         const percentage = (event.clientY - 88) / (window.innerHeight - 88)

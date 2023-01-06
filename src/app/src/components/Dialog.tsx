@@ -1,11 +1,10 @@
-import { useContext } from 'react'
-import { DialogContext } from '@/providers'
+import { useDialogContext } from '@/providers'
 import { TDialogButton } from '@/types/app'
 import useKeyboard from '@/hooks/keyboard'
 import bem from '@/util/bem'
 
 export const Dialog = () => {
-    const dialog = useContext(DialogContext)
+    const dialog = useDialogContext()
 
     useKeyboard('keydown', 'Escape', () => {
         dialog.close()
@@ -17,7 +16,7 @@ export const Dialog = () => {
         return <button
             className={classes}
             onClick={btn.action}
-            data-cy={btn.cy}
+            data-testid={btn.cy}
         >
             {btn.label}
         </button>
@@ -38,7 +37,7 @@ export const Dialog = () => {
     ])
 
     return <div
-        data-cy={dialog.id}
+        data-testid={dialog.id}
         className={classes}
     >
         <div className="dialog__container">

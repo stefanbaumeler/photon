@@ -1,9 +1,8 @@
 import ListItem from './ListItem'
-import { useContext } from 'react'
-import { MediaContext } from '@/providers'
+import { useMediaContext } from '@/providers'
 
 const ListItems = () => {
-    const media = useContext(MediaContext)
+    const media = useMediaContext()
 
     const items = media.media.map((medium, k) => {
         return <ListItem

@@ -7,6 +7,12 @@ import { Prisma } from '.prisma/client'
 export default class AlbumsService {
     prisma = getDatabase()
 
+    context
+
+    constructor (context?: { user: { id: string } }) {
+        this.context = context
+    }
+
     truncate = async () => {
         return this.prisma.album.deleteMany({
             where: {}
@@ -30,7 +36,11 @@ export default class AlbumsService {
                     connect: {
                         id: album.owner.id
                     }
-                } : undefined
+                } : {
+                    connect: {
+                        id: this.context?.user.id
+                    }
+                }
             },
             include: {
                 owner: true

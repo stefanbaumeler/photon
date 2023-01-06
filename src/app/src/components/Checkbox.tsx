@@ -46,7 +46,7 @@ export const Checkbox = ({
                 ref={ref as Ref<HTMLInputElement>}
                 className="checkbox__input"
                 onClick={onClick}
-                data-cy={cy}
+                data-testid={cy}
             />
             <div className="checkbox__box"></div>
         </div>

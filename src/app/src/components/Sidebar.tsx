@@ -1,9 +1,8 @@
 import { MainNav } from '@/components'
-import { useContext } from 'react'
-import { NavContext } from '@/providers'
+import { useNavContext } from '@/providers'
 
 export const Sidebar = () => {
-    const navs = useContext(NavContext)
+    const navs = useNavContext()
 
     return <aside className="sidebar">
         {navs?.navs.filter((nav) => navs.active.includes(nav.id)).map((nav, k) => <MainNav

@@ -50,7 +50,7 @@ export const Uploader = () => {
             Upload
         </span>
         <input
-            data-cy="uploader"
+            data-testid="uploader"
             className="uploader__input"
             type="file"
             multiple={true}

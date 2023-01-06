@@ -30,7 +30,6 @@ export type TAlbum = {
 export type TAlbumInput = {
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
-  idMedium?: InputMaybe<Scalars['ID']>;
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -77,7 +76,7 @@ export type TMedium = {
   dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   favoredBy?: Maybe<Array<Maybe<TUser>>>;
-  filenameDisk?: Maybe<Scalars['String']>;
+  filenameDisk: Scalars['String'];
   filenameDownload?: Maybe<Scalars['String']>;
   hash?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -201,14 +200,14 @@ export type TMutationUploadArgs = {
 
 export type TQuery = {
   __typename?: 'Query';
-  album: TAlbum;
+  album?: Maybe<TAlbum>;
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
   devices: Array<TDevice>;
   favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
-  medium: TMedium;
+  medium?: Maybe<TMedium>;
   user: TUser;
   users: Array<TUser>;
 };
@@ -460,7 +459,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   dateTaken?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   favoredBy?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
-  filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  filenameDisk?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
@@ -500,14 +499,14 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
-  album?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
+  album?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
   devices?: Resolver<Array<TResolversTypes['Device']>, ParentType, ContextType>;
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
-  medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
+  medium?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
 };

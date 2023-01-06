@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can sign in 1`] = `
+{
+  "accessToken": Any<String>,
+}
+`;
+
+exports[`can sign out 1`] = `true`;
+
+exports[`can sign up 1`] = `
+{
+  "accessToken": Any<String>,
+}
+`;

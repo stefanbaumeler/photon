@@ -1,9 +1,5 @@
 import MediaService from '../../services/media'
-import { randomUUID } from 'crypto'
-import fs from 'fs'
-import { fileToMedium } from '../../helpers/exif'
-import { TQueryResolvers, TMedium, TMutationResolvers } from '../../database'
-import { DeepPartial } from '../../types'
+import { TQueryResolvers, TMutationResolvers } from '../../database'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {

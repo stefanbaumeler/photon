@@ -1,22 +1,22 @@
 import AlbumsService from '../../services/albums'
 import AlbumsMediaService from '../../services/albumsMedia'
-import { TQueryResolvers, TMutationResolvers } from '../../database'
+import { TQueryResolvers, TMutationResolvers, TAlbum } from '../../database'
 
 const queries: Partial<TQueryResolvers> = {
     albums: (_, input, context) => {
-        return new AlbumsService().readMany({
+        return new AlbumsService(context).readMany({
             owner: {
                 id: context.user.id
             }
         })
     },
-    album: (_, input) => new AlbumsService().readOne(input.id),
+    album: (_, input, context) => new AlbumsService(context).readOne(input.id),
     albumMedia: (_, input) => new AlbumsMediaService().readMediaOfAlbum(input.id)
 }
 
 const mutations: Partial<TMutationResolvers> = {
-    deleteAlbum: (_, input) => {
-        return new AlbumsService().destroy(input.ids)
+    deleteAlbum: (_, input, context) => {
+        return new AlbumsService(context).destroy(input.ids)
     },
     addToAlbum: (_, input) => {
         const albumsMedia = input.media.map((medium) => ({
@@ -26,12 +26,12 @@ const mutations: Partial<TMutationResolvers> = {
 
         return new AlbumsMediaService().createMany(albumsMedia)
     },
-    removeFromAlbum: async (_, input) => {
+    removeFromAlbum: async (_, input, context) => {
         await new AlbumsMediaService().removeFromAlbum(input.idAlbum, input.media)
-        return new AlbumsService().readOne(input.idAlbum)
+        return new AlbumsService(context).readOne(input.idAlbum)
     },
-    updateAlbumTitle: (_, input) => new Promise((resolve) => {
-        new AlbumsService().update(input.id, {
+    updateAlbumTitle: (_, input, context) => new Promise((resolve) => {
+        new AlbumsService(context).update(input.id, {
             title: input.title
         }).then((res) => {
             resolve(res)
@@ -42,13 +42,7 @@ const mutations: Partial<TMutationResolvers> = {
             id: medium as string
         })) || []
 
-        const album = await new AlbumsService().createOne({
-            owner: {
-                id: context.user.id
-            }
-        }, media)
-
-        return album
+        return await new AlbumsService(context).createOne((input.album || {}) as TAlbum, media)
     },
     setAlbumCover: (_, input) => new Promise((resolve) => {
         new AlbumsService().update(input.idAlbum, {

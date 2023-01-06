@@ -3,7 +3,6 @@ import sharp from 'sharp'
 import * as fs from 'fs'
 import MediaService from '../services/media'
 import jwt from 'jsonwebtoken'
-import UsersService from '../services/users'
 import { predefinedUserUUIDs } from '../database/helpers/ids'
 
 const router = express.Router()

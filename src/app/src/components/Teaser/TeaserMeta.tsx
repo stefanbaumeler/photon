@@ -2,11 +2,10 @@ import { TVideoMeta } from '@/api'
 import { secondsToTime } from '@/util/date'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import { useContext } from 'react'
-import { TeaserContext } from './TeaserContext'
+import { useTeaserContext } from './TeaserContext'
 
 const TeaserMeta = () => {
-    const teaser = useContext(TeaserContext)
+    const teaser = useTeaserContext()
 
     if (teaser.medium.mimetype.startsWith('video')) {
         const meta = teaser.medium.meta as TVideoMeta

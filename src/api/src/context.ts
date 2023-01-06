@@ -1,10 +1,10 @@
-import { BaseContext, ContextFunction } from '@apollo/server'
+import { ContextFunction } from '@apollo/server'
 import { ExpressContextFunctionArgument } from '@apollo/server/express4'
 import UsersService from './services/users'
 import { predefinedUserUUIDs } from './database/helpers/ids'
 import jwt from 'jsonwebtoken'
 
-export const context: ContextFunction<[ExpressContextFunctionArgument], BaseContext> = async ({
+export const context: ContextFunction<[ExpressContextFunctionArgument]> = async ({
     req, res
 }) => {
     const service = new UsersService()

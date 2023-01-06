@@ -3,14 +3,13 @@ import { IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EEditState, ESelectionMode } from '@/types/app'
-import { useContext } from 'react'
-import { EditContext, SelectionContext } from '@/providers'
+import { useEditContext, useSelectionContext } from '@/providers'
 
 export const EditActions = () => {
     const { t } = useTranslation()
 
-    const edit = useContext(EditContext)
-    const selection = useContext(SelectionContext)
+    const edit = useEditContext()
+    const selection = useSelectionContext()
 
     const confirm = () => {
         edit.setState(EEditState.CONFIRMED)

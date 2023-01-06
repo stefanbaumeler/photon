@@ -1,8 +1,7 @@
 import { TMedium } from '@/api'
 import { Check, ListItemActions, Medium } from '@/components'
 import { formatDate } from '@/util/date'
-import { useContext } from 'react'
-import { DetailsContext, SelectionContext } from '@/providers'
+import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import Tippy from '@tippyjs/react'
 
@@ -11,8 +10,8 @@ type Props = {
 }
 
 const ListItem = ({ medium }: Props) => {
-    const selection = useContext(SelectionContext)
-    const details = useContext(DetailsContext)
+    const selection = useSelectionContext()
+    const details = useDetailsContext()
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {

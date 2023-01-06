@@ -1,4 +1,4 @@
-import express  from 'express'
+import express from 'express'
 import mediaRouter from './controllers/media'
 import albumsRouter from './controllers/albums'
 import uploadsRouter from './controllers/uploads'
@@ -16,9 +16,7 @@ import https from 'https'
 import fs from 'fs'
 import http from 'http'
 
-export const createApp = async () => {
-    const app = express()
-
+export const getApollo = (app: ReturnType<typeof express> ) => {
     const server = parseInt(process.env.API_SECURE || '1', 10) ? https.createServer({
         key: fs.readFileSync('../../ssl/key.pem'),
         cert: fs.readFileSync('../../ssl/cert.pem')
@@ -31,13 +29,18 @@ export const createApp = async () => {
 
     schema = authDirectiveTransformer(schema, 'auth')
 
-    const apollo = new ApolloServer({
+    return new ApolloServer({
         schema,
         plugins: [ApolloServerPluginDrainHttpServer({
             httpServer: server
         })]
     })
+}
 
+export const createApp = async () => {
+    const app = express()
+
+    const apollo = getApollo(app)
     await apollo.start()
 
     app.use(

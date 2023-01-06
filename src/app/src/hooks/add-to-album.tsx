@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { DialogContext, SelectionContext } from '@/providers'
+import { useDialogContext, useSelectionContext } from '@/providers'
 import { QAlbumMediaDocument, useMAddToAlbum } from '@/api'
 
 const useAddToAlbum = () => {
     const router = useRouter()
-    const dialog = useContext(DialogContext)
-    const selection = useContext(SelectionContext)
+    const dialog = useDialogContext()
+    const selection = useSelectionContext()
     const [activeAlbum, setActiveAlbum] = useState<string | number>()
 
     const [addToAlbumMutation] = useMAddToAlbum({

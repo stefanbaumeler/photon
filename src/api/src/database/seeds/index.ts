@@ -1,16 +1,12 @@
-import dotenv from 'dotenv'
 import { getDatabase, setDbUrl } from '../'
-
-dotenv.config({
-    path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env',
-    override: true
-})
-
-setDbUrl()
-
 import usersSeed from './users'
 import mediaSeed from './media'
 import albumsSeed from './albums'
+import { getEnv } from '../../../env'
+
+getEnv()
+
+setDbUrl()
 
 const prisma = getDatabase()
 

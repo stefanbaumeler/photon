@@ -14,7 +14,8 @@
         "db:seed": "ts-node src/database/seeds",
         "db:truncate": "ts-node src/database/truncate.ts",
         "db:generate": "prisma generate",
-        "start": "node dist"
+        "start": "node dist",
+        "test": "jest"
     },
     "dependencies": {
         "@apollo/server": "^4.3.0",
@@ -47,10 +48,14 @@
         "@types/cors": "^2.8.13",
         "@types/express": "^4.17.13",
         "@types/ffmpeg": "^1.0.4",
+        "@types/jest": "^29.2.5",
         "@types/multer": "^1.4.7",
         "@types/node": "^18.6.3",
         "@types/sharp": "^0.30.5",
+        "jest": "^29.3.1",
+        "jest-environment-jsdom": "^29.3.1",
         "npm-run-all": "^4.1.5",
+        "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1",
         "ts-node-dev": "^2.0.0",
         "typescript": "^4.7.4"

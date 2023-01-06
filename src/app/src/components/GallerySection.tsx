@@ -1,9 +1,9 @@
 import { TMedium } from '@/api'
 import { ESelectionMode, GalleryItem } from '@/types/app'
 import { Check, Teaser } from '@/components'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
-import { SelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 import bem from '@/util/bem'
 
 type Props = {
@@ -19,7 +19,7 @@ export const GallerySection = ({
     const [elements, setElements] = useState<GalleryItem[]>([])
     const [adjustedElements, setAdjustedElements] = useState<GalleryItem[]>([])
 
-    const selection = useContext(SelectionContext)
+    const selection = useSelectionContext()
 
     useEffect(() => {
         setElements(media
@@ -86,7 +86,7 @@ export const GallerySection = ({
     }
 
     return <div
-        data-cy="gallery-section"
+        data-testid="gallery-section"
         className={classes}
         ref={galleryEl}
     >

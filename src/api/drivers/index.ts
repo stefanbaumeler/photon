@@ -1,4 +1,4 @@
-import { registerStorageDrivers } from './register-storage-drivers'
+// import { registerStorageDrivers } from './register-storage-drivers'
 import { registerCVDrivers } from './register-cv-drivers'
 import type { StorageManager, StorageDriver } from '@photon/storage'
 import type { CVManager, CVDriver } from '@photon/cv'
@@ -14,29 +14,29 @@ const managers = {
     }
 }
 
-export const getStorage = async (): Promise<StorageDriver> => {
-    if (managers.storage.driver) {
-        return managers.storage.driver
-    }
-
-    const { StorageManager } = await import('@photon/storage')
-
-    const name = process.env.CV_DRIVER as string
-
-    managers.storage.manager = new StorageManager()
-
-    await registerStorageDrivers(managers.storage.manager)
-
-    const driver = managers.storage.manager.getDriver(name) as StorageDriver | undefined
-
-    if (!driver) {
-        throw new Error(`Storage Driver "${name}" doesn't exist.`)
-    }
-
-    managers.storage.driver = driver
-
-    return driver
-}
+// export const getStorage = async (): Promise<StorageDriver> => {
+//     if (managers.storage.driver) {
+//         return managers.storage.driver
+//     }
+//
+//     const { StorageManager } = await import('@photon/storage')
+//
+//     const name = process.env.CV_DRIVER as string
+//
+//     managers.storage.manager = new StorageManager()
+//
+//     await registerStorageDrivers(managers.storage.manager)
+//
+//     const driver = managers.storage.manager.getDriver(name) as StorageDriver | undefined
+//
+//     if (!driver) {
+//         throw new Error(`Storage Driver "${name}" doesn't exist.`)
+//     }
+//
+//     managers.storage.driver = driver
+//
+//     return driver
+// }
 
 export const getCV = async (): Promise<CVDriver> => {
     if (managers.cv.driver) {

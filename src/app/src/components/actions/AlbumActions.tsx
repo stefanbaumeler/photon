@@ -2,16 +2,16 @@ import * as Icons from '@mdi/js'
 import { IconButton, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
 import { useRouter } from 'next/router'
-import { LayoutContext, SelectionContext } from '@/providers'
+import { useLayoutContext, useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 
 export const AlbumActions = () => {
     const { t } = useTranslation()
-    const selection = useContext(SelectionContext)
-    const layout = useContext(LayoutContext)
+    const selection = useSelectionContext()
+    const layout = useLayoutContext()
     const router = useRouter()
 
     const deleteAlbumDialog = useDeleteAlbumDialog()

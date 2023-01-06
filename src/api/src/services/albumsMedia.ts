@@ -25,7 +25,7 @@ export default class AlbumsMediaService {
     }
 
     createMany = async (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => {
-        return await this.prisma.$transaction(
+        const results = await this.prisma.$transaction(
             albumsMedia.map((albumMedium) => {
                 return this.prisma.albumMedium.upsert({
                     where: {
@@ -46,6 +46,8 @@ export default class AlbumsMediaService {
                 })
             })
         )
+
+        return results.map((result) => result.medium) as TMedium[]
     }
 
     removeFromAlbum = async (idAlbum: string, mediaIds: string[]) => {

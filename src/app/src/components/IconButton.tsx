@@ -50,7 +50,7 @@ export const IconButton = ({
                 onClick={onClick}
                 className={linkClasses}
                 ref={ref as Ref<HTMLAnchorElement>}
-                data-cy={cy}
+                data-testid={cy}
             >
                 {children}
             </Link>
@@ -60,7 +60,7 @@ export const IconButton = ({
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
-            data-cy={cy}
+            data-testid={cy}
         >
             {children}
         </button>

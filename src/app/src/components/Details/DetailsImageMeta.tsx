@@ -1,11 +1,10 @@
 import { TImageMeta } from '@/api'
 import { Detail } from '@/components'
 import * as Icons from '@mdi/js'
-import { useContext } from 'react'
-import { DetailsContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 
 export const DetailsImageMeta = () => {
-    const details = useContext(DetailsContext)
+    const details = useDetailsContext()
 
     const meta = details.medium.meta as TImageMeta
 

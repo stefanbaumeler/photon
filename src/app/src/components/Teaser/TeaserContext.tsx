@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from 'react'
+import { createContext, ReactNode, useContext } from 'react'
 import { TMedium } from '@/api'
 
 type Props = {
@@ -29,6 +29,10 @@ const TeaserProvider = ({
     </TeaserContext.Provider>
 }
 
+const useTeaserContext = () => {
+    return useContext(TeaserContext)
+}
+
 export {
-    TeaserProvider, TeaserContext
+    TeaserProvider, useTeaserContext
 }

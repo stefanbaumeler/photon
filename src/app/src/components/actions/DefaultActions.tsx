@@ -2,8 +2,8 @@ import * as Icons from '@mdi/js'
 import { Dropdown, IconButton } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useContext, useRef, useState } from 'react'
-import { LayoutContext, NavContext, SelectionContext, MediaContext } from '@/providers'
+import { useRef, useState } from 'react'
+import { useLayoutContext, useNavContext, useSelectionContext, useMediaContext } from '@/providers'
 import { EMediumSort, ENavItemType, ESelectionMode } from '@/types/app'
 import useUpload from '@/hooks/upload'
 import { useRouter } from 'next/router'
@@ -15,9 +15,9 @@ export const DefaultActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
-    const nav = useContext(NavContext)
-    const selection = useContext(SelectionContext)
-    const media = useContext(MediaContext)
+    const nav = useNavContext()
+    const selection = useSelectionContext()
+    const media = useMediaContext()
 
     const emptyTrashDialog = useEmptyTrashDialog()
 
@@ -33,7 +33,7 @@ export const DefaultActions = () => {
 
     const upload = useUpload()
 
-    const layout = useContext(LayoutContext)
+    const layout = useLayoutContext()
 
     const layoutProps = layout.getLayoutProps(layout.nextLayout)
 
@@ -71,7 +71,7 @@ export const DefaultActions = () => {
     const RegularActions = () => {
         return <>
             <input
-                data-cy="upload-action"
+                data-testid="upload-action"
                 type="file"
                 className="actions__uploader"
                 ref={uploadRef}

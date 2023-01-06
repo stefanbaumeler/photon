@@ -4,7 +4,7 @@ import { TMedium, useQAlbumMedia, useQFavorites, useQMedia } from '@/api'
 import { useRouter } from 'next/router'
 import { formatDate, toDate } from '@/util/date'
 import { GallerySection } from '@/components'
-import { SelectionContext } from '@/providers/SelectionProvider'
+import { useSelectionContext } from '@/providers/SelectionProvider'
 
 type Props = {
     children?: ReactNode
@@ -38,7 +38,7 @@ const MediaProvider = ({ children }: Props) => {
     const [status, setStatus] = useState(defaultStatus)
     const [sections, setSections] = useState<JSX.Element[]>([])
 
-    const selection = useContext(SelectionContext)
+    const selection = useSelectionContext()
 
     const favoritesQuery = useQFavorites()
 
@@ -189,6 +189,9 @@ const MediaProvider = ({ children }: Props) => {
     </MediaContext.Provider>
 }
 
+const useMediaContext = () => {
+    return useContext(MediaContext)
+}
 export {
-    MediaProvider, MediaContext
+    MediaProvider, useMediaContext
 }

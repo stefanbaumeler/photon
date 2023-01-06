@@ -1,15 +1,15 @@
-import { useContext, useEffect } from 'react'
-import { DetailsContext, DialogContext, LayoutContext, MediaContext, SelectionContext } from '@/providers'
+import { useEffect } from 'react'
+import { useDetailsContext, useDialogContext, useLayoutContext, useMediaContext, useSelectionContext } from '@/providers'
 import useKeyboard from '@/hooks/keyboard'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView } from '@/components'
 
 export const Media = () => {
-    const selection = useContext(SelectionContext)
-    const details = useContext(DetailsContext)
-    const dialog = useContext(DialogContext)
-    const layout = useContext(LayoutContext)
-    const media = useContext(MediaContext)
+    const selection = useSelectionContext()
+    const details = useDetailsContext()
+    const dialog = useDialogContext()
+    const layout = useLayoutContext()
+    const media = useMediaContext()
 
     useEffect(() => {
         if (details.medium && Object.keys(details.medium).length && media) {

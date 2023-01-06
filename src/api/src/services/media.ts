@@ -9,6 +9,10 @@ import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 import { fileToMedium } from '../helpers/exif'
 import { FileUpload } from 'graphql-upload-minimal'
 import { getCV } from '../../drivers'
+import path from 'path'
+import { getEnv } from '../../env'
+
+const env = getEnv()
 
 export default class MediaService {
     prisma = getDatabase()
@@ -20,21 +24,28 @@ export default class MediaService {
     }
 
     truncate = async () => {
-        return this.prisma.medium.deleteMany({
-            where: {}
-        })
+        await this.prisma.medium.deleteMany()
+
+        this.prisma.albumMedium.deleteMany()
     }
 
     createOne = async (medium: DeepPartial<TMedium> & { id?: string }) => {
         const existing = await this.prisma.medium.findFirst({
             where: {
-                hash: medium.hash
+                OR: {
+                    hash: medium.hash,
+                    id: medium.id
+                }
             }
-        })
+        }) as TMedium | null
 
         if (existing) {
-            await fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
-            return
+            const existingPath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, existing.filenameDisk)
+            if (fs.existsSync(existingPath)) {
+                await fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, existing.filenameDisk))
+            }
+
+            return existing
         }
 
         return await this.prisma.medium.create({
@@ -51,8 +62,13 @@ export default class MediaService {
                     }
                 },
                 meta: JSON.stringify(medium.meta),
-                favoredBy: {}
+                favoredBy: {
+                    connect: medium.favoredBy?.map((fav) => ({
+                        id: fav?.id
+                    }))
+                }
             }
+
         }) as TMedium
     }
 
@@ -151,10 +167,6 @@ export default class MediaService {
                 }
             }
         })
-
-        if (medium === null) {
-            throw new Error()
-        }
 
         return medium as TMedium
     }
@@ -269,7 +281,7 @@ export default class MediaService {
         })
 
         media.forEach((medium) => {
-            fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+            fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
         })
 
         await this.prisma.medium.deleteMany({
@@ -284,17 +296,19 @@ export default class MediaService {
     }
 
     rotate = async (id: string) => {
-        const newFileName = randomUUID()
-
         const medium = await this.readOne(id)
-        const row = await sharp(`./uploads/${medium.filenameDisk}`).rotate(90).toFile(`./uploads/${newFileName}`)
+
+        const filePath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
+        const filePathOld = path.join(__dirname, '../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
+        fs.renameSync(filePath, filePathOld)
+
+        const row = await sharp(filePathOld).rotate(90).toFile(filePath)
 
         const response = await this.prisma.medium.update({
             where: {
                 id
             },
             data: {
-                filenameDisk: newFileName,
                 meta: JSON.stringify({
                     ...medium.meta as TMeta,
                     width: row.width,
@@ -303,7 +317,7 @@ export default class MediaService {
             }
         })
 
-        fs.unlinkSync(`./uploads/${medium.filenameDisk}`)
+        fs.unlinkSync(filePathOld)
 
         return response as TMedium
     }

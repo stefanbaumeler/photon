@@ -25,7 +25,7 @@ export default gql`
         dateModified: Date
         dateModifiedStatus: Date
         dateTaken: Date
-        filenameDisk: String
+        filenameDisk: String!
         filenameDownload: String
         title: String
         description: String
@@ -62,7 +62,7 @@ export default gql`
 
     type Query {
         media(status: String, sort: String): [Medium!] @auth
-        medium(id: ID!): Medium! @auth
+        medium(id: ID!): Medium @auth
         mediaCountByYear: YearCountResult! @auth
     }
 

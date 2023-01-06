@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { ELayout } from '@/types/app'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
@@ -59,6 +59,10 @@ const LayoutProvider = ({ children }: Props) => {
     </LayoutContext.Provider>
 }
 
+const useLayoutContext = () => {
+    return useContext(LayoutContext)
+}
+
 export {
-    LayoutProvider, LayoutContext
+    LayoutProvider, useLayoutContext
 }

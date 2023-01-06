@@ -1,9 +1,8 @@
 import { QAlbumDocument, useMSetAlbumCover } from '@/api'
-import { useContext } from 'react'
-import { SelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 
 const useSetAlbumCover = (idAlbum: string, idMedium?: string) => {
-    const selection = useContext(SelectionContext)
+    const selection = useSelectionContext()
 
     idMedium = idMedium || [...selection.selected][0]?.id
 

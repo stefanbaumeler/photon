@@ -1,16 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import bem from '@/util/bem'
-import ScrollbarYears from '@/components/Scrollbar/ScrollbarYears'
-import { ScrollbarPosition } from '@/components/Scrollbar/ScrollbarPosition'
-import { ScrollbarCursor } from '@/components/Scrollbar/ScrollbarCursor'
-import { ScrollbarContext } from '@/components/Scrollbar/ScrollbarContext'
+import ScrollbarYears from './ScrollbarYears'
+import { ScrollbarPosition } from './ScrollbarPosition'
+import { ScrollbarCursor } from './ScrollbarCursor'
+import { useScrollbarContext } from './ScrollbarContext'
 
 const Scrollbar = () => {
     const [mouseY, setMouseY] = useState<number>()
     const [scrolling, setScrolling] = useState(false)
     let scrollingTimeout = 0
 
-    const scrollbar = useContext(ScrollbarContext)
+    const scrollbar = useScrollbarContext()
 
     const scroll = () => {
         setScrolling(true)

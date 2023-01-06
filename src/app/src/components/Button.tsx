@@ -39,7 +39,7 @@ export const Button = ({
                 onClick={onClick}
                 className={linkClasses}
                 ref={ref as Ref<HTMLAnchorElement>}
-                data-cy={cy}
+                data-testid={cy}
             >
                 {children}
             </Link>
@@ -49,7 +49,7 @@ export const Button = ({
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
-            data-cy={cy}
+            data-testid={cy}
         >
             {children}
         </button>

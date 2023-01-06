@@ -1,9 +1,9 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/layout'
 import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
-import { DetailsProvider, EditContext, MediaContext, SelectionContext } from '@/providers'
+import { DetailsProvider, useEditContext, useMediaContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
 import { QAlbumMediaDocument, QAlbumDocument, TAlbum, TMedium, useQAlbumMedia, useQAlbum, useMRemoveFromAlbum, useMUpdateAlbumTitle } from '@/api'
 import { useTranslation } from 'react-i18next'
@@ -16,9 +16,9 @@ const AlbumPage = () => {
     const { t } = useTranslation()
     const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
-    const selection = useContext(SelectionContext)
-    const edit = useContext(EditContext)
-    const media = useContext(MediaContext)
+    const selection = useSelectionContext()
+    const edit = useEditContext()
+    const media = useMediaContext()
 
     const titleEl = useRef(null)
 
@@ -161,7 +161,7 @@ const AlbumPage = () => {
                         />
                     </div>
                     <input
-                        data-cy="album-title"
+                        data-testid="album-title"
                         ref={titleEl}
                         type="text"
                         className="album-details__title"

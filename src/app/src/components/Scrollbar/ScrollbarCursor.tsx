@@ -1,11 +1,10 @@
-import { useContext } from 'react'
-import { ScrollbarContext } from './ScrollbarContext'
+import { useScrollbarContext } from './ScrollbarContext'
 
 type Props = {
     mouseY: number
 }
 export const ScrollbarCursor = ({ mouseY }: Props) => {
-    const scrollbar = useContext(ScrollbarContext)
+    const scrollbar = useScrollbarContext()
 
     if (!scrollbar?.mouseOverMonth) {
         return <></>

@@ -3,15 +3,14 @@ import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import useDeleteMediaDialog from '@/dialogs/delete-media'
 import useRestoreMediaDialog from '@/dialogs/restore-media'
-import { useContext } from 'react'
-import { SelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
     white?: boolean
 }
 const TrashActions = ({ white }: Props) => {
-    const selection = useContext(SelectionContext)
+    const selection = useSelectionContext()
     const { t } = useTranslation()
 
     const deleteMediaDialog = useDeleteMediaDialog()

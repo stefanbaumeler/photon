@@ -1,13 +1,12 @@
-import { useContext } from 'react'
-import { DetailsContext, DialogContext, SelectionContext, MediaContext } from '@/providers'
+import { useDetailsContext, useDialogContext, useSelectionContext, useMediaContext } from '@/providers'
 import { QMediaDocument, useMEmptyTrash } from '@/api'
 import { EMediumStatus } from '@/types/app'
 
 const useEmptyTrash = () => {
-    const dialog = useContext(DialogContext)
-    const selection = useContext(SelectionContext)
-    const details = useContext(DetailsContext)
-    const media = useContext(MediaContext)
+    const dialog = useDialogContext()
+    const selection = useSelectionContext()
+    const details = useDetailsContext()
+    const media = useMediaContext()
 
     const [emptyTrash] = useMEmptyTrash({
         refetchQueries: [{

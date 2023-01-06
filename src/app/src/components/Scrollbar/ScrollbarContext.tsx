@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { TYearCountEntry, useQMediaYearCount } from '@/api'
 
 type Props = {
@@ -39,6 +39,10 @@ const ScrollbarProvider = ({ children }: Props) => {
     </ScrollbarContext.Provider>
 }
 
+const useScrollbarContext = () => {
+    return useContext(ScrollbarContext)
+}
+
 export {
-    ScrollbarProvider, ScrollbarContext
+    ScrollbarProvider, useScrollbarContext
 }

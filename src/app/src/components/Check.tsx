@@ -40,7 +40,7 @@ const Check = ({
         className={classes}
         onClick={onClick}
         ref={ref as Ref<HTMLButtonElement>}
-        data-cy={cy}
+        data-testid={cy}
         style={{
             width: `${boxSize}px`,
             height: `${boxSize}px`,

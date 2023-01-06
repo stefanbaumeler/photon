@@ -1,10 +1,10 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "./",
         "paths": {
             "@/*": [
-                "*",
-                "src/*"
+                "src/app/*",
+                "src/app/src/*"
             ]
         },
         "target": "es2016",
@@ -32,16 +32,11 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "**.*.css"
+        "**.*.css",
     ],
     "exclude": [
         "src-tauri",
         "node_modules",
         "src/api/schema.ts"
-    ],
-    "references": [
-        {
-            "path": "../shared"
-        }
     ]
 }
