@@ -22,7 +22,7 @@ const useDeleteAlbumDialog = (id?: string) => {
                 type: 'secondary'
             },
             {
-                cy: 'album-confirm-delete',
+                testId: 'album-confirm-delete',
                 label: t(ETrans.PERMANENTLY_DELETE),
                 action: confirm
             }

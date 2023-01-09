@@ -5,7 +5,6 @@ import fs from 'fs'
 import path from 'path'
 import { getEnv } from '../../../env'
 import { TMedium } from '../schema'
-import FavoritesService from '../../services/favorites'
 
 const env = getEnv()
 

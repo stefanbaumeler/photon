@@ -7,10 +7,11 @@ type Props = {
     type?: string
     value?: string
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void
+    testId?: string
 }
 
 export const TextBox = ({
-    id, label, placeholder = '', type = 'text', value, onChange
+    id, label, placeholder = '', type = 'text', value, onChange, testId
 }: Props) => {
     const Label = () => label ? <label
         htmlFor={id}
@@ -22,6 +23,7 @@ export const TextBox = ({
     return <div className="input">
         <Label />
         <input
+            data-testid={testId}
             id={id}
             type={type}
             className="input__input"

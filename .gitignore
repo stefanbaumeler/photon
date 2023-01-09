@@ -9,7 +9,6 @@
 .idea
 .DS_Store
 
-tests/cypress/screenshots
 dist
 node_modules
 .env

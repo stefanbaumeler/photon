@@ -1,0 +1,5 @@
+mutation MUpdateAlbum($idAlbum: ID!, $fields: AlbumInput!) {
+    updateAlbum(idAlbum: $idAlbum, fields: $fields) {
+        id
+    }
+}

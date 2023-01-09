@@ -14,7 +14,7 @@ type Props = {
     iconSize?: number
     hover?: boolean
     remove?: boolean
-    cy?: string
+    testId?: string
     round?: boolean
 }
 
@@ -26,7 +26,7 @@ const Check = ({
     checked = false,
     boxSize = 24,
     iconSize = 1,
-    ready, onClick, hover, remove, cy
+    ready, onClick, hover, remove, testId
 }: Props, ref: Ref<unknown>) => {
     const classes = bem('check', [
         ['ready', ready],
@@ -40,7 +40,7 @@ const Check = ({
         className={classes}
         onClick={onClick}
         ref={ref as Ref<HTMLButtonElement>}
-        data-testid={cy}
+        data-testid={testId}
         style={{
             width: `${boxSize}px`,
             height: `${boxSize}px`,

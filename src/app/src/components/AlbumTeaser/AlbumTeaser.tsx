@@ -34,7 +34,7 @@ export const AlbumTeaser = ({ album }: Props) => {
 
     const moreItems = [
         {
-            cy: 'album-delete',
+            testId: 'album-delete',
             label: t(ETrans.DELETE_THING, {
                 thing: t(ETrans.ALBUM)
             }),
@@ -54,7 +54,7 @@ export const AlbumTeaser = ({ album }: Props) => {
                 smallButton={true}
             >
                 <IconButton
-                    cy={'album-controls'}
+                    testId="album-controls"
                     icon={Icons.mdiDotsVertical}
                     white={true}
                     onClick={() => setMoreActive(!moreActive)}

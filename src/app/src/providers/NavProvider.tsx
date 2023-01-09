@@ -27,7 +27,8 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.PHOTO_PLURAL),
                     icon: Icons.mdiImageOutline,
-                    href: ''
+                    href: '/',
+                    testId: 'nav-index'
                 },
                 {
                     label: t(ETrans.ALBUM_PLURAL),
@@ -38,7 +39,8 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.FAVORITES),
                     icon: Icons.mdiStar,
-                    href: 'favorites'
+                    href: 'favorites',
+                    testId: 'nav-favorites'
                 },
                 {
                     label: t(ETrans.SHARING),
@@ -53,7 +55,8 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.TRASH),
                     icon: Icons.mdiTrashCanOutline,
-                    href: 'trash'
+                    href: 'trash',
+                    testId: 'nav-trash'
                 }
             ]
         },

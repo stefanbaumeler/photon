@@ -28,10 +28,10 @@ const resolvers = {
     Date: DateTimeScalar,
     Medium: {
         owner: (obj: { owner: TUser }) => {
-            return new UsersService().readOne(obj.owner.id)
+            return new UsersService().readOne(obj.owner?.id)
         },
         uploader: (obj: { uploader: TUser }) => {
-            return new UsersService().readOne(obj.uploader.id)
+            return new UsersService().readOne(obj.uploader?.id)
         },
         meta: (obj: { meta: string }) => {
             return JSON.parse(obj.meta) as TMeta
@@ -39,7 +39,7 @@ const resolvers = {
     },
     Album: {
         owner: (obj: { owner: TUser }) => {
-            return new UsersService().readOne(obj.owner.id)
+            return new UsersService().readOne(obj.owner?.id)
         }
     },
     Meta: {

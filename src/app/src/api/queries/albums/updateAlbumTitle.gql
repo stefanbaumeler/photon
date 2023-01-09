@@ -1,5 +1,0 @@
-mutation MUpdateAlbumTitle($id: ID!, $title: String!) {
-    updateAlbumTitle(id: $id, title: $title) {
-        id
-    }
-}

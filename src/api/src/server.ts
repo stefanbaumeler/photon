@@ -2,11 +2,13 @@ import { createApp } from './app'
 import * as https from 'https'
 import * as http from 'http'
 import fs from 'fs'
+import { getEnv } from '../env'
 
+const env = getEnv()
 export const createServer = async () => {
     const app = await createApp()
 
-    if (parseInt(process.env.API_SECURE || '1', 10)) {
+    if (parseInt(env.API_SECURE || '1', 10)) {
         return https.createServer({
             key: fs.readFileSync('../../ssl/key.pem'),
             cert: fs.readFileSync('../../ssl/cert.pem')

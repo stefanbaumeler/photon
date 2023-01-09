@@ -62,7 +62,7 @@ export const Details = () => {
         }
 
         return <IconButton
-            cy="show-infos"
+            testId="show-infos"
             hint={t(ETrans.SHOW_THING, {
                 thing: t(ETrans.INFO_PLURAL)
             })}
@@ -152,7 +152,7 @@ export const Details = () => {
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
-                        cy="close-details"
+                        testId="close-details"
                         hint={t(ETrans.BACK)}
                         white={true}
                         onClick={details.close}
@@ -178,7 +178,7 @@ export const Details = () => {
                 />
                 <Medium
                     priority={true}
-                    cy="details-image"
+                    testId="details-image"
                     medium={details.medium}
                     width={details.medium.meta.width / 2}
                 />
@@ -191,7 +191,7 @@ export const Details = () => {
             <div className="toolbar">
                 <div className="toolbar__section toolbar__section--left">
                     <IconButton
-                        cy="hide-infos"
+                        testId="hide-infos"
                         hint={t(ETrans.HIDE_THING, {
                             thing: t(ETrans.INFO_PLURAL)
                         })}

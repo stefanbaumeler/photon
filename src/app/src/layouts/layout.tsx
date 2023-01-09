@@ -19,6 +19,7 @@ const Layout = ({ children }: Props) => {
         <div id="modal-root"></div>
         <div
             id="content-root"
+            data-testid="content-root"
             className={classes}
         >
             <SearchBar />

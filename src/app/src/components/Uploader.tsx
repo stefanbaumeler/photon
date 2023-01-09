@@ -45,12 +45,15 @@ export const Uploader = () => {
         ['visible', visible]
     ])
 
-    return <div className={classes}>
+    return <div
+        className={classes}
+        data-testid="uploader"
+    >
         <span className="uploader__label">
             Upload
         </span>
         <input
-            data-testid="uploader"
+            data-testid="uploader-input"
             className="uploader__input"
             type="file"
             multiple={true}

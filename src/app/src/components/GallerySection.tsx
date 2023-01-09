@@ -93,7 +93,7 @@ export const GallerySection = ({
         <div className={headerClasses}>
             <div className="gallery-section__check">
                 <Check
-                    cy="gallery-section-check"
+                    testId="gallery-section-check"
                     backgroundColor="#F0F0F0"
                     onClick={select}
                     ready={false}

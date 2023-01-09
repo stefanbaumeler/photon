@@ -13,7 +13,7 @@
     },
     "engineStrict": true,
     "scripts": {
-        "dev": "NODE_ENV=test run-s start:docker watch",
+        "dev": "NODE_ENV=development run-s start:docker watch",
         "prod:api": "run-s start:docker watch:api",
         "watch": "run-p watch:*",
         "watch:api": "yarn workspace @photon/api watch",
@@ -26,13 +26,14 @@
         "db:down": "yarn workspace @photon/api db:down",
         "db:seed": "yarn workspace @photon/api db:seed",
         "db:truncate": "yarn workspace @photon/api db:truncate",
-        "build": "run-p build:*",
+        "build": "run-p -l build:*",
         "build:app": "yarn workspace @photon/app build:static",
         "build:api": "yarn workspace @photon/api build",
         "build:db": "run-s start:docker db:up",
-        "test": "NODE_ENV=test jest -i",
-        "test:e2e": "NODE_ENV=test npx cypress run --e2e -b 'chrome'",
-        "test:e2e:open": "NODE_ENV=test npx cypress open --e2e -b 'chrome:canary'"
+        "test": "NODE_ENV=test start-server-and-test 'yarn start:app' http://0.0.0.0:3030 'yarn test:all'",
+        "test:all": "run-s test:api test:e2e",
+        "test:api": "NODE_ENV=test jest -i",
+        "test:e2e": "NODE_ENV=test npx playwright test"
     },
     "dependencies": {
         "dotenv": "^16.0.3",
@@ -41,22 +42,19 @@
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^12.2.3",
+        "@playwright/test": "^1.29.2",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^14.4.3",
         "@types/jest": "^29.2.5",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
-        "cypress": "^12.2.0",
-        "cypress-dotenv": "^2.0.0",
-        "cypress-recurse": "^1.23.0",
         "eslint": "^8.20.0",
-        "eslint-plugin-cypress": "^2.12.1",
         "eslint-plugin-react": "^7.30.1",
         "jest": "^29.3.1",
         "lerna": "^6.1.0",
         "npm-run-all": "^4.1.5",
-        "start-server-and-test": "^1.14.0",
+        "start-server-and-test": "^1.15.2",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1"
     }

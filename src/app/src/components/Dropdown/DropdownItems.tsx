@@ -11,7 +11,7 @@ const DropdownItems = ({ items }: Props) => {
             key={k}
         >
             <button
-                data-testid={item.cy}
+                data-testid={item.testId}
                 className="dropdown__button"
                 onClick={item.callback}
             >

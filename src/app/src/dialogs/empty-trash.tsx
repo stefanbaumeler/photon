@@ -27,7 +27,7 @@ const useEmptyTrashDialog = () => {
                 type: 'secondary'
             },
             {
-                cy: 'trash-empty-confirm',
+                testId: 'trash-empty-confirm',
                 label: t(ETrans.PERMANENTLY_DELETE),
                 action: confirm
             }

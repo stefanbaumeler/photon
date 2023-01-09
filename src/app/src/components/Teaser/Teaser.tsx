@@ -53,8 +53,13 @@ const Teaser = () => {
         forceOpen()
     }
 
-    const updateShiftTargets = () => {
+    const updateShiftTargets = (clear = false) => {
         if (selection.mode !== ESelectionMode.SELECT) {
+            return
+        }
+
+        if (clear) {
+            selection.setShiftTargets([])
             return
         }
 
@@ -88,6 +93,7 @@ const Teaser = () => {
         }
 
         return <Icon
+            data-testid={'favorite-mark'}
             path={Icons.mdiStar}
             className="teaser__favorite"
             size={1}
@@ -97,7 +103,8 @@ const Teaser = () => {
     return <div
         data-testid="teaser"
         className={classes}
-        onMouseOver={updateShiftTargets}
+        onMouseOver={() => updateShiftTargets(false)}
+        onMouseOut={() => updateShiftTargets(true)}
     >
         <div
             className="teaser__check"
@@ -136,7 +143,7 @@ const Teaser = () => {
                 }}
             >
                 <Medium
-                    cy="teaser-image"
+                    testId="teaser-image"
                     medium={teaser.medium}
                     width={teaser.width}
                 />

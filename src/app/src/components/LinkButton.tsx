@@ -11,11 +11,11 @@ type Props = {
     prefix?: string
     suffix?: string
     href?: string
-    cy?: string
+    testId?: string
 }
 
 export const LinkButton = ({
-    onClick, hint, hintPlacement, label, prefix, suffix, href, cy
+    onClick, hint, hintPlacement, label, prefix, suffix, href, testId
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -41,7 +41,7 @@ export const LinkButton = ({
                 onClick={onClick}
                 className={linkClasses}
                 ref={ref as Ref<HTMLAnchorElement>}
-                data-testid={cy}
+                data-testid={testId}
             >
                 {children}
             </Link>
@@ -51,7 +51,7 @@ export const LinkButton = ({
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
-            data-testid={cy}
+            data-testid={testId}
         >
             {children}
         </button>
@@ -64,7 +64,7 @@ export const LinkButton = ({
     </span> : <></>
 
     const Suffix = () => suffix ? <span>
-        {`${prefix} `}
+        {`${suffix} `}
     </span> : <></>
 
     return <ConditionalTip>

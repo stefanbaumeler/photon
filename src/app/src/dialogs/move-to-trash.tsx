@@ -33,7 +33,7 @@ const useMoveToTrashDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
                 type: 'secondary'
             },
             {
-                cy: 'confirm-move-to-trash',
+                testId: 'move-to-trash-confirm',
                 label: t(ETrans.MOVE_TO_TRASH),
                 action: confirm
             }

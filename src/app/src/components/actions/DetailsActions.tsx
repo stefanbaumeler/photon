@@ -33,6 +33,8 @@ export const DetailsActions = () => {
     const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
 
     const rotate = useRotate(details.medium.id)
+    const setAlbumCover = useSetAlbumCover(idAlbum, idMedium)
+    const [moreActive, setMoreActive] = useState(false)
 
     const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${details.medium.filenameDisk}` : '#'
 
@@ -45,7 +47,7 @@ export const DetailsActions = () => {
             content={t(ETrans.SELECT)}
         >
             <Check
-                cy="details-select"
+                testId="details-select"
                 onClick={select}
                 ready={true}
                 checked={selection.isSelected(details.medium)}
@@ -63,7 +65,8 @@ export const DetailsActions = () => {
         },
         {
             label: t(ETrans.ROTATE_LEFT),
-            callback: rotate
+            callback: rotate,
+            testId: 'rotate'
         },
         {
             label: details.medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
@@ -74,11 +77,9 @@ export const DetailsActions = () => {
     if (idAlbum) {
         moreItems.push({
             label: t(ETrans.SET_AS_ALBUM_COVER),
-            callback: useSetAlbumCover(idAlbum, idMedium)
+            callback: setAlbumCover
         })
     }
-
-    const [moreActive, setMoreActive] = useState(false)
 
     const RegularActions = () => {
         return <>
@@ -88,18 +89,26 @@ export const DetailsActions = () => {
                 white={true}
                 icon={Icons.mdiTrayArrowDown}
             />
-            <IconButton
-                onClick={() => details.medium.favoredBy?.length ? removeFromFavorites() : addToFavorites()}
-                hint={details.medium.favoredBy?.length ? t(ETrans.UNFAVORITE) : t(ETrans.FAVORITE)}
+            {details.medium.favoredBy?.length ? <IconButton
+                testId={'details-unfavorite'}
+                onClick={removeFromFavorites}
+                hint={t(ETrans.UNFAVORITE)}
                 white={true}
-                icon={details.medium.favoredBy?.length ? Icons.mdiStar : Icons.mdiStarOutline}
-            />
+                icon={Icons.mdiStar}
+            /> : <IconButton
+                testId={'details-favorite'}
+                onClick={addToFavorites}
+                hint={t(ETrans.FAVORITE)}
+                white={true}
+                icon={Icons.mdiStarOutline}
+            />}
             <Dropdown
                 items={moreItems}
                 active={moreActive}
                 onClickOutside={() => setMoreActive(false)}
             >
                 <IconButton
+                    testId={'details-more'}
                     hint={t(ETrans.MORE_OPTIONS)}
                     icon={Icons.mdiDotsVertical}
                     white={true}

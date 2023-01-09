@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Tests
 
 on: [push]
 
@@ -6,7 +6,7 @@ env:
     NODE_ENV: test
 
 jobs:
-    cypress-run:
+    tests-run:
         services:
             postgres:
                 image: postgres
@@ -18,7 +18,7 @@ jobs:
                 ports:
                   - 5432:5432
                 env:
-                    POSTGRES_DB: photos
+                    POSTGRES_DB: cy-photos
                     POSTGRES_PASSWORD: postgres
                     POSTGRES_USER: stefanbaumeler
         runs-on: ubuntu-latest
@@ -36,10 +36,7 @@ jobs:
               run: yarn build
               env:
                   NODE_ENV: test
-            - name: Cypress Tests
-              uses: cypress-io/github-action@v4.2.0
+            - name: Tests
+              run: yarn test
               env:
                   NODE_ENV: test
-              with:
-                  start: yarn start
-                  test: yarn test

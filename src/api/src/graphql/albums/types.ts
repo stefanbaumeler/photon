@@ -13,6 +13,7 @@ export default gql`
         id: ID
         title: String
         description: String
+        cover: ID
     }
 
     type Query {
@@ -25,8 +26,7 @@ export default gql`
         deleteAlbum(ids: [ID]!): Count @auth
         addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]! @auth
         removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album @auth
-        updateAlbumTitle(id: ID!, title: String!): Album @auth
+        updateAlbum(idAlbum: ID!, fields: AlbumInput): Album @auth
         createAlbum(album: AlbumInput, media: [ID]): Album @auth
-        setAlbumCover(idAlbum: ID!, idMedium: ID!): Album @auth
     }
 `

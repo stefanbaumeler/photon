@@ -16,7 +16,7 @@ export const Dialog = () => {
         return <button
             className={classes}
             onClick={btn.action}
-            data-testid={btn.cy}
+            data-testid={btn.testId}
         >
             {btn.label}
         </button>
@@ -58,7 +58,7 @@ export const Dialog = () => {
                     label={button.label}
                     action={button.action}
                     type={button.type}
-                    cy={button.cy}
+                    testId={button.testId}
                 />)}
             </div>
         </div>

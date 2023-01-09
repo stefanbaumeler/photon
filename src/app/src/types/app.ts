@@ -5,7 +5,7 @@ export type TDialogButton = {
     label: string
     action: () => void
     type?: 'secondary'
-    cy?: string
+    testId?: string
 }
 
 export type TNavItem = {
@@ -15,6 +15,7 @@ export type TNavItem = {
     subNav?: string
     href?: string
     type?: ENavItemType
+    testId?: string
 }
 
 export type TNav = {
@@ -48,7 +49,7 @@ export type TThumbnail = {
 export type TDropdownItem = {
     label: string
     callback: () => void
-    cy?: string
+    testId?: string
 }
 
 export enum ENavs {

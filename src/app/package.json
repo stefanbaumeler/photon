@@ -8,7 +8,7 @@
         "watch:app-schema": "graphql-codegen -c codegen.ts",
         "build": "run-s build:*",
         "build:static": "next build && next export",
-        "build:tauri": "yarn tauri build --debug",
+        "build:tauri": "yarn tauri build",
         "start": "next start -p 3030",
         "lint": "next lint"
     },

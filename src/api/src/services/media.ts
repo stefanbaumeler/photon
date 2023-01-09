@@ -1,4 +1,4 @@
-import { getDatabase, TMedium, TMeta } from '../database'
+import { getDatabase, TMedium } from '../database'
 import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
@@ -300,20 +300,22 @@ export default class MediaService {
 
         const filePath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
         const filePathOld = path.join(__dirname, '../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
-        fs.renameSync(filePath, filePathOld)
+        await fs.renameSync(filePath, filePathOld)
 
         const row = await sharp(filePathOld).rotate(90).toFile(filePath)
+
+        const meta = JSON.stringify({
+            ...JSON.parse(medium.meta as string),
+            width: row.width,
+            height: row.height
+        })
 
         const response = await this.prisma.medium.update({
             where: {
                 id
             },
             data: {
-                meta: JSON.stringify({
-                    ...medium.meta as TMeta,
-                    width: row.width,
-                    height: row.height
-                })
+                meta
             }
         })
 

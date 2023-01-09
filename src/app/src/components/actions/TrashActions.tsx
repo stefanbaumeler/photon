@@ -21,14 +21,14 @@ const TrashActions = ({ white }: Props) => {
             label={t(ETrans.DELETE)}
             onClick={deleteMediaDialog}
             icon={Icons.mdiDeleteForever}
-            cy={'trash-delete'}
+            testId="trash-delete"
             white={white}
         />
         <IconButton
             label={t(ETrans.RESTORE)}
             onClick={restoreMediaDialog}
             icon={Icons.mdiDeleteRestore}
-            cy={'trash-restore'}
+            testId="trash-restore"
             white={white}
         />
     </>

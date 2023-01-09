@@ -1,15 +1,17 @@
-import { QAlbumDocument, useMSetAlbumCover } from '@/api'
+import { QAlbumDocument, useMUpdateAlbum } from '@/api'
 import { useSelectionContext } from '@/providers'
 
-const useSetAlbumCover = (idAlbum: string, idMedium?: string) => {
+const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
     const selection = useSelectionContext()
 
     idMedium = idMedium || [...selection.selected][0]?.id
 
-    const [setAlbumCover] = useMSetAlbumCover({
+    const [setAlbumCover] = useMUpdateAlbum({
         variables: {
             idAlbum,
-            idMedium
+            fields: {
+                cover: idMedium
+            }
         },
         refetchQueries: [{
             query: QAlbumDocument,
@@ -20,9 +22,11 @@ const useSetAlbumCover = (idAlbum: string, idMedium?: string) => {
     })
 
     return () => {
-        setAlbumCover().then(() => {
-            selection.clear()
-        })
+        if (idAlbum) {
+            setAlbumCover().then(() => {
+                selection.clear()
+            })
+        }
     }
 }
 

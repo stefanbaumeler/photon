@@ -5,7 +5,12 @@ import { DetailsProvider, useEditContext, useMediaContext, useSelectionContext }
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
-import { QAlbumMediaDocument, QAlbumDocument, TAlbum, TMedium, useQAlbumMedia, useQAlbum, useMRemoveFromAlbum, useMUpdateAlbumTitle } from '@/api'
+import { QAlbumMediaDocument,
+    QAlbumDocument,
+    TAlbum,
+    useQAlbum,
+    useMRemoveFromAlbum,
+    useMUpdateAlbum } from '@/api'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
@@ -47,10 +52,12 @@ const AlbumPage = () => {
         }]
     })
 
-    const [updateAlbumTitle] = useMUpdateAlbumTitle({
+    const [updateAlbumTitle] = useMUpdateAlbum({
         variables: {
-            id,
-            title
+            idAlbum: id,
+            fields: {
+                title
+            }
         },
         refetchQueries: [{
             query: QAlbumDocument,
@@ -68,7 +75,7 @@ const AlbumPage = () => {
 
     useEffect(() => {
         if (albumQuery.data) {
-            setAlbum(albumQuery.data.album)
+            setAlbum(albumQuery.data.album as TAlbum)
         }
     }, [albumQuery.data])
 
@@ -152,7 +159,7 @@ const AlbumPage = () => {
                 <div className="album-details__header">
                     <div className="albums-details__back">
                         <IconButton
-                            cy="album-back"
+                            testId="album-back"
                             hint={t(ETrans.BACK)}
                             hintPlacement={'right'}
                             icon={Icons.mdiArrowLeft}

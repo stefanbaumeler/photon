@@ -8,8 +8,7 @@
     "env": {
         "node": true,
         "browser": true,
-        "es2021": true,
-        "cypress/globals": true
+        "es2021": true
     },
     "plugins": [
         "@next/eslint-plugin-next",
@@ -19,8 +18,7 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:cypress/recommended"
+        "plugin:@typescript-eslint/recommended"
     ],
     "parserOptions": {
         "sourceType": "module",
@@ -102,5 +100,5 @@
             "beforeSelfClosing": "always"
         }]
     },
-    "ignorePatterns": ["packages/app/src/api/schema.ts"]
+    "ignorePatterns": ["src/app/src/api/schema.ts"]
 }

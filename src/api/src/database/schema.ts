@@ -28,6 +28,7 @@ export type TAlbum = {
 };
 
 export type TAlbumInput = {
+  cover?: InputMaybe<Scalars['ID']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   title?: InputMaybe<Scalars['String']>;
@@ -104,12 +105,11 @@ export type TMutation = {
   removeFromAlbum?: Maybe<TAlbum>;
   removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
-  setAlbumCover?: Maybe<TAlbum>;
   setMediaStatus: TCount;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
-  updateAlbumTitle?: Maybe<TAlbum>;
+  updateAlbum?: Maybe<TAlbum>;
   upload: Array<TMedium>;
 };
 
@@ -162,12 +162,6 @@ export type TMutationRotateArgs = {
 };
 
 
-export type TMutationSetAlbumCoverArgs = {
-  idAlbum: Scalars['ID'];
-  idMedium: Scalars['ID'];
-};
-
-
 export type TMutationSetMediaStatusArgs = {
   media: Array<InputMaybe<Scalars['ID']>>;
   status: Scalars['String'];
@@ -188,9 +182,9 @@ export type TMutationSignUpArgs = {
 };
 
 
-export type TMutationUpdateAlbumTitleArgs = {
-  id: Scalars['ID'];
-  title: Scalars['String'];
+export type TMutationUpdateAlbumArgs = {
+  fields?: InputMaybe<TAlbumInput>;
+  idAlbum: Scalars['ID'];
 };
 
 
@@ -489,12 +483,11 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
   removeFromFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
   rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
-  setAlbumCover?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationSetAlbumCoverArgs, 'idAlbum' | 'idMedium'>>;
   setMediaStatus?: Resolver<TResolversTypes['Count'], ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
-  updateAlbumTitle?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumTitleArgs, 'id' | 'title'>>;
+  updateAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'idAlbum'>>;
   upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
 

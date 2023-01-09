@@ -1,7 +1,7 @@
 import AlbumsMediaService from './albumsMedia'
 import { DeepPartial } from '../types'
 import UsersService from './users'
-import { getDatabase, TAlbum } from '../database'
+import { getDatabase, TAlbum, TAlbumInput } from '../database'
 import { Prisma } from '.prisma/client'
 
 export default class AlbumsService {
@@ -106,23 +106,18 @@ export default class AlbumsService {
         })
     }
 
-    update = async (id: string, newProps: Partial<TAlbum>) => {
-        delete newProps.id
+    update = async (id: string, newProps: TAlbumInput | undefined | null) => {
+        delete newProps?.id
 
         return await this.prisma.album.update({
             where: {
                 id
             },
             data: {
-                ...newProps,
-                owner: newProps.owner ? {
+                ...newProps as Omit<TAlbumInput, 'id'>,
+                cover: newProps?.cover ? {
                     connect: {
-                        id: newProps.owner.id
-                    }
-                } : undefined,
-                cover: newProps.cover ? {
-                    connect: {
-                        id: newProps.cover.id
+                        id: newProps.cover
                     }
                 } : undefined
             },

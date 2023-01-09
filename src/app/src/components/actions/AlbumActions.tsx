@@ -37,7 +37,7 @@ export const AlbumActions = () => {
         {
             label: t(ETrans.SET_ALBUM_COVER),
             callback: setAlbumCover,
-            cy: 'album-set-cover'
+            testId: 'album-set-cover'
         }
     ]
 
@@ -62,7 +62,7 @@ export const AlbumActions = () => {
                 hint={t(ETrans.MORE_OPTIONS)}
                 icon={Icons.mdiDotsVertical}
                 onClick={() => setMoreActive(!moreActive)}
-                cy={'album-more'}
+                testId="album-more"
             />
         </Dropdown>
     </div>

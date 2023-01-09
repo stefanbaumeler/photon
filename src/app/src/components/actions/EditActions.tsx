@@ -25,13 +25,13 @@ export const EditActions = () => {
 
     return <div className="actions">
         <IconButton
-            cy="save-changes"
+            testId="save-changes"
             hint={t(ETrans.SAVE)}
             icon={Icons.mdiCheck}
             onClick={confirm}
         />
         <IconButton
-            cy="discard-changes"
+            testId="discard-changes"
             hint={t(ETrans.DISCARD)}
             onClick={discard}
             icon={Icons.mdiClose}

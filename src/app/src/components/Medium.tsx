@@ -7,14 +7,14 @@ import bem from '@/util/bem'
 type Props = {
     medium: TMedium
     width: number
-    cy?: string
+    testId?: string
     priority?: boolean
     position?: string
     placeholder?: boolean
 }
 
 const Medium = ({
-    medium, width, cy, priority = false, position, placeholder
+    medium, width, testId, priority = false, position, placeholder
 }: Props, ref?: Ref<unknown>) => {
     const details = useDetailsContext()
 
@@ -36,7 +36,7 @@ const Medium = ({
                 alt=""
                 unoptimized={true}
                 priority={priority}
-                data-testid={cy}
+                data-testid={testId}
                 className="medium__image"
                 fill={true}
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}

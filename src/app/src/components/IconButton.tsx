@@ -14,12 +14,12 @@ type Props = {
     white?: boolean
     icon: string
     solid?: boolean
-    cy?: string
+    testId?: string
     small?: boolean
 }
 
 export const IconButton = ({
-    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, cy, small = false
+    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, testId, small = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -50,7 +50,7 @@ export const IconButton = ({
                 onClick={onClick}
                 className={linkClasses}
                 ref={ref as Ref<HTMLAnchorElement>}
-                data-testid={cy}
+                data-testid={testId}
             >
                 {children}
             </Link>
@@ -60,7 +60,7 @@ export const IconButton = ({
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
-            data-testid={cy}
+            data-testid={testId}
         >
             {children}
         </button>

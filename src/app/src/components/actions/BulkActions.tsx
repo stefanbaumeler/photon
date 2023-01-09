@@ -21,7 +21,8 @@ export const BulkActions = () => {
     const selection = useSelectionContext()
 
     const trashMediaDialog = useMoveToTrashDialog(selection.selected)
-    const archive = useSetMediaStatus(selection.selected, Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
+    const archive = useSetMediaStatus(selection.selected, EMediumStatus.ARCHIVED)
+    const unarchive = useSetMediaStatus(selection.selected, EMediumStatus.ALL)
     const [moreActive, setMoreActive] = useState(false)
 
     const addToAlbumDialog = useAddToAlbumDialog()
@@ -32,18 +33,24 @@ export const BulkActions = () => {
         return <></>
     }
 
-    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favoredBy.length === 0)
+    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favoredBy?.length === 0)
 
     const moreItems = [
-        {
-            cy: 'move-to-archive',
-            label: Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
+        Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? {
+            testId: 'unarchive',
+            label: t(ETrans.UNARCHIVE),
+            callback: unarchive
+        } : {
+            testId: 'archive',
+            label: t(ETrans.MOVE_TO_ARCHIVE),
             callback: archive
         },
         selectionContainsUnfavorited ? {
+            testId: 'favorite',
             label: t(ETrans.FAVORITE),
             callback: addToFavorites
         } : {
+            testId: 'unfavorite',
             label: t(ETrans.UNFAVORITE),
             callback: removeFromFavorites
         }
@@ -52,7 +59,7 @@ export const BulkActions = () => {
     const RegularActions = () => {
         return <>
             <IconButton
-                cy={'add-to'}
+                testId="add-to"
                 hint={t(ETrans.ADD_TO)}
                 icon={Icons.mdiPlus}
                 onClick={addToAlbumDialog}
@@ -62,7 +69,7 @@ export const BulkActions = () => {
                 icon={Icons.mdiTrayArrowDown}
             />
             <IconButton
-                cy={'move-to-trash'}
+                testId="move-to-trash"
                 hint={t(ETrans.DELETE)}
                 onClick={trashMediaDialog}
                 icon={Icons.mdiTrashCanOutline}
@@ -73,7 +80,7 @@ export const BulkActions = () => {
                 onClickOutside={() => setMoreActive(false)}
             >
                 <IconButton
-                    cy="bulk-more"
+                    testId="bulk-more"
                     hint={t(ETrans.MORE_OPTIONS)}
                     icon={Icons.mdiDotsVertical}
                     onClick={() => setMoreActive(!moreActive)}

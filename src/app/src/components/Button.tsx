@@ -9,11 +9,11 @@ type Props = {
     hintPlacement?: Placement
     label?: string
     href?: string
-    cy?: string
+    testId?: string
 }
 
 export const Button = ({
-    onClick, hint, hintPlacement, label, href, cy
+    onClick, hint, hintPlacement, label, href, testId
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -39,7 +39,7 @@ export const Button = ({
                 onClick={onClick}
                 className={linkClasses}
                 ref={ref as Ref<HTMLAnchorElement>}
-                data-testid={cy}
+                data-testid={testId}
             >
                 {children}
             </Link>
@@ -49,7 +49,7 @@ export const Button = ({
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
-            data-testid={cy}
+            data-testid={testId}
         >
             {children}
         </button>

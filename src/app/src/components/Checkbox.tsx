@@ -9,11 +9,11 @@ type Props = {
     hintPlacement?: Placement
     label?: string
     href?: string
-    cy?: string
+    testId?: string
 }
 
 export const Checkbox = ({
-    id, onClick, hint, hintPlacement, label, href, cy
+    id, onClick, hint, hintPlacement, label, testId
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -30,7 +30,7 @@ export const Checkbox = ({
         </>
     }
 
-    const Box = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
+    const Box = (_: { children: ReactElement }, ref: Ref<unknown>) => {
         const Label = () => label ? <label
             htmlFor={id}
             className="checkbox__label"
@@ -46,7 +46,7 @@ export const Checkbox = ({
                 ref={ref as Ref<HTMLInputElement>}
                 className="checkbox__input"
                 onClick={onClick}
-                data-testid={cy}
+                data-testid={testId}
             />
             <div className="checkbox__box"></div>
         </div>

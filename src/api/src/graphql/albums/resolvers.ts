@@ -30,29 +30,16 @@ const mutations: Partial<TMutationResolvers> = {
         await new AlbumsMediaService().removeFromAlbum(input.idAlbum, input.media)
         return new AlbumsService(context).readOne(input.idAlbum)
     },
-    updateAlbumTitle: (_, input, context) => new Promise((resolve) => {
-        new AlbumsService(context).update(input.id, {
-            title: input.title
-        }).then((res) => {
-            resolve(res)
-        })
-    }),
+    updateAlbum: async (_, input, context) => {
+        return  new AlbumsService(context).update(input.idAlbum, input.fields)
+    },
     createAlbum: async (_, input, context) => {
         const media = input.media?.map((medium) => ({
             id: medium as string
         })) || []
 
         return await new AlbumsService(context).createOne((input.album || {}) as TAlbum, media)
-    },
-    setAlbumCover: (_, input) => new Promise((resolve) => {
-        new AlbumsService().update(input.idAlbum, {
-            cover: {
-                id: input.idMedium
-            }
-        }).then((res) => {
-            resolve(res)
-        })
-    })
+    }
 }
 
 export default {

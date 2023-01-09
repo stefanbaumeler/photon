@@ -51,14 +51,3 @@ services:
         networks:
             proxy:
                 ipv4_address: 10.5.0.11
-    cypress:
-        image: 'cypress/included:12.1.0'
-        depends_on:
-            - db
-            - api
-            - app
-        environment:
-            - CYPRESS_baseUrl=http://localhost:3030
-        volumes:
-            - ./cypress:./cypress
-

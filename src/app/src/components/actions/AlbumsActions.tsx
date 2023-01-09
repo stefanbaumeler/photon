@@ -21,6 +21,7 @@ export const AlbumsActions = () => {
 
     return <div className="actions">
         <IconButton
+            testId="album-create"
             hint={t(ETrans.CREATE_THING, {
                 thing: t(ETrans.ALBUM)
             })}

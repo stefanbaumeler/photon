@@ -35,3 +35,5 @@
 //         expect(teaser).toHaveClass('teaser--selected')
 //     })
 // })
+
+export default {}

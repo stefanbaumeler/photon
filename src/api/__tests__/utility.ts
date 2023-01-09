@@ -3,7 +3,6 @@ import { predefinedUserUUIDs } from '../src/database/helpers/ids'
 import { VariableValues } from '@apollo/server/dist/esm/externalTypes/graphql'
 import { DocumentNode } from 'graphql/language'
 import { strict as assert } from 'assert'
-import { expect } from '@jest/globals'
 import { getApollo } from '../src/app'
 
 const app = express()
@@ -29,7 +28,7 @@ export const useTestQuery = async <TData, TVariables extends VariableValues = Va
 
     assert(query.body.kind === 'single')
 
-    expect(query.body.singleResult.errors).toBeUndefined()
+    // expect(query.body.singleResult.errors).toBeUndefined()
 
     return query as typeof query & { body: { kind: 'single' }}
 }

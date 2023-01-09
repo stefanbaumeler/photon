@@ -149,12 +149,14 @@ const LoginPage = () => {
                         </div>
                         {SignUpFields}
                         <TextBox
+                            testId="signin-mail"
                             id={'mail'}
                             label={t(ETrans.MAIL)}
                             value={mail}
                             onChange={(event) => setMail(event.target.value)}
                         />
                         <TextBox
+                            testId="signin-password"
                             id={'password'}
                             label={t(ETrans.PASSWORD)}
                             type="password"
@@ -168,6 +170,7 @@ const LoginPage = () => {
                                 <SignUpLinks />
                             </div>
                             <Button
+                                testId="signin-confirm"
                                 onClick={submit}
                                 label={loginFormMode === ELoginFormMode.DEFAULT ? t(ETrans.SIGN_IN) : t(ETrans.SIGN_UP)}
                             />

@@ -10,5 +10,6 @@
         "isolatedModules": true,
         "noEmitOnError": false
     },
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts"],
+    "exclude": ["__tests__"]
 }

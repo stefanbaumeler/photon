@@ -33,9 +33,9 @@ const useRestoreMediaDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
                 type: 'secondary'
             },
             {
+                testId: 'trash-restore-confirm',
                 label: t(ETrans.RESTORE),
-                action: confirm,
-                cy: 'trash-restore-confirm'
+                action: confirm
             }
         ]
     })

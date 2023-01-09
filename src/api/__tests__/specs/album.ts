@@ -2,8 +2,8 @@ import * as Schema from '@photon/app/src/api'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 import { seed } from '../../src/database/seeds/jest'
 import { strict as assert } from 'assert'
-import { expect, describe, beforeEach } from '@jest/globals'
 import { useTestQuery } from '../utility'
+import { TQAlbumVariables } from '@photon/app/src/api'
 
 beforeEach(async () => {
     await seed()
@@ -45,7 +45,18 @@ it('can be created with media', async () => {
 })
 
 it('can be updated', async () => {
-    // TODO
+    await useTestQuery<Schema.TMUpdateAlbum, Schema.TMUpdateAlbumVariables>(Schema.MUpdateAlbumDocument, {
+        idAlbum: predefinedAlbumUUIDs[0],
+        fields: {
+            title: 'Updated Title'
+        }
+    })
+
+    const isUpdatedQuery = await useTestQuery<Schema.TQAlbum, TQAlbumVariables>(Schema.QAlbumDocument, {
+        id: predefinedAlbumUUIDs[0]
+    })
+
+    expect(isUpdatedQuery.body.singleResult.data?.album?.title).toBe('Updated Title')
 })
 
 it('can be deleted', async () => {

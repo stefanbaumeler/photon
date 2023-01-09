@@ -1,7 +1,6 @@
 import * as Schema from '@photon/app/src/api'
 import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 import { seed } from '../../src/database/seeds/jest'
-import { expect, beforeEach } from '@jest/globals'
 import fs from 'fs'
 import path from 'path'
 import { useTestQuery } from '../utility'

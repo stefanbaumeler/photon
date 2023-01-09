@@ -71,7 +71,7 @@ export const DefaultActions = () => {
     const RegularActions = () => {
         return <>
             <input
-                data-testid="upload-action"
+                data-testid="upload"
                 type="file"
                 className="actions__uploader"
                 ref={uploadRef}
@@ -113,7 +113,7 @@ export const DefaultActions = () => {
                 label={t(ETrans.EMPTY_TRASH)}
                 icon={Icons.mdiDeleteForever}
                 onClick={emptyTrashDialog}
-                cy={'trash-empty'}
+                testId="trash-empty"
             />
             <IconButton
                 hint={layoutProps.name}
