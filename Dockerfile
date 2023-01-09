@@ -6,23 +6,23 @@ WORKDIR /photon
 
 COPY package.json package.json
 
-COPY src/api/package.json src/api/package.json
+COPY api/package.json api/package.json
 
-COPY src/app/package.json src/app/package.json
+COPY app/package.json app/package.json
 
 RUN yarn install --target_arch=x64
 
-COPY src/api/prisma/schema.prisma src/api/src/database/schema.prisma
+COPY api/prisma/schema.prisma api/src/database/schema.prisma
 
 RUN yarn workspace @photon/api db:generate
 
 COPY packages packages
 
-COPY src/api src/api
+COPY api api
 
 RUN yarn workspace @photon/api build
 
-COPY src/app src/app
+COPY app app
 
 RUN yarn workspace @photon/app build
 

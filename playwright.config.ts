@@ -1,7 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
-    globalSetup: './tests/playwright/support/setup',
+    globalSetup: './app/__tests__/e2e/support/setup',
     use: {
         baseURL: 'http://localhost:3030'
     },

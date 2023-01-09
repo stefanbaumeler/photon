@@ -1,0 +1,41 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "paths": {
+            "@/*": [
+                "app/*",
+                "app/src/*"
+            ]
+        },
+        "target": "es2016",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "noImplicitAny": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "incremental": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve"
+    },
+    "include": [
+        "./",
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "**.*.css"
+    ],
+    "exclude": [
+        "src-tauri",
+        "node_modules"
+    ]
+}

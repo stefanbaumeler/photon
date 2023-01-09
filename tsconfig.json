@@ -16,13 +16,13 @@
         "types": ["node", "jest"],
         "isolatedModules": false,
         "paths": {
-            "@/*": ["src/app/*", "src/app/src/*"]
+            "@/*": ["app/*", "app/src/*"]
         }
     },
     "include": [
         "./tests/**/*.ts",
-        "src/app/*",
-        "src/api/*"
+        "app/*",
+        "api/*"
     ],
     "exclude": [
         "node_modules"
