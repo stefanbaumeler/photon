@@ -18,6 +18,7 @@
         "test": "jest"
     },
     "dependencies": {
+        "@photon/cv": "*",
         "@apollo/server": "^4.3.0",
         "@ffmpeg/core": "^0.11.0",
         "@ffmpeg/ffmpeg": "^0.11.6",

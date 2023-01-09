@@ -1,5 +1,5 @@
 import { DetectLabelsCommand, RekognitionClient } from '@aws-sdk/client-rekognition'
-import { CVDriver } from '@photon/cv'
+import type { CVDriver } from '@photon/cv'
 
 export default class CVRekognitionDriver implements CVDriver {
     labels = async (buffer: Buffer) => {
