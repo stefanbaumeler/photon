@@ -8,6 +8,9 @@
         "build": "tsc --build",
         "dev": "tsc --watch"
     },
+    "dependencies": {
+        "@photon/cv": "*"
+    },
     "devDependencies": {
         "typescript": "^4.7.4",
         "eslint": "^8.20.0",
