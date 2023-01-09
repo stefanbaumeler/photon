@@ -32,7 +32,9 @@
         "test": "NODE_ENV=test start-server-and-test 'yarn start:app' http://0.0.0.0:3030 'yarn test:all'",
         "test:all": "run-s test:api test:e2e",
         "test:api": "NODE_ENV=test jest -i",
-        "test:e2e": "NODE_ENV=test npx playwright test"
+        "test:e2e": "run-s playwright:*",
+        "playwright:install": "npx playwright install",
+        "playwright:test": "NODE_ENV=test npx playwright test"
     },
     "dependencies": {
         "dotenv": "^16.0.3",
