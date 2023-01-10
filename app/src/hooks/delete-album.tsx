@@ -1,5 +1,5 @@
-import { useDialogContext } from '../providers'
-import { QAlbumsDocument, useMDeleteAlbum } from '../api'
+import { useDialogContext } from '@/providers'
+import { QAlbumsDocument, useMDeleteAlbum } from '@photon/schema'
 import { useRouter } from 'next/router'
 
 const useDeleteAlbum = (id?: string) => {

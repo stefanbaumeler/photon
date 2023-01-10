@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TMedium } from '../api'
+import { TMedium } from '@photon/schema'
 
 export type TDialogButton = {
     label: string

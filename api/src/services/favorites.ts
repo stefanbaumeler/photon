@@ -1,4 +1,5 @@
-import { getDatabase, TMedium } from '../database'
+import { getDatabase } from '../database'
+import { TMedium } from '@photon/schema'
 import { Response } from 'express'
 
 export default class FavoritesService {

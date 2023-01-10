@@ -1,4 +1,4 @@
-import * as Schema from 'app/src/api'
+import * as Schema from '@photon/schema'
 import { seed } from '../../src/database/seeds/jest'
 import { useTestQuery } from '../utility'
 

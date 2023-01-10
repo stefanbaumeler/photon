@@ -20,7 +20,7 @@
   resolved "https://packages.1up.io:443/@apollo%2fcache-control-types/-/cache-control-types-1.0.2.tgz#f42ed3563acc7f1f50617d65d208483977adc68e"
   integrity sha512-Por80co1eUm4ATsvjCOoS/tIR8PHxqVjsA6z76I6Vw0rFn4cgyVElQcmQDIZiYsy41k8e5xkrMRECkM2WR8pNw==
 
-"@apollo/client@^3.7.0":
+"@apollo/client@*", "@apollo/client@^3.7.0":
   version "3.7.3"
   resolved "https://packages.1up.io:443/@apollo%2fclient/-/client-3.7.3.tgz#ab3fe31046e74bc1a3762363a185ba5bcfffc58b"
   integrity sha512-nzZ6d6a4flLpm3pZOGpuAUxLlp9heob7QcCkyIqZlCLvciUibgufRfYTwfkWCc4NaGHGSZyodzvfr79H6oUwGQ==
@@ -7196,7 +7196,7 @@ graphql-tag@^2.10.0, graphql-tag@^2.11.0, graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql-upload-minimal@^1.5.4:
+graphql-upload-minimal@*, graphql-upload-minimal@^1.5.4:
   version "1.5.4"
   resolved "https://packages.1up.io:443/graphql-upload-minimal/-/graphql-upload-minimal-1.5.4.tgz#eb54bd20fd25df9c4dff86b1e54f03ba6c1917ca"
   integrity sha512-bBZ2J1kg6Guq++IkAhyyyd5QThHa9Mrl2NRqIumrSi2T/7SdoqduhIEdqZ+U4oniZP9jLzcIOyo+l8b+NuSgCw==

@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { TMedium } from '../api'
+import { TMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
 
 type Props = {

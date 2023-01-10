@@ -1,5 +1,5 @@
-import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '../api'
-import { useSelectionContext, useMediaContext } from '../providers'
+import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '@photon/schema'
+import { useSelectionContext, useMediaContext } from '@/providers'
 
 const useAddToFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()

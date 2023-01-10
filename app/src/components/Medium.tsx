@@ -1,7 +1,7 @@
-import { TMedium } from '../api'
+import { TMedium } from '@photon/schema'
 import { Ref, useMemo, forwardRef, useState } from 'react'
 import Image from 'next/image'
-import { useDetailsContext } from '../providers'
+import { useDetailsContext } from '@/providers'
 import bem from '../util/bem'
 
 type Props = {

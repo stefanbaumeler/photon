@@ -1,7 +1,7 @@
-import { TImageMeta } from '../../api'
+import { TImageMeta } from '@photon/schema'
 import { Detail } from '../index'
 import * as Icons from '@mdi/js'
-import { useDetailsContext } from '../../providers'
+import { useDetailsContext } from '@/providers'
 
 export const DetailsImageMeta = () => {
     const details = useDetailsContext()

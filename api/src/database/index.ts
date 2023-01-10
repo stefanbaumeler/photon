@@ -17,5 +17,3 @@ export const getDatabase = () => {
 
     return database
 }
-
-export * from './schema'

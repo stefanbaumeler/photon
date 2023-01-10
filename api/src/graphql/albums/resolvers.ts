@@ -1,6 +1,6 @@
 import AlbumsService from '../../services/albums'
 import AlbumsMediaService from '../../services/albumsMedia'
-import { TQueryResolvers, TMutationResolvers, TAlbum } from '../../database'
+import { TQueryResolvers, TMutationResolvers, TAlbum } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
     albums: (_, input, context) => {

@@ -100,5 +100,5 @@
             "beforeSelfClosing": "always"
         }]
     },
-    "ignorePatterns": ["app/src/api/schema.ts"]
+    "ignorePatterns": ["packages/schema/schema.ts"]
 }

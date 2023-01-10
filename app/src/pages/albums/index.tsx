@@ -1,6 +1,6 @@
 import Layout from '../../layouts/layout'
-import { Albums, Uploader, Dialog } from '../../components'
-import { useQAlbums } from '../../api'
+import { Albums, Uploader, Dialog } from '@/components'
+import { useQAlbums } from '@photon/schema'
 
 const AlbumsPage = () => {
     const albums = useQAlbums()

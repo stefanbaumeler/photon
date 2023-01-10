@@ -1,8 +1,8 @@
-import { TMedium } from '../../api'
+import { TMedium } from '@photon/schema'
 import { Check, ListItemActions, Medium } from '../index'
-import { formatDate } from '../../util/date'
-import { useSelectionContext, useDetailsContext } from '../../providers'
-import { ESelectionMode } from '../../types/app'
+import { formatDate } from '@/util/date'
+import { useSelectionContext, useDetailsContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
 import Tippy from '@tippyjs/react'
 
 type Props = {

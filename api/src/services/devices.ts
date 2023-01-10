@@ -1,4 +1,5 @@
-import { getDatabase, TDevice } from '../database'
+import { getDatabase } from '../database'
+import { TDevice } from '@photon/schema'
 import { Response } from 'express'
 
 export default class DevicesService {

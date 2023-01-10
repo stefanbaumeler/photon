@@ -1,4 +1,5 @@
-import { TUser, getDatabase } from '../database'
+import { getDatabase } from '../database'
+import { TUser } from '@photon/schema'
 import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express'

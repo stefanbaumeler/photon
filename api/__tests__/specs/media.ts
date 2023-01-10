@@ -1,4 +1,4 @@
-import * as Schema from 'app/src/api'
+import * as Schema from '@photon/schema'
 import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 import { seed } from '../../src/database/seeds/jest'
 import fs from 'fs'

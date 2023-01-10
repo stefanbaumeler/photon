@@ -1,9 +1,8 @@
-import * as Schema from 'app/src/api'
+import * as Schema from '@photon/schema'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 import { seed } from '../../src/database/seeds/jest'
 import { strict as assert } from 'assert'
 import { useTestQuery } from '../utility'
-import { TQAlbumVariables } from 'app/src/api'
 
 beforeEach(async () => {
     await seed()
@@ -52,7 +51,7 @@ it('can be updated', async () => {
         }
     })
 
-    const isUpdatedQuery = await useTestQuery<Schema.TQAlbum, TQAlbumVariables>(Schema.QAlbumDocument, {
+    const isUpdatedQuery = await useTestQuery<Schema.TQAlbum, Schema.TQAlbumVariables>(Schema.QAlbumDocument, {
         id: predefinedAlbumUUIDs[0]
     })
 

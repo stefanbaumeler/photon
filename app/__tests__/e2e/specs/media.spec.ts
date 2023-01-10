@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { globalBeforeEach, openDetails } from '../support/common'
+import { globalBeforeEach } from '../support/common'
 
 globalBeforeEach()
 

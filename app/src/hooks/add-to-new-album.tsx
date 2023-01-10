@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { QAlbumsDocument, useMCreateAlbum } from '../api'
-import { useDialogContext, useSelectionContext } from '../providers'
+import { QAlbumsDocument, useMCreateAlbum } from '@photon/schema'
+import { useDialogContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
 const useAddToNewAlbum = () => {

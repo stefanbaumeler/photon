@@ -1,9 +1,9 @@
-import { ETrans } from '../types/translations'
-import { useDialogContext, useSelectionContext } from '../providers'
+import { ETrans } from '@/types/translations'
+import { useDialogContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useSetMediaStatus from '../hooks/set-status'
-import { EMediumStatus } from '../types/app'
-import { TMedium } from '../api'
+import { EMediumStatus } from '@/types/app'
+import { TMedium } from '@photon/schema'
 
 const useRestoreMediaDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useDialogContext()

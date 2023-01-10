@@ -1,5 +1,5 @@
-import { useDetailsContext, useMediaContext } from '../providers'
-import { QMediaDocument, useMRotate } from '../api'
+import { useDetailsContext, useMediaContext } from '@/providers'
+import { QMediaDocument, useMRotate } from '@photon/schema'
 
 const useRotate = (idMedium: string) => {
     const details = useDetailsContext()

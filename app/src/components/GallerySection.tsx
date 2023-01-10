@@ -1,9 +1,9 @@
-import { TMedium } from '../api'
-import { ESelectionMode, GalleryItem } from '../types/app'
+import { TMedium } from '@photon/schema'
+import { ESelectionMode, GalleryItem } from '@/types/app'
 import { Check, Teaser } from './index'
 import { useEffect, useRef, useState } from 'react'
-import { generateGallery } from '../util/gallery'
-import { useSelectionContext } from '../providers'
+import { generateGallery } from '@/util/gallery'
+import { useSelectionContext } from '@/providers'
 import bem from '../util/bem'
 
 type Props = {

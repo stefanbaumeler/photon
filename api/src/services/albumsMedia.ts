@@ -1,5 +1,6 @@
 import { AlbumsMedia } from '../types'
-import { getDatabase, TMedium } from '../database'
+import { getDatabase } from '../database'
+import { TMedium } from '@photon/schema'
 
 export default class AlbumsMediaService {
     prisma = getDatabase()

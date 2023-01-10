@@ -1,5 +1,5 @@
-import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '../api'
-import { useSelectionContext, useMediaContext } from '../providers'
+import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '@photon/schema'
+import { useSelectionContext, useMediaContext } from '@/providers'
 
 const useRemoveFromFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()

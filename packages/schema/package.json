@@ -1,0 +1,21 @@
+{
+    "name": "@photon/schema",
+    "private": true,
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc --build",
+        "dev": "tsc --watch"
+    },
+    "dependencies": {
+        "graphql": "*",
+        "graphql-upload-minimal": "*",
+        "@apollo/client": "*"
+    },
+    "devDependencies": {
+        "typescript": "^4.7.4",
+        "eslint": "^8.20.0",
+        "eslint-plugin-react": "^7.30.1"
+    }
+}

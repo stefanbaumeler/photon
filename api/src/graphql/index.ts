@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
 import { DateTimeScalar } from 'graphql-date-scalars'
-import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '../database'
+import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '@photon/schema'
 import { GraphQLUpload } from 'graphql-upload-minimal'
 
 const global = gql`

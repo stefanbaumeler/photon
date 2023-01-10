@@ -1,25 +1,34 @@
-import { getEnv } from './env'
+import { getEnv } from './api/env'
 
 const env = getEnv()
 
 export default {
     overwrite: true,
     watch: true,
-    schema: `${env.NEXT_PUBLIC_API_URL}`,
-    documents: ['../**/*.gql'],
+    schema: `${parseInt(env.API_SECURE || '1', 10) ? 'https' : 'http'}://${env.API_HOST}:${env.API_PORT}/graphql`,
+    documents: ['**/*.gql'],
     config: {
         scalars: {
             TDate: Date
         }
     },
     generates: {
-        './src/api/schema.ts': {
+        './packages/schema/index.ts': {
             plugins: [
                 'typescript',
+                'typescript-resolvers',
                 'typescript-operations',
-                'typescript-react-apollo'
+                'typescript-react-apollo',
+                {
+                    add: {
+                        content: 'import { FileUpload } from \'graphql-upload-minimal\''
+                    }
+                }
             ],
             config: {
+                scalars: {
+                    Upload: 'Promise<FileUpload>'
+                },
                 preResolveTypes: false,
                 maybeValue: 'Partial<T> | T | null',
                 useTypeImports: true,

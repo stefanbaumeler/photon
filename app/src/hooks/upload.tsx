@@ -1,7 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { QMediaDocument, QMediaYearCountDocument, useMUpload } from '../api'
+import { QMediaDocument, QMediaYearCountDocument, useMUpload } from '@photon/schema'
 import tauri from '../tauri'
-import { useMediaContext } from '../providers'
+import { useMediaContext } from '@/providers'
+import { FileUpload } from 'graphql-upload-minimal'
 
 const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
@@ -10,7 +11,7 @@ const useUpload = () => {
 
     const [upload] = useMUpload({
         variables: {
-            files
+            files: files as unknown as Promise<FileUpload>
         },
         refetchQueries: [{
             query: QMediaDocument,

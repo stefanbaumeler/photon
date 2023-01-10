@@ -4,7 +4,7 @@ import path from 'path'
 import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
-import { TMedium, TVideoMeta, TImageMeta } from '../database'
+import { TMedium, TVideoMeta, TImageMeta } from '@photon/schema'
 import { DeepPartial } from '../types'
 
 export const hash = (str: string, seed = 0) => {

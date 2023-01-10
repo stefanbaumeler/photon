@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useDetailsContext, useDialogContext, useLayoutContext, useMediaContext, useSelectionContext } from '../providers'
+import { useDetailsContext, useDialogContext, useLayoutContext, useMediaContext, useSelectionContext } from '@/providers'
 import useKeyboard from '../hooks/keyboard'
-import { ELayout } from '../types/app'
+import { ELayout } from '@/types/app'
 import { GalleryView, ListView } from './index'
 
 export const Media = () => {

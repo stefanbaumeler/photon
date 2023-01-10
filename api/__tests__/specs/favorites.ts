@@ -1,5 +1,5 @@
 import { useTestQuery } from '../utility'
-import * as Schema from 'app/src/api'
+import * as Schema from '@photon/schema'
 import { seed } from '../../src/database/seeds/jest'
 import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 

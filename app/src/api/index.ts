@@ -21,5 +21,4 @@ const client = new ApolloClient({
     link: from([errorLink, uploadLink])
 })
 
-export * from './schema'
 export { client }

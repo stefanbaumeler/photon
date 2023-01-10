@@ -1,5 +1,5 @@
 import MediaService from '../../services/media'
-import { TQueryResolvers, TMutationResolvers } from '../../database'
+import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {

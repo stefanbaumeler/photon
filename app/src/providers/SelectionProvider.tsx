@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { TMedium } from '../api'
-import { ESelectionMode } from '../types/app'
+import { TMedium } from '@photon/schema'
+import { ESelectionMode } from '@/types/app'
 
 type Props = {
     children?: ReactNode

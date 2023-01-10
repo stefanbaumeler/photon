@@ -1,19 +1,19 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
-import { Details, Dialog, IconButton, Uploader, Media } from '../../../components'
-import { DetailsProvider, useEditContext, useMediaContext, useSelectionContext } from '../../../providers'
+import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
+import { DetailsProvider, useEditContext, useMediaContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { EDateFormat, EEditState, ESelectionMode } from '../../../types/app'
+import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
 import { QAlbumMediaDocument,
     QAlbumDocument,
     TAlbum,
     useQAlbum,
     useMRemoveFromAlbum,
-    useMUpdateAlbum } from '../../../api'
+    useMUpdateAlbum } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../../../types/translations'
-import { formatDate } from '../../../util/date'
+import { ETrans } from '@/types/translations'
+import { formatDate } from '@/util/date'
 import useSetAlbumCover from '../../../hooks/set-album-cover'
 
 const AlbumPage = () => {

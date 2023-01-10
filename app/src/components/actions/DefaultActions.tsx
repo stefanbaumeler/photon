@@ -1,15 +1,15 @@
 import * as Icons from '@mdi/js'
 import { Dropdown, IconButton } from '../index'
-import { ETrans } from '../../types/translations'
+import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef, useState } from 'react'
-import { useLayoutContext, useNavContext, useSelectionContext, useMediaContext } from '../../providers'
-import { EMediumSort, ENavItemType, ESelectionMode } from '../../types/app'
+import { useLayoutContext, useNavContext, useSelectionContext, useMediaContext } from '@/providers'
+import { EMediumSort, ENavItemType, ESelectionMode } from '@/types/app'
 import useUpload from '../../hooks/upload'
 import { useRouter } from 'next/router'
 import bem from '../../util/bem'
 import useEmptyTrashDialog from '../../dialogs/empty-trash'
-import { useMSignOut } from '../../api'
+import { useMSignOut } from '@photon/schema'
 
 export const DefaultActions = () => {
     const { t } = useTranslation()

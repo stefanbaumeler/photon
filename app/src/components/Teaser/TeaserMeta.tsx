@@ -1,5 +1,5 @@
-import { TVideoMeta } from '../../api'
-import { secondsToTime } from '../../util/date'
+import { TVideoMeta } from '@photon/schema'
+import { secondsToTime } from '@/util/date'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import { useTeaserContext } from './TeaserContext'

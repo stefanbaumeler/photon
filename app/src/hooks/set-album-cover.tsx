@@ -1,5 +1,5 @@
-import { QAlbumDocument, useMUpdateAlbum } from '../api'
-import { useSelectionContext } from '../providers'
+import { QAlbumDocument, useMUpdateAlbum } from '@photon/schema'
+import { useSelectionContext } from '@/providers'
 
 const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
     const selection = useSelectionContext()

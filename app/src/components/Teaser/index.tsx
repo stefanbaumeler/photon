@@ -1,6 +1,6 @@
 import { TeaserProvider } from './TeaserContext'
 import TeaserComponent from './Teaser'
-import { TMedium } from '../../api'
+import { TMedium } from '@photon/schema'
 
 type Props = {
     medium: TMedium

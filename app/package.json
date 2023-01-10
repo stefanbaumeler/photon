@@ -5,7 +5,6 @@
     "scripts": {
         "watch": "node_modules/.bin/run-p -l watch:*",
         "watch:next": "node_modules/.bin/next dev -p 3030",
-        "watch:app-schema": "node_modules/.bin/graphql-codegen -c codegen.ts",
         "build": "node_modules/.bin/run-s build:static",
         "build:static": "node_modules/.bin/next build && next export",
         "build:tauri": "yarn node_modules/.bin/tauri build",
@@ -17,6 +16,7 @@
         "@heroicons/react": "^1.0.6",
         "@mdi/js": "^7.0.96",
         "@mdi/react": "^1.6.1",
+        "@photon/schema": "*",
         "@tauri-apps/api": "^1.2.0",
         "@tippyjs/react": "^4.2.6",
         "@types/react": "^18.0.14",

@@ -1,7 +1,8 @@
 import AlbumsMediaService from './albumsMedia'
 import { DeepPartial } from '../types'
 import UsersService from './users'
-import { getDatabase, TAlbum, TAlbumInput } from '../database'
+import { getDatabase } from '../database'
+import { TAlbum, TAlbumInput } from '@photon/schema'
 import { Prisma } from '.prisma/client'
 
 export default class AlbumsService {

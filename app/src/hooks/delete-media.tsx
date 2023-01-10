@@ -1,5 +1,5 @@
-import { useDialogContext, useSelectionContext, useMediaContext, useDetailsContext } from '../providers'
-import { QAlbumsDocument, QMediaDocument, useMDeleteMedia } from '../api'
+import { useDialogContext, useSelectionContext, useMediaContext, useDetailsContext } from '@/providers'
+import { QAlbumsDocument, QMediaDocument, useMDeleteMedia } from '@photon/schema'
 
 const useDeleteMedia = () => {
     const dialog = useDialogContext()

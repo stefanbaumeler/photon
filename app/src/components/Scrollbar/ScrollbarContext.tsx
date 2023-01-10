@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
-import { TYearCountEntry, useQMediaYearCount } from '../../api'
+import { TYearCountEntry, useQMediaYearCount } from '@photon/schema'
 
 type Props = {
     children?: ReactNode

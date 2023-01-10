@@ -1,4 +1,4 @@
-import { TAlbum } from '../api'
+import { TAlbum } from '@photon/schema'
 import { AlbumTeaser } from './index'
 
 type Props = {

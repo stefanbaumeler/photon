@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useDialogContext, useSelectionContext } from '../providers'
-import { QAlbumMediaDocument, useMAddToAlbum } from '../api'
+import { useDialogContext, useSelectionContext } from '@/providers'
+import { QAlbumMediaDocument, useMAddToAlbum } from '@photon/schema'
 
 const useAddToAlbum = () => {
     const router = useRouter()

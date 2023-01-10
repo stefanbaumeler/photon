@@ -4,7 +4,7 @@ import { fileToMedium } from '../../helpers/exif'
 import fs from 'fs'
 import path from 'path'
 import { getEnv } from '../../../env'
-import { TMedium } from '../schema'
+import { TMedium } from '@photon/schema'
 
 const env = getEnv()
 

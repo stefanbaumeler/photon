@@ -1,5 +1,5 @@
 import UsersService from '../../services/users'
-import { TQueryResolvers, TMutationResolvers } from '../../database'
+import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
     users: (_, input, context) =>  new UsersService(context).readMany(),

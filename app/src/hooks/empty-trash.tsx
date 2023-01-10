@@ -1,6 +1,6 @@
-import { useDetailsContext, useDialogContext, useSelectionContext, useMediaContext } from '../providers'
-import { QMediaDocument, useMEmptyTrash } from '../api'
-import { EMediumStatus } from '../types/app'
+import { useDetailsContext, useDialogContext, useSelectionContext, useMediaContext } from '@/providers'
+import { QMediaDocument, useMEmptyTrash } from '@photon/schema'
+import { EMediumStatus } from '@/types/app'
 
 const useEmptyTrash = () => {
     const dialog = useDialogContext()

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useQMedium } from '../../api'
+import { useQMedium } from '@photon/schema'
 
 type Props = {
     id: string

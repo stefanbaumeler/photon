@@ -1,11 +1,11 @@
-import { useMSignIn, useMSignUp, QMediaDocument } from '../api'
+import { useMSignIn, useMSignUp, QMediaDocument } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../types/translations'
-import { Brand, Button, LinkButton, TextBox, Checkbox } from '../components'
+import { ETrans } from '@/types/translations'
+import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { EMediumStatus } from '../types/app'
-import { useMediaContext } from '../providers'
+import { EMediumStatus } from '@/types/app'
+import { useMediaContext } from '@/providers'
 
 enum ELoginFormMode {
     DEFAULT,

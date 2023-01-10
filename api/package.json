@@ -4,10 +4,10 @@
     "main": "index.ts",
     "license": "MIT",
     "scripts": {
+        "schema": "npx apollo service:download --endpoint=http://localhost:3030/ graphql-schema.json",
         "build": "node_modules/.bin/tsc -b ./tsconfig.json && copyfiles .env* dist",
         "watch": "node_modules/.bin/run-p -l watch:*",
         "watch:api": "node_modules/.bin/ts-node-dev index.ts",
-        "watch:api-schema": "node_modules/.bin/graphql-codegen -c codegen.ts -w",
         "db:up": "node_modules/.bin/run-s db:down db:setup db:generate db:seed",
         "db:down": "node_modules/.bin/ts-node src/database/teardown.ts",
         "db:setup": "node_modules/.bin/ts-node src/database/setup.ts",
@@ -18,10 +18,11 @@
         "test": "node_modules/.bin/jest"
     },
     "dependencies": {
-        "@photon/cv": "*",
         "@apollo/server": "^4.3.0",
         "@ffmpeg/core": "^0.11.0",
         "@ffmpeg/ffmpeg": "^0.11.6",
+        "@photon/cv": "*",
+        "@photon/schema": "*",
         "@prisma/client": "^4.8.1",
         "@types/exif-reader": "^1.0.0",
         "argon2": "^0.30.2",

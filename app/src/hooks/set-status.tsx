@@ -1,10 +1,10 @@
-import { useDetailsContext, useSelectionContext, useMediaContext } from '../providers'
+import { useDetailsContext, useSelectionContext, useMediaContext } from '@/providers'
 import { QAlbumMediaDocument, QAlbumsDocument,
     QFavoritesDocument,
     QMediaDocument,
     TMedium,
-    useMSetMediaStatus } from '../api'
-import { EMediumStatus } from '../types/app'
+    useMSetMediaStatus } from '@photon/schema'
+import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 
 const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {

@@ -1,4 +1,4 @@
-import { TQueryResolvers, TMutationResolvers } from '../../database'
+import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 import DevicesService from '../../services/devices'
 
 const queries: Partial<TQueryResolvers> = {

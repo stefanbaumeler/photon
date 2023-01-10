@@ -1,9 +1,9 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
-import { EMediumSort, EMediumStatus, ESelectionMode } from '../types/app'
-import { TMedium, useQAlbumMedia, useQFavorites, useQMedia } from '../api'
+import { EMediumSort, EMediumStatus, ESelectionMode } from '@/types/app'
+import { TMedium, useQAlbumMedia, useQFavorites, useQMedia } from '@photon/schema'
 import { useRouter } from 'next/router'
-import { formatDate, toDate } from '../util/date'
-import { GallerySection } from '../components'
+import { formatDate, toDate } from '@/util/date'
+import { GallerySection } from '@/components'
 import { useSelectionContext } from './SelectionProvider'
 
 type Props = {

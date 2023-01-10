@@ -1,6 +1,6 @@
 import { predefinedUserUUIDs } from '../helpers/ids'
 import UsersService from '../../services/users'
-import { TUser } from '../schema'
+import { TUser } from '@photon/schema'
 
 export default async (truncateOnly = false) => {
     const service = new UsersService()

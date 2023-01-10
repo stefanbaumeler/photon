@@ -1,10 +1,10 @@
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import { EThumbnailType, TThumbnail } from '../types/app'
+import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../types/translations'
+import { ETrans } from '@/types/translations'
 import bem from '../util/bem'
-import { TMedium, useQMedium } from '../api'
+import { TMedium, useQMedium } from '@photon/schema'
 import { useEffect, useState } from 'react'
 
 export const Thumbnail = ({

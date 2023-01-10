@@ -1,6 +1,6 @@
 import Icon from '@mdi/react'
-import { TNav, TNavItem } from '../types/app'
-import { useNavContext, useSelectionContext } from '../providers'
+import { TNav, TNavItem } from '@/types/app'
+import { useNavContext, useSelectionContext } from '@/providers'
 import Link from 'next/link'
 
 type Props = {

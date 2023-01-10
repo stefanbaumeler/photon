@@ -1,4 +1,4 @@
-import { TYearCountEntry } from '../../api'
+import { TYearCountEntry } from '@photon/schema'
 import ScrollbarMonth from './ScrollbarMonth'
 
 type Props = {
