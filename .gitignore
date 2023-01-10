@@ -12,7 +12,7 @@
 dist
 node_modules
 .env
-.env.*
+.env.development
 .vs
 .vscode
 *.tsbuildinfo
