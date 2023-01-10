@@ -5,17 +5,17 @@
     "license": "MIT",
     "scripts": {
         "schema": "npx apollo service:download --endpoint=http://localhost:3030/ graphql-schema.json",
-        "build": "node_modules/.bin/tsc -b ./tsconfig.json && copyfiles .env* dist",
-        "watch": "node_modules/.bin/run-p -l watch:*",
-        "watch:api": "node_modules/.bin/ts-node-dev index.ts",
-        "db:up": "node_modules/.bin/run-s db:down db:setup db:generate db:seed",
-        "db:down": "node_modules/.bin/ts-node src/database/teardown.ts",
-        "db:setup": "node_modules/.bin/ts-node src/database/setup.ts",
-        "db:seed": "node_modules/.bin/ts-node src/database/seeds",
-        "db:truncate": "node_modules/.bin/ts-node src/database/truncate.ts",
-        "db:generate": "node_modules/.bin/prisma generate",
+        "build": "tsc -b ./tsconfig.json && copyfiles .env* dist",
+        "watch": "run-p -l watch:*",
+        "watch:api": "ts-node-dev index.ts",
+        "db:up": "run-s db:down db:setup db:generate db:seed",
+        "db:down": "ts-node src/database/teardown.ts",
+        "db:setup": "ts-node src/database/setup.ts",
+        "db:seed": "ts-node src/database/seeds",
+        "db:truncate": "ts-node src/database/truncate.ts",
+        "db:generate": "prisma generate",
         "start": "node dist",
-        "test": "node_modules/.bin/jest"
+        "test": "jest"
     },
     "dependencies": {
         "@apollo/server": "^4.3.0",

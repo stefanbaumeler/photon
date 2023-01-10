@@ -20,7 +20,7 @@
         "watch:api": "yarn workspace @photon/api watch",
         "watch:app": "yarn workspace @photon/app watch",
         "watch:schema": "run-p schema:*",
-        "schema:generate": "node_modules/.bin/graphql-codegen -c codegen.ts -w",
+        "schema:generate": "graphql-codegen -c codegen.ts -w",
         "schema:compile": "yarn workspace @photon/schema build",
         "start": "run-p start:api start:app",
         "start:api": "yarn workspace @photon/api start",

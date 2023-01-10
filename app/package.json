@@ -3,13 +3,13 @@
     "version": "1.0.0",
     "main": "main.js",
     "scripts": {
-        "watch": "node_modules/.bin/run-p -l watch:*",
-        "watch:next": "node_modules/.bin/next dev -p 3030",
-        "build": "node_modules/.bin/run-s build:static",
-        "build:static": "node_modules/.bin/next build && next export",
-        "build:tauri": "yarn node_modules/.bin/tauri build",
-        "start": "node_modules/.bin/next start -p 3030",
-        "lint": "node_modules/.bin/next lint"
+        "watch": "run-p -l watch:*",
+        "watch:next": "next dev -p 3030",
+        "build": "run-s build:static",
+        "build:static": "next build && next export",
+        "build:tauri": "yarn tauri build",
+        "start": "next start -p 3030",
+        "lint": "next lint"
     },
     "dependencies": {
         "@apollo/client": "^3.7.0",
