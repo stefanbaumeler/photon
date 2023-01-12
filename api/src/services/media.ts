@@ -12,6 +12,7 @@ import { FileUpload } from 'graphql-upload-minimal'
 import { getCV } from '../../drivers'
 import path from 'path'
 import { getEnv } from '../../env'
+import AdmZip from 'adm-zip'
 
 const env = getEnv()
 
@@ -40,10 +41,11 @@ export default class MediaService {
             }
         }) as TMedium | null
 
-        if (existing) {
-            const existingPath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, existing.filenameDisk)
+        if (existing && medium.filenameDisk) {
+            const existingPath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
+
             if (fs.existsSync(existingPath)) {
-                await fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, existing.filenameDisk))
+                await fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
             }
 
             return existing
@@ -336,5 +338,38 @@ export default class MediaService {
                 status
             }
         })
+    }
+
+    download = async (ids: string[]) => {
+        const media = await this.readMany({
+            conditions: {
+                id: {
+                    in: ids
+                }
+            }
+        })
+
+        if (media.length === 1) {
+            return {
+                url: `/uploads/${media[0].filenameDisk}?download=1`
+            }
+        }
+
+        const downloadId = randomUUID()
+        const zip = new AdmZip()
+
+        media.forEach((medium) => {
+            zip.addLocalFile(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk), '', medium.filenameDownload || medium.filenameDisk)
+        })
+
+        if (!fs.existsSync('downloads')) {
+            fs.mkdirSync('downloads')
+        }
+
+        zip.writeZip(path.join(__dirname, '../../', 'downloads', `${downloadId}.zip`))
+
+        return {
+            url: `/downloads/${downloadId}.zip`
+        }
     }
 }

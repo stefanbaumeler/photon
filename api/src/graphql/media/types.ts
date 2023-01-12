@@ -60,10 +60,15 @@ export default gql`
         count: Int!
     }
 
+    type Download {
+        url: String!
+    }
+
     type Query {
         media(status: String, sort: String): [Medium!] @auth
         medium(id: ID!): Medium @auth
         mediaCountByYear: YearCountResult! @auth
+        download(media: [ID!]!): Download! @auth
     }
 
     type Mutation {

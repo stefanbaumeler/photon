@@ -11,7 +11,6 @@ export const Albums = ({ albums }: Props) => {
         key={k}
     />)
 
-    console.log(albums)
     return <div className="albums">
         <div className="albums__items">
             {albumElements}

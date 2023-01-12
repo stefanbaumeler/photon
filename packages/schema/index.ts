@@ -56,6 +56,11 @@ export type TDeviceInput = {
   type: Scalars['String'];
 };
 
+export type TDownload = {
+  __typename?: 'Download';
+  url: Scalars['String'];
+};
+
 export type TFile = {
   __typename?: 'File';
   url?: Maybe<Scalars['String']>;
@@ -201,6 +206,7 @@ export type TQuery = {
   albumMedia: Array<TMedium>;
   albums: Array<TAlbum>;
   devices: Array<TDevice>;
+  download: TDownload;
   favorites: Array<TMedium>;
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
@@ -217,6 +223,11 @@ export type TQueryAlbumArgs = {
 
 export type TQueryAlbumMediaArgs = {
   id: Scalars['ID'];
+};
+
+
+export type TQueryDownloadArgs = {
+  media: Array<Scalars['ID']>;
 };
 
 
@@ -355,6 +366,7 @@ export type TResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   Device: ResolverTypeWrapper<TDevice>;
   DeviceInput: TDeviceInput;
+  Download: ResolverTypeWrapper<TDownload>;
   File: ResolverTypeWrapper<TFile>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -383,6 +395,7 @@ export type TResolversParentTypes = {
   DateTime: Scalars['DateTime'];
   Device: TDevice;
   DeviceInput: TDeviceInput;
+  Download: TDownload;
   File: TFile;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
@@ -430,6 +443,11 @@ export type TDeviceResolvers<ContextType = any, ParentType extends TResolversPar
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TDownloadResolvers<ContextType = any, ParentType extends TResolversParentTypes['Download'] = TResolversParentTypes['Download']> = {
+  url?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -499,6 +517,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
   devices?: Resolver<Array<TResolversTypes['Device']>, ParentType, ContextType>;
+  download?: Resolver<TResolversTypes['Download'], ParentType, ContextType, RequireFields<TQueryDownloadArgs, 'media'>>;
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
@@ -560,6 +579,7 @@ export type TResolvers<ContextType = any> = {
   Count?: TCountResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Device?: TDeviceResolvers<ContextType>;
+  Download?: TDownloadResolvers<ContextType>;
   File?: TFileResolvers<ContextType>;
   ImageMeta?: TImageMetaResolvers<ContextType>;
   Medium?: TMediumResolvers<ContextType>;
@@ -773,6 +793,19 @@ export type TMDeleteMedia = (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
   )> }
+);
+
+export type TQDownloadVariables = Exact<{
+  media: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type TQDownload = (
+  { __typename?: 'Query' }
+  & { download: (
+    { __typename?: 'Download' }
+    & Pick<TDownload, 'url'>
+  ) }
 );
 
 export type TMEmptyTrashVariables = Exact<{ [key: string]: never; }>;
@@ -1447,6 +1480,41 @@ export function useMDeleteMedia(baseOptions?: Apollo.MutationHookOptions<TMDelet
 export type MDeleteMediaHookResult = ReturnType<typeof useMDeleteMedia>;
 export type MDeleteMediaMutationResult = Apollo.MutationResult<TMDeleteMedia>;
 export type MDeleteMediaMutationOptions = Apollo.BaseMutationOptions<TMDeleteMedia, TMDeleteMediaVariables>;
+export const QDownloadDocument = gql`
+    query QDownload($media: [ID!]!) {
+  download(media: $media) {
+    url
+  }
+}
+    `;
+
+/**
+ * __useQDownload__
+ *
+ * To run a query within a React component, call `useQDownload` and pass it any options that fit your needs.
+ * When your component renders, `useQDownload` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQDownload({
+ *   variables: {
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
+export function useQDownload(baseOptions: Apollo.QueryHookOptions<TQDownload, TQDownloadVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TQDownload, TQDownloadVariables>(QDownloadDocument, options);
+      }
+export function useQDownloadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQDownload, TQDownloadVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TQDownload, TQDownloadVariables>(QDownloadDocument, options);
+        }
+export type QDownloadHookResult = ReturnType<typeof useQDownload>;
+export type QDownloadLazyQueryHookResult = ReturnType<typeof useQDownloadLazyQuery>;
+export type QDownloadQueryResult = Apollo.QueryResult<TQDownload, TQDownloadVariables>;
 export const MEmptyTrashDocument = gql`
     mutation MEmptyTrash {
   emptyTrash {

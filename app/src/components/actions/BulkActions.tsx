@@ -1,10 +1,10 @@
 import * as Icons from '@mdi/js'
 import { Dropdown, IconButton } from '../index'
 import {  useState } from 'react'
-import { useSelectionContext } from '../../providers'
-import { ETrans } from '../../types/translations'
+import { useSelectionContext } from '@/providers'
+import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { EMediumStatus, ESelectionMode } from '../../types/app'
+import { EMediumStatus, ESelectionMode } from '@/types/app'
 import useAddToAlbumDialog from '../../dialogs/add-to-album'
 import useSetMediaStatus from '../../hooks/set-status'
 import useMoveToTrashDialog from '../../dialogs/move-to-trash'
@@ -13,6 +13,7 @@ import bem from '../../util/bem'
 import TrashActions from './TrashActions'
 import useAddToFavorites from '../../hooks/add-to-favorites'
 import useRemoveFromFavorites from '../../hooks/remove-from-favorites'
+import useDownload  from '../../hooks/download'
 
 export const BulkActions = () => {
     const { t } = useTranslation()
@@ -23,7 +24,16 @@ export const BulkActions = () => {
     const trashMediaDialog = useMoveToTrashDialog(selection.selected)
     const archive = useSetMediaStatus(selection.selected, EMediumStatus.ARCHIVED)
     const unarchive = useSetMediaStatus(selection.selected, EMediumStatus.ALL)
+
     const [moreActive, setMoreActive] = useState(false)
+    const [skipDownload, setSkipDownload] = useState(true)
+
+    const download = useDownload(skipDownload)
+
+    if (download.data?.download) {
+        router.push(`http://localhost:11011${download.data.download.url}`)
+        setSkipDownload(true)
+    }
 
     const addToAlbumDialog = useAddToAlbumDialog()
     const addToFavorites = useAddToFavorites(Array.from(selection.selected).map((selected) => selected.id))
@@ -67,6 +77,7 @@ export const BulkActions = () => {
             <IconButton
                 hint={t(ETrans.DOWNLOAD)}
                 icon={Icons.mdiTrayArrowDown}
+                onClick={() => setSkipDownload(false)}
             />
             <IconButton
                 testId="move-to-trash"

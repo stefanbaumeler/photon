@@ -2,6 +2,7 @@ import express from 'express'
 import mediaRouter from './controllers/media'
 import albumsRouter from './controllers/albums'
 import uploadsRouter from './controllers/uploads'
+import downloadsRouter from './controllers/downloads'
 import { graphqlUploadExpress } from 'graphql-upload-minimal'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -69,6 +70,7 @@ export const createApp = async () => {
     )
 
     app.use('/uploads', uploadsRouter)
+    app.use('/downloads', downloadsRouter)
     app.use('/media', mediaRouter)
     app.use('/albums', albumsRouter)
 

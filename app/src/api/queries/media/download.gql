@@ -1,0 +1,5 @@
+query QDownload($media: [ID!]!) {
+    download(media: $media) {
+        url
+    }
+}

@@ -31,7 +31,7 @@ export default async (truncateOnly = false) => {
         const medium = await fileToMedium({
             filePath: fullPath,
             fileName: filename,
-            originalName: `Test Image ${i}`,
+            originalName: `Test Image ${i}.jpg`,
             type: 'image/jpeg',
             user: predefinedUserUUIDs[0]
         })
