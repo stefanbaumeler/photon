@@ -6,6 +6,7 @@ import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
 import { TMedium, TVideoMeta, TImageMeta } from '@photon/schema'
 import { DeepPartial } from '../types'
+import mime from 'mime-types'
 
 export const hash = (str: string, seed = 0) => {
     // https://stackoverflow.com/a/52171480
@@ -236,11 +237,14 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type, user
-}: { filePath: string, fileName: string, originalName: string, type: string, user: string }) => {
-    const mediumType = type.split('/')[0]
+}: { filePath: string, fileName: string, originalName: string, type?: string, user: string }) => {
+    const mimetype = type || mime.lookup(originalName) || ''
+    const mediumType = mimetype.split('/')[0]
+
+    console.log(mimetype, mediumType)
     const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
         return {
-            mimetype: type,
+            mimetype,
             filenameDisk: fileName,
             filenameDownload: originalName,
             title: path.parse(originalName).name,

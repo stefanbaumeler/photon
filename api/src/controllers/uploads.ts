@@ -37,7 +37,6 @@ router.get('/:id', async (req, res, next) => {
 
         const medium = await new MediaService().readOneFromDisk(req.params.id)
 
-        console.log(medium, req.params.id)
         if (medium?.owner?.id !== userInfo.id) {
             res.statusCode = 403
             res.send()

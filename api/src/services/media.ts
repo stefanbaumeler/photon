@@ -85,6 +85,68 @@ export default class MediaService {
         })
     }
 
+    recursivelyReadDir = async (directory: string) => {
+        const files: string[] = []
+
+        const promises = fs.readdirSync(directory).map(async (file) => {
+            const absolute = path.join(directory, file)
+            if (fs.statSync(absolute).isDirectory()) {
+                await this.recursivelyReadDir(absolute).then((results) => {
+                    files.push(...results)
+                })
+            }
+            else {
+                files.push(absolute)
+            }
+        })
+
+        await Promise.all(promises)
+
+        return files
+    }
+
+    handleZip = async (zipPath: string) => {
+        const zip = new AdmZip(zipPath)
+
+        await zip.extractAllTo(`${process.env.API_UPLOADS_DIR}/temp`)
+
+        const paths = await this.recursivelyReadDir(`${process.env.API_UPLOADS_DIR}/temp`)
+
+        const noMacOS = paths.filter((p) => {
+            return !p.includes('__MACOSX')
+        })
+
+        const promises = noMacOS.map((filePath) => new Promise<DeepPartial<TMedium>>((resolve) => {
+            const name = randomUUID()
+            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
+
+            fs.copyFileSync(filePath, pathName)
+
+            // this.generateTags(pathName, name)
+
+            const m = fileToMedium({
+                filePath: pathName,
+                fileName: name,
+                originalName: filePath.split('/').pop() || '',
+                user: this.context!.user.id
+            }) as DeepPartial<TMedium>
+
+            resolve(m)
+        }))
+
+        const results = await Promise.all(promises) as TMedium[]
+
+        fs.rm(`${process.env.API_UPLOADS_DIR}/temp`, {
+            recursive: true
+        }, (error) => {
+            if (error) {
+                console.log(error)
+            }
+        })
+
+        return results
+    }
+
     writeToDisk = async (filePromises: Promise<FileUpload>[]) => {
         const promises = filePromises.map(async (filePromise) => {
             const name = randomUUID()
@@ -92,19 +154,27 @@ export default class MediaService {
             const file = await filePromise
             const stream = file.createReadStream()
 
-            return await new Promise<Promise<TMedium>>((resolve) => {
-                stream.pipe(fs.createWriteStream(pathName)).on('finish', () => {
-                    this.generateTags(pathName, name)
+            // application/x-7z-compressed
+            // application/zip
+            // application/x-rar
+            // console.log(file.mimetype)
+
+            return await new Promise<Promise<TMedium | TMedium[]>>((resolve) => {
+                stream.pipe(fs.createWriteStream(pathName)).on('finish', async () => {
+                    if (file.mimetype === 'application/zip') {
+                        resolve(this.handleZip(pathName))
+                    }
 
                     if (!this.context?.user.id) {
                         return {} as DeepPartial<TMedium>
                     }
 
+                    // this.generateTags(pathName, name)
+
                     const m = fileToMedium({
                         filePath: pathName,
                         fileName: name,
                         originalName: file.filename,
-                        type: file.mimetype,
                         user: this.context.user.id
                     }) as Promise<TMedium>
 
@@ -113,7 +183,15 @@ export default class MediaService {
             }) as TMedium
         })
 
-        return await Promise.all(promises) as TMedium[]
+        const media = await Promise.all(promises) as (TMedium[] | TMedium)[]
+
+        const results: TMedium[] = []
+
+        media.forEach((medium) => {
+            Array.isArray(medium) ? results.push(...medium) : results.push(medium)
+        })
+
+        return results
     }
 
     generateTags = async (pathName: string, filenameDisk: string) => {
@@ -205,7 +283,7 @@ export default class MediaService {
             })
         ])
 
-        const years: { count: number, year: number, months: { month: number, count: number }[]}[] = []
+        const years: { count: number, year: number, months: { month: number, count: number }[] }[] = []
 
         dateSets.forEach((dateSet) => {
             const date = new Date(dateSet.dateTaken ?? dateSet.dateCreated)
@@ -221,15 +299,13 @@ export default class MediaService {
 
                 if (existingMonth) {
                     existingMonth.count++
-                }
-                else {
+                } else {
                     existingYear.months.push({
                         month,
                         count: 1
                     })
                 }
-            }
-            else {
+            } else {
                 years.push({
                     year,
                     count: 1,

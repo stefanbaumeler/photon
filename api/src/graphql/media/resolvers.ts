@@ -3,7 +3,6 @@ import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
-        console.log(context)
         return new MediaService(context).readMany({
             conditions: input.status ? {
                 status: input.status,

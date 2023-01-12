@@ -5,6 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import { getEnv } from '../../../env'
 import { TMedium } from '@photon/schema'
+import { extension } from 'mime-types'
 
 const env = getEnv()
 
@@ -32,8 +33,8 @@ export default async (truncateOnly = false) => {
             filePath: fullPath,
             fileName: filename,
             originalName: `Test Image ${i}.jpg`,
-            type: 'image/jpeg',
-            user: predefinedUserUUIDs[0]
+            user: predefinedUserUUIDs[0],
+            type: 'image/jpeg'
         })
 
         const m = {
