@@ -122,7 +122,7 @@ export default class MediaService {
 
             fs.copyFileSync(filePath, pathName)
 
-            // this.generateTags(pathName, name)
+            this.generateTags(pathName, name)
 
             const m = fileToMedium({
                 filePath: pathName,
@@ -169,7 +169,7 @@ export default class MediaService {
                         return {} as DeepPartial<TMedium>
                     }
 
-                    // this.generateTags(pathName, name)
+                    this.generateTags(pathName, name)
 
                     const m = fileToMedium({
                         filePath: pathName,
@@ -194,6 +194,22 @@ export default class MediaService {
         return results
     }
 
+    reduceToFileSize = async (buffer: Buffer, sizeInMB: number, quality = 80, attempts = 10): Promise<Buffer> => {
+        const newFile = await sharp(buffer).jpeg({
+            quality
+        }).toBuffer()
+
+        if (newFile.byteLength / 1000 / 1000 < sizeInMB) {
+            return newFile
+        }
+
+        if (attempts) {
+            return await this.reduceToFileSize(buffer, sizeInMB, quality - 5, attempts - 1)
+        }
+
+        return newFile
+    }
+
     generateTags = async (pathName: string, filenameDisk: string) => {
         if (!process.env.CV_REKOGNITION_ACCESS_KEY_ID || !process.env.CV_REKOGNITION_SECRET_ACCESS_KEY || !process.env.CV_REKOGNITION_REGION) {
             return false
@@ -201,12 +217,16 @@ export default class MediaService {
 
         const buffer = await fs.promises.readFile(pathName)
 
-        const recognize = await getCV()
-        const labels = await recognize.labels(buffer)
+        const bufferForCV = await this.reduceToFileSize(buffer, 4.9)
 
-        if (labels) {
-            await this.writeGeneratedTags(labels, filenameDisk)
-        }
+        const recognize = await getCV()
+        // const labels = await recognize.labels(bufferForCV)
+        // const text = await recognize.text(bufferForCV)
+        // const faces = await recognize.faces(bufferForCV)
+
+        // if (labels) {
+        //     await this.writeGeneratedTags([...labels, ...text], filenameDisk)
+        // }
     }
 
     writeGeneratedTags = async (tags: string[], filenameDisk: string) => {
@@ -216,7 +236,7 @@ export default class MediaService {
             return
         }
 
-        await this.prisma.medium.update({
+        const r = await this.prisma.medium.update({
             where: {
                 id: medium.id
             },
@@ -224,6 +244,8 @@ export default class MediaService {
                 generatedTags: tags.join(', ')
             }
         })
+
+        console.log(r)
     }
 
     async readOne (id: string) {

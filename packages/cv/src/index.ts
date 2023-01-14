@@ -14,6 +14,10 @@ export declare class CVDriver {
     constructor(config: Record<string, unknown>)
 
     labels(buffer: Buffer): Promise<string[]>
+
+    text(buffer: Buffer): Promise<string[]>
+
+    faces(buffer: Buffer): Promise<string[]>
 }
 
 export type DriverConfig = {
