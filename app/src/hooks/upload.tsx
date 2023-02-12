@@ -3,10 +3,12 @@ import { QMediaDocument, QMediaYearCountDocument, useMUpload } from '@photon/sch
 import tauri from '../tauri'
 import { useMediaContext } from '@/providers'
 import { FileUpload } from 'graphql-upload-minimal'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
 
+    const instantSearch = useInstantSearch()
     const media = useMediaContext()
 
     const [upload] = useMUpload({
@@ -27,6 +29,7 @@ const useUpload = () => {
             tauri.upload(files)
 
             upload().then(() => {
+                instantSearch.refresh()
                 setFiles(undefined)
             })
         }

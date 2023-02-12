@@ -87,6 +87,7 @@ export type TMedium = {
   favoredBy?: Maybe<Array<Maybe<TUser>>>;
   filenameDisk: Scalars['String'];
   filenameDownload?: Maybe<Scalars['String']>;
+  generatedTags?: Maybe<Array<Maybe<Scalars['String']>>>;
   hash?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   lat?: Maybe<Scalars['Float']>;
@@ -113,7 +114,7 @@ export type TMutation = {
   removeFromAlbum?: Maybe<TAlbum>;
   removeFromFavorites: Array<TMedium>;
   rotate: TMedium;
-  setMediaStatus: TCount;
+  setMediaStatus: Array<TMedium>;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
@@ -476,6 +477,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   favoredBy?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
   filenameDisk?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  generatedTags?: Resolver<Maybe<Array<Maybe<TResolversTypes['String']>>>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   lat?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
@@ -504,7 +506,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
   removeFromFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
   rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
-  setMediaStatus?: Resolver<TResolversTypes['Count'], ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
+  setMediaStatus?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
@@ -934,10 +936,10 @@ export type TMSetMediaStatusVariables = Exact<{
 
 export type TMSetMediaStatus = (
   { __typename?: 'Mutation' }
-  & { setMediaStatus: (
-    { __typename?: 'Count' }
-    & Pick<TCount, 'count'>
-  ) }
+  & { setMediaStatus: Array<(
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'id'>
+  )> }
 );
 
 export type TMUploadVariables = Exact<{
@@ -1804,7 +1806,7 @@ export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRota
 export const MSetMediaStatusDocument = gql`
     mutation MSetMediaStatus($media: [ID]!, $status: String!) {
   setMediaStatus(media: $media, status: $status) {
-    count
+    id
   }
 }
     `;

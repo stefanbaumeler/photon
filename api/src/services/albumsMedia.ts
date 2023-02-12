@@ -48,7 +48,7 @@ export default class AlbumsMediaService {
             })
         )
 
-        return results.map((result) => result.medium) as TMedium[]
+        return results.map(({ medium }) => medium) as TMedium[]
     }
 
     removeFromAlbum = async (idAlbum: string, mediaIds: string[]) => {

@@ -1,9 +1,11 @@
 import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '@photon/schema'
 import { useSelectionContext, useMediaContext } from '@/providers'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useAddToFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()
     const media = useMediaContext()
+    const instantSearch = useInstantSearch()
 
     const [addToFavorites] = useMAddToFavorites({
         variables: {
@@ -19,6 +21,7 @@ const useAddToFavorites = (mediaIds: string[]) => {
 
     return () => {
         addToFavorites().then(() => {
+            instantSearch.refresh()
             selection.clear()
         })
     }

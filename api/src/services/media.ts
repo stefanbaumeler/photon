@@ -13,11 +13,14 @@ import { getCV } from '../../drivers'
 import path from 'path'
 import { getEnv } from '../../env'
 import AdmZip from 'adm-zip'
+import { getTypesense } from '../search'
 
 const env = getEnv()
 
 export default class MediaService {
     prisma = getDatabase()
+
+    typesense = getTypesense()
 
     context
 
@@ -54,6 +57,7 @@ export default class MediaService {
         return await this.prisma.medium.create({
             data: {
                 ...medium as DeepPartial<TMedium>,
+                generatedTags: medium.generatedTags?.join(', '),
                 owner: {
                     connect: {
                         id: medium.owner?.id
@@ -220,13 +224,13 @@ export default class MediaService {
         const bufferForCV = await this.reduceToFileSize(buffer, 4.9)
 
         const recognize = await getCV()
-        // const labels = await recognize.labels(bufferForCV)
-        // const text = await recognize.text(bufferForCV)
+        const labels = await recognize.labels(bufferForCV)
+        const text = await recognize.text(bufferForCV)
         // const faces = await recognize.faces(bufferForCV)
 
-        // if (labels) {
-        //     await this.writeGeneratedTags([...labels, ...text], filenameDisk)
-        // }
+        if (labels && text) {
+            await this.writeGeneratedTags([...labels, ...text], filenameDisk)
+        }
     }
 
     writeGeneratedTags = async (tags: string[], filenameDisk: string) => {
@@ -244,6 +248,8 @@ export default class MediaService {
                 generatedTags: tags.join(', ')
             }
         })
+
+        // this.typesense.collections('media').documents().update({})
 
         console.log(r)
     }
@@ -422,11 +428,13 @@ export default class MediaService {
 
         fs.unlinkSync(filePathOld)
 
+        // typesense.collections('media').documents().upsert()
+
         return response as TMedium
     }
 
-    setStatus = (ids: string[], status: string) => {
-        return this.prisma.medium.updateMany({
+    setStatus = async (ids: string[], status: string) => {
+        await this.prisma.medium.updateMany({
             where: {
                 id: {
                     in: ids
@@ -434,6 +442,14 @@ export default class MediaService {
             },
             data: {
                 status
+            }
+        })
+
+        return this.readMany({
+            conditions: {
+                id: {
+                    in: ids
+                }
             }
         })
     }

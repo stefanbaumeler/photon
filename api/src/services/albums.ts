@@ -68,17 +68,15 @@ export default class AlbumsService {
             },
             include: {
                 owner: true,
-                cover: true
+                cover: {
+                    include: {
+                        owner: true
+                    }
+                }
             }
         })
 
-        const asTAlbum = album as TAlbum
-
-        if (album?.owner) {
-            asTAlbum.owner = await new UsersService().readOne(album.owner.id)
-        }
-
-        return asTAlbum
+        return album as TAlbum
     }
 
     readMany = async (conditions: Prisma.AlbumWhereInput = {}, take = 100) => {
@@ -87,7 +85,11 @@ export default class AlbumsService {
             take,
             include: {
                 owner: true,
-                cover: true
+                cover: {
+                    include: {
+                        owner: true
+                    }
+                }
             }
         })
 
@@ -124,7 +126,11 @@ export default class AlbumsService {
             },
             include: {
                 owner: true,
-                cover: true
+                cover: {
+                    include: {
+                        owner: true
+                    }
+                }
             }
         }) as TAlbum
     }

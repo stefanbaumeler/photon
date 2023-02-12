@@ -16,12 +16,15 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import https from 'https'
 import fs from 'fs'
 import http from 'http'
+import path from 'path'
 
 export const getApollo = (app: ReturnType<typeof express> ) => {
-    const server = parseInt(process.env.API_SECURE || '1', 10) ? https.createServer({
-        key: fs.readFileSync('../../ssl/key.pem'),
-        cert: fs.readFileSync('../../ssl/cert.pem')
-    }, app) : http.createServer(app)
+    // const server = parseInt(process.env.API_SECURE || '1', 10) ? https.createServer({
+    //     key: fs.readFileSync(path.join(__dirname, '../../ssl/key.pem')),
+    //     cert: fs.readFileSync(path.join(__dirname, '../../ssl/cert.pem'))
+    // }, app) : http.createServer(app)
+
+    const server = http.createServer(app)
 
     let schema = makeExecutableSchema({
         typeDefs,

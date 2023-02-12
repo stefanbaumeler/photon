@@ -51,7 +51,7 @@ model Medium {
   albums             Album[]
   albumMedia         AlbumMedium[]
   favoredBy          User[]
-  generatedTags      String?
+  generatedTags      String[]
 
   @@unique(hash)
 }

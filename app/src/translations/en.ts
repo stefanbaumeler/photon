@@ -87,5 +87,6 @@ export default {
     sort_by: 'Sort by',
     newest_first: 'Newest first',
     oldest_first: 'Oldest first',
-    most_recent: 'Recently added'
+    most_recent: 'Recently added',
+    filter: 'Filter'
 }

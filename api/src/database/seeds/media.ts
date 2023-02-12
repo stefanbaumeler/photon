@@ -18,6 +18,16 @@ export default async (truncateOnly = false) => {
         return
     }
 
+    const predefinedGeneratedTags = [
+        'Hut, Nature, Outdoors, Countryside, Building, Rural, Architecture, Shelter, Housing, Shack',
+        'Scenery, Nature, Outdoors, Rubble, Gravel, Road, Rock, Wilderness, Landscape, Person, Slope, Mountain Range, Mountain',
+        'Scenery, Outdoors, Nature, Boat, Vehicle, Transportation, Railing, Handrail, Bridge, Summer, Water, Bird, Animal',
+        'Grassland, Nature, Outdoors, Field, Meadow, Countryside, Rural, Plateau, Pasture, Farm, Grass, Plant, Ground, Scenery',
+        'Reservoir, Outdoors, Nature, Water, Promontory, Scenery, Sea, Land',
+        'Shelter, Outdoors, Building, Architecture, Hut, Nature, Countryside, Rural, Scenery, Car, Vehicle, Transportation, Pickup Truck, Truck, Person',
+        'Scenery, Outdoors, Nature, Promontory, Water, Beach, Shoreline, Sea, Coast'
+    ]
+
     for (let i = 0; i < 7; i++) {
         const filename = predefinedMediumUUIDs[i]
         const fixturePath = path.join(__dirname, '../', `fixtures/image-${i}.jpg`)
@@ -37,8 +47,9 @@ export default async (truncateOnly = false) => {
             type: 'image/jpeg'
         })
 
-        const m = {
+        await service.createOne({
             ...medium,
+            generatedTags: predefinedGeneratedTags[i].split(', '),
             dateCreated: new Date('2022-11-11 00:00:00'),
             dateModified: new Date('2022-11-11 00:00:00'),
             id: filename,
@@ -51,8 +62,6 @@ export default async (truncateOnly = false) => {
             favoredBy: i < 3 ? [{
                 id: predefinedUserUUIDs[0]
             }] : []
-        } as TMedium
-
-        await service.createOne(m)
+        })
     }
 }

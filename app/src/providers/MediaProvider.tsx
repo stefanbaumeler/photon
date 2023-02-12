@@ -1,10 +1,17 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { EMediumSort, EMediumStatus, ESelectionMode } from '@/types/app'
-import { TMedium, useQAlbumMedia, useQFavorites, useQMedia } from '@photon/schema'
+import { TMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { formatDate, toDate } from '@/util/date'
 import { GallerySection } from '@/components'
 import { useSelectionContext } from './SelectionProvider'
+import { useClearRefinements,
+    useHits,
+    useMenu,
+    useSortBy,
+    useToggleRefinement,
+    useHitsPerPage,
+    useCurrentRefinements } from 'react-instantsearch-hooks-web'
 
 type Props = {
     children?: ReactNode
@@ -37,52 +44,72 @@ const MediaProvider = ({ children }: Props) => {
     const [sort, setSort] = useState(EMediumSort.NEWEST)
     const [status, setStatus] = useState(defaultStatus)
     const [sections, setSections] = useState<JSX.Element[]>([])
+    const [media, setMedia] = useState([])
 
     const selection = useSelectionContext()
 
-    const favoritesQuery = useQFavorites()
-
-    const albumMediaQuery = useQAlbumMedia({
-        variables: {
-            id: idAlbum
-        },
-        skip: !router.isReady || !idAlbum
+    const favoritesMenu = useToggleRefinement({
+        attribute: 'isFavorite'
     })
 
-    const mediaQuery = useQMedia({
-        variables: {
-            sort,
-            status: EMediumStatus.ALL
-        }
+    const trashMenu = useToggleRefinement({
+        attribute: 'isTrash'
     })
 
-    const trashQuery = useQMedia({
-        variables: {
-            sort,
-            status: EMediumStatus.TRASH
-        }
+    const notTrashMenu = useToggleRefinement({
+        attribute: 'isTrash',
+        on: false,
+        off: true
     })
 
-    const archiveQuery = useQMedia({
-        variables: {
-            sort,
-            status: EMediumStatus.ARCHIVED
-        }
+    const archivedMenu = useToggleRefinement({
+        attribute: 'isArchived'
     })
 
-    const mediaQueryByStatus = {
-        all: mediaQuery,
-        trash: trashQuery,
-        archived: archiveQuery
-    }
+    const notArchivedMenu = useToggleRefinement({
+        attribute: 'isArchived',
+        on: false,
+        off: true
+    })
+
+    const hitsPerPage = useHitsPerPage({
+        items: [
+            {
+                label: '',
+                value: 250,
+                default: true
+            }
+        ]
+    })
 
     useEffect(() => {
-        if (idAlbum) {
-            albumMediaQuery.refetch({
-                id: idAlbum
-            })
-        }
-    }, [idAlbum])
+        hitsPerPage.refine(250)
+    }, [])
+
+    const clear = useClearRefinements()
+
+    const sortBy = useSortBy({
+        items: [
+            {
+                label: '',
+                value: 'media'
+            },
+            {
+                label: '',
+                value: 'media/sort/dateTakenSort:asc'
+            },
+            {
+                label: '',
+                value: 'media/sort/dateTakenSort:desc'
+            }
+        ]
+    })
+
+    const albumsMenu = useMenu({
+        attribute: 'albums'
+    })
+
+    const { hits } = useHits<TMedium>()
 
     useEffect(() => {
         let newStatus: EMediumStatus
@@ -98,17 +125,47 @@ const MediaProvider = ({ children }: Props) => {
         if (newStatus !== status) {
             setStatus(newStatus)
         }
-    }, [router.pathname])
+    }, [topLevelRoute, !!hits.length])
 
-    let media = mediaQueryByStatus[status].data?.media || []
+    const c = useCurrentRefinements()
+    useEffect(() => {
+        console.log('before', c, hits)
 
-    if (idAlbum) {
-        media = albumMediaQuery.data?.albumMedia || []
-    }
+        clear.refine()
+        console.log('after', c, hits)
 
-    if (topLevelRoute === 'favorites') {
-        media = favoritesQuery.data?.favorites as TMedium[] || []
-    }
+        sortBy.refine(`media/sort/dateTakenSort:${sort === EMediumSort.OLDEST ? 'asc' : 'desc'}`)
+
+        console.log(idAlbum, status, !!hits.length)
+        if (idAlbum) {
+            albumsMenu.refine(idAlbum)
+        } else if (status) {
+            if (status === EMediumStatus.ARCHIVED) {
+                archivedMenu.refine()
+            } else if (status === EMediumStatus.TRASH) {
+                trashMenu.refine()
+            } else {
+                notTrashMenu.refine()
+                notArchivedMenu.refine()
+            }
+        }
+
+        if (topLevelRoute === 'favorites') {
+            favoritesMenu.refine()
+        }
+    }, [topLevelRoute, idAlbum, status, !!hits.length, sort])
+
+    useEffect(() => {
+        const hitsWithMeta = hits.map((hit) => {
+            if (typeof hit.meta === 'string') {
+                hit.meta = JSON.parse(hit.meta)
+            }
+
+            return hit
+        })
+
+        setMedia(hitsWithMeta)
+    }, [hits])
 
     useEffect(() => {
         const groups = new Set<string>()
@@ -175,7 +232,7 @@ const MediaProvider = ({ children }: Props) => {
         }).map((section) => section.template)
 
         setSections(newSections)
-    }, [mediaQueryByStatus[status], albumMediaQuery, topLevelRoute])
+    }, [media])
 
     return <MediaContext.Provider value={{
         sort,

@@ -16,6 +16,17 @@
 @mixin searchbar-section {
     &--left {
         width: #{$sidebar-width - 10};
+        flex-shrink: 0;
+    }
+
+    &--center {
+        width: 100%;
+    }
+
+    &--right {
+        width: 100%;
+        align-items: flex-end;
+        display: flex;
     }
 }
 

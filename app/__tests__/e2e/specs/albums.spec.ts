@@ -107,7 +107,6 @@ test('can set cover', async ({ page }) => {
     const id = split[split.length - 2]
 
     await page.getByTestId('save-changes').click()
-    await page.getByTestId('album-back').click()
 
     const link = await page.locator(`[href="/albums/${predefinedAlbumUUIDs[0]}"]`)
     const imageSrc = await link.getByTestId('album-image').getAttribute('src')

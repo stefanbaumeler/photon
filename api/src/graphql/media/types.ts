@@ -38,6 +38,7 @@ export default gql`
         uploader: User
         hash: String
         favoredBy: [User]
+        generatedTags: [String]
     }
 
     type YearCountMonth {
@@ -74,7 +75,7 @@ export default gql`
     type Mutation {
         deleteMedia(ids: [ID!]!): [Medium!]! @auth
         rotate(id: ID!): Medium! @auth
-        setMediaStatus(media: [ID]!, status: String!): Count! @auth
+        setMediaStatus(media: [ID]!, status: String!): [Medium!]! @auth
         upload(files: [Upload!]!): [Medium!]! @auth
         emptyTrash: [Medium!]! @auth
     }

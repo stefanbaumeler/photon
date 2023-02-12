@@ -6,6 +6,10 @@ type TAppEnv = { [key: string]: string | undefined } & {
     NEXT_PUBLIC_API_URL: string
     NEXT_PUBLIC_UPLOADS_DIR: string
     DATABASE_URL: string
+    NEXT_PUBLIC_TYPESENSE_HOST: string
+    NEXT_PUBLIC_TYPESENSE_PORT: string
+    NEXT_PUBLIC_TYPESENSE_SECURE: string
+    NEXT_PUBLIC_TYPESENSE_SEARCH_KEY: string
 }
 
 export const getEnv = () => {

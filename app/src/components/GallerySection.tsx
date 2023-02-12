@@ -52,13 +52,9 @@ export const GallerySection = ({
     }
 
     useEffect(() => {
-        window.addEventListener('resize', () => {
-            resize()
-        })
+        window.addEventListener('resize', resize)
 
-        return () => window.removeEventListener('resize', () => {
-            resize()
-        })
+        return () => window.removeEventListener('resize', resize)
     })
 
     useEffect(() => {

@@ -16,6 +16,10 @@ type TApiEnv = { [key: string]: string | undefined } & {
     CV_REKOGNITION_ACCESS_KEY_ID?: string
     CV_REKOGNITION_SECRET_ACCESS_KEY?: string
     CV_REKOGNITION_REGION?: string
+    TYPESENSE_HOST: string
+    TYPESENSE_PORT: string
+    TYPESENSE_SECURE: string
+    TYPESENSE_ADMIN_KEY: string
 }
 
 export const getEnv = () => {

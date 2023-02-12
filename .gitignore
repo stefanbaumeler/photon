@@ -18,5 +18,3 @@ node_modules
 *.tsbuildinfo
 yarn-debug.log*
 yarn-error.log*
-
-/ssl

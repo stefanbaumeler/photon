@@ -1,12 +1,10 @@
 **/dist
 **/node_modules
 **/.git
-**/.next
 **/__tests__
-**/out
 **/ssl
 **/downloads
 **/src/database/fixtures
 **/uploads
-**/Dockerfile
-**/.dockerignore
+Dockerfile
+.dockerignore

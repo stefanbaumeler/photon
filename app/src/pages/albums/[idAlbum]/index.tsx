@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '../../../hooks/set-album-cover'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const AlbumPage = () => {
     const router = useRouter()
@@ -38,6 +39,8 @@ const AlbumPage = () => {
         },
         skip: !router.isReady
     })
+
+    const instantSearch = useInstantSearch()
 
     const [removeFromAlbum] = useMRemoveFromAlbum({
         variables: {
@@ -89,6 +92,7 @@ const AlbumPage = () => {
         if (edit.state === EEditState.CONFIRMED) {
             if (selection.mode === ESelectionMode.DELETE) {
                 Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
+                    instantSearch.refresh()
                     selection.clear()
                 })
             }

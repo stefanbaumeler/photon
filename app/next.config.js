@@ -4,6 +4,7 @@ const withGraphql = require('next-plugin-graphql')
 module.exports = withGraphql({
     reactStrictMode: true,
     swcMinify: true,
+    output: 'standalone',
     async rewrites () {
         return [
             {

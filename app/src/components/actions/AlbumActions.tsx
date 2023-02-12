@@ -1,12 +1,12 @@
 import * as Icons from '@mdi/js'
 import { IconButton, Dropdown } from '../index'
-import { ETrans } from '../../types/translations'
+import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import useDeleteAlbumDialog from '../../dialogs/delete-album'
 import { useRouter } from 'next/router'
-import { useLayoutContext, useSelectionContext } from '../../providers'
-import { ESelectionMode } from '../../types/app'
+import { useLayoutContext, useSelectionContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
 
 export const AlbumActions = () => {
     const { t } = useTranslation()

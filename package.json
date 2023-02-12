@@ -34,11 +34,9 @@
         "build:lerna": "lerna run build",
         "build:db": "run-s start:docker db:up",
         "test": "NODE_ENV=test start-server-and-test 'yarn start:app' http://0.0.0.0:3030 'yarn test:all'",
-        "test:all": "run-s test:api test:e2e",
-        "test:api": "NODE_ENV=test jest -i",
-        "test:e2e": "run-s playwright:*",
-        "playwright:install": "npx playwright install",
-        "playwright:test": "NODE_ENV=test npx playwright test"
+        "test:all": "run-s test:api test:app",
+        "test:app": "yarn workspace @photon/app test",
+        "test:api": "NODE_ENV=test jest -i"
     },
     "dependencies": {
         "@photon/cv": "1.0.0",
@@ -48,10 +46,6 @@
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^12.2.3",
-        "@playwright/test": "^1.29.2",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.4.0",
-        "@testing-library/user-event": "^14.4.3",
         "@types/jest": "^29.2.5",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",

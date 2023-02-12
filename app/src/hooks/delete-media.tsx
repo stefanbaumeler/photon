@@ -1,11 +1,13 @@
 import { useDialogContext, useSelectionContext, useMediaContext, useDetailsContext } from '@/providers'
 import { QAlbumsDocument, QMediaDocument, useMDeleteMedia } from '@photon/schema'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useDeleteMedia = () => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const details = useDetailsContext()
     const media = useMediaContext()
+    const instantSearch = useInstantSearch()
 
     const [deleteMedia] = useMDeleteMedia({
         variables: {
@@ -24,6 +26,7 @@ const useDeleteMedia = () => {
 
     return () => {
         deleteMedia().then(() => {
+            instantSearch.refresh()
             selection.clear()
             dialog.close()
             details?.close()

@@ -241,7 +241,6 @@ export const fileToMedium = async ({
     const mimetype = type || mime.lookup(originalName) || ''
     const mediumType = mimetype.split('/')[0]
 
-    console.log(mimetype, mediumType)
     const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
         return {
             mimetype,

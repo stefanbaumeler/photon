@@ -51,7 +51,7 @@ const Medium = ({
             el = <></>
         }
 
-        if (details.active) {
+        if (details.active && details.medium.id === medium.id) {
             setLoaded(false)
         }
 

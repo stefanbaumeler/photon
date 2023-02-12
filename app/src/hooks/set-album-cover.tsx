@@ -1,8 +1,10 @@
 import { QAlbumDocument, useMUpdateAlbum } from '@photon/schema'
 import { useSelectionContext } from '@/providers'
+import { useRouter } from 'next/router'
 
 const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
     const selection = useSelectionContext()
+    const router = useRouter()
 
     idMedium = idMedium || [...selection.selected][0]?.id
 
@@ -25,6 +27,7 @@ const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
         if (idAlbum) {
             setAlbumCover().then(() => {
                 selection.clear()
+                router.push('/albums')
             })
         }
     }

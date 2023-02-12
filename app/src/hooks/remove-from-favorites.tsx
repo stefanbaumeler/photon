@@ -1,9 +1,11 @@
 import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '@photon/schema'
 import { useSelectionContext, useMediaContext } from '@/providers'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useRemoveFromFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()
     const media = useMediaContext()
+    const instantSearch = useInstantSearch()
 
     const [removeFromFavorites] = useMRemoveFromFavorites({
         variables: {
@@ -19,6 +21,7 @@ const useRemoveFromFavorites = (mediaIds: string[]) => {
 
     return () => {
         removeFromFavorites().then(() => {
+            instantSearch.refresh()
             selection.clear()
         })
     }

@@ -27,7 +27,7 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.PHOTO_PLURAL),
                     icon: Icons.mdiImageOutline,
-                    href: '/',
+                    href: '',
                     testId: 'nav-index'
                 },
                 {

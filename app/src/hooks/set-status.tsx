@@ -6,11 +6,13 @@ import { QAlbumMediaDocument, QAlbumsDocument,
     useMSetMediaStatus } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const media = useMediaContext()
+    const instantSearch = useInstantSearch()
 
     const router = useRouter()
 
@@ -65,6 +67,7 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
 
     return () => {
         setMediaStatus().then(() => {
+            instantSearch.refresh()
             selection.clear()
             details?.close()
 

@@ -21,8 +21,8 @@ export const MainNav = ({ nav }: Props) => {
 
     return <nav className={nav.type}>
         <ul className={`${nav.type}__list`}>
-            {nav.items.map((item, key) =>
-                <li
+            {nav.items.map((item, key) => {
+                return <li
                     key={key}
                     className={`${nav.type}__item`}
                 >
@@ -43,6 +43,7 @@ export const MainNav = ({ nav }: Props) => {
                         </span>
                     </Link>
                 </li>
+            }
             )}
         </ul>
     </nav>
