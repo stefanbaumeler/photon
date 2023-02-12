@@ -7,28 +7,14 @@ env:
 
 jobs:
     tests-run:
-        services:
-            postgres:
-                image: postgres
-                options: >-
-                    --health-cmd pg_isready
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
-                ports:
-                  - 5432:5432
-                env:
-                    POSTGRES_DB: cy-photos
-                    POSTGRES_PASSWORD: postgres
-                    POSTGRES_USER: stefanbaumeler
-            typesense:
-                image: typesense/typesense:0.23.1
-                ports:
-                    - 8108:8108
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+            - name: Setup DB
+              run: docker-compose up -d db
+            - name: Setup Search
+              run: docker-compose up -d search
             - name: Setup Yarn
               uses: actions/setup-node@v3
               with:
