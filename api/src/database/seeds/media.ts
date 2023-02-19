@@ -4,8 +4,6 @@ import { fileToMedium } from '../../helpers/exif'
 import fs from 'fs'
 import path from 'path'
 import { getEnv } from '../../../env'
-import { TMedium } from '@photon/schema'
-import { extension } from 'mime-types'
 
 const env = getEnv()
 
@@ -33,8 +31,8 @@ export default async (truncateOnly = false) => {
         const fixturePath = path.join(__dirname, '../', `fixtures/image-${i}.jpg`)
         const fullPath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, filename)
 
-        if (!fs.existsSync('uploads')) {
-            fs.mkdirSync('uploads')
+        if (!fs.existsSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR))) {
+            fs.mkdirSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR))
         }
 
         fs.copyFileSync(fixturePath, fullPath)

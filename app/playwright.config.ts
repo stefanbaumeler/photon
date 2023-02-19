@@ -1,11 +1,14 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
+import { getEnv } from '@/env'
 
-const config: PlaywrightTestConfig = {
-    globalSetup: './__tests__/e2e/support/setup',
-    use: {
-        baseURL: 'http://localhost:3030'
-    },
-    workers: 1
-}
+const env = getEnv()
 
+const config: PlaywrightTestConfig =
+    {
+        globalSetup: './__tests__/e2e/support/setup',
+        use: {
+            baseURL: env.NEXT_PUBLIC_URL
+        },
+        workers: 1
+    }
 export default config

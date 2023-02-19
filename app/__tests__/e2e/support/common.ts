@@ -4,6 +4,12 @@ import { useTestQuery } from '../../../../api/__tests__/utility'
 
 export const globalBeforeEach = () => {
     test.beforeEach(async ({ page }) => {
+        page.on('console', (message) => {
+            if (message.type() === 'error') {
+                console.log(process.env.NODE_ENV, message.text(), message.type(), message.location())
+            }
+        })
+
         await seed()
 
         await page.route('**/graphql', async (route, request) => {
@@ -24,7 +30,7 @@ export const openDetails = async (page: Page, provideIds = false) => {
     const ids = []
 
     if (provideIds) {
-        await expect(await page.getByTestId('teaser-image')).not.toHaveCount(0)
+        await expect.poll(async () => await page.getByTestId('teaser-image').count()).toBeGreaterThan(0)
 
         const images = await page.getByTestId('teaser-image').elementHandles()
 

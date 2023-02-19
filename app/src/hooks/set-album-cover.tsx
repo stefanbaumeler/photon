@@ -15,12 +15,14 @@ const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
                 cover: idMedium
             }
         },
-        refetchQueries: [{
-            query: QAlbumDocument,
-            variables: {
-                id: idAlbum
+        refetchQueries: [
+            {
+                query: QAlbumDocument,
+                variables: {
+                    id: idAlbum
+                }
             }
-        }]
+        ]
     })
 
     return () => {

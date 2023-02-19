@@ -13,7 +13,11 @@ const useAddToNewAlbum = () => {
         variables: {
             media: Array.from(selection.selected).map((s) => s.id)
         },
-        refetchQueries: [QAlbumsDocument]
+        refetchQueries: [
+            {
+                query: QAlbumsDocument
+            }
+        ]
     })
 
     useEffect(() => {

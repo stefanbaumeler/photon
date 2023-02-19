@@ -1,7 +1,0 @@
-**/node_modules
-**/.git
-**/.next
-**/__tests__
-**/out
-Dockerfile
-.dockerignore

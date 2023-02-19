@@ -7,7 +7,7 @@ globalBeforeEach()
 test('can delete', async ({ page }) => {
     await page.goto('/albums')
 
-    await expect(await page.getByTestId('album-teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
 
     const count = await page.getByTestId('album-teaser').count()
 
@@ -23,11 +23,13 @@ test('can delete', async ({ page }) => {
 test('can create from media', async ({ page }) => {
     await page.goto('/albums')
 
-    await expect(await page.getByTestId('album-teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
 
     const count = await page.getByTestId('album-teaser').count()
 
     await page.goto('/')
+
+    await page.waitForTimeout(4000)
 
     await page.getByTestId('teaser-check').first().click()
     await page.getByTestId('teaser-check').last().click()
@@ -47,11 +49,10 @@ test('can create from media', async ({ page }) => {
 
 test('can create empty', async ({ page }) => {
     await page.goto('/albums')
-    await expect(await page.getByTestId('album-teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('album-teaser').count()
 
     await page.getByTestId('album-create').click()
-    await page.waitForNavigation()
     await page.getByTestId('album-back').click()
 
     await expect(await page.getByTestId('album-teaser')).toHaveCount(count + 1)
@@ -59,8 +60,7 @@ test('can create empty', async ({ page }) => {
 
 test('can add media and avoids duplicates', async ({ page }) => {
     await page.goto(`/albums/${predefinedAlbumUUIDs[4]}`)
-
-    await expect(await page.getByTestId('teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 
     for (let i = 0; i < 2; i++) {
@@ -72,15 +72,13 @@ test('can add media and avoids duplicates', async ({ page }) => {
 
         await page.waitForNavigation()
 
-        await expect(await page.getByTestId('teaser')).not.toHaveCount(0)
-
         await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
     }
 })
 
 test('can remove media and change title', async ({ page }) => {
     await page.goto(`/albums/${predefinedAlbumUUIDs[0]}`)
-    await expect(await page.getByTestId('teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 
     await page.getByTestId('album-title').click()
@@ -88,7 +86,7 @@ test('can remove media and change title', async ({ page }) => {
     await page.getByTestId('album-title').type('Changed Title')
     await page.getByTestId('teaser').first().click()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(count - 1)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count - 1)
 
     await page.getByTestId('save-changes').click()
     await page.getByTestId('album-back').click()

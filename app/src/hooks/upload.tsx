@@ -15,13 +15,18 @@ const useUpload = () => {
         variables: {
             files: files as unknown as Promise<FileUpload>
         },
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                status: media.status,
-                sort: media.sort
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    status: media.status,
+                    sort: media.sort
+                }
+            },
+            {
+                query: QMediaYearCountDocument
             }
-        }, QMediaYearCountDocument]
+        ]
     })
 
     useEffect(() => {

@@ -12,9 +12,11 @@ const useDeleteAlbum = (id?: string) => {
         variables: {
             ids: [idToDelete]
         },
-        refetchQueries: [{
-            query: QAlbumsDocument
-        }]
+        refetchQueries: [
+            {
+                query: QAlbumsDocument
+            }
+        ]
     })
 
     return () => {

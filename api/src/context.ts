@@ -3,13 +3,15 @@ import { ExpressContextFunctionArgument } from '@apollo/server/express4'
 import UsersService from './services/users'
 import { predefinedUserUUIDs } from './database/helpers/ids'
 import jwt from 'jsonwebtoken'
+import { getEnv } from '../env'
 
+const env = getEnv()
 export const context: ContextFunction<[ExpressContextFunctionArgument]> = async ({
     req, res
 }) => {
     const service = new UsersService()
 
-    if (process.env.NODE_ENV === 'test') {
+    if (!parseInt(env.API_CREDENTIALS || '1', 10)) {
         const user = await service.readOne(predefinedUserUUIDs[0])
 
         if (user) {
@@ -31,7 +33,7 @@ export const context: ContextFunction<[ExpressContextFunctionArgument]> = async 
     let userInfo
 
     try {
-        jwt.verify(accessToken, process.env.JWT_SECRET as string)
+        jwt.verify(accessToken, env.JWT_SECRET as string)
         userInfo = jwt.decode(accessToken) as { id: string }
         verified = true
     }

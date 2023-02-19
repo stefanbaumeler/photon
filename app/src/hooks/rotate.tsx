@@ -11,12 +11,14 @@ const useRotate = (idMedium: string) => {
         variables: {
             id: idMedium
         },
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                sort: media.sort
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    sort: media.sort
+                }
             }
-        }],
+        ],
         awaitRefetchQueries: true
     })
 

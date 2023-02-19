@@ -11,12 +11,17 @@ const useAddToFavorites = (mediaIds: string[]) => {
         variables: {
             media: mediaIds
         },
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                sort: media.sort
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    sort: media.sort
+                }
+            },
+            {
+                query: QFavoritesDocument
             }
-        }, QFavoritesDocument]
+        ]
     })
 
     return () => {

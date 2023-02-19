@@ -22,7 +22,7 @@ const AlbumTeaserImage = ({ id }: Props) => {
         return <img
             data-testid={'album-image'}
             className="album__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${thumbnail.filenameDisk}?w=800`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${thumbnail.filenameDisk}?w=800`}
             alt=""
         />
     }, [thumbnail])

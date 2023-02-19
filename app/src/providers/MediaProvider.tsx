@@ -105,11 +105,11 @@ const MediaProvider = ({ children }: Props) => {
         ]
     })
 
+    const { hits } = useHits<TMedium>()
+
     const albumsMenu = useMenu({
         attribute: 'albums'
     })
-
-    const { hits } = useHits<TMedium>()
 
     useEffect(() => {
         let newStatus: EMediumStatus
@@ -128,15 +128,11 @@ const MediaProvider = ({ children }: Props) => {
     }, [topLevelRoute, !!hits.length])
 
     const c = useCurrentRefinements()
+
     useEffect(() => {
-        console.log('before', c, hits)
-
         clear.refine()
-        console.log('after', c, hits)
+        // sortBy.refine(`media/sort/dateTakenSort:${sort === EMediumSort.OLDEST ? 'asc' : 'desc'}`)
 
-        sortBy.refine(`media/sort/dateTakenSort:${sort === EMediumSort.OLDEST ? 'asc' : 'desc'}`)
-
-        console.log(idAlbum, status, !!hits.length)
         if (idAlbum) {
             albumsMenu.refine(idAlbum)
         } else if (status) {

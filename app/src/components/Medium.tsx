@@ -24,7 +24,7 @@ const Medium = ({
         return <video
             controls={details.active}
             className="medium__video"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}`}
         ></video>
     }, [medium, width])
 
@@ -39,7 +39,7 @@ const Medium = ({
                 data-testid={testId}
                 className="medium__image"
                 fill={true}
-                src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}
+                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}
                 onLoad={() => {
                     setLoaded(true)
                 }}
@@ -49,10 +49,6 @@ const Medium = ({
         }
         else {
             el = <></>
-        }
-
-        if (details.active && details.medium.id === medium.id) {
-            setLoaded(false)
         }
 
         return el

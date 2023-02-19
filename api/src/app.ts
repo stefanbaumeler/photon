@@ -17,8 +17,11 @@ import https from 'https'
 import fs from 'fs'
 import http from 'http'
 import path from 'path'
+import { getEnv } from '../env'
 
-export const getApollo = (app: ReturnType<typeof express> ) => {
+const env = getEnv()
+
+export const getApollo = (app: ReturnType<typeof express>) => {
     // const server = parseInt(process.env.API_SECURE || '1', 10) ? https.createServer({
     //     key: fs.readFileSync(path.join(__dirname, '../../ssl/key.pem')),
     //     cert: fs.readFileSync(path.join(__dirname, '../../ssl/cert.pem'))
@@ -47,12 +50,54 @@ export const createApp = async () => {
     const apollo = getApollo(app)
     await apollo.start()
 
+    const origins = [
+        'tauri://localhost',
+        'localhost',
+        'localhost:3030',
+        'http://localhost',
+        'http://localhost/',
+        'http://localhost:3030',
+        'http://localhost:3030/',
+        'http://localhost:11011',
+        '127.0.0.1',
+        '127.0.0.1:3030',
+        'http://127.0.0.1',
+        'http://127.0.0.1/',
+        'http://127.0.0.1:3030',
+        'http://127.0.0.1:3030/',
+        'http://127.0.0.1:1430',
+        'http://0.0.0.0:3030',
+        '0.0.0.0',
+        '0.0.0.0:3030',
+        'http://0.0.0.0',
+        'http://0.0.0.0/',
+        'http://0.0.0.0:3030',
+        'http://0.0.0.0:3030/',
+        '10.5.0.5',
+        '10.5.0.5:3030',
+        'http://10.5.0.5',
+        'http://10.5.0.5:3030',
+        'http://10.5.0.5:3030/',
+        '10.5.0.6',
+        '10.5.0.6:3030',
+        'http://10.5.0.6',
+        'http://10.5.0.6:3030',
+        'http://10.5.0.6:3030/',
+        '10.5.0.2',
+        '10.5.0.2:3030',
+        'http://10.5.0.2',
+        'http://10.5.0.2/',
+        'http://10.5.0.2:3030',
+        'http://10.5.0.2:3030/',
+        'https://studio.apollographql.com'
+    ]
+
     app.use(
         cookieParser(),
         cors({
             methods: ['GET', 'POST', 'OPTIONS'],
-            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://localhost:3030/', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
-            credentials: true
+            origin: origins,
+            credentials: !!parseInt(env.API_CREDENTIALS || '1', 10)
         }),
         express.json(),
         graphqlUploadExpress()
@@ -64,8 +109,8 @@ export const createApp = async () => {
         '/graphql',
         cors({
             methods: ['GET', 'POST', 'OPTIONS'],
-            origin: ['tauri://localhost', 'https://127.0.0.1:8001', 'http://127.0.0.1:1430',  'http://0.0.0.0:3030', 'http://localhost:3030', 'http://localhost:3030/', 'http://127.0.0.1:1430', 'https://studio.apollographql.com'],
-            credentials: true
+            origin: origins,
+            credentials: !!parseInt(env.API_CREDENTIALS || '1', 10)
         }),
         expressMiddleware(apollo, {
             context

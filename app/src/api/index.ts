@@ -9,7 +9,7 @@ const errorLink = onError((error) => {
 
 const uploadLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_API_URL,
-    credentials: 'include',
+    credentials: parseInt(process.env.NEXT_PUBLIC_API_CREDENTIALS || '1', 10) ? 'include' : '',
     headers: {
         'Apollo-Require-Preflight': 'true'
     }

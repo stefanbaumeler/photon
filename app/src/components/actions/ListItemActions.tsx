@@ -41,7 +41,7 @@ export const ListItemActions = ({ medium }: Props) => {
         }
     ]
 
-    const src = medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}` : '#'
+    const src = medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}` : '#'
 
     return <div className="actions">
         <IconButton

@@ -3,6 +3,7 @@ import usersSeed from './users'
 import mediaSeed from './media'
 import albumsSeed from './albums'
 import { getEnv } from '../../../env'
+import reset from '../../search/reset'
 
 getEnv()
 
@@ -38,6 +39,7 @@ export const truncate = async () => {
 
     try {
         await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`)
+        await reset()
     } catch (error) {
         console.log({
             error

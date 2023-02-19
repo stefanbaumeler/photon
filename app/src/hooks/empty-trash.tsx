@@ -11,13 +11,15 @@ const useEmptyTrash = () => {
     const instantSearch = useInstantSearch()
 
     const [emptyTrash] = useMEmptyTrash({
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                status: EMediumStatus.TRASH,
-                sort: media.sort
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    status: EMediumStatus.TRASH,
+                    sort: media.sort
+                }
             }
-        }]
+        ]
     })
 
     return () => {

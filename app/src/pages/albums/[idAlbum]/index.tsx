@@ -47,12 +47,14 @@ const AlbumPage = () => {
             idAlbum: `${id}`,
             media: [...selection.selected].map((s) => s.id)
         },
-        refetchQueries: [{
-            query: QAlbumMediaDocument,
-            variables: {
-                id
+        refetchQueries: [
+            {
+                query: QAlbumMediaDocument,
+                variables: {
+                    id
+                }
             }
-        }]
+        ]
     })
 
     const [updateAlbumTitle] = useMUpdateAlbum({
@@ -62,12 +64,14 @@ const AlbumPage = () => {
                 title
             }
         },
-        refetchQueries: [{
-            query: QAlbumDocument,
-            variables: {
-                id
+        refetchQueries: [
+            {
+                query: QAlbumDocument,
+                variables: {
+                    id
+                }
             }
-        }]
+        ]
     })
 
     const setAlbumCover = useSetAlbumCover(id)

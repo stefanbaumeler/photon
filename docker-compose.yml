@@ -14,42 +14,37 @@ volumes:
 services:
     api:
         container_name: api_c
-        platform: linux/x86_64
         restart: unless-stopped
+        links:
+            - app
         build:
             context: .
             target: api
         entrypoint: ['node', 'api/dist']
         depends_on:
             - db
+            - search
         environment:
+            NODE_ENV: ci
             PORT: 11011
         ports:
-            - "11011:11011"
-            - "11012:11012"
+            - '11011:11011'
         expose:
             - 11011
-            - 9229
-            - 11012
-        stdin_open: true
-        tty: true
     app:
         container_name: app_c
-        platform: linux/x86_64
         restart: unless-stopped
         build:
             context: .
             target: app
         environment:
+            NODE_ENV: ci
             PORT: 3030
         entrypoint: ['node', 'app/server.js']
         ports:
-            - "3030:3030"
+            - '3030:3030'
         expose:
             - 3030
-        stdin_open: true
-        tty: true
-
     db:
         container_name: db_c
         image: postgres
@@ -59,15 +54,32 @@ services:
             - POSTGRES_PASSWORD=postgres
             - POSTGRES_DB=photos
         ports:
-            - "5555:5432"
+            - '5555:5432'
         expose:
             - 5555
+            - 5432
     search:
         container_name: search_c
         image: typesense/typesense:0.23.1
         restart: unless-stopped
-        entrypoint: sh -c "/opt/typesense-server --data-dir /data --api-key=asdf --enable-cors"
+        entrypoint: sh -c '/opt/typesense-server --data-dir /data --api-key=asdf --enable-cors'
         ports:
-            - "8108:8108"
+            - '8108:8108'
         volumes:
             - search-data:/data
+        healthcheck:
+            test: ['CMD-SHELL', 'apt-get update && apt-get install -y curl && curl -f http://localhost:8108/health']
+            interval: 10s
+            timeout: 5s
+            retries: 20
+    test:
+        container_name: test_c
+        environment:
+            NODE_ENV: ci
+        build:
+            context: .
+            target: test
+        depends_on:
+            search:
+                condition: service_healthy
+        entrypoint: ['yarn', 'seed-and-test']

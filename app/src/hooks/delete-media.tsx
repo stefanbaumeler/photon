@@ -13,15 +13,18 @@ const useDeleteMedia = () => {
         variables: {
             ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
         },
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                sort: media.sort,
-                status: media.status
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    sort: media.sort,
+                    status: media.status
+                }
+            },
+            {
+                query: QAlbumsDocument
             }
-        }, {
-            query: QAlbumsDocument
-        }]
+        ]
     })
 
     return () => {

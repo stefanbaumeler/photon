@@ -1,6 +1,6 @@
 import { Client } from 'typesense'
 import { getEnv } from '../../env'
-import { Prisma } from '.prisma/client'
+import { Prisma } from '@prisma/client'
 import { TUser } from '@photon/schema'
 
 const env = getEnv()

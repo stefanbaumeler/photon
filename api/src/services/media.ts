@@ -4,7 +4,7 @@ import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { DeepPartial } from '../types'
-import { Prisma } from '.prisma/client'
+import { Prisma } from '@prisma/client'
 import Enumerable = Prisma.Enumerable
 import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 import { fileToMedium } from '../helpers/exif'
@@ -280,8 +280,10 @@ export default class MediaService {
         return medium as TMedium
     }
 
-    async readOneFromDisk (filenameDisk: string) {
-        return this.prisma.medium.findFirst({
+    readOneFromDisk = async (filenameDisk: string) => {
+        const db = getDatabase()
+
+        return db.medium.findFirst({
             where: {
                 filenameDisk
             },
@@ -427,8 +429,6 @@ export default class MediaService {
         })
 
         fs.unlinkSync(filePathOld)
-
-        // typesense.collections('media').documents().upsert()
 
         return response as TMedium
     }

@@ -62,7 +62,7 @@ export const Thumbnail = ({
 
         return <img
             className="thumbnail__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_DIR}${medium.filenameDisk}?w=100`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=100`}
             alt=""
         />
     }

@@ -4,8 +4,11 @@ import * as fs from 'fs'
 import MediaService from '../services/media'
 import jwt from 'jsonwebtoken'
 import { predefinedUserUUIDs } from '../database/helpers/ids'
+import path from 'path'
+import { getEnv } from '../../env'
 
 const router = express.Router()
+const env = getEnv()
 
 const resize = (p: string, width: string | undefined) => {
     const readStream = fs.createReadStream(p)
@@ -25,7 +28,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         let userInfo
 
-        if (process.env.NODE_ENV === 'test') {
+        if (!parseInt(env.API_CREDENTIALS || '1', 10)) {
             userInfo = {
                 id: predefinedUserUUIDs[0]
             }
@@ -35,7 +38,11 @@ router.get('/:id', async (req, res, next) => {
             userInfo = jwt.decode(req.cookies.accessToken) as { id: string }
         }
 
-        const medium = await new MediaService().readOneFromDisk(req.params.id)
+        const medium = await new MediaService({
+            user: {
+                id: userInfo.id
+            }
+        }).readOneFromDisk(req.params.id)
 
         if (medium?.owner?.id !== userInfo.id) {
             res.statusCode = 403
@@ -45,7 +52,7 @@ router.get('/:id', async (req, res, next) => {
         }
 
         if (!req.query.download) {
-            resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
+            resize(path.join(__dirname, '../../', `./uploads/${req.params.id}`), req.query.w as string).pipe(res)
         }
         else {
             await new MediaService().readOneFromDisk(req.params.id).then((medium) => {
@@ -54,12 +61,13 @@ router.get('/:id', async (req, res, next) => {
                         'Content-disposition',
                         `attachment; filename=${medium.filenameDownload}`
                     )
-                    resize(`./uploads/${req.params.id}`, req.query.w as string).pipe(res)
+                    resize(path.join(__dirname, '../../', `./uploads/${req.params.id}`), req.query.w as string).pipe(res)
                 }
             })
         }
     }
-    catch {
+    catch (e) {
+        console.log(e)
         res.statusCode = 403
         res.send()
         next()

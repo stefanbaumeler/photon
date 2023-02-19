@@ -12,7 +12,8 @@ const config: JestConfigWithTsJest = {
     testEnvironment: 'jsdom',
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
-    setupFilesAfterEnv: ['<rootDir>/app/__tests__/setup.ts']
+    setupFilesAfterEnv: ['<rootDir>/app/__tests__/setup.ts'],
+    bail: true
 }
 
 export default config

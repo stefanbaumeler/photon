@@ -3,7 +3,7 @@ name: Tests
 on: [push]
 
 env:
-    NODE_ENV: test
+    NODE_ENV: ci
 
 jobs:
     tests-run:
@@ -11,22 +11,5 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: Setup DB
-              run: docker-compose up -d db
-            - name: Setup Search
-              run: docker-compose up -d search
-            - name: Setup Yarn
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18.12.1
-                  cache: 'yarn'
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile --immutable
-            - name: Build Servers
-              run: yarn build
-              env:
-                  NODE_ENV: test
-            - name: Tests
-              run: yarn test
-              env:
-                  NODE_ENV: test
+            - name: Setup Docker Containers
+              run: docker-compose up --build

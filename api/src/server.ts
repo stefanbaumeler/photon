@@ -9,12 +9,14 @@ const env = getEnv()
 export const createServer = async () => {
     const app = await createApp()
 
-    // if (parseInt(env.API_SECURE || '1', 10)) {
-    //     return https.createServer({
-    //         key: fs.readFileSync(path.join(__dirname, '../../ssl/key.pem')),
-    //         cert: fs.readFileSync(path.join(__dirname, '../../ssl/cert.pem'))
-    //     }, app)
-    // }
+    console.log(path.join(__dirname, '../ssl/key.pem'))
+
+    if (parseInt(env.API_SECURE || '1', 10)) {
+        return https.createServer({
+            key: fs.readFileSync(path.join(__dirname, '../ssl/key.pem')),
+            cert: fs.readFileSync(path.join(__dirname, '../ssl/cert.pem'))
+        }, app)
+    }
 
     return http.createServer(app)
 }
@@ -26,9 +28,16 @@ export const startServer = async () => {
 
     const server = await createServer()
 
-    server.listen(port, host, () => {
-        console.log(`⚡️[server]: Server is running at ${protocol}://${host}:${port}`)
-    })
+    try {
+        server.listen(port, '0.0.0.0', () => {
+            console.log(`⚡️[server]: Server is running at ${protocol}://0.0.0.0:${port}`)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+    server.timeout = 500000
 
     return true
 }

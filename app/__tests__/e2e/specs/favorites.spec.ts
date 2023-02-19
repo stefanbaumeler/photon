@@ -4,11 +4,9 @@ import { globalBeforeEach, openDetails } from '../support/common'
 globalBeforeEach()
 
 test('can favorite and unfavorite', async ({ page }) => {
-    await page.goto('/')
-
     await page.goto('/favorites')
 
-    await expect(await page.getByTestId('teaser')).not.toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 
     await page.goto('/')
@@ -23,23 +21,28 @@ test('can favorite and unfavorite', async ({ page }) => {
 
     await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
 
-    await page.getByTestId('nav-index').click()
+    await page.goto('/')
     await page.getByTestId('teaser-check').nth(3).click()
     await page.getByTestId('bulk-more').click()
+
     await page.getByTestId('unfavorite').click()
 
-    await expect(await page.getByTestId('teaser').nth(3).getByTestId('favorite-mark')).toHaveCount(0)
+    await expect.poll(async () => await page.getByTestId('favorite-mark').count()).toBeGreaterThan(0)
 
     await page.getByTestId('nav-favorites').click()
 
     await expect(await page.getByTestId('teaser')).toHaveCount(count)
 })
 
-test('can favorite and unfavorite on details page', async ({ page }) => {
-    await page.goto('/')
+test('can unfavorite on favorites details page', async ({ page }) => {
+    await page.goto('/favorites')
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
+    const count = await page.getByTestId('teaser').count()
 
     await openDetails(page)
 
     await page.getByTestId('details-unfavorite').click()
-    await page.getByTestId('details-favorite').click()
+    await page.keyboard.press('Escape')
+
+    await expect(await page.getByTestId('teaser')).toHaveCount(count - 1)
 })

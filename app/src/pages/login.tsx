@@ -16,13 +16,15 @@ const LoginPage = () => {
     const media = useMediaContext()
 
     const [signIn] = useMSignIn({
-        refetchQueries: [{
-            query: QMediaDocument,
-            variables: {
-                sort: media.sort,
-                status: EMediumStatus.ALL
+        refetchQueries: [
+            {
+                query: QMediaDocument,
+                variables: {
+                    sort: media.sort,
+                    status: EMediumStatus.ALL
+                }
             }
-        }]
+        ]
     })
     const [signUp] = useMSignUp()
     const { t } = useTranslation()

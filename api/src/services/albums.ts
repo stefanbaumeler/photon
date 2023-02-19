@@ -3,7 +3,7 @@ import { DeepPartial } from '../types'
 import UsersService from './users'
 import { getDatabase } from '../database'
 import { TAlbum, TAlbumInput } from '@photon/schema'
-import { Prisma } from '.prisma/client'
+import { Prisma } from '@prisma/client'
 
 export default class AlbumsService {
     prisma = getDatabase()

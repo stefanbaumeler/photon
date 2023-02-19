@@ -60,8 +60,12 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
                     sort: media.sort
                 }
             },
-            QFavoritesDocument,
-            QAlbumsDocument
+            {
+                query: QFavoritesDocument
+            },
+            {
+                query: QAlbumsDocument
+            }
         ]
     })
 

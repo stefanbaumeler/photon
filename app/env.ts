@@ -4,7 +4,7 @@ import path from 'path'
 type TAppEnv = { [key: string]: string | undefined } & {
     NODE_ENV: string
     NEXT_PUBLIC_API_URL: string
-    NEXT_PUBLIC_UPLOADS_DIR: string
+    NEXT_PUBLIC_UPLOADS_URL: string
     DATABASE_URL: string
     NEXT_PUBLIC_TYPESENSE_HOST: string
     NEXT_PUBLIC_TYPESENSE_PORT: string

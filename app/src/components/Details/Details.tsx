@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from 'react'
-import { useDetailsContext, useDialogContext, useMediaContext } from '../../providers'
+import { useDetailsContext, useDialogContext, useMediaContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '../index'
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../../types/translations'
+import { ETrans } from '@/types/translations'
 import dynamic from 'next/dynamic'
-import { formatDate, getRelativeTime } from '../../util/date'
+import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '../../hooks/keyboard'
 import bem from '../../util/bem'
 import { useRouter } from 'next/router'
-import { EDateFormat } from '../../types/app'
+import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
 
@@ -32,7 +32,7 @@ export const Details = () => {
                 details.open(mediumToOpen)
             }
         }
-    }, [media.media])
+    }, [media.media, idMedium])
 
     const slide = (direction: number) => {
         const index = media.media.indexOf(details.medium)

@@ -36,7 +36,7 @@ export const DetailsActions = () => {
     const setAlbumCover = useSetAlbumCover(idAlbum, idMedium)
     const [moreActive, setMoreActive] = useState(false)
 
-    const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_DIR}${details.medium.filenameDisk}` : '#'
+    const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${details.medium.filenameDisk}` : '#'
 
     const select = () => {
         selection.toggle(details.medium)

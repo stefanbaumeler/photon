@@ -9,6 +9,7 @@ type TApiEnv = { [key: string]: string | undefined } & {
     DB_PORT: string
     JWT_SECRET: string
     API_HOST: string
+    API_CREDENTIALS: string
     API_PORT: string
     API_SECURE: string
     API_UPLOADS_DIR: string

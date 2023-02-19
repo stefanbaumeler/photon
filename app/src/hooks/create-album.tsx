@@ -9,7 +9,11 @@ const useCreateAlbum = () => {
             album: {},
             media: []
         },
-        refetchQueries: [QAlbumsDocument]
+        refetchQueries: [
+            {
+                query: QAlbumsDocument
+            }
+        ]
     })
 
     return () => {
