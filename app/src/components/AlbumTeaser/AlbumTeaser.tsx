@@ -30,7 +30,7 @@ export const AlbumTeaser = ({ album }: Props) => {
         return <></>
     }
 
-    const media = albumMediaQuery.data.albumMedia
+    const media = albumMediaQuery.data?.albumMedia
 
     const moreItems = [
         {
@@ -81,9 +81,9 @@ export const AlbumTeaser = ({ album }: Props) => {
                         className="album__count"
                         data-testid="album-teaser-count"
                     >
-                        {`${media.length} `}
+                        {`${media?.length} `}
                         {t(ETrans.ELEMENT, {
-                            count: media.length
+                            count: media?.length
                         })}
                     </span>
                 </div>

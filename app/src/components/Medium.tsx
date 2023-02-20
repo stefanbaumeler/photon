@@ -19,17 +19,12 @@ const Medium = ({
     const details = useDetailsContext()
 
     const [loaded, setLoaded] = useState(false)
-
-    const Video = useMemo(() => {
-        return <video
-            controls={details.active}
-            className="medium__video"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}`}
-        ></video>
-    }, [medium, width])
-
     const ImageOrVideo = useMemo(() => {
         let el
+
+        if (!width) {
+            return <></>
+        }
 
         if (medium.mimetype?.startsWith('image')) {
             el = <Image
@@ -45,7 +40,11 @@ const Medium = ({
                 }}
             />
         } else if (medium.mimetype?.startsWith('video')) {
-            el = Video
+            el = <video
+                controls={details.active}
+                className="medium__video"
+                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}`}
+            ></video>
         }
         else {
             el = <></>

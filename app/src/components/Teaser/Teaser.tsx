@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useDetailsContext, useMediaContext, useSelectionContext } from '@/providers'
+import { useEffect, useState } from 'react'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check, Medium } from '../index'
@@ -9,12 +9,14 @@ import bem from '../../util/bem'
 import { isEqual } from 'lodash'
 import TeaserMeta from './TeaserMeta'
 import { useTeaserContext } from './TeaserContext'
+import { useHits } from 'react-instantsearch-hooks-web'
+import { TMedium } from '@photon/schema'
 
 const Teaser = () => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
-    const media = useMediaContext()
+    const { hits: media } = useHits<TMedium>()
 
     const [shift, setShift] = useState(false)
 
@@ -63,11 +65,11 @@ const Teaser = () => {
             return
         }
 
-        const ids = media.media.map((medium) => medium.id)
+        const ids = media.map((medium) => medium.id)
         const lastIndex = ids.indexOf(selection.lastAdded?.id)
         const hoverIndex = ids.indexOf(teaser.medium.id)
 
-        const newShiftTargets = lastIndex < hoverIndex ? media.media.slice(lastIndex, hoverIndex + 1) : media.media.slice(hoverIndex, lastIndex + 1)
+        const newShiftTargets = lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)
 
         if (shift && !isEqual(selection.shiftTargets, newShiftTargets)) {
             selection.setShiftTargets(newShiftTargets)

@@ -3,7 +3,7 @@ import { Dropdown, IconButton } from '../index'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef, useState } from 'react'
-import { useLayoutContext, useNavContext, useSelectionContext, useMediaContext } from '@/providers'
+import { useLayoutContext, useNavContext, useSelectionContext, useSortContext } from '@/providers'
 import { EMediumSort, ENavItemType, ESelectionMode } from '@/types/app'
 import useUpload from '../../hooks/upload'
 import { useRouter } from 'next/router'
@@ -17,7 +17,7 @@ export const DefaultActions = () => {
 
     const nav = useNavContext()
     const selection = useSelectionContext()
-    const media = useMediaContext()
+    const sort = useSortContext()
 
     const emptyTrashDialog = useEmptyTrashDialog()
 
@@ -56,15 +56,17 @@ export const DefaultActions = () => {
     const moreItems = [
         {
             label: t(ETrans.NEWEST_FIRST),
-            callback: () => media.setSort(EMediumSort.NEWEST)
+            callback: () => {
+                sort.setSort(EMediumSort.NEWEST)
+            }
         },
         {
             label: t(ETrans.OLDEST_FIRST),
-            callback: () => media.setSort(EMediumSort.OLDEST)
+            callback: () => sort.setSort(EMediumSort.OLDEST)
         },
         {
             label: t(ETrans.MOST_RECENT),
-            callback: () => media.setSort(EMediumSort.RECENT)
+            callback: () => sort.setSort(EMediumSort.RECENT)
         }
     ]
 

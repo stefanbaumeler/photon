@@ -7,7 +7,7 @@ import i18next from '../src/translations'
 import { DetailsProvider,
     DialogProvider,
     EditProvider,
-    LayoutProvider, MediaProvider,
+    LayoutProvider, SortProvider,
     NavProvider,
     ProviderProvider,
     SelectionProvider } from '../src/providers'
@@ -22,7 +22,7 @@ const TestProvider = (props: Props) => {
     return (
         <MockedProvider>
             <I18nextProvider i18n={i18next}>
-                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, MediaProvider, DetailsProvider]}>
+                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
                     {children}
                 </ProviderProvider>
             </I18nextProvider>

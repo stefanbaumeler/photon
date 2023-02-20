@@ -1,7 +1,7 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
 import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
-import { DetailsProvider, useEditContext, useMediaContext, useSelectionContext } from '@/providers'
+import { DetailsProvider, useEditContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
@@ -10,21 +10,27 @@ import { QAlbumMediaDocument,
     TAlbum,
     useQAlbum,
     useMRemoveFromAlbum,
-    useMUpdateAlbum } from '@photon/schema'
+    useMUpdateAlbum, TMedium } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '../../../hooks/set-album-cover'
-import { useInstantSearch } from 'react-instantsearch-hooks-web'
+import { useHits, useInstantSearch } from 'react-instantsearch-hooks-web'
+import { useMenu } from 'react-instantsearch-hooks'
 
 const AlbumPage = () => {
     const router = useRouter()
     const { t } = useTranslation()
     const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
+    const albumsMenu = useMenu({
+        attribute: 'albums'
+    })
+
     const selection = useSelectionContext()
     const edit = useEditContext()
-    const media = useMediaContext()
+    const hits = useHits<TMedium>()
+    const media = hits.hits
 
     const titleEl = useRef(null)
 
@@ -77,12 +83,9 @@ const AlbumPage = () => {
     const setAlbumCover = useSetAlbumCover(id)
 
     useEffect(() => {
-        setTitle(album?.title || '')
-    }, [album])
-
-    useEffect(() => {
         if (albumQuery.data) {
             setAlbum(albumQuery.data.album as TAlbum)
+            setTitle(albumQuery.data.album.title || '')
         }
     }, [albumQuery.data])
 
@@ -116,12 +119,18 @@ const AlbumPage = () => {
     }, [edit.state])
 
     useEffect(() => {
-        const mediaSortedByDateTaken = Array.from(media.media)
+        const mediaSortedByDateTaken = Array.from(media)
             .sort((a, b) => new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime())
 
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
-    }, [media.media])
+    }, [media])
+
+    useEffect(() => {
+        if (id && albumsMenu.canRefine) {
+            albumsMenu.refine(id)
+        }
+    }, [id, albumsMenu.canRefine])
 
     const editAlbum = () => {
         selection.setMode(ESelectionMode.DELETE)

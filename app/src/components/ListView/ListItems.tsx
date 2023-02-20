@@ -1,10 +1,11 @@
 import ListItem from './ListItem'
-import { useMediaContext } from '../../providers'
+import { useHits } from 'react-instantsearch-hooks-web'
+import { TMedium } from '@photon/schema'
 
 const ListItems = () => {
-    const media = useMediaContext()
+    const { hits: media } = useHits<TMedium>()
 
-    const items = media.media.map((medium, k) => {
+    const items = media.map((medium, k) => {
         return <ListItem
             medium={medium}
             key={k}

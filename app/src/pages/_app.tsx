@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, MediaProvider } from '../providers'
+import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider } from '../providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -33,7 +33,7 @@ const Photon = ({
                 indexName="media"
             >
                 <SearchError />
-                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, MediaProvider]}>
+                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider]}>
                     <Component {...pageProps} />
                 </ProviderProvider>
             </InstantSearch>

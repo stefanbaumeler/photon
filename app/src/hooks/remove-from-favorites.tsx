@@ -1,11 +1,11 @@
-import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '@photon/schema'
-import { useSelectionContext, useMediaContext, useDetailsContext } from '@/providers'
-import { useInstantSearch } from 'react-instantsearch-hooks-web'
+import { QFavoritesDocument, QMediaDocument, TMedium, useMRemoveFromFavorites } from '@photon/schema'
+import { useSelectionContext, useDetailsContext } from '@/providers'
+import { useHits, useInstantSearch } from 'react-instantsearch-hooks-web'
 import { useRouter } from 'next/router'
 
 const useRemoveFromFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()
-    const media = useMediaContext()
+    const { hits: media } = useHits<TMedium>()
     const instantSearch = useInstantSearch()
     const router = useRouter()
     const details = useDetailsContext()
@@ -35,12 +35,12 @@ const useRemoveFromFavorites = (mediaIds: string[]) => {
 
             if (topLevelRoute === 'favorites') {
                 if (idMedium) {
-                    const index = media.media.findIndex((medium) => medium.id === idMedium)
+                    const index = media.findIndex((medium) => medium.id === idMedium)
 
-                    let newSelected = media.media[index + 1]
+                    let newSelected = media[index + 1]
 
                     if (!newSelected) {
-                        newSelected = media.media[index - 1]
+                        newSelected = media[index - 1]
                     }
 
                     if (newSelected) {

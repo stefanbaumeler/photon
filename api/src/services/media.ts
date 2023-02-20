@@ -68,7 +68,7 @@ export default class MediaService {
                         id: medium.uploader?.id
                     }
                 },
-                meta: JSON.stringify(medium.meta),
+                meta: medium.meta as string,
                 favoredBy: {
                     connect: medium.favoredBy?.map((fav) => ({
                         id: fav?.id
@@ -413,11 +413,11 @@ export default class MediaService {
 
         const row = await sharp(filePathOld).rotate(90).toFile(filePath)
 
-        const meta = JSON.stringify({
-            ...JSON.parse(medium.meta as string),
+        const meta = {
+            ...medium.meta,
             width: row.width,
             height: row.height
-        })
+        }
 
         const response = await this.prisma.medium.update({
             where: {

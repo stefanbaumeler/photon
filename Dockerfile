@@ -129,6 +129,8 @@ COPY app/__tests__ app/__tests__
 
 COPY app/playwright.config.ts app/
 
+COPY app/.env.ci app/
+
 COPY app/env.ts app/
 
 COPY api api

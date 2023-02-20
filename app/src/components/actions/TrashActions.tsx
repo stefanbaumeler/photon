@@ -1,9 +1,9 @@
 import { IconButton } from '../index'
-import { ETrans } from '../../types/translations'
+import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import useDeleteMediaDialog from '../../dialogs/delete-media'
 import useRestoreMediaDialog from '../../dialogs/restore-media'
-import { useSelectionContext } from '../../providers'
+import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 
 type Props = {

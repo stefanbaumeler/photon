@@ -54,11 +54,11 @@ const SelectionProvider = ({ children }: Props) => {
         }
 
         const itemsToRemove = Array.isArray(items) ? items : [items]
-        const newSet = new Set(selected)
+        const idsToRemove = itemsToRemove.map((i) => i.id)
 
-        itemsToRemove.forEach((item) => {
-            newSet.delete(item)
-        })
+        const newSet = new Set([...selected].filter((s) => {
+            return !idsToRemove.includes(s.id)
+        }))
 
         setSelected(newSet)
         setLastAdded(undefined)
@@ -81,8 +81,8 @@ const SelectionProvider = ({ children }: Props) => {
 
     const isSelected = (items: TMedium | TMedium[]) => {
         const itemsToCheck = Array.isArray(items) ? items : [items]
-
-        return itemsToCheck.every((item) => selected.has(item))
+        const selectedIds = [...selected].map((s) => s.id)
+        return itemsToCheck.every((item) => selectedIds.includes(item.id))
     }
 
     const clear = () => {

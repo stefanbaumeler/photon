@@ -59,20 +59,20 @@ test('can create empty', async ({ page }) => {
 })
 
 test('can add media and avoids duplicates', async ({ page }) => {
-    await page.goto(`/albums/${predefinedAlbumUUIDs[4]}`)
+    await page.goto(`/albums/${predefinedAlbumUUIDs[3]}`)
     await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 
     for (let i = 0; i < 2; i++) {
         await page.goto('/')
-        await page.getByTestId('teaser-check').last().click()
+        await page.getByTestId('teaser-check').first().click()
 
         await page.getByTestId('add-to').click()
-        await page.getByTestId('thumbnail').nth(2).click()
+        await page.getByText('Test Album 3').click()
 
         await page.waitForNavigation()
 
-        await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
+        await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count + 1)
     }
 })
 

@@ -13,7 +13,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         let userInfo
 
-        if (parseInt(env.API_CREDENTIALS || '1', 10)) {
+        if (!parseInt(env.API_CREDENTIALS || '1', 10)) {
             userInfo = {
                 id: predefinedUserUUIDs[0]
             }

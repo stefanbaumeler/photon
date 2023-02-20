@@ -1,9 +1,5 @@
-import { useDetailsContext, useSelectionContext, useMediaContext } from '@/providers'
-import { QAlbumMediaDocument, QAlbumsDocument,
-    QFavoritesDocument,
-    QMediaDocument,
-    TMedium,
-    useMSetMediaStatus } from '@photon/schema'
+import { useDetailsContext, useSelectionContext } from '@/providers'
+import { QAlbumsDocument, QFavoritesDocument, TMedium, useMSetMediaStatus } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 import { useInstantSearch } from 'react-instantsearch-hooks-web'
@@ -11,15 +7,11 @@ import { useInstantSearch } from 'react-instantsearch-hooks-web'
 const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
-    const media = useMediaContext()
     const instantSearch = useInstantSearch()
 
     const router = useRouter()
 
-    const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
-
     let ids: string[]
-    let previousStatus
 
     const idMediaAsMedium = idMedia as TMedium
 
@@ -27,11 +19,9 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
         const arr = Array.from(idMedia as TMedium[] | Set<TMedium>)
 
         ids = arr.map((medium) => medium.id)
-        previousStatus = (arr[0]?.status || EMediumStatus.ALL) as EMediumStatus
     }
     else {
         ids = [idMediaAsMedium.id]
-        previousStatus = idMediaAsMedium.status as EMediumStatus
     }
 
     const [setMediaStatus] = useMSetMediaStatus({
@@ -40,26 +30,6 @@ const useSetMediaStatus = (idMedia: TMedium[] | Set<TMedium> | TMedium, status: 
             status
         },
         refetchQueries: [
-            idAlbum ? {
-                query: QAlbumMediaDocument,
-                variables: {
-                    id: idAlbum
-                }
-            } : undefined,
-            {
-                query: QMediaDocument,
-                variables: {
-                    status: previousStatus,
-                    sort: media.sort
-                }
-            },
-            {
-                query: QMediaDocument,
-                variables: {
-                    status,
-                    sort: media.sort
-                }
-            },
             {
                 query: QFavoritesDocument
             },

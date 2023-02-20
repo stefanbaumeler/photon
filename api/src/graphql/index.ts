@@ -32,10 +32,10 @@ const resolvers = {
         },
         uploader: (obj: { uploader: TUser }) => {
             return new UsersService().readOne(obj.uploader?.id)
-        },
-        meta: (obj: { meta: string }) => {
-            return JSON.parse(obj.meta) as TMeta
         }
+        // meta: (obj: { meta: string }) => {
+        //     return JSON.parse(obj.meta) as TMeta
+        // }
     },
     Album: {
         owner: (obj: { owner: TUser }) => {

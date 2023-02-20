@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { useDetailsContext, useDialogContext, useMediaContext } from '@/providers'
+import { useDetailsContext, useDialogContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '../index'
 import { useTranslation } from 'react-i18next'
@@ -13,13 +13,14 @@ import { useRouter } from 'next/router'
 import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
+import { useHits } from 'react-instantsearch-hooks-web'
+import { TMedium } from '@photon/schema'
 
 export const Details = () => {
     const { t } = useTranslation()
-
     const details = useDetailsContext()
     const dialog = useDialogContext()
-    const media = useMediaContext()
+    const { hits: media }: { hits: TMedium[] } = useHits<TMedium>()
 
     const router = useRouter()
 
@@ -27,28 +28,28 @@ export const Details = () => {
 
     useEffect(() => {
         if (idMedium) {
-            const mediumToOpen = media.media.find((medium) => medium.id === idMedium)
+            const mediumToOpen = media.find((medium) => medium.id === idMedium)
             if (mediumToOpen) {
                 details.open(mediumToOpen)
             }
         }
-    }, [media.media, idMedium])
+    }, [media, idMedium])
 
     const slide = (direction: number) => {
-        const index = media.media.indexOf(details.medium)
+        const index = media.indexOf(details.medium)
 
-        if (media.media[index + direction] && details.active) {
-            details.open(media.media[index + direction])
+        if (media[index + direction] && details.active) {
+            details.open(media[index + direction])
         }
     }
 
     useKeyboard('keydown', 'ArrowLeft', () => {
         slide(-1)
-    }, [media.media, details.medium])
+    }, [media, details.medium])
 
     useKeyboard('keydown', 'ArrowRight', () => {
         slide(1)
-    }, [media.media, details.medium])
+    }, [media, details.medium])
 
     useKeyboard('keydown', 'Escape', () => {
         if (!dialog.active) {
@@ -116,8 +117,8 @@ export const Details = () => {
 
     const previewClasses = bem('details__preview', [
         ['video', details.medium.mimetype?.startsWith('video')],
-        ['first', media.media.indexOf(details.medium) === 0],
-        ['last', media.media.indexOf(details.medium) === media.media.length - 1]
+        ['first', media.indexOf(details.medium) === 0],
+        ['last', media.indexOf(details.medium) === media.length - 1]
     ])
 
     return <div

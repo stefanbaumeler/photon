@@ -1,11 +1,9 @@
-import { useMSignIn, useMSignUp, QMediaDocument } from '@photon/schema'
+import { useMSignIn, useMSignUp } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { EMediumStatus } from '@/types/app'
-import { useMediaContext } from '@/providers'
 
 enum ELoginFormMode {
     DEFAULT,
@@ -13,19 +11,7 @@ enum ELoginFormMode {
 }
 
 const LoginPage = () => {
-    const media = useMediaContext()
-
-    const [signIn] = useMSignIn({
-        refetchQueries: [
-            {
-                query: QMediaDocument,
-                variables: {
-                    sort: media.sort,
-                    status: EMediumStatus.ALL
-                }
-            }
-        ]
-    })
+    const [signIn] = useMSignIn()
     const [signUp] = useMSignUp()
     const { t } = useTranslation()
     const [loginFormMode, setLoginFormMode] = useState<ELoginFormMode>(ELoginFormMode.DEFAULT)

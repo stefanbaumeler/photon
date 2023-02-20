@@ -16,6 +16,7 @@ interface DetailsContext {
     openInfos: () => void
     closeInfos: () => void
 }
+
 const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {

@@ -9,7 +9,6 @@ const useRestoreMediaDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const { t } = useTranslation()
-
     const restore = useSetMediaStatus(idMedia, EMediumStatus.ALL)
 
     const confirm = () => {
