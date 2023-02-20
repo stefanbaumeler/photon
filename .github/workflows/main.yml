@@ -17,4 +17,4 @@ jobs:
                     cache-from: type=gha
                     cache-to: type=gha,mode=max
             -   name: Test
-                run: docker-compose up --build
+                run: docker-compose up
