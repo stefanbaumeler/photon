@@ -29,11 +29,12 @@ const AlbumPage = () => {
 
     const selection = useSelectionContext()
     const edit = useEditContext()
-    const hits = useHits<TMedium>()
-    const media = hits.hits
+    const { hits: media } = useHits<TMedium>()
 
     const titleEl = useRef(null)
 
+    const [isRefined, setIsRefined] = useState(false)
+    const [isRefining, setIsRefining] = useState(false)
     const [title, setTitle] = useState('')
     const [album, setAlbum] = useState<TAlbum>()
     const [earliest, setEarliest] = useState('')
@@ -83,6 +84,19 @@ const AlbumPage = () => {
     const setAlbumCover = useSetAlbumCover(id)
 
     useEffect(() => {
+        if (id && albumsMenu.canRefine) {
+            albumsMenu.refine(id)
+            setIsRefining(true)
+        }
+    }, [id, albumsMenu.canRefine])
+
+    useEffect(() => {
+        if (isRefining) {
+            setIsRefined(true)
+        }
+    }, [media.length])
+
+    useEffect(() => {
         if (albumQuery.data) {
             setAlbum(albumQuery.data.album as TAlbum)
             setTitle(albumQuery.data.album.title || '')
@@ -126,12 +140,6 @@ const AlbumPage = () => {
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
     }, [media])
 
-    useEffect(() => {
-        if (id && albumsMenu.canRefine) {
-            albumsMenu.refine(id)
-        }
-    }, [id, albumsMenu.canRefine])
-
     const editAlbum = () => {
         selection.setMode(ESelectionMode.DELETE)
     }
@@ -140,7 +148,7 @@ const AlbumPage = () => {
         setTitle(event.target.value)
     }
 
-    if (albumQuery.loading) {
+    if (albumQuery.loading || !isRefined) {
         return <></>
     }
 

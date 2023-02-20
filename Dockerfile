@@ -43,6 +43,8 @@ WORKDIR /photon
 
 COPY api api
 
+COPY api/.env.ci api/.env
+
 RUN yarn workspace @photon/api build
 
 
@@ -86,9 +88,15 @@ COPY api/src/database/fixtures/image-6.jpg api/dist/uploads/2ef6335e-ef45-400f-9
 
 FROM install as app-build
 
+WORKDIR /photon
+
 COPY app app
 
-RUN yarn workspace @photon/app build
+COPY app/.env.ci app/.env
+
+WORKDIR /photon/app
+
+RUN yarn build
 
 
 FROM base as app-prod
@@ -129,10 +137,12 @@ COPY app/__tests__ app/__tests__
 
 COPY app/playwright.config.ts app/
 
-COPY app/.env.ci app/
+COPY app/.env.ci app/.env
 
 COPY app/env.ts app/
 
 COPY api api
+
+COPY api/.env.ci api/.env
 
 COPY jest.config.ts .

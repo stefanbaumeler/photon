@@ -65,7 +65,7 @@ test('can add media and avoids duplicates', async ({ page }) => {
 
     for (let i = 0; i < 2; i++) {
         await page.goto('/')
-        await page.getByTestId('teaser-check').first().click()
+        await page.getByTestId('teaser-check').nth(3).click()
 
         await page.getByTestId('add-to').click()
         await page.getByText('Test Album 3').click()

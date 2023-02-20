@@ -8,3 +8,6 @@
 **/uploads
 **/Dockerfile
 **/.dockerignore
+**/.env.development
+**/.env.test
+**/.env
