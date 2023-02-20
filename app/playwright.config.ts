@@ -2,7 +2,6 @@ import type { PlaywrightTestConfig } from '@playwright/test'
 import { getEnv } from '@/env'
 
 const env = getEnv()
-
 const config: PlaywrightTestConfig =
     {
         globalSetup: './__tests__/e2e/support/setup',
