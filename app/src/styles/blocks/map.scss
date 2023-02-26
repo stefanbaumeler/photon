@@ -1,0 +1,12 @@
+@mixin map-root {
+    position: absolute;
+    inset: 0;
+}
+
+@mixin map {
+    .map {
+        @include map-root;
+    }
+}
+
+@include map;

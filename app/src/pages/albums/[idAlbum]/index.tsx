@@ -1,7 +1,7 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
 import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
-import { DetailsProvider, useEditContext, useSelectionContext } from '@/providers'
+import { DetailsProvider, useEditContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
@@ -10,12 +10,11 @@ import { QAlbumMediaDocument,
     TAlbum,
     useQAlbum,
     useMRemoveFromAlbum,
-    useMUpdateAlbum, TMedium } from '@photon/schema'
+    useMUpdateAlbum } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '../../../hooks/set-album-cover'
-import { useHits, useInstantSearch } from 'react-instantsearch-hooks-web'
 import { useMenu } from 'react-instantsearch-hooks'
 
 const AlbumPage = () => {
@@ -29,7 +28,7 @@ const AlbumPage = () => {
 
     const selection = useSelectionContext()
     const edit = useEditContext()
-    const { hits: media } = useHits<TMedium>()
+    const { hits: media } = useSearchContext()
 
     const titleEl = useRef(null)
 
@@ -47,7 +46,7 @@ const AlbumPage = () => {
         skip: !router.isReady
     })
 
-    const instantSearch = useInstantSearch()
+    const search = useSearchContext()
 
     const [removeFromAlbum] = useMRemoveFromAlbum({
         variables: {
@@ -113,7 +112,7 @@ const AlbumPage = () => {
         if (edit.state === EEditState.CONFIRMED) {
             if (selection.mode === ESelectionMode.DELETE) {
                 Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
-                    instantSearch.refresh()
+                    search.instantSearch.refresh()
                     selection.clear()
                 })
             }

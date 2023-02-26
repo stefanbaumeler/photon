@@ -26,7 +26,10 @@ export const ListItemActions = ({ medium }: Props) => {
     const moreItems = [
         {
             label: t(ETrans.DELETE),
-            callback: moveToTrashDialog
+            callback: () => {
+                moveToTrashDialog()
+                setMoreActive(false)
+            }
         },
         {
             label: t(ETrans.ROTATE_LEFT),
@@ -37,7 +40,10 @@ export const ListItemActions = ({ medium }: Props) => {
         },
         {
             label: medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
-            callback: archive
+            callback: () => {
+                archive()
+                setMoreActive(false)
+            }
         }
     ]
 

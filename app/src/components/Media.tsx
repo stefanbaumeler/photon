@@ -1,18 +1,15 @@
-import { useEffect } from 'react'
-import { useDetailsContext, useDialogContext, useLayoutContext, useSelectionContext } from '@/providers'
+import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext, useSelectionContext } from '@/providers'
 import useKeyboard from '../hooks/keyboard'
 import { ELayout } from '@/types/app'
-import { GalleryView, ListView } from './index'
-import { useHits } from 'react-instantsearch-hooks-web'
-import { TMedium } from '@photon/schema'
+import { GalleryView, ListView, MapView } from './'
+import { useEffect } from 'react'
 
 export const Media = () => {
     const selection = useSelectionContext()
     const details = useDetailsContext()
     const dialog = useDialogContext()
     const layout = useLayoutContext()
-    const hits = useHits<TMedium>()
-    const media = hits.hits
+    const { hits: media } = useSearchContext()
 
     useEffect(() => {
         if (details.medium && Object.keys(details.medium).length && media) {
@@ -34,7 +31,9 @@ export const Media = () => {
         return <ListView />
     }
 
-    return <>
-        {layout.layout}
-    </>
+    if (layout.layout === ELayout.MAP) {
+        return <MapView />
+    }
+
+    return <></>
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { useDetailsContext, useDialogContext } from '@/providers'
+import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '../index'
 import { useTranslation } from 'react-i18next'
@@ -13,14 +13,12 @@ import { useRouter } from 'next/router'
 import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
-import { useHits } from 'react-instantsearch-hooks-web'
-import { TMedium } from '@photon/schema'
 
 export const Details = () => {
     const { t } = useTranslation()
     const details = useDetailsContext()
     const dialog = useDialogContext()
-    const { hits: media }: { hits: TMedium[] } = useHits<TMedium>()
+    const { hits: media } = useSearchContext()
 
     const router = useRouter()
 
@@ -96,8 +94,8 @@ export const Details = () => {
 
         return <>
             <Map
-                lat={details.medium.lat}
-                lng={details.medium.lng}
+                lat={details.medium.location[0]}
+                lng={details.medium.location[1]}
             />
         </>
     }, [details.medium])

@@ -1,18 +1,17 @@
-import { useDetailsContext, useDialogContext, useSelectionContext } from '@/providers'
+import { useDetailsContext, useDialogContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useMEmptyTrash } from '@photon/schema'
-import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useEmptyTrash = () => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const details = useDetailsContext()
-    const instantSearch = useInstantSearch()
+    const search = useSearchContext()
 
     const [emptyTrash] = useMEmptyTrash()
 
     return () => {
         emptyTrash().then(() => {
-            instantSearch.refresh()
+            search.instantSearch.refresh()
             selection.clear()
             dialog.close()
             details?.close()

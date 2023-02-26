@@ -97,6 +97,8 @@ export default (database: PrismaClient) => {
         const albums = await Promise.all(albumPromises)
 
         rows.forEach((row, k) => {
+            const location = Array.isArray(row.location) ? row.location : JSON.parse(row.location as unknown as string) as string[]
+
             typesense.collections('media').documents().upsert({
                 id: row.id,
                 dateTaken: row.dateTaken?.toString() || null,
@@ -111,7 +113,8 @@ export default (database: PrismaClient) => {
                 isFavorite: !!row.favoredBy?.length,
                 isArchived: row.status === 'archived',
                 isTrash: row.status === 'trash',
-                albums: albums[k]
+                albums: albums[k],
+                location: location?.map((c) => typeof c === 'number' ? c : 0)
             })
         })
 

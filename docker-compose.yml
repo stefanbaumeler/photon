@@ -45,7 +45,7 @@ services:
             - 3030
     db:
         container_name: db_c
-        image: postgres
+        image: postgis/postgis:15-3.3-alpine
         restart: unless-stopped
         environment:
             - POSTGRES_USER=stefanbaumeler

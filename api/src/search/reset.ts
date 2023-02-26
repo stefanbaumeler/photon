@@ -56,6 +56,11 @@ const reset = async () => {
                 name: 'albums',
                 type: 'string[]',
                 facet: true
+            },
+            {
+                name: 'location',
+                type: 'float[]',
+                facet: true
             }
         ]
     })
@@ -99,6 +104,7 @@ const reset = async () => {
             isFavorite: !!document.favoredBy?.length,
             isArchived: document.status === 'archived',
             isTrash: document.status === 'trash',
+            location: [0, 0],
             albums: albumIds
         } as unknown as SearchMedium
     })

@@ -51,7 +51,7 @@ const Medium = ({
         }
 
         return el
-    }, [medium, width])
+    }, [medium, width, loaded])
 
     const classes = bem('medium', [
         ['position', !!position],

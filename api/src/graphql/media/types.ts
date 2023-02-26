@@ -29,8 +29,7 @@ export default gql`
         filenameDownload: String
         title: String
         description: String
-        lat: Float
-        lng: Float
+        location: [Float]
         status: String
         mimetype: String
         meta: Meta

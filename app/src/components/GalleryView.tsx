@@ -4,22 +4,22 @@ import { useEffect, useState } from 'react'
 import { EMediumSort, ESelectionMode } from '@/types/app'
 import { formatDate } from '@/util/date'
 import { GallerySection } from '@/components/GallerySection'
-import { useSelectionContext, useSortContext } from '@/providers'
+import { useSearchContext, useSelectionContext, useSortContext } from '@/providers'
 
 export const GalleryView = () => {
-    const { hits } = useHits<TMedium>()
+    const { hits: media } = useSearchContext()
     const selection = useSelectionContext()
 
     const [sections, setSections] = useState([])
     const sort = useSortContext()
 
     useEffect(() => {
-        const hitsWithMeta = hits.map((hit) => {
-            if (typeof hit.meta === 'string') {
-                hit.meta = JSON.parse(hit.meta)
+        const hitsWithMeta = media.map((medium) => {
+            if (typeof medium.meta === 'string') {
+                medium.meta = JSON.parse(medium.meta)
             }
 
-            return hit
+            return medium
         }) as TMedium[]
 
         const groups = hitsWithMeta
@@ -61,7 +61,7 @@ export const GalleryView = () => {
         })
 
         setSections(newSections)
-    }, [hits, sort.sort])
+    }, [media, sort.sort])
 
     return <div className="gallery">
         <div className="gallery__sections">

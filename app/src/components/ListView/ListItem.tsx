@@ -86,7 +86,9 @@ const ListItem = ({ medium }: Props) => {
             Stefan Baumeler
         </td>
         <td className="list-view__cell">
-            <ListItemActions medium={medium} />
+            <ListItemActions
+                medium={medium}
+            />
         </td>
     </tr>
 }

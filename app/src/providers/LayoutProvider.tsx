@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { ELayout } from '../types/app'
-import { ETrans } from '../types/translations'
+import { ELayout } from '@/types/app'
+import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import { useTranslation } from 'react-i18next'
 

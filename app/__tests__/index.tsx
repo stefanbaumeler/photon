@@ -10,7 +10,7 @@ import { DetailsProvider,
     LayoutProvider, SortProvider,
     NavProvider,
     ProviderProvider,
-    SelectionProvider } from '../src/providers'
+    SelectionProvider, SearchProvider } from '../src/providers'
 
 interface Props {
     children: ReactNode
@@ -22,7 +22,7 @@ const TestProvider = (props: Props) => {
     return (
         <MockedProvider>
             <I18nextProvider i18n={i18next}>
-                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
+                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider, SearchProvider]}>
                     {children}
                 </ProviderProvider>
             </I18nextProvider>

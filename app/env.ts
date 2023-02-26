@@ -10,6 +10,7 @@ type TAppEnv = { [key: string]: string | undefined } & {
     NEXT_PUBLIC_TYPESENSE_PORT: string
     NEXT_PUBLIC_TYPESENSE_SECURE: string
     NEXT_PUBLIC_TYPESENSE_SEARCH_KEY: string
+    NEXT_PUBLIC_MAPBOX_KEY: string
 }
 
 export const getEnv = () => {

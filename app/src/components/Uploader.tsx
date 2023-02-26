@@ -23,9 +23,7 @@ export const Uploader = () => {
     useEffect(() => {
         window.addEventListener('dragover', drag)
 
-        return () => {
-            window.removeEventListener('dragover', drag)
-        }
+        return () => window.removeEventListener('dragover', drag)
     }, [])
 
     const upload = useUpload()

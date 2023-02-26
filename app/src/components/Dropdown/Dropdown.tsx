@@ -1,4 +1,4 @@
-import { TDropdownItem } from '../../types/app'
+import { TDropdownItem } from '@/types/app'
 import bem from '../../util/bem'
 import { ReactElement } from 'react'
 import Tippy from '@tippyjs/react'

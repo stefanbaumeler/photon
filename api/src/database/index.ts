@@ -14,6 +14,7 @@ export const getDatabase = () => {
     globalForPrisma.prisma = new PrismaClient()
 
     setDbUrl()
+
     sync(globalForPrisma.prisma)
 
     return globalForPrisma.prisma

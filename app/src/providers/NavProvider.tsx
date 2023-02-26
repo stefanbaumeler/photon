@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
-import { ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '../types/app'
+import { ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../types/translations'
+import { ETrans } from '@/types/translations'
 
 type Props = {
     children?: ReactNode

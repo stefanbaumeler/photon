@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { EEditState } from '../types/app'
+import { EEditState } from '@/types/app'
 
 type Props = {
     children?: ReactNode

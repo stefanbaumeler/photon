@@ -5,5 +5,6 @@ export * from './SelectionProvider'
 export * from './EditProvider'
 export * from './LayoutProvider'
 export * from './SortProvider'
+export * from './SearchProvider'
 
 export { default as ProviderProvider } from './ProviderProvider'

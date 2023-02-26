@@ -1,11 +1,13 @@
 generator client {
-  provider   = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl"]
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DB_URL")
+  provider   = "postgresql"
+  url        = env("DB_URL")
+  extensions = [postgis]
 }
 
 model Album {
@@ -40,8 +42,7 @@ model Medium {
   filenameDownload   String?       @map("filename_download") @db.VarChar(100)
   title              String?       @db.VarChar(100)
   description        String?
-  lat                Float?        @db.Real
-  lng                Float?        @db.Real
+  location           Json?
   status             String?       @default("all")
   mimetype           String?       @db.VarChar(255)
   meta               Json?         @db.Json

@@ -1,4 +1,4 @@
-import { TDropdownItem } from '../../types/app'
+import { TDropdownItem } from '@/types/app'
 
 type Props = {
     items: TDropdownItem[]

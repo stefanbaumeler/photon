@@ -8,8 +8,7 @@ query QMedia($status: String, $sort: String) {
         filenameDownload
         title
         description
-        lat
-        lng
+        location
         status
         mimetype
         favoredBy {

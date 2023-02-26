@@ -1,6 +1,8 @@
 @import '../../../node_modules/tippy.js/dist/tippy.css';
 @import '../../../node_modules/leaflet/dist/leaflet.css';
 
+@import 'mapbox-gl/dist/mapbox-gl';
+
 @import 'util/fonts';
 @import 'util/vars';
 @import 'util/reset';
@@ -25,6 +27,7 @@
 @import 'blocks/dropdown';
 @import 'blocks/main';
 @import 'blocks/main-nav';
+@import 'blocks/map';
 @import 'blocks/gallery';
 @import 'blocks/gallery-section';
 @import 'blocks/icon-button';

@@ -152,8 +152,7 @@ const handleImage = async (filePath: string) => {
     const mediumData: Partial<TMedium> = {
         dateTaken: dateTime,
         hash: hash(JSON.stringify(rawMeta)).toString(),
-        lat,
-        lng
+        location: [lat, lng]
     }
 
     const meta: Partial<TImageMeta> = {
@@ -218,8 +217,7 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
             }
 
             if (coordinates.length) {
-                mediumData.lat = coordinates[0]
-                mediumData.lng = coordinates[1]
+                mediumData.location = coordinates
             }
 
             resolve({

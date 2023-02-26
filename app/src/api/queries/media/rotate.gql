@@ -8,8 +8,7 @@ mutation MRotate($id: ID!) {
         filenameDownload
         title
         description
-        lat
-        lng
+        location
         status
         mimetype
         favoredBy {

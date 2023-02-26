@@ -5,7 +5,7 @@ import { getEnv } from '../../env'
 getEnv()
 setDbUrl()
 
-exec('npx prisma db push --schema ../api/prisma/schema.prisma', (schemaError) => {
+exec('npx prisma db push --schema ../api/prisma/schema.prisma --accept-data-loss', (schemaError) => {
     if (schemaError !== null) {
         throw schemaError
     }

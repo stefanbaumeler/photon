@@ -8,8 +8,7 @@ query QFavorites {
         filenameDownload
         title
         description
-        lat
-        lng
+        location
         status
         mimetype
         favoredBy {

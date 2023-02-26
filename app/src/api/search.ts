@@ -16,5 +16,3 @@ export const typesenseAdapter = new TypesenseInstantsearchAdapter({
         facet_by: 'favorite'
     }
 })
-
-export const searchClient = typesenseAdapter.searchClient

@@ -1,5 +1,12 @@
 import { ApolloProvider } from '@apollo/client'
-import { NavProvider, ProviderProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider } from '../providers'
+import { NavProvider,
+    ProviderProvider,
+    DialogProvider,
+    SelectionProvider,
+    EditProvider,
+    LayoutProvider,
+    SortProvider,
+    SearchProvider } from '../providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -11,8 +18,8 @@ import { I18nextProvider } from 'react-i18next'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'tippy.js/themes/light.css'
 import { InstantSearch } from 'react-instantsearch-hooks-web'
-import { searchClient } from '@/api/search'
-import { SearchError } from '@/components/SearchError'
+import { typesenseAdapter } from '@/api/search'
+import { SearchSetup } from '@/components'
 
 tippy.setDefaultProps({
     zIndex: 101,
@@ -29,11 +36,11 @@ const Photon = ({
     return <ApolloProvider client={client}>
         <I18nextProvider i18n={i18next}>
             <InstantSearch
-                searchClient={searchClient}
+                searchClient={typesenseAdapter.searchClient}
                 indexName="media"
             >
-                <SearchError />
-                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider]}>
+                <SearchSetup />
+                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider, SearchProvider]}>
                     <Component {...pageProps} />
                 </ProviderProvider>
             </InstantSearch>

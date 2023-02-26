@@ -73,7 +73,8 @@ export default class MediaService {
                     connect: medium.favoredBy?.map((fav) => ({
                         id: fav?.id
                     }))
-                }
+                },
+                location: JSON.stringify(medium.location)
             }
 
         }) as TMedium

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useDetailsContext, useSelectionContext } from '@/providers'
+import { useState } from 'react'
+import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check, Medium } from '../index'
@@ -9,14 +9,13 @@ import bem from '../../util/bem'
 import { isEqual } from 'lodash'
 import TeaserMeta from './TeaserMeta'
 import { useTeaserContext } from './TeaserContext'
-import { useHits } from 'react-instantsearch-hooks-web'
-import { TMedium } from '@photon/schema'
 
 const Teaser = () => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
-    const { hits: media } = useHits<TMedium>()
+
+    const { hits: media } = useSearchContext()
 
     const [shift, setShift] = useState(false)
 

@@ -1,6 +1,7 @@
 @mixin main-root {
     padding: 16px 0 16px 8px;
     grid-area: main;
+    position: relative;
 }
 
 @mixin main {
