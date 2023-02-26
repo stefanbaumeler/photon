@@ -88,5 +88,6 @@ export default {
     newest_first: 'Newest first',
     oldest_first: 'Oldest first',
     most_recent: 'Recently added',
-    filter: 'Filter'
+    filter: 'Filter',
+    view: 'View'
 }

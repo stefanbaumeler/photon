@@ -1,10 +1,23 @@
 import { TDropdownItem } from '@/types/app'
+import * as Icons from '@mdi/js'
+import Icon from '@mdi/react'
 
 type Props = {
     items: TDropdownItem[]
 }
 
 const DropdownItems = ({ items }: Props) => {
+    const ConditionalIcon = ({ item }: { item: TDropdownItem }) => {
+        if (!item.icon) {
+            return <></>
+        }
+
+        return <Icon
+            className="dropdown__icon"
+            path={item.icon}
+            size={1}
+        />
+    }
     return <>
         {items.map((item, k) => <li
             className="dropdown__item"
@@ -15,7 +28,10 @@ const DropdownItems = ({ items }: Props) => {
                 className="dropdown__button"
                 onClick={item.callback}
             >
-                {item.label}
+                <ConditionalIcon item={item} />
+                <span className="dropdown__label">
+                    {item.label}
+                </span>
             </button>
         </li>)}
     </>

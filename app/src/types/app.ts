@@ -49,6 +49,7 @@ export type TThumbnail = {
 export type TDropdownItem = {
     label: string
     callback: () => void
+    icon?: string
     testId?: string
 }
 

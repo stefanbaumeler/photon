@@ -4,7 +4,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef, useState } from 'react'
 import { useLayoutContext, useNavContext, useSelectionContext, useSortContext } from '@/providers'
-import { EMediumSort, ENavItemType, ESelectionMode } from '@/types/app'
+import { ELayout, EMediumSort, ENavItemType, ESelectionMode } from '@/types/app'
 import useUpload from '../../hooks/upload'
 import { useRouter } from 'next/router'
 import bem from '../../util/bem'
@@ -23,7 +23,8 @@ export const DefaultActions = () => {
 
     const uploadRef = useRef<HTMLInputElement>(null)
 
-    const [moreActive, setMoreActive] = useState(false)
+    const [sortDropdownActive, setSortDropdownActive] = useState(false)
+    const [viewDropdownActive, setViewDropdownActive] = useState(false)
 
     const item = nav.getActiveItem()
 
@@ -37,10 +38,6 @@ export const DefaultActions = () => {
 
     const layoutProps = layout.getLayoutProps(layout.nextLayout)
 
-    const changeLayout = () => {
-        layout.setLayout(layout.nextLayout)
-    }
-
     const [out] = useMSignOut()
 
     const signOut = () => {
@@ -53,12 +50,10 @@ export const DefaultActions = () => {
         return <></>
     }
 
-    const moreItems = [
+    const sortItems = [
         {
             label: t(ETrans.NEWEST_FIRST),
-            callback: () => {
-                sort.setSort(EMediumSort.NEWEST)
-            }
+            callback: () => sort.setSort(EMediumSort.NEWEST)
         },
         {
             label: t(ETrans.OLDEST_FIRST),
@@ -67,6 +62,24 @@ export const DefaultActions = () => {
         {
             label: t(ETrans.MOST_RECENT),
             callback: () => sort.setSort(EMediumSort.RECENT)
+        }
+    ]
+
+    const viewItems = [
+        {
+            label: t(ETrans.GALLERY_VIEW),
+            callback: () => layout.setLayout(ELayout.GALLERY),
+            icon: Icons.mdiViewCompact
+        },
+        {
+            label: t(ETrans.MAP_VIEW),
+            callback: () => layout.setLayout(ELayout.MAP),
+            icon: Icons.mdiMapMarker
+        },
+        {
+            label: t(ETrans.LIST_VIEW),
+            callback: () => layout.setLayout(ELayout.LIST),
+            icon: Icons.mdiFormatListBulletedSquare
         }
     ]
 
@@ -86,21 +99,27 @@ export const DefaultActions = () => {
                 onClick={clickUpload}
             />
             <Dropdown
-                items={moreItems}
-                active={moreActive}
-                onClickOutside={() => setMoreActive(false)}
+                items={sortItems}
+                active={sortDropdownActive}
+                onClickOutside={() => setSortDropdownActive(false)}
             >
                 <IconButton
                     hint={t(ETrans.SORT)}
                     icon={Icons.mdiSwapVertical}
-                    onClick={() => setMoreActive(!moreActive)}
+                    onClick={() => setSortDropdownActive(!sortDropdownActive)}
                 />
             </Dropdown>
-            <IconButton
-                hint={layoutProps.name}
-                icon={layoutProps.icon}
-                onClick={changeLayout}
-            />
+            <Dropdown
+                items={viewItems}
+                active={viewDropdownActive}
+                onClickOutside={() => setViewDropdownActive(false)}
+            >
+                <IconButton
+                    hint={t(ETrans.VIEW)}
+                    icon={Icons.mdiEye}
+                    onClick={() => setViewDropdownActive(!viewDropdownActive)}
+                />
+            </Dropdown>
             <IconButton
                 hint={t(ETrans.SIGN_OUT)}
                 icon={Icons.mdiLogout}
@@ -117,11 +136,17 @@ export const DefaultActions = () => {
                 onClick={emptyTrashDialog}
                 testId="trash-empty"
             />
-            <IconButton
-                hint={layoutProps.name}
-                icon={layoutProps.icon}
-                onClick={changeLayout}
-            />
+            <Dropdown
+                items={viewItems}
+                active={viewDropdownActive}
+                onClickOutside={() => setViewDropdownActive(false)}
+            >
+                <IconButton
+                    hint={t(ETrans.VIEW)}
+                    icon={Icons.mdiEye}
+                    onClick={() => setViewDropdownActive(!viewDropdownActive)}
+                />
+            </Dropdown>
         </>
     }
 
