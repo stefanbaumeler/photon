@@ -1,4 +1,4 @@
-import { getDatabase, setDbUrl } from '../index'
+import { getDatabase, setDbUrl } from '../'
 import usersSeed from './users'
 import mediaSeed from './media'
 import albumsSeed from './albums'

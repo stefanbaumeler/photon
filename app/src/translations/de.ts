@@ -89,5 +89,6 @@ export default {
     oldest_first: 'Älteste zuerst',
     most_recent: 'Kürzlich hinzugefügt',
     filter: 'Filtern',
-    view: 'Ansicht'
+    view: 'Ansicht',
+    location_unknown: 'Medien ohne Koordinaten'
 }

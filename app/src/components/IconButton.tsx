@@ -16,10 +16,13 @@ type Props = {
     solid?: boolean
     testId?: string
     small?: boolean
+    className?: string
+    badge?: string
+    badgePlacement?: 'below' | 'bottom-right'
 }
 
 export const IconButton = ({
-    onClick, hint, hintPlacement, label, href, white = false, icon, solid = false, testId, small = false
+    onClick, badge, badgePlacement, className, hint, hintPlacement, label, href, white = false, icon, solid = false, testId, small = false
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (hint) {
@@ -36,19 +39,35 @@ export const IconButton = ({
         </>
     }
 
-    const linkClasses = bem('icon-button', [
+    const localClasses = bem('icon-button', [
         ['white', white],
         ['solid', solid],
         ['small', small],
         ['label', !!label?.length]
     ])
 
+    const classes = className ? `${localClasses} ${className}` : localClasses
+
+    const Badge = () => {
+        if (!badge) {
+            return <></>
+        }
+
+        const badgeClasses = bem('icon-button__badge', [
+            [badgePlacement, !!badgePlacement]
+        ])
+
+        return <span className={badgeClasses}>
+            {badge}
+        </span>
+    }
+
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
         if (href) {
             return <Link
                 href={href}
                 onClick={onClick}
-                className={linkClasses}
+                className={classes}
                 ref={ref as Ref<HTMLAnchorElement>}
                 data-testid={testId}
             >
@@ -58,7 +77,7 @@ export const IconButton = ({
 
         return <button
             ref={ref as Ref<HTMLButtonElement>}
-            className={linkClasses}
+            className={classes}
             onClick={onClick}
             data-testid={testId}
         >
@@ -75,6 +94,7 @@ export const IconButton = ({
                     path={icon}
                     size={small ? .75 : 1}
                 />
+                <Badge />
                 {label}
             </>
         </ButtonOrLinkWithRef>

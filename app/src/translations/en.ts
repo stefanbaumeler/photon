@@ -89,5 +89,6 @@ export default {
     oldest_first: 'Oldest first',
     most_recent: 'Recently added',
     filter: 'Filter',
-    view: 'View'
+    view: 'View',
+    location_unknown: 'Media with unknown location'
 }

@@ -1,5 +1,5 @@
 import { TMedium } from '@photon/schema'
-import { Check, ListItemActions, Medium } from '../index'
+import { Check, ListItemActions, Medium } from '../'
 import { formatDate } from '@/util/date'
 import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'

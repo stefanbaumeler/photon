@@ -2,9 +2,16 @@ import { TMedium } from '@photon/schema'
 import { useSearchContext, useSelectionContext } from '@/providers'
 import Map, { Marker } from 'react-map-gl'
 import { useEffect, useState } from 'react'
+import * as Icons from '@mdi/js'
+import Icon from '@mdi/react'
+import { ETrans } from '@/types/translations'
+import Tippy from '@tippyjs/react'
+import { useTranslation } from 'react-i18next'
+import { IconButton } from '@/components/IconButton'
 
 export const MapView = () => {
     const { hits: media } = useSearchContext()
+    const { t } = useTranslation()
     // const selection = useSelectionContext()
 
     const [markers, setMarkers] = useState<TMedium[]>([])
@@ -27,7 +34,20 @@ export const MapView = () => {
         setMediaWithoutLocation(mediaWithoutLocation)
     }, [media])
 
-    console.log(markers)
+    const NoLocationButton = () => {
+        if (mediaWithoutLocation.length === 0) {
+            return <></>
+        }
+
+        return <IconButton
+            hintPlacement="right"
+            className="map__button"
+            hint={t(ETrans.LOCATION_UNKNOWN)}
+            icon={Icons.mdiMapMarkerQuestionOutline}
+            badge={mediaWithoutLocation.length.toString()}
+            badgePlacement={mediaWithoutLocation.length >= 10 ? 'below' : 'bottom-right'}
+        />
+    }
 
     return <div className="map">
         <Map
@@ -49,5 +69,6 @@ export const MapView = () => {
                 longitude={marker.location[1]}
             />)}
         </Map>
+        <NoLocationButton />
     </div>
 }

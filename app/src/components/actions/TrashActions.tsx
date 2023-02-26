@@ -1,4 +1,4 @@
-import { IconButton } from '../index'
+import { IconButton } from '../'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import useDeleteMediaDialog from '../../dialogs/delete-media'

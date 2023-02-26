@@ -90,5 +90,6 @@ export enum ETrans {
     OLDEST_FIRST = 'oldest_first',
     MOST_RECENT = 'most_recent',
     FILTER = 'filter',
-    VIEW = 'view'
+    VIEW = 'view',
+    LOCATION_UNKNOWN = 'location_unknown'
 }

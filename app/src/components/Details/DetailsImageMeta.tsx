@@ -1,5 +1,5 @@
 import { TImageMeta } from '@photon/schema'
-import { Detail } from '../index'
+import { Detail } from '../'
 import * as Icons from '@mdi/js'
 import { useDetailsContext } from '@/providers'
 
