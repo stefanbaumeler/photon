@@ -1,9 +1,9 @@
 import * as Icons from '@mdi/js'
 import { IconButton } from '../index'
-import { ETrans } from '../../types/translations'
+import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { EEditState, ESelectionMode } from '../../types/app'
-import { useEditContext, useSelectionContext } from '../../providers'
+import { EEditState, ESelectionMode } from '@/types/app'
+import { useEditContext, useSelectionContext } from '@/providers'
 
 export const EditActions = () => {
     const { t } = useTranslation()

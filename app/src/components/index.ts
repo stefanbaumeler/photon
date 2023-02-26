@@ -6,6 +6,9 @@ export * from './actions/AlbumActions'
 export *  from './actions/DetailsActions'
 export * from './actions/ListItemActions'
 
+export * from './controls/SortControl'
+export * from './controls/ViewControl'
+
 export * from './AlbumTeaser'
 export * from './Albums'
 export * from './Sidebar'
