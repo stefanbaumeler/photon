@@ -1,67 +1,37 @@
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
-import L from 'leaflet'
+import { Map, Marker } from 'react-map-gl'
+import { useDetailsContext } from '@/providers'
 import { useState } from 'react'
 
-type Props = {
-    lat: number
-    lng: number
-}
+export const DetailsMap = () => {
+    const details = useDetailsContext()
 
-const DetailsMap = ({
-    lat, lng
-}: Props) => {
-    if (typeof lat === 'undefined' || typeof lng === 'undefined' || lat === null || lng === null) {
-        return <></>
-    }
-
-    const [markerIcon, setMarkerIcon] = useState('')
-
-    import('leaflet/dist/images/marker-icon-2x.png').then((icon) => {
-        setMarkerIcon(icon.default.src)
+    const [mapState] = useState({
+        latitude: details.medium.location[0],
+        longitude: details.medium.location[1]
     })
 
-    const ConditionalMarker = () => {
-        if (markerIcon) {
-            const icon = L.icon({
-                iconUrl: markerIcon,
-                iconSize: [25, 41],
-                iconAnchor: [12.5, 41],
-                popupAnchor: null,
-                shadowUrl: null,
-                shadowSize: null,
-                shadowAnchor: null
-            })
-
-            return <Marker
-                position={[lat, lng]}
-                icon={icon}
-            />
-        }
-
+    if (!details.medium.location[0] || !details.medium.location[1]) {
         return <></>
     }
 
-    return <div className="details-map">
-        <a
-            href={`https://google.com/maps/?q=loc:${lat},${lng}`}
-            className="details-map__link"
-            target="_blank"
-            rel="noreferrer"
+    return <div className="details__map">
+        <Map
+            {...mapState}
+            style={{
+                width: '100%',
+                aspectRatio: 1
+            }}
+            initialViewState={{
+                zoom: 13
+            }}
+            dragPan={false}
+            mapStyle="mapbox://styles/mapbox/streets-v12"
+            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
         >
-            <MapContainer
-                center={[lat, lng]}
-                zoom={13}
-                scrollWheelZoom={false}
-                zoomControl={false}
-                dragging={false}
-            >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <ConditionalMarker />
-            </MapContainer>
-        </a>
+            <Marker
+                latitude={details.medium.location[0]}
+                longitude={details.medium.location[1]}
+            />
+        </Map>
     </div>
 }
-
-export default DetailsMap

@@ -1,63 +1,64 @@
-import BinaryHeap from './binary-heap'
+import MinHeap, { RankingFunctionComparator } from './heap'
 
-const buildPrecedentsMap = (graph: (start: string) => {[key: number]: number}, startNode: string, endNode: number) => {
-    const precedentsMap: { [key: string]: string} = {}
+type GraphFunction<T> = (node: T) => Map<T, number>
 
-    const visited: { [key: string]: number} = {}
+const buildPrecedentsMap = <T>(graph: GraphFunction<T>, startNode: T, endNode: T) => {
+    const precedentsMap = new Map<T, T>()
+    const visited = new Set<T>()
+    const storedShortestPaths = new Map<T, number>()
 
-    const storedShortestPaths = {} as { [key: string]: number }
+    storedShortestPaths.set(startNode, 0)
 
-    storedShortestPaths[startNode] = 0
-
-    const pQueue = new BinaryHeap((n) => n.weight)
-
+    const pQueue = MinHeap<{ id: T, weight: number }>(RankingFunctionComparator((el) => el.weight))
     pQueue.push({
         id: startNode,
         weight: 0
     })
 
-    while (pQueue.size()) {
-        const shortestNode = pQueue.pop()
-        const shortestNodeId = shortestNode.id
+    while (pQueue.size() > 0) {
+        const {
+            id, weight
+        } = pQueue.pop()
 
-        if (visited[shortestNodeId]) {continue}
+        if (!visited.has(id)) {
+            const neighboringNodes = graph(id)
+            visited.add(id)
 
-        const neighboringNodes = graph(shortestNodeId) || {}
-        visited[shortestNodeId] = 1
+            neighboringNodes.forEach((neighborWeight, neighbor) => {
+                const newWeight = weight + neighborWeight
+                const currentId = precedentsMap.get(neighbor)
+                const currentWeight = storedShortestPaths.get(neighbor)
 
-        for (const neighbor in neighboringNodes) {
-            const newTotalWeight = shortestNode.weight + neighboringNodes[neighbor]
-
-            if (typeof storedShortestPaths[neighbor] === 'undefined' || storedShortestPaths[neighbor] > newTotalWeight) {
-                storedShortestPaths[neighbor] = newTotalWeight
-                pQueue.push({
-                    id: neighbor,
-                    weight: newTotalWeight
-                })
-
-                precedentsMap[neighbor] = shortestNodeId
-            }
+                if (
+                    currentWeight === undefined ||
+                    currentWeight > newWeight &&
+                        (currentWeight / newWeight > 1.005 || currentId !== undefined && currentId < id)
+                ) {
+                    storedShortestPaths.set(neighbor, newWeight)
+                    pQueue.push({
+                        id: neighbor,
+                        weight: newWeight
+                    })
+                    precedentsMap.set(neighbor, id)
+                }
+            })
         }
     }
 
-    if (typeof storedShortestPaths[endNode] === 'undefined') {
-        throw new Error(`There is no path from ${startNode} to ${endNode}`)
-    }
-
-    return precedentsMap
+    return storedShortestPaths.has(endNode) ? precedentsMap : undefined
 }
 
-const getPathFromPrecedentsMap = (precedentsMap: { [key: string]: string}, endNode: number) => {
+const getPathFromPrecedentsMap = <T>(precedentsMap: Map<T, T>, endNode: T) => {
     const nodes = []
-    let n = endNode as string | number | undefined
-    while (n) {
-        nodes.push(n)
-        n = precedentsMap[n]
+    for (let node: T | undefined = endNode; node !== undefined; node = precedentsMap.get(node)) {
+        nodes.push(node)
     }
     return nodes.reverse()
 }
 
-export const findShortestPath = (graph: (start: string) => {[key: number]: number}, startNode: string, endNode: number) => {
+const findShortestPath = <T>(graph: GraphFunction<T>, startNode: T, endNode: T) => {
     const precedentsMap = buildPrecedentsMap(graph, startNode, endNode)
-    return getPathFromPrecedentsMap(precedentsMap, endNode)
+    return precedentsMap ? getPathFromPrecedentsMap(precedentsMap, endNode) : undefined
 }
+
+export default findShortestPath

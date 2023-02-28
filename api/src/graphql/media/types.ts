@@ -9,6 +9,7 @@ export default gql`
         flash: Int
         fNumber: Float
         iso: Int
+        focalLength: String
     }
 
     type VideoMeta {

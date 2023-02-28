@@ -14,15 +14,24 @@ export const SortControl = () => {
     const sortItems = [
         {
             label: t(ETrans.NEWEST_FIRST),
-            callback: () => sort.setSort(EMediumSort.NEWEST)
+            callback: () => {
+                sort.setSort(EMediumSort.NEWEST)
+                setSortDropdownActive(false)
+            }
         },
         {
             label: t(ETrans.OLDEST_FIRST),
-            callback: () => sort.setSort(EMediumSort.OLDEST)
+            callback: () => {
+                sort.setSort(EMediumSort.OLDEST)
+                setSortDropdownActive(false)
+            }
         },
         {
             label: t(ETrans.MOST_RECENT),
-            callback: () => sort.setSort(EMediumSort.RECENT)
+            callback: () => {
+                sort.setSort(EMediumSort.RECENT)
+                setSortDropdownActive(false)
+            }
         }
     ]
 

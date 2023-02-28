@@ -161,7 +161,9 @@ const handleImage = async (filePath: string) => {
         cameraMake: rawMeta.Make?.value[0],
         cameraModel: rawMeta.Model?.value[0],
         flash: rawMeta.Flash?.value,
-        fNumber: fNumber
+        fNumber: fNumber,
+        iso: rawMeta.ISOSpeedRatings?.value,
+        focalLength: rawMeta.FocalLength?.description
     }
 
     return {

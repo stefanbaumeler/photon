@@ -16,12 +16,12 @@ export const DetailsImageMeta = () => {
         <Detail
             icon={Icons.mdiCameraIris}
             title={`${meta.cameraMake} ${meta.cameraModel}`}
-            values={[`f/${meta.fNumber}`, `${meta.iso}`]}
+            values={[`f/${meta.fNumber}`, meta.focalLength, `ISO${meta.iso}`]}
         />
         <Detail
-            icon={Icons.mdiMapMarker}
-            title={`${meta.cameraMake} ${meta.cameraModel}`}
-            values={[`f/${meta.fNumber}`, `${meta.iso}`]}
+            icon={Icons.mdiImageOutline}
+            title={`${details.medium.filenameDownload}`}
+            values={[`${(meta.width * meta.height / 1000000).toFixed(1)}MP`, `${meta.width}×${meta.height}`]}
         />
     </>
 }

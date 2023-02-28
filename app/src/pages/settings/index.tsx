@@ -1,5 +1,5 @@
 import Layout from '../../layouts/layout'
-import { Uploader } from '../../components'
+import { Uploader } from '@/components'
 
 const SettingsPage = () => {
     return <Layout>
@@ -16,6 +16,9 @@ const SettingsPage = () => {
                         </li>
                         <li>
                             Language
+                        </li>
+                        <li>
+                            Default view
                         </li>
                     </ul>
                 </div>

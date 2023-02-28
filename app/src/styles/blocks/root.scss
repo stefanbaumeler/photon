@@ -1,6 +1,6 @@
 @mixin root-root {
     display: grid;
-    grid-template: 'search search search' #{$searchbar-height} 'sidebar main scrollbar' auto / #{$sidebar-width} calc(100vw - #{$sidebar-width + $scrollbar-width - 8px}) #{$scrollbar-width};
+    grid-template: 'search search' #{$searchbar-height} 'sidebar main' auto / #{$sidebar-width} calc(100vw - #{$sidebar-width - 8px});
     flex-wrap: wrap;
     height: 100vh;
 }

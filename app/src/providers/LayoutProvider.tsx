@@ -17,7 +17,6 @@ interface LayoutContext {
     layout: ELayout
     setLayout: Dispatch<SetStateAction<ELayout>>
     getLayoutProps: (id: string) => LayoutProps
-    nextLayout: ELayout
 }
 
 const LayoutContext = createContext<LayoutContext | null>(null)
@@ -25,7 +24,7 @@ const LayoutContext = createContext<LayoutContext | null>(null)
 const LayoutProvider = ({ children }: Props) => {
     const { t } = useTranslation()
 
-    const [layout, setLayout] = useState(ELayout.GALLERY)
+    const [layout, setLayout] = useState(ELayout.MAP)
 
     const getLayoutProps = (id: string) => {
         switch (id) {
@@ -46,13 +45,11 @@ const LayoutProvider = ({ children }: Props) => {
             }
         }
     }
-    const nextLayout = Object.values(ELayout)[Object.values(ELayout).indexOf(layout) + 1] || Object.values(ELayout)[0]
 
     return <LayoutContext.Provider value={{
         layout,
         setLayout,
-        getLayoutProps,
-        nextLayout
+        getLayoutProps
     }}
     >
         {children}

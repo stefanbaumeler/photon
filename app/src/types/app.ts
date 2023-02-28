@@ -34,7 +34,6 @@ export type TNavContext = {
 
 export type GalleryItem = {
     medium: TMedium
-    ratio: number
     width?: number
     height?: number
 }

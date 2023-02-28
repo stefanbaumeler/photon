@@ -29,6 +29,7 @@ mutation MRotate($id: ID!) {
                 flash
                 fNumber
                 iso
+                focalLength
             }
             ...on VideoMeta {
                 width

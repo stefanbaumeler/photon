@@ -1,15 +1,17 @@
 import ListItems from './ListItems'
-import { useLayoutContext } from '@/providers'
+import { TMedium } from '@photon/schema'
 
-export const ListView = () => {
-    const layout = useLayoutContext()
-    console.log(layout)
+type Props = {
+    media: TMedium[]
+}
+
+export const ListView = ({ media }: Props) => {
     return <div className="list-view">
         <div className="list-view__header">
         </div>
         <table className="list-view__table">
             <tbody className="list-view__tbody">
-                <ListItems />
+                <ListItems media={media} />
             </tbody>
         </table>
     </div>

@@ -1,6 +1,10 @@
 @mixin gallery-section-root {
     margin: -2px;
     width: auto;
+
+    &:not(:has(.teaser:not(.teaser--removed))) {
+        display: none;
+    }
 }
 
 @mixin gallery-section-header {

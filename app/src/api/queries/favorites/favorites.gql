@@ -29,6 +29,7 @@ query QFavorites {
                 flash
                 fNumber
                 iso
+                focalLength
             }
             ...on VideoMeta {
                 width

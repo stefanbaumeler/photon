@@ -99,6 +99,7 @@ export default (database: PrismaClient) => {
         rows.forEach((row, k) => {
             const location = Array.isArray(row.location) ? row.location : JSON.parse(row.location as unknown as string) as string[]
 
+            console.log(row.filenameDownload)
             typesense.collections('media').documents().upsert({
                 id: row.id,
                 dateTaken: row.dateTaken?.toString() || null,
@@ -108,6 +109,7 @@ export default (database: PrismaClient) => {
                 meta: row.meta,
                 mimetype: row.mimetype,
                 filenameDisk: row.filenameDisk,
+                filenameDownload: row.filenameDownload,
                 status: row.status,
                 favoredBy: row.favoredBy || [],
                 isFavorite: !!row.favoredBy?.length,

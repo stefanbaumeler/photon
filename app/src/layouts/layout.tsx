@@ -29,7 +29,6 @@ const Layout = ({ children }: Props) => {
             >
                 {children}
             </main>
-            <Scrollbar />
         </div>
     </>
 }

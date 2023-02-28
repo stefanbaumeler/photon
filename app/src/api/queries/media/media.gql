@@ -29,6 +29,7 @@ query QMedia($status: String, $sort: String) {
                 flash
                 fNumber
                 iso
+                focalLength
             }
             ...on VideoMeta {
                 width

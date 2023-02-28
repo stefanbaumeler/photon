@@ -1,56 +1,68 @@
-import { findShortestPath } from './dijkstra'
-import { GalleryItem } from '../types/app'
+import findShortestPath from './dijkstra'
+import { TMedium } from '@photon/schema'
 
 type TGalleryConfig = {
     containerWidth: number
-    images: GalleryItem[]
+    images: TMedium[]
     targetRowHeight: number
     margin: number
     maxHeight: number
 }
 
-const getCommonHeight = (row: GalleryItem[], config: TGalleryConfig) => {
-    const rowWidth = config.containerWidth - row.length * (config.margin * 2)
-    const totalAspectRatio = row.reduce((acc, photo) => acc + photo.ratio, 0)
+const getCommonHeight = (config: TGalleryConfig, row: TMedium[]) => {
+    const rowWidth = config.containerWidth - (row.length - 1) * config.margin * 2 - 2
+    const totalAspectRatio = row.reduce((acc, photo) => {
+        return acc + photo.meta.width / photo.meta.height
+    }, 0)
+
     return rowWidth / totalAspectRatio
 }
 
-const makeGetNeighbors = (limitNodeSearch: number, config: TGalleryConfig) => (start: string) => {
-    const results: {[key: string]: number} = {}
-    const startNum = +start
-    results[+start] = 0
+const cost = (config: TGalleryConfig, i: number, j: number) => {
+    const row = config.images.slice(i, j)
+    const commonHeight = getCommonHeight(config, row)
+    return commonHeight > 0 ? (commonHeight - config.targetRowHeight) ** 2 * row.length : undefined
+}
 
-    for (let i = startNum + 1; i < config.images.length + 1; ++i) {
-        if (i - startNum > limitNodeSearch) {
+const makeGetRowNeighbors = (config: TGalleryConfig) => (node: number) => {
+    const results = new Map<number, number>()
+    results.set(node, 0)
+
+    for (let i = node + 1; i < config.images.length + 1; i += 1) {
+        if (i - node > 10) {
+            break
+        }
+        const currentCost = cost(config, node, i)
+
+        if (currentCost === undefined) {
             break
         }
 
-        results[i.toString()] = Math.pow(Math.abs(getCommonHeight(config.images.slice(startNum, i), config) - Math.sqrt(config.targetRowHeight * window.innerWidth) / 2.5), 2)
+        results.set(i, currentCost)
     }
 
     return results
 }
+export const generateGallery = (config: TGalleryConfig) => {
+    const getNeighbors = makeGetRowNeighbors(config)
+    const path = findShortestPath(getNeighbors, 0, config.images.length)?.map((node) => +node)
 
-export const generateGallery = (config: TGalleryConfig): Promise<GalleryItem[]> => {
-    const cfg = {
-        ...config
+    const layout = []
+
+    for (let i = 1; i < path.length; i += 1) {
+        const row = config.images.slice(path[i - 1], path[i])
+
+        const calculatedHeight = getCommonHeight(config, row)
+
+        const height = calculatedHeight > config.maxHeight ? config.maxHeight : calculatedHeight
+
+        layout.push(
+            ...row.map((item) => ({
+                height,
+                width: height * item.meta.width / item.meta.height
+            }))
+        )
     }
 
-    return new Promise((resolve) => {
-        const idealNodeSearch = cfg.containerWidth >= 450 ? Math.round(cfg.containerWidth / cfg.targetRowHeight / 1.5 * 100) / 100 + 8 : 2
-        const getNeighbors = makeGetNeighbors(idealNodeSearch, cfg)
-        const path = findShortestPath(getNeighbors, '0', cfg.images.length).map((node) => +node)
-
-        for (let i = 1; i < path.length; ++i) {
-            const calculatedHeight = getCommonHeight(cfg.images.slice(path[i - 1], path[i]), cfg)
-            const height = calculatedHeight > cfg.maxHeight ? cfg.targetRowHeight : Math.min(calculatedHeight, cfg.maxHeight)
-
-            for (let j = path[i - 1]; j < path[i]; ++j) {
-                cfg.images[j].width = Math.round(height * cfg.images[j].ratio * 100) / 100
-                cfg.images[j].height = height
-            }
-        }
-
-        resolve(cfg.images)
-    })
+    return layout
 }

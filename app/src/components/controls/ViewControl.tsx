@@ -13,17 +13,26 @@ export const ViewControl = () => {
     const viewItems = [
         {
             label: t(ETrans.GALLERY_VIEW),
-            callback: () => layout.setLayout(ELayout.GALLERY),
+            callback: () => {
+                layout.setLayout(ELayout.GALLERY)
+                setViewDropdownActive(false)
+            },
             icon: Icons.mdiViewCompact
         },
         {
             label: t(ETrans.MAP_VIEW),
-            callback: () => layout.setLayout(ELayout.MAP),
+            callback: () => {
+                layout.setLayout(ELayout.MAP)
+                setViewDropdownActive(false)
+            },
             icon: Icons.mdiMapMarker
         },
         {
             label: t(ETrans.LIST_VIEW),
-            callback: () => layout.setLayout(ELayout.LIST),
+            callback: () => {
+                layout.setLayout(ELayout.LIST)
+                setViewDropdownActive(false)
+            },
             icon: Icons.mdiFormatListBulletedSquare
         }
     ]

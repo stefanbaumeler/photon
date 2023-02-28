@@ -1,9 +1,11 @@
 import ListItem from './ListItem'
-import { useSearchContext } from '@/providers'
+import { TMedium } from '@photon/schema'
 
-const ListItems = () => {
-    const { hits: media } = useSearchContext()
+type Props = {
+    media: TMedium[]
+}
 
+const ListItems = ({ media }: Props) => {
     const items = media.map((medium, k) => {
         return <ListItem
             medium={medium}

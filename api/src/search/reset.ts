@@ -89,6 +89,7 @@ const reset = async () => {
 
     const sync = documentsToSync.map((document, k) => {
         const albumIds = albumIdTransaction[k].map(({ idAlbum }) => idAlbum)
+        const location = Array.isArray(document.location) ? document.location : JSON.parse(document.location as unknown as string) as string[]
 
         return {
             id: document.id,
@@ -99,12 +100,13 @@ const reset = async () => {
             meta: document.meta,
             mimetype: document.mimetype,
             filenameDisk: document.filenameDisk,
+            filenameDownload: document.filenameDownload,
             status: document.status,
             favoredBy: document.favoredBy || null,
             isFavorite: !!document.favoredBy?.length,
             isArchived: document.status === 'archived',
             isTrash: document.status === 'trash',
-            location: [0, 0],
+            location: location.map((c) => typeof c === 'number' ? c : 0),
             albums: albumIds
         } as unknown as SearchMedium
     })

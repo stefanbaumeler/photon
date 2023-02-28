@@ -150,6 +150,10 @@
     }
 }
 
+@mixin details-map {
+    cursor: default;
+}
+
 @mixin details {
     .details {
         @include details-root;
@@ -188,6 +192,10 @@
 
         &__image {
             @include details-image;
+        }
+
+        &__map {
+            @include details-map;
         }
     }
 }

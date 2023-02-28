@@ -24,7 +24,7 @@ export const Media = () => {
     }, [details.active, dialog.active])
 
     if (layout.layout === ELayout.GALLERY) {
-        return <GalleryView />
+        return <GalleryView media={media} />
     }
 
     if (layout.layout === ELayout.LIST) {

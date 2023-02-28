@@ -1,5 +1,5 @@
-import { useDialogContext } from '../providers'
-import { TDialogButton } from '../types/app'
+import { useDialogContext } from '@/providers'
+import { TDialogButton } from '@/types/app'
 import useKeyboard from '../hooks/keyboard'
 import bem from '../util/bem'
 

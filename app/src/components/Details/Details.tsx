@@ -1,10 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Detail, DetailsActions, IconButton, Medium } from '../'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import dynamic from 'next/dynamic'
 import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import useKeyboard from '../../hooks/keyboard'
@@ -13,6 +12,7 @@ import { useRouter } from 'next/router'
 import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
+import { DetailsMap } from './DetailsMap'
 
 export const Details = () => {
     const { t } = useTranslation()
@@ -82,23 +82,6 @@ export const Details = () => {
 
         return <></>
     }
-
-    const Map = dynamic(() => import('./DetailsMap'), {
-        ssr: false
-    })
-
-    const DetailsMap = useMemo(() => {
-        if (!details.medium) {
-            return <></>
-        }
-
-        return <>
-            <Map
-                lat={details.medium.location[0]}
-                lng={details.medium.location[1]}
-            />
-        </>
-    }, [details.medium])
 
     const classes = bem('details', [
         ['active', details.active],
@@ -203,7 +186,7 @@ export const Details = () => {
                 <ConditionalDateDetail />
                 <DetailsImageMeta />
                 <DetailsVideoMeta />
-                {DetailsMap}
+                <DetailsMap />
             </div>
         </aside>
     </div>

@@ -72,6 +72,7 @@ export type TImageMeta = {
   cameraModel?: Maybe<Scalars['String']>;
   fNumber?: Maybe<Scalars['Float']>;
   flash?: Maybe<Scalars['Int']>;
+  focalLength?: Maybe<Scalars['String']>;
   height?: Maybe<Scalars['Int']>;
   iso?: Maybe<Scalars['Int']>;
   width?: Maybe<Scalars['Int']>;
@@ -461,6 +462,7 @@ export type TImageMetaResolvers<ContextType = any, ParentType extends TResolvers
   cameraModel?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   fNumber?: Resolver<Maybe<TResolversTypes['Float']>, ParentType, ContextType>;
   flash?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
+  focalLength?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   height?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
   iso?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
   width?: Resolver<Maybe<TResolversTypes['Int']>, ParentType, ContextType>;
@@ -648,7 +650,7 @@ export type TQAlbumMedia = (
       & Pick<TUser, 'id'>
     )>>>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -761,7 +763,7 @@ export type TQFavorites = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -841,7 +843,7 @@ export type TQMedia = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -889,7 +891,7 @@ export type TQMedium = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -918,7 +920,7 @@ export type TMRotate = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -1095,6 +1097,7 @@ export const QAlbumMediaDocument = gql`
         flash
         fNumber
         iso
+        focalLength
       }
       ... on VideoMeta {
         width
@@ -1375,6 +1378,7 @@ export const QFavoritesDocument = gql`
         flash
         fNumber
         iso
+        focalLength
       }
       ... on VideoMeta {
         width
@@ -1577,6 +1581,7 @@ export const QMediaDocument = gql`
         flash
         fNumber
         iso
+        focalLength
       }
       ... on VideoMeta {
         width
@@ -1690,6 +1695,7 @@ export const QMediumDocument = gql`
         flash
         fNumber
         iso
+        focalLength
       }
       ... on VideoMeta {
         width
@@ -1760,6 +1766,7 @@ export const MRotateDocument = gql`
         flash
         fNumber
         iso
+        focalLength
       }
       ... on VideoMeta {
         width
