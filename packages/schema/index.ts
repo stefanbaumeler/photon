@@ -80,6 +80,8 @@ export type TImageMeta = {
 
 export type TMedium = {
   __typename?: 'Medium';
+  address?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
   dateCreated?: Maybe<Scalars['DateTime']>;
   dateModified?: Maybe<Scalars['DateTime']>;
   dateModifiedStatus?: Maybe<Scalars['DateTime']>;
@@ -95,6 +97,8 @@ export type TMedium = {
   meta?: Maybe<TMeta>;
   mimetype?: Maybe<Scalars['String']>;
   owner?: Maybe<TUser>;
+  place?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   uploader?: Maybe<TUser>;
@@ -470,6 +474,8 @@ export type TImageMetaResolvers<ContextType = any, ParentType extends TResolvers
 };
 
 export type TMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Medium'] = TResolversParentTypes['Medium']> = {
+  address?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  country?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   dateCreated?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   dateModified?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   dateModifiedStatus?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -485,6 +491,8 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   meta?: Resolver<Maybe<TResolversTypes['Meta']>, ParentType, ContextType>;
   mimetype?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
+  place?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  region?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   uploader?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
@@ -644,7 +652,7 @@ export type TQAlbumMedia = (
   { __typename?: 'Query' }
   & { albumMedia: Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -751,7 +759,7 @@ export type TQFavorites = (
   { __typename?: 'Query' }
   & { favorites: Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -831,7 +839,7 @@ export type TQMedia = (
   { __typename?: 'Query' }
   & { media?: Maybe<Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -879,7 +887,7 @@ export type TQMedium = (
   { __typename?: 'Query' }
   & { medium?: Maybe<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -908,7 +916,7 @@ export type TMRotate = (
   { __typename?: 'Mutation' }
   & { rotate: (
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -1085,6 +1093,10 @@ export const QAlbumMediaDocument = gql`
     location
     status
     mimetype
+    country
+    region
+    place
+    address
     favoredBy {
       id
     }
@@ -1360,6 +1372,10 @@ export const QFavoritesDocument = gql`
     location
     status
     mimetype
+    country
+    region
+    place
+    address
     favoredBy {
       id
     }
@@ -1563,6 +1579,10 @@ export const QMediaDocument = gql`
     location
     status
     mimetype
+    country
+    region
+    place
+    address
     favoredBy {
       id
     }
@@ -1677,6 +1697,10 @@ export const QMediumDocument = gql`
     location
     status
     mimetype
+    country
+    region
+    place
+    address
     favoredBy {
       id
     }
@@ -1748,6 +1772,10 @@ export const MRotateDocument = gql`
     location
     status
     mimetype
+    country
+    region
+    place
+    address
     favoredBy {
       id
     }

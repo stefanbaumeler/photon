@@ -11,6 +11,10 @@ query QMedia($status: String, $sort: String) {
         location
         status
         mimetype
+        country
+        region
+        place
+        address
         favoredBy {
             id
         }

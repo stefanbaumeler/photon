@@ -11,6 +11,10 @@ query QMedium($id: ID!) {
         location
         status
         mimetype
+        country
+        region
+        place
+        address
         favoredBy {
             id
         }

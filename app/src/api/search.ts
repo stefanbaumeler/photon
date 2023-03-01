@@ -12,7 +12,7 @@ export const typesenseAdapter = new TypesenseInstantsearchAdapter({
         ]
     },
     additionalSearchParameters: {
-        query_by: 'dateTaken,title,generatedTags',
+        query_by: 'dateTaken,title,generatedTags,country,region,place,address',
         facet_by: 'favorite'
     }
 })

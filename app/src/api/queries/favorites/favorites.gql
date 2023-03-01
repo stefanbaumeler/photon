@@ -11,6 +11,10 @@ query QFavorites {
         location
         status
         mimetype
+        country
+        region
+        place
+        address
         favoredBy {
             id
         }
