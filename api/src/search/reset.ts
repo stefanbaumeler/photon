@@ -58,8 +58,23 @@ const reset = async () => {
                 facet: true
             },
             {
-                name: 'location',
-                type: 'float[]',
+                name: 'country',
+                type: 'string',
+                facet: true
+            },
+            {
+                name: 'region',
+                type: 'string',
+                facet: true
+            },
+            {
+                name: 'place',
+                type: 'string',
+                facet: true
+            },
+            {
+                name: 'address',
+                type: 'string',
                 facet: true
             }
         ]
@@ -91,6 +106,7 @@ const reset = async () => {
         const albumIds = albumIdTransaction[k].map(({ idAlbum }) => idAlbum)
         const location = Array.isArray(document.location) ? document.location : JSON.parse(document.location as unknown as string) as string[]
 
+        console.log(document.country || '')
         return {
             id: document.id,
             title: document.title,
@@ -107,6 +123,10 @@ const reset = async () => {
             isArchived: document.status === 'archived',
             isTrash: document.status === 'trash',
             location: location.map((c) => typeof c === 'number' ? c : 0),
+            country: document.country || '',
+            region: document.region || '',
+            place: document.place || '',
+            address: document.address || '',
             albums: albumIds
         } as unknown as SearchMedium
     })

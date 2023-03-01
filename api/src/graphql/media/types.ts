@@ -39,6 +39,10 @@ export default gql`
         hash: String
         favoredBy: [User]
         generatedTags: [String]
+        country: String
+        region: String
+        place: String
+        address: String
     }
 
     type YearCountMonth {

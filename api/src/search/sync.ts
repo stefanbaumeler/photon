@@ -99,7 +99,6 @@ export default (database: PrismaClient) => {
         rows.forEach((row, k) => {
             const location = Array.isArray(row.location) ? row.location : JSON.parse(row.location as unknown as string) as string[]
 
-            console.log(row.filenameDownload)
             typesense.collections('media').documents().upsert({
                 id: row.id,
                 dateTaken: row.dateTaken?.toString() || null,
@@ -116,7 +115,11 @@ export default (database: PrismaClient) => {
                 isArchived: row.status === 'archived',
                 isTrash: row.status === 'trash',
                 albums: albums[k],
-                location: location?.map((c) => typeof c === 'number' ? c : 0)
+                location: location?.map((c) => typeof c === 'number' ? c : 0),
+                country: row.country || '',
+                region: row.region || '',
+                place: row.place || '',
+                address: row.address || ''
             })
         })
 

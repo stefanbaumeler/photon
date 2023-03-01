@@ -54,6 +54,10 @@ model Medium {
   albumMedia         AlbumMedium[]
   favoredBy          User[]
   generatedTags      String[]
+  country            String?
+  region             String?
+  place              String?
+  address            String?
 
   @@unique(hash)
 }

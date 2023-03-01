@@ -4,7 +4,7 @@ import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { DeepPartial } from '../types'
-import { Prisma } from '@prisma/client'
+import { Prisma } from '.prisma/client'
 import Enumerable = Prisma.Enumerable
 import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 import { fileToMedium } from '../helpers/exif'
@@ -14,6 +14,7 @@ import path from 'path'
 import { getEnv } from '../../env'
 import AdmZip from 'adm-zip'
 import { getTypesense } from '../search'
+import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
 
 const env = getEnv()
 
@@ -54,9 +55,14 @@ export default class MediaService {
             return existing
         }
 
+        const locationData = medium.location && medium.location[0] && medium.location[1]
+            ? await this.getLocationData([medium.location[0], medium.location[1]])
+            : {}
+
         return await this.prisma.medium.create({
             data: {
                 ...medium as DeepPartial<TMedium>,
+                ...locationData,
                 generatedTags: medium.generatedTags?.join(', '),
                 owner: {
                     connect: {
@@ -113,9 +119,9 @@ export default class MediaService {
     handleZip = async (zipPath: string) => {
         const zip = new AdmZip(zipPath)
 
-        await zip.extractAllTo(`${process.env.API_UPLOADS_DIR}/temp`)
+        await zip.extractAllTo(`${env.API_UPLOADS_DIR}/temp`)
 
-        const paths = await this.recursivelyReadDir(`${process.env.API_UPLOADS_DIR}/temp`)
+        const paths = await this.recursivelyReadDir(`${env.API_UPLOADS_DIR}/temp`)
 
         const noMacOS = paths.filter((p) => {
             return !p.includes('__MACOSX')
@@ -123,7 +129,7 @@ export default class MediaService {
 
         const promises = noMacOS.map((filePath) => new Promise<DeepPartial<TMedium>>((resolve) => {
             const name = randomUUID()
-            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
+            const pathName = `${env.API_UPLOADS_DIR}/${name}`
 
             fs.copyFileSync(filePath, pathName)
 
@@ -141,7 +147,7 @@ export default class MediaService {
 
         const results = await Promise.all(promises) as TMedium[]
 
-        fs.rm(`${process.env.API_UPLOADS_DIR}/temp`, {
+        fs.rm(`${env.API_UPLOADS_DIR}/temp`, {
             recursive: true
         }, (error) => {
             if (error) {
@@ -155,7 +161,7 @@ export default class MediaService {
     writeToDisk = async (filePromises: Promise<FileUpload>[]) => {
         const promises = filePromises.map(async (filePromise) => {
             const name = randomUUID()
-            const pathName = `${process.env.API_UPLOADS_DIR}/${name}`
+            const pathName = `${env.API_UPLOADS_DIR}/${name}`
             const file = await filePromise
             const stream = file.createReadStream()
 
@@ -176,14 +182,14 @@ export default class MediaService {
 
                     this.generateTags(pathName, name)
 
-                    const m = fileToMedium({
+                    const medium = await fileToMedium({
                         filePath: pathName,
                         fileName: name,
                         originalName: file.filename,
                         user: this.context.user.id
                     }) as Promise<TMedium>
 
-                    resolve(m)
+                    resolve(medium)
                 })
             }) as TMedium
         })
@@ -216,7 +222,7 @@ export default class MediaService {
     }
 
     generateTags = async (pathName: string, filenameDisk: string) => {
-        if (!process.env.CV_REKOGNITION_ACCESS_KEY_ID || !process.env.CV_REKOGNITION_SECRET_ACCESS_KEY || !process.env.CV_REKOGNITION_REGION) {
+        if (!env.CV_REKOGNITION_ACCESS_KEY_ID || !env.CV_REKOGNITION_SECRET_ACCESS_KEY || !env.CV_REKOGNITION_REGION) {
             return false
         }
 
@@ -232,6 +238,41 @@ export default class MediaService {
         if (labels && text) {
             await this.writeGeneratedTags([...labels, ...text], filenameDisk)
         }
+    }
+
+    getLocationData = async (location: number[]) => {
+        const geocodingClient = GeocodingClient({
+            accessToken: env.MAPBOX_KEY
+        })
+
+        const result = await geocodingClient.reverseGeocode({
+            query: [location[1] || 0, location[0] || 0]
+        }).send()
+
+        const countryFeature = result.body.features.find((feature) => feature.place_type[0] === 'country')
+        const regionFeature = result.body.features.find((feature) => feature.place_type[0] === 'region')
+        const placeFeature = result.body.features.find((feature) => feature.place_type[0] === 'place')
+        const addressFeature = result.body.features.find((feature) => feature.place_type[0] === 'address')
+
+        const data = {} as Partial<TMedium>
+
+        if (countryFeature) {
+            data.country = countryFeature.text
+        }
+
+        if (regionFeature) {
+            data.region = regionFeature.text
+        }
+
+        if (placeFeature) {
+            data.place = placeFeature.text
+        }
+
+        if (addressFeature) {
+            data.address = addressFeature.text
+        }
+
+        return data
     }
 
     writeGeneratedTags = async (tags: string[], filenameDisk: string) => {
