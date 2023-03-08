@@ -7,14 +7,14 @@ Self-hosted, open source photo management, sync and api for developers.
 ## App
 
 - Pictures, videos, albums
-- Sync from your iOS or Android device
+- Sync from your iOS or Android device (soon)
 - Show media on a map
 - Search for places, dates, people, pets, objects
-- Public, password protected or expiring share links
-- Partner accounts
+- Public, password protected or expiring share links (soon)
+- Partner accounts (soon)
 
 ## API
 - GraphQL and REST
-- Permissions
+- Permissions (soon)
 - Resize on request
 - Use as image hosting for your web project
