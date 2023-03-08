@@ -28,11 +28,10 @@
         "jsx": "preserve"
     },
     "include": [
-        "./",
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        "**.*.css"
+        "app/next-env.d.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "app/**.*.css"
     ],
     "exclude": [
         "src-tauri",

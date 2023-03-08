@@ -6,17 +6,10 @@ env:
     NODE_ENV: ci
 
 jobs:
-    build-docker:
+    tests-run:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v3
-            -   uses: docker/setup-buildx-action@v2
-            -   uses: docker/build-push-action@v4
-                with:
-                    context: .
-                    cache-from: type=gha
-                    cache-to: type=gha,mode=max
-            -   name: Test
-                run: docker-compose up
-    tests:
-        runs-on: ubuntu-latest
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Docker Containers
+              run: docker-compose up --build

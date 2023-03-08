@@ -34,8 +34,7 @@
         "build": "run-s build:lerna build:db",
         "build:lerna": "lerna run build",
         "build:db": "run-s start:docker db:up",
-        "test": "start-server-and-test 'yarn start:app' http://0.0.0.0:3030 'yarn test:all'",
-        "test:all": "run-s test:api test:app",
+        "test": "run-s test:api test:app",
         "test:app": "yarn workspace @photon/app test",
         "test:api": "jest -i",
         "seed-and-test": "run-s db:up search:setup test:all"

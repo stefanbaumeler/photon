@@ -14,7 +14,7 @@ import path from 'path'
 import { getEnv } from '../../env'
 import AdmZip from 'adm-zip'
 import { getTypesense } from '../search'
-import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
+// import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
 
 const env = getEnv()
 
@@ -241,38 +241,38 @@ export default class MediaService {
     }
 
     getLocationData = async (location: number[]) => {
-        const geocodingClient = GeocodingClient({
-            accessToken: env.MAPBOX_KEY
-        })
+        // const geocodingClient = GeocodingClient({
+        //     accessToken: env.MAPBOX_KEY
+        // })
+        //
+        // const result = await geocodingClient.reverseGeocode({
+        //     query: [location[1] || 0, location[0] || 0]
+        // }).send()
 
-        const result = await geocodingClient.reverseGeocode({
-            query: [location[1] || 0, location[0] || 0]
-        }).send()
-
-        const countryFeature = result.body.features.find((feature) => feature.place_type[0] === 'country')
-        const regionFeature = result.body.features.find((feature) => feature.place_type[0] === 'region')
-        const placeFeature = result.body.features.find((feature) => feature.place_type[0] === 'place')
-        const addressFeature = result.body.features.find((feature) => feature.place_type[0] === 'address')
-
-        const data = {} as Partial<TMedium>
-
-        if (countryFeature) {
-            data.country = countryFeature.text
-        }
-
-        if (regionFeature) {
-            data.region = regionFeature.text
-        }
-
-        if (placeFeature) {
-            data.place = placeFeature.text
-        }
-
-        if (addressFeature) {
-            data.address = addressFeature.text
-        }
-
-        return data
+        // const countryFeature = result.body.features.find((feature) => feature.place_type[0] === 'country')
+        // const regionFeature = result.body.features.find((feature) => feature.place_type[0] === 'region')
+        // const placeFeature = result.body.features.find((feature) => feature.place_type[0] === 'place')
+        // const addressFeature = result.body.features.find((feature) => feature.place_type[0] === 'address')
+        //
+        // const data = {} as Partial<TMedium>
+        //
+        // if (countryFeature) {
+        //     data.country = countryFeature.text
+        // }
+        //
+        // if (regionFeature) {
+        //     data.region = regionFeature.text
+        // }
+        //
+        // if (placeFeature) {
+        //     data.place = placeFeature.text
+        // }
+        //
+        // if (addressFeature) {
+        //     data.address = addressFeature.text
+        // }
+        //
+        // return data
     }
 
     writeGeneratedTags = async (tags: string[], filenameDisk: string) => {

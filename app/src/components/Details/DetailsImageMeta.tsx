@@ -12,6 +12,18 @@ export const DetailsImageMeta = () => {
         return <></>
     }
 
+    const LocationMeta = () => {
+        if (!location) {
+            return <></>
+        }
+
+        return <Detail
+            icon={Icons.mdiMapMarkerOutline}
+            title={`${details.medium.region}, ${details.medium.country}`}
+            values={[details.medium.address,  details.medium.place]}
+        />
+    }
+
     return <>
         <Detail
             icon={Icons.mdiCameraIris}
@@ -23,5 +35,6 @@ export const DetailsImageMeta = () => {
             title={`${details.medium.filenameDownload}`}
             values={[`${(meta.width * meta.height / 1000000).toFixed(1)}MP`, `${meta.width}×${meta.height}`]}
         />
+        <LocationMeta />
     </>
 }
