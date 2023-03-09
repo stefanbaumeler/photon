@@ -118,9 +118,9 @@ COPY yarn.lock .
 
 COPY app/package.json app/
 
-COPY --from=app-prod photon/node_modules/ app/node_modules/
+COPY --from=app-prod photon/node_modules/ node_modules/
 
-COPY --from=app-build photon/app/.next/standalone app/
+COPY --from=app-build photon/app/.next/standalone .
 
 COPY --from=app-build photon/app/.next/static/ app/.next/static/
 
