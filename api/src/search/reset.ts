@@ -106,7 +106,6 @@ const reset = async () => {
         const albumIds = albumIdTransaction[k].map(({ idAlbum }) => idAlbum)
         const location = Array.isArray(document.location) ? document.location : JSON.parse(document.location as unknown as string) as string[]
 
-        console.log(document.country || '')
         return {
             id: document.id,
             title: document.title,

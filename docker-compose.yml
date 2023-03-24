@@ -55,7 +55,6 @@ services:
             - '5555:5432'
         expose:
             - 5555
-            - 5432
     search:
         container_name: search_c
         image: typesense/typesense:0.23.1

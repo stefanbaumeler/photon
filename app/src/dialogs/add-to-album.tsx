@@ -1,7 +1,7 @@
-import { ETrans } from '../types/translations'
-import { Thumbnails } from '../components'
+import { ETrans } from '@/types/translations'
+import { Thumbnails } from '@/components'
 import { useTranslation } from 'react-i18next'
-import { useDialogContext } from '../providers'
+import { useDialogContext } from '@/providers'
 
 const useAddToAlbumDialog = () => {
     const { t } = useTranslation()

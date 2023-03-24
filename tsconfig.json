@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
-        "noImplicitAny": true,
         "allowJs": true,
         "skipLibCheck": true,
         "strict": false,

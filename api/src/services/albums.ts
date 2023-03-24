@@ -14,12 +14,6 @@ export default class AlbumsService {
         this.context = context
     }
 
-    truncate = async () => {
-        return this.prisma.album.deleteMany({
-            where: {}
-        })
-    }
-
     createOne = async (album: DeepPartial<TAlbum>, media?: { id: string }[]) => {
         if (media?.length) {
             album.cover = media[0]

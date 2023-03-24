@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Scrollbar, SearchBar, Sidebar } from '@/components'
+import { SearchBar, Sidebar } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'

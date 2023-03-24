@@ -16,24 +16,25 @@ import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '../../../hooks/set-album-cover'
 import { useMenu } from 'react-instantsearch-hooks'
+import { useCurrentRefinements } from 'react-instantsearch-hooks-web'
 
 const AlbumPage = () => {
+    const currentRefinements = useCurrentRefinements()
     const router = useRouter()
     const { t } = useTranslation()
     const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
+
+    const selection = useSelectionContext()
+    const edit = useEditContext()
+    const search = useSearchContext()
+    const media = search.hits
 
     const albumsMenu = useMenu({
         attribute: 'albums'
     })
 
-    const selection = useSelectionContext()
-    const edit = useEditContext()
-    const { hits: media } = useSearchContext()
-
     const titleEl = useRef(null)
 
-    const [isRefined, setIsRefined] = useState(false)
-    const [isRefining, setIsRefining] = useState(false)
     const [title, setTitle] = useState('')
     const [album, setAlbum] = useState<TAlbum>()
     const [earliest, setEarliest] = useState('')
@@ -45,8 +46,6 @@ const AlbumPage = () => {
         },
         skip: !router.isReady
     })
-
-    const search = useSearchContext()
 
     const [removeFromAlbum] = useMRemoveFromAlbum({
         variables: {
@@ -83,17 +82,10 @@ const AlbumPage = () => {
     const setAlbumCover = useSetAlbumCover(id)
 
     useEffect(() => {
-        if (id && albumsMenu.canRefine) {
+        if (albumsMenu.items.length && albumsMenu.canRefine && id && !currentRefinements.items.find((refinement) => refinement.label === 'albums')) {
             albumsMenu.refine(id)
-            setIsRefining(true)
         }
-    }, [id, albumsMenu.canRefine])
-
-    useEffect(() => {
-        if (isRefining) {
-            setIsRefined(true)
-        }
-    }, [media.length])
+    }, [albumsMenu.canRefine, albumsMenu.items.length, id])
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -132,7 +124,7 @@ const AlbumPage = () => {
     }, [edit.state])
 
     useEffect(() => {
-        const mediaSortedByDateTaken = Array.from(media)
+        const mediaSortedByDateTaken = media
             .sort((a, b) => new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime())
 
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))
@@ -147,7 +139,7 @@ const AlbumPage = () => {
         setTitle(event.target.value)
     }
 
-    if (albumQuery.loading || !isRefined) {
+    if (albumQuery.loading) {
         return <></>
     }
 

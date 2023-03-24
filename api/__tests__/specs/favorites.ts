@@ -1,10 +1,10 @@
 import { useTestQuery } from '../utility'
 import * as Schema from '@photon/schema'
-import { seed } from '../../src/database/seeds/jest'
-import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
+import seed from '../../setups/seed'
+import { predefinedFavoriteUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 
-beforeEach(async () => {
-    await seed()
+beforeAll(async () => {
+    await seed('test')
 })
 
 it('can be listed', async () => {
@@ -30,7 +30,7 @@ it('can be added', async () => {
 it('can be removed', async () => {
     const beforeQuery = await useTestQuery<Schema.TQFavorites, Schema.TQFavorites>(Schema.QFavoritesDocument)
     const removeQuery = await useTestQuery<Schema.TMRemoveFromFavorites, Schema.TMRemoveFromFavoritesVariables>(Schema.MRemoveFromFavoritesDocument, {
-        media: [predefinedMediumUUIDs[0]]
+        media: [predefinedFavoriteUUIDs[0]]
     })
 
     const beforeCount = beforeQuery.body.singleResult.data?.favorites.length

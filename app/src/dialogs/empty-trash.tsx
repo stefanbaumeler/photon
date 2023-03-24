@@ -1,5 +1,5 @@
-import { ETrans } from '../types/translations'
-import { useDialogContext } from '../providers'
+import { ETrans } from '@/types/translations'
+import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useEmptyTrash from '../hooks/empty-trash'
 

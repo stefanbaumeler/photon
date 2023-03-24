@@ -11,12 +11,6 @@ export default class DevicesService {
         this.context = context
     }
 
-    truncate = async () => {
-        return this.prisma.user.deleteMany({
-            where: {}
-        })
-    }
-
     readMany = async () => {
         return this.prisma.device.findMany({
             where: {

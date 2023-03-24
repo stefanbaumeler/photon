@@ -1,9 +1,9 @@
 import * as Schema from '@photon/schema'
-import { seed } from '../../src/database/seeds/jest'
+import seed from '../../setups/seed'
 import { useTestQuery } from '../utility'
 
-beforeEach(async () => {
-    await seed()
+beforeAll(async () => {
+    await seed('test')
 })
 
 it('can sign in', async () => {

@@ -13,7 +13,8 @@ const config: JestConfigWithTsJest = {
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     setupFilesAfterEnv: ['<rootDir>/app/__tests__/setup.ts'],
-    bail: true
+    bail: true,
+    testTimeout: 50000
 }
 
 export default config

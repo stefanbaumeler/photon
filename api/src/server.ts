@@ -9,8 +9,6 @@ const env = getEnv()
 export const createServer = async () => {
     const app = await createApp()
 
-    console.log(path.join(__dirname, '../ssl/key.pem'))
-
     if (parseInt(env.API_SECURE || '1', 10)) {
         return https.createServer({
             key: fs.readFileSync(path.join(__dirname, '../ssl/key.pem')),

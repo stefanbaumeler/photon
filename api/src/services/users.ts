@@ -13,12 +13,6 @@ export default class UsersService {
         this.context = context
     }
 
-    truncate = async () => {
-        return this.prisma.user.deleteMany({
-            where: {}
-        })
-    }
-
     createOne = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
         const encryptedPassword = await argon2.hash(user.password)
 

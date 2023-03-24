@@ -1,12 +1,12 @@
 import * as Schema from '@photon/schema'
 import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
-import { seed } from '../../src/database/seeds/jest'
+import seed from '../../setups/seed'
 import fs from 'fs'
 import path from 'path'
 import { useTestQuery } from '../utility'
 
-beforeEach(async () => {
-    await seed()
+beforeAll(async () => {
+    await seed('test')
 })
 
 it('can be listed', async () => {

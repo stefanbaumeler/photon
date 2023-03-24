@@ -27,16 +27,14 @@
         "start:docker": "docker-compose up -d db search",
         "db:up": "yarn workspace @photon/api db:up",
         "db:down": "yarn workspace @photon/api db:down",
-        "db:seed": "yarn workspace @photon/api db:seed",
         "search:setup": "yarn workspace @photon/api search:setup",
-        "db:truncate": "yarn workspace @photon/api db:truncate",
         "build": "run-s build:lerna build:db",
         "build:lerna": "lerna run build",
         "build:db": "run-s start:docker db:up",
         "test": "run-s test:api test:app",
         "test:app": "yarn workspace @photon/app test",
         "test:api": "jest -i",
-        "seed-and-test": "run-s db:up search:setup test:all"
+        "seed-and-test": "start-server-and-test watch:api 11011 test"
     },
     "dependencies": {
         "@photon/cv": "1.0.0",
@@ -55,6 +53,7 @@
         "lerna": "^6.1.0",
         "npm-run-all": "^4.1.5",
         "start-server-and-test": "^1.15.2",
+        "testcontainers": "^9.2.1",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1"
     }

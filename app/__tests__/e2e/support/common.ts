@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test'
-import { seed } from '../../../../api/src/database/seeds/jest'
+import seed from '../../../../api/setups/seed'
 import { useTestQuery } from '../../../../api/__tests__/utility'
 
 export const globalBeforeEach = () => {
@@ -10,7 +10,7 @@ export const globalBeforeEach = () => {
             }
         })
 
-        await seed()
+        await seed('test')
 
         await page.route('**/graphql', async (route, request) => {
             const graphqlRequest = request.postDataJSON()

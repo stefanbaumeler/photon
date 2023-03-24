@@ -11,12 +11,6 @@ export default class FavoritesService {
         this.context = context
     }
 
-    truncate = async () => {
-        return this.prisma.user.deleteMany({
-            where: {}
-        })
-    }
-
     readMany = async () => {
         const res = await this.prisma.user.findFirst({
             where: {

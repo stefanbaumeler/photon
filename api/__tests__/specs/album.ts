@@ -1,11 +1,11 @@
 import * as Schema from '@photon/schema'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
-import { seed } from '../../src/database/seeds/jest'
 import { strict as assert } from 'assert'
 import { useTestQuery } from '../utility'
+import seed from '../../setups/seed'
 
-beforeEach(async () => {
-    await seed()
+beforeAll(async () => {
+    await seed('test')
 })
 
 it('can be created empty', async () => {

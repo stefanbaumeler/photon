@@ -77,14 +77,6 @@ COPY --from=api-build photon/api/dist/ api/dist/
 
 RUN mkdir api/dist/uploads
 
-COPY api/src/database/fixtures/image-0.jpg api/dist/uploads/9b004ea9-996f-4c18-92e3-bec2b9051585
-COPY api/src/database/fixtures/image-1.jpg api/dist/uploads/2b96675e-2428-4520-909e-91e8a91fb5f9
-COPY api/src/database/fixtures/image-2.jpg api/dist/uploads/114d5e91-b89e-4a31-9305-d3753bf64f2c
-COPY api/src/database/fixtures/image-3.jpg api/dist/uploads/bc8b723c-3f58-4bd6-a2e5-9fa1fbdd305d
-COPY api/src/database/fixtures/image-4.jpg api/dist/uploads/3498b0eb-9433-4c90-a27b-ac1f08221fa7
-COPY api/src/database/fixtures/image-5.jpg api/dist/uploads/6e11ebf1-4d3d-457d-b27b-7fcf66d5bb16
-COPY api/src/database/fixtures/image-6.jpg api/dist/uploads/2ef6335e-ef45-400f-97ee-213f2c1e1a48
-
 
 FROM install as app-build
 
@@ -127,7 +119,7 @@ COPY --from=app-build photon/app/.next/static/ app/.next/static/
 
 FROM mcr.microsoft.com/playwright:v1.30.0-focal as test
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs postgresql
 
 WORKDIR /photon
 
@@ -139,10 +131,18 @@ COPY app/playwright.config.ts app/
 
 COPY app/.env.ci app/.env
 
+COPY app/.env.ci app/.env.test
+
 COPY app/env.ts app/
 
 COPY api api
 
 COPY api/.env.ci api/.env
 
+COPY api/.env.ci api/.env.test
+
 COPY jest.config.ts .
+
+RUN npx playwright install
+
+RUN mkdir api/uploads
