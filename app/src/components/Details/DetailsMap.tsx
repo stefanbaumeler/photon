@@ -1,11 +1,11 @@
 import { Map, Marker } from 'react-map-gl'
 import { useDetailsContext } from '@/providers'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const DetailsMap = () => {
     const details = useDetailsContext()
 
-    const [mapState] = useState({
+    const [mapState, setMapState] = useState({
         latitude: details.medium.location[0],
         longitude: details.medium.location[1]
     })
@@ -13,6 +13,13 @@ export const DetailsMap = () => {
     if (!details.medium.location[0] || !details.medium.location[1]) {
         return <></>
     }
+
+    useEffect(() => {
+        setMapState({
+            latitude: details.medium.location[0],
+            longitude: details.medium.location[1]
+        })
+    }, [details.medium.location])
 
     return <div className="details__map">
         <Map

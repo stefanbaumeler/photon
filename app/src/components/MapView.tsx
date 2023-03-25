@@ -54,7 +54,6 @@ export const MapView = () => {
 
     return <div className="map">
         <Map
-            reuseMaps={true}
             style={{
                 width: '100%',
                 height: '100%'
