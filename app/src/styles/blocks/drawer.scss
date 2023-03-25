@@ -1,18 +1,29 @@
 @mixin drawer-root {
-    display: none;
     position: fixed;
-    top: $searchbar-height;
-    right: 0;
-    width: $sidebar-width * 3;
     background-color: $color-white;
     box-sizing: border-box;
     padding: 20px;
     height: calc(100vh - #{$searchbar-height});
     overflow: auto;
     z-index: 1;
+    transform: translateX(100%);
+    transition: transform .25s;
+
+    &--right {
+        top: $searchbar-height;
+        right: 0;
+        width: $sidebar-width * 3;
+    }
+
+    &--bottom {
+        bottom: 0;
+        left: $sidebar-width;
+        height: $sidebar-width * 1.5;
+        width: 100%;
+    }
 
     &--active {
-        display: block;
+        transform: none;
     }
 }
 

@@ -12,6 +12,10 @@
         scale: .925;
     }
 
+    @at-root .map & {
+        transition: none;
+    }
+
     &--loading:not(.medium--placeholder) {
         opacity: 0;
     }
@@ -32,6 +36,10 @@
 
 @mixin medium-image {
     object-fit: contain;
+
+    @at-root .map & {
+        object-fit: cover;
+    }
 
     @at-root .medium--top & {
         object-position: top;

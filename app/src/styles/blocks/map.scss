@@ -20,6 +20,46 @@
     }
 }
 
+@mixin map-marker {
+    width: 40px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    clip-path: circle();
+    transition: transform .25s;
+
+    &:hover {
+        transform: scale(3);
+        z-index: 1000;
+    }
+}
+
+@mixin map-cluster {
+    position: relative;
+    width: 48px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    z-index: -1;
+    border: 1px solid $color-primary;
+    cursor: pointer;
+}
+
+@mixin map-cluster-label {
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: normal;
+    color: $color-white;
+    padding: 3px 5px 2px;
+    border-radius: 9px;
+    position: absolute;
+    background-color: $color-primary;
+    margin-top: 4px;
+    top: 55%;
+    right: -5px;
+    left: auto;
+}
+
 @mixin map {
     .map {
         @include map-root;
@@ -27,7 +67,60 @@
         &__button {
             @include map-button;
         }
+
+        &__marker {
+            @include map-marker;
+        }
+
+        &__cluster {
+            @include map-cluster;
+        }
+
+        &__cluster-label {
+            @include map-cluster-label;
+        }
     }
 }
 
 @include map;
+
+
+.mapboxgl-marker:hover {
+    z-index: 100000;
+}
+
+.mapboxgl-ctrl-top-left {
+    display: flex;
+
+    > .mapboxgl-ctrl {
+        margin: 5px;
+
+        &:first-child {
+            margin-top: 4px;
+            margin-right: 3px;
+            margin-left: 7px;
+        }
+    }
+}
+
+.mapboxgl-ctrl-attrib.mapboxgl-compact .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-attrib.mapboxgl-compact-show .mapboxgl-ctrl-attrib-inner {
+    filter: opacity(.75);
+    height: 22px;
+    background-position: center;
+}
+
+.mapboxgl-ctrl-attrib.mapboxgl-compact {
+    padding-bottom: 0;
+}
+
+.mapboxgl-ctrl-bottom-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show, .mapboxgl-ctrl-top-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show {
+    padding-top: 1px;
+    padding-bottom: 0;
+    transform: translateY(1px);
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+    opacity: .65;
+    background-color: transparent;
+    padding-left: 0;
+}

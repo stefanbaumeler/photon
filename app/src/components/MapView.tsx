@@ -1,20 +1,34 @@
 import { TMedium } from '@photon/schema'
 import { useDetailsContext, useSearchContext } from '@/providers'
-import Map, { Marker } from 'react-map-gl'
-import { useEffect, useState } from 'react'
+import { MapboxGeoJSONFeature, Marker } from 'mapbox-gl'
+import Map, { GeoJSONSource,
+    Layer,
+    LayerProps,
+    MapLayerMouseEvent,
+    MapRef,
+    Source,
+    Marker as MarkerEl,
+    AttributionControl } from 'react-map-gl'
+import { useEffect, useRef, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@/components/IconButton'
 import { Drawer } from '@/components/Drawer'
-import { GalleryView } from '@/components'
+import { GalleryView, Medium } from '@/components'
 
 export const MapView = () => {
+    const mapRef = useRef<MapRef>(null)
+
     const { hits: media } = useSearchContext()
     const { t } = useTranslation()
     const details = useDetailsContext()
     // const selection = useSelectionContext()
 
+    const [markersOnScreen, setMarkersOnScreen] = useState<{[key: string]: {
+            marker: Marker
+            feature: MapboxGeoJSONFeature
+        }}>({})
     const [markers, setMarkers] = useState<TMedium[]>([])
     const [unknown, setUnknown] = useState<TMedium[]>([])
     const [unknownVisible, setUnknownVisible] = useState(false)
@@ -52,6 +66,128 @@ export const MapView = () => {
         />
     }
 
+    const layers = [
+        {
+            id: 'clusters',
+            type: 'circle',
+            source: 'mediaMarkers',
+            filter: ['has', 'point_count'],
+            paint: {
+                'circle-opacity': 0,
+                'circle-radius': 25
+            }
+        }
+    ] as LayerProps[]
+
+    const onMapClick = (event: MapLayerMouseEvent) => {
+        const feature = event.features[0]
+
+        if (!feature) {
+            return
+        }
+
+        const clusterId = feature.properties.cluster_id
+
+        const mapboxSource = mapRef.current.getSource('mediaMarkers') as GeoJSONSource
+
+        mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
+            if (err) {
+                return
+            }
+
+            if (feature.geometry.type === 'Point') {
+                mapRef.current.easeTo({
+                    center: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
+                    zoom,
+                    duration: 500
+                })
+            }
+        })
+    }
+
+    const onMapRender = () => {
+        const newMarkers: {[key: string]: {
+                marker: Marker
+                feature: MapboxGeoJSONFeature
+            }} = {}
+        const features = mapRef.current?.querySourceFeatures('mediaMarkers') || []
+
+        features.forEach((feature) => {
+            if (feature.geometry.type !== 'Point' || feature.properties.cluster_id) {
+                return
+            }
+
+            const coords = feature.geometry.coordinates as [number, number]
+            const id = feature.properties.cluster_id || feature.properties.id
+
+            if (!newMarkers[id]) {
+                newMarkers[id] = {
+                    marker: new Marker().setLngLat(coords),
+                    feature
+                }
+            }
+        })
+
+        features.forEach((feature) => {
+            if (feature.geometry.type !== 'Point' || !feature.properties.cluster_id) {
+                return
+            }
+
+            const coords = feature.geometry.coordinates as [number, number]
+            const id = feature.properties.cluster_id || feature.properties.id
+
+            if (!newMarkers[id]) {
+                newMarkers[id] = {
+                    marker: new Marker().setLngLat(coords),
+                    feature
+                }
+            }
+        })
+
+        for (const id in markersOnScreen) {
+            if (!newMarkers[id]) {
+                markersOnScreen[id].marker.remove()
+            }
+        }
+
+        const currentKeys = Object.keys(markersOnScreen)
+        const newKeys = Object.keys(newMarkers)
+
+        if (currentKeys.length !== newKeys.length) {
+            setMarkersOnScreen(newMarkers)
+            return
+        }
+
+        for (let i = 0; i < currentKeys.length; i++) {
+            if (currentKeys[i] !== newKeys[i]) {
+                setMarkersOnScreen(newMarkers)
+                break
+            }
+        }
+    }
+
+    const HTMLMarker = ({ k }: { k: string }) => {
+        const medium = markers.find((marker) => marker.id === k)
+
+        if (medium) {
+            return <div
+                className="map__marker"
+                onClick={() => details.open(medium)}
+            >
+                <Medium
+                    medium={medium}
+                    width={120}
+                />
+            </div>
+        }
+
+        return <div className="map__cluster">
+            <div className="map__cluster-label">
+                {markersOnScreen[k].feature.properties.point_count_abbreviated}
+            </div>
+        </div>
+    }
+
     return <div className="map">
         <Map
             style={{
@@ -62,21 +198,64 @@ export const MapView = () => {
                 latitude: 0,
                 longitude: 0
             }}
+            interactiveLayerIds={['clusters']}
             mapStyle="mapbox://styles/mapbox/streets-v12"
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+            onClick={onMapClick}
+            ref={mapRef}
+            onRender={onMapRender}
+            attributionControl={false}
+            logoPosition={'top-left'}
         >
-            {markers.map((marker, k) => <Marker
-                onClick={() => details.open(marker)}
-                key={k}
-                latitude={marker.location[0]}
-                longitude={marker.location[1]}
-            />)}
+            <AttributionControl
+                position={'top-left'}
+            />
+            <Source
+                id="mediaMarkers"
+                type="geojson"
+                cluster={true}
+                clusterRadius={50}
+                data={{
+                    type: 'FeatureCollection',
+                    features: markers.map((marker) => {
+                        return {
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [marker.location[1], marker.location[0]]
+                            },
+                            properties: marker,
+                            type: 'Feature'
+                        }
+                    })
+                }}
+            >
+                {layers.map((layer, k) => <Layer
+                    key={k}
+                    {...layer}
+                />)}
+            </Source>
+            {Object.keys(markersOnScreen).map((key) => <MarkerEl
+                key={key}
+                latitude={markersOnScreen[key].marker.getLngLat().lat}
+                longitude={markersOnScreen[key].marker.getLngLat().lng}
+            >
+                <HTMLMarker k={key} />
+            </MarkerEl>)}
         </Map>
         <Drawer active={unknownVisible}>
             <GalleryView
                 media={unknown}
                 targetRowHeight={120}
                 containerWidth={621}
+            />
+        </Drawer>
+        <Drawer
+            active={true}
+            side={'bottom'}
+        >
+            <GalleryView
+                media={media}
+                targetRowHeight={120}
             />
         </Drawer>
         <NoLocationButton />
