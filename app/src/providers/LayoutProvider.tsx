@@ -24,7 +24,7 @@ const LayoutContext = createContext<LayoutContext | null>(null)
 const LayoutProvider = ({ children }: Props) => {
     const { t } = useTranslation()
 
-    const [layout, setLayout] = useState(ELayout.MAP)
+    const [layout, setLayout] = useState(ELayout.GALLERY)
 
     const getLayoutProps = (id: string) => {
         switch (id) {
