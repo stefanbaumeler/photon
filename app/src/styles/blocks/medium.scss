@@ -2,6 +2,7 @@
     height: 100%;
     position: relative;
     transition: opacity .5s, scale .1s;
+    max-width: 100%;
 
     &--placeholder {
         position: absolute;
