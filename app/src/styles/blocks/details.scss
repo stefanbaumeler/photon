@@ -111,6 +111,8 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    display: flex;
+    justify-content: center;
 }
 
 @mixin details-placeholder-container {
