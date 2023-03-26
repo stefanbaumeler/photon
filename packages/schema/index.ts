@@ -609,6 +609,27 @@ export type TDirectiveResolvers<ContextType = any> = {
   auth?: TAuthDirectiveResolver<any, any, ContextType>;
 };
 
+export type TFMedia = (
+  { __typename?: 'Medium' }
+  & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+  & { favoredBy?: Maybe<Array<Maybe<(
+    { __typename?: 'User' }
+    & Pick<TUser, 'id'>
+  )>>>, owner?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<TUser, 'id'>
+  )>, uploader?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<TUser, 'id'>
+  )>, meta?: Maybe<(
+    { __typename?: 'ImageMeta' }
+    & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+  ) | (
+    { __typename?: 'VideoMeta' }
+    & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+  )> }
+);
+
 export type TMAddToAlbumVariables = Exact<{
   idAlbum: Scalars['ID'];
   media: Array<Scalars['ID']> | Scalars['ID'];
@@ -652,13 +673,19 @@ export type TQAlbumMedia = (
   { __typename?: 'Query' }
   & { albumMedia: Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
-    )>>>, meta?: Maybe<(
+    )>>>, owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -759,7 +786,7 @@ export type TQFavorites = (
   { __typename?: 'Query' }
   & { favorites: Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -771,7 +798,7 @@ export type TQFavorites = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -839,7 +866,7 @@ export type TQMedia = (
   { __typename?: 'Query' }
   & { media?: Maybe<Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -851,7 +878,7 @@ export type TQMedia = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -887,7 +914,7 @@ export type TQMedium = (
   { __typename?: 'Query' }
   & { medium?: Maybe<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -899,7 +926,7 @@ export type TQMedium = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -916,7 +943,7 @@ export type TMRotate = (
   { __typename?: 'Mutation' }
   & { rotate: (
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'status' | 'mimetype' | 'country' | 'region' | 'place' | 'address'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
@@ -928,7 +955,7 @@ export type TMRotate = (
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso' | 'focalLength'>
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
@@ -1001,7 +1028,50 @@ export type TMSignUp = (
   )> }
 );
 
-
+export const FMedia = gql`
+    fragment FMedia on Medium {
+  dateCreated
+  dateModified
+  dateTaken
+  id
+  filenameDisk
+  filenameDownload
+  title
+  description
+  location
+  country
+  region
+  place
+  address
+  status
+  mimetype
+  favoredBy {
+    id
+  }
+  owner {
+    id
+  }
+  uploader {
+    id
+  }
+  meta {
+    ... on ImageMeta {
+      width
+      height
+      cameraMake
+      cameraModel
+      flash
+      fNumber
+      iso
+    }
+    ... on VideoMeta {
+      width
+      height
+      duration
+    }
+  }
+}
+    `;
 export const MAddToAlbumDocument = gql`
     mutation MAddToAlbum($idAlbum: ID!, $media: [ID!]!) {
   addToAlbum(idAlbum: $idAlbum, media: $media) {
@@ -1082,44 +1152,10 @@ export type QAlbumQueryResult = Apollo.QueryResult<TQAlbum, TQAlbumVariables>;
 export const QAlbumMediaDocument = gql`
     query QAlbumMedia($id: ID!) {
   albumMedia(id: $id) {
-    dateCreated
-    dateModified
-    dateTaken
-    id
-    filenameDisk
-    filenameDownload
-    title
-    description
-    location
-    status
-    mimetype
-    country
-    region
-    place
-    address
-    favoredBy {
-      id
-    }
-    meta {
-      ... on ImageMeta {
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
-        focalLength
-      }
-      ... on VideoMeta {
-        width
-        height
-        duration
-      }
-    }
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQAlbumMedia__
@@ -1361,50 +1397,10 @@ export type MAddToFavoritesMutationOptions = Apollo.BaseMutationOptions<TMAddToF
 export const QFavoritesDocument = gql`
     query QFavorites {
   favorites {
-    dateCreated
-    dateModified
-    dateTaken
-    id
-    filenameDisk
-    filenameDownload
-    title
-    description
-    location
-    status
-    mimetype
-    country
-    region
-    place
-    address
-    favoredBy {
-      id
-    }
-    owner {
-      id
-    }
-    uploader {
-      id
-    }
-    meta {
-      ... on ImageMeta {
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
-        focalLength
-      }
-      ... on VideoMeta {
-        width
-        height
-        duration
-      }
-    }
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQFavorites__
@@ -1568,50 +1564,10 @@ export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash
 export const QMediaDocument = gql`
     query QMedia($status: String, $sort: String) {
   media(status: $status, sort: $sort) {
-    dateCreated
-    dateModified
-    dateTaken
-    id
-    filenameDisk
-    filenameDownload
-    title
-    description
-    location
-    status
-    mimetype
-    country
-    region
-    place
-    address
-    favoredBy {
-      id
-    }
-    owner {
-      id
-    }
-    uploader {
-      id
-    }
-    meta {
-      ... on ImageMeta {
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
-        focalLength
-      }
-      ... on VideoMeta {
-        width
-        height
-        duration
-      }
-    }
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQMedia__
@@ -1686,50 +1642,10 @@ export type QMediaYearCountQueryResult = Apollo.QueryResult<TQMediaYearCount, TQ
 export const QMediumDocument = gql`
     query QMedium($id: ID!) {
   medium(id: $id) {
-    dateCreated
-    dateModified
-    dateTaken
-    id
-    filenameDisk
-    filenameDownload
-    title
-    description
-    location
-    status
-    mimetype
-    country
-    region
-    place
-    address
-    favoredBy {
-      id
-    }
-    owner {
-      id
-    }
-    uploader {
-      id
-    }
-    meta {
-      ... on ImageMeta {
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
-        focalLength
-      }
-      ... on VideoMeta {
-        width
-        height
-        duration
-      }
-    }
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQMedium__
@@ -1761,50 +1677,10 @@ export type QMediumQueryResult = Apollo.QueryResult<TQMedium, TQMediumVariables>
 export const MRotateDocument = gql`
     mutation MRotate($id: ID!) {
   rotate(id: $id) {
-    dateCreated
-    dateModified
-    dateTaken
-    id
-    filenameDisk
-    filenameDownload
-    title
-    description
-    location
-    status
-    mimetype
-    country
-    region
-    place
-    address
-    favoredBy {
-      id
-    }
-    owner {
-      id
-    }
-    uploader {
-      id
-    }
-    meta {
-      ... on ImageMeta {
-        width
-        height
-        cameraMake
-        cameraModel
-        flash
-        fNumber
-        iso
-        focalLength
-      }
-      ... on VideoMeta {
-        width
-        height
-        duration
-      }
-    }
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 export type TMRotateMutationFn = Apollo.MutationFunction<TMRotate, TMRotateVariables>;
 
 /**

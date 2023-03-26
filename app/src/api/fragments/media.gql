@@ -1,0 +1,42 @@
+fragment FMedia on Medium {
+    dateCreated
+    dateModified
+    dateTaken
+    id
+    filenameDisk
+    filenameDownload
+    title
+    description
+    location
+    country
+    region
+    place
+    address
+    status
+    mimetype
+    favoredBy {
+        id
+    }
+    owner {
+        id
+    }
+    uploader {
+        id
+    }
+    meta {
+        ...on ImageMeta {
+            width
+            height
+            cameraMake
+            cameraModel
+            flash
+            fNumber
+            iso
+        }
+        ...on VideoMeta {
+            width
+            height
+            duration
+        }
+    }
+}

@@ -1,39 +1,5 @@
 query QAlbumMedia($id: ID!) {
     albumMedia(id: $id) {
-        dateCreated
-        dateModified
-        dateTaken
-        id
-        filenameDisk
-        filenameDownload
-        title
-        description
-        location
-        status
-        mimetype
-        country
-        region
-        place
-        address
-        favoredBy {
-            id
-        }
-        meta {
-            ...on ImageMeta {
-                width
-                height
-                cameraMake
-                cameraModel
-                flash
-                fNumber
-                iso
-                focalLength
-            }
-            ...on VideoMeta {
-                width
-                height
-                duration
-            }
-        }
+        ...FMedia
     }
 }
