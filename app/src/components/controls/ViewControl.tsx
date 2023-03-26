@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout } from '@/types/app'
+
 export const ViewControl = () => {
     const { t } = useTranslation()
     const [viewDropdownActive, setViewDropdownActive] = useState(false)

@@ -101,6 +101,21 @@ const Teaser = () => {
         />
     }
 
+    let height
+    let width
+
+    if (teaser.width) {
+        width = teaser.width
+    }
+
+    if (teaser.height) {
+        height = teaser.height
+    }
+
+    if (!teaser.height && !teaser.width) {
+        height = '100%'
+    }
+
     return <div
         data-testid="teaser"
         className={classes}
@@ -139,14 +154,14 @@ const Teaser = () => {
             <div
                 className="teaser__image-container"
                 style={{
-                    width: teaser.width - 1,
-                    height: teaser.height
+                    width,
+                    height
                 }}
             >
                 <Medium
                     testId="teaser-image"
                     medium={teaser.medium}
-                    width={teaser.width}
+                    width={(teaser.width ? teaser.width : teaser.height / teaser.medium.meta.height * teaser.medium.meta.width) || 300}
                 />
             </div>
         </div>

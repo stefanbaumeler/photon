@@ -36,6 +36,7 @@ export * from './Button'
 export * from './LinkButton'
 export * from './Checkbox'
 export * from './Scrollbar'
+export * from './FilmStrip'
 
 export { default as Check } from './Check'
 export { default as Medium } from './Medium'

@@ -4,14 +4,14 @@ import { TMedium } from '@photon/schema'
 type Props = {
     children?: ReactNode
     medium: TMedium
-    width: number
-    height: number
+    width?: number
+    height?: number
 }
 
 interface TeaserContext {
     medium: TMedium
-    width: number
-    height: number
+    width?: number
+    height?: number
 }
 
 const TeaserContext = createContext<TeaserContext | null>(null)

@@ -24,6 +24,11 @@
 
 @mixin teaser-container {
     pointer-events: all;
+    height: 100%;
+}
+
+@mixin teaser-image-container {
+    height: 100%;
 }
 
 @mixin teaser-check {
@@ -138,6 +143,10 @@
             @include teaser-container;
         }
 
+        &__image-container {
+            @include teaser-image-container;
+        }
+
         &__check {
             @include teaser-check;
         }
@@ -149,7 +158,7 @@
         &__open-fallback {
             @include teaser-open-fallback;
         }
-        
+
         &__categories {
             @include teaser-categories;
         }

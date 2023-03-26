@@ -4,8 +4,8 @@ import { TMedium } from '@photon/schema'
 
 type Props = {
     medium: TMedium
-    width: number
-    height: number
+    width?: number
+    height?: number
 }
 
 export const Teaser = ({

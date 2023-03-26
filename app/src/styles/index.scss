@@ -7,7 +7,7 @@
 @import 'util/reset';
 @import 'util/defaults';
 
-@import 'lib/leaflet';
+@import 'lib/mapbox';
 @import 'lib/tippy';
 
 @import 'blocks/actions';
@@ -45,3 +45,4 @@
 @import 'blocks/thumbnails';
 @import 'blocks/toolbar';
 @import 'blocks/uploader';
+@import 'blocks/film-strip';

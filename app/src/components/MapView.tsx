@@ -1,6 +1,6 @@
 import { TMedium } from '@photon/schema'
 import { useDetailsContext, useSearchContext } from '@/providers'
-import { MapboxGeoJSONFeature, Marker } from 'mapbox-gl'
+import { LngLat, LngLatBounds, MapboxGeoJSONFeature, Marker } from 'mapbox-gl'
 import Map, { GeoJSONSource,
     Layer,
     LayerProps,
@@ -15,7 +15,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@/components/IconButton'
 import { Drawer } from '@/components/Drawer'
-import { GalleryView, Medium } from '@/components'
+import { FilmStrip, GalleryView, Medium } from '@/components'
 
 export const MapView = () => {
     const mapRef = useRef<MapRef>(null)
@@ -30,6 +30,7 @@ export const MapView = () => {
             feature: MapboxGeoJSONFeature
         }}>({})
     const [markers, setMarkers] = useState<TMedium[]>([])
+    const [mediaInBounds, setMediaInBounds] = useState<TMedium[]>([])
     const [unknown, setUnknown] = useState<TMedium[]>([])
     const [unknownVisible, setUnknownVisible] = useState(false)
 
@@ -166,6 +167,38 @@ export const MapView = () => {
         }
     }
 
+    const bounds = mapRef.current?.getBounds().toArray()
+
+    const recalculateMediaInBounds = () => {
+        if (bounds) {
+            const isOnMap = (
+                bounds: number[][],
+                point: number[]
+            ) => {
+                const sw = bounds[0]
+                const ne = bounds[1]
+
+                if (sw && ne) {
+                    const isLngInRange = point[1] >= sw[0] && point[1] <= ne[0]
+                    const isLatInRange = point[0] >= sw[1] && point[0] <= ne[1]
+                    return isLngInRange && isLatInRange
+                }
+
+                return true
+            }
+
+            const newMediaInBounds = media.filter((medium) => {
+                return isOnMap(bounds, medium.location)
+            })
+
+            setMediaInBounds(newMediaInBounds)
+        }
+    }
+
+    useEffect(() => {
+        recalculateMediaInBounds()
+    }, [])
+
     const HTMLMarker = ({ k }: { k: string }) => {
         const medium = markers.find((marker) => marker.id === k)
 
@@ -189,59 +222,62 @@ export const MapView = () => {
     }
 
     return <div className="map">
-        <Map
-            style={{
-                width: '100%',
-                height: '100%'
-            }}
-            initialViewState={{
-                latitude: 0,
-                longitude: 0
-            }}
-            interactiveLayerIds={['clusters']}
-            mapStyle="mapbox://styles/mapbox/streets-v12"
-            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-            onClick={onMapClick}
-            ref={mapRef}
-            onRender={onMapRender}
-            attributionControl={false}
-            logoPosition={'top-left'}
-        >
-            <AttributionControl
-                position={'top-left'}
-            />
-            <Source
-                id="mediaMarkers"
-                type="geojson"
-                cluster={true}
-                clusterRadius={50}
-                data={{
-                    type: 'FeatureCollection',
-                    features: markers.map((marker) => {
-                        return {
-                            geometry: {
-                                type: 'Point',
-                                coordinates: [marker.location[1], marker.location[0]]
-                            },
-                            properties: marker,
-                            type: 'Feature'
-                        }
-                    })
+        <div className="map__map">
+            <Map
+                style={{
+                    width: '100%',
+                    height: '100%'
                 }}
+                initialViewState={{
+                    latitude: 0,
+                    longitude: 0
+                }}
+                interactiveLayerIds={['clusters']}
+                mapStyle="mapbox://styles/mapbox/streets-v12"
+                mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+                onClick={onMapClick}
+                ref={mapRef}
+                onRender={onMapRender}
+                onMoveEnd={recalculateMediaInBounds}
+                attributionControl={false}
+                logoPosition={'top-left'}
             >
-                {layers.map((layer, k) => <Layer
-                    key={k}
-                    {...layer}
-                />)}
-            </Source>
-            {Object.keys(markersOnScreen).map((key) => <MarkerEl
-                key={key}
-                latitude={markersOnScreen[key].marker.getLngLat().lat}
-                longitude={markersOnScreen[key].marker.getLngLat().lng}
-            >
-                <HTMLMarker k={key} />
-            </MarkerEl>)}
-        </Map>
+                <AttributionControl
+                    position={'top-left'}
+                />
+                <Source
+                    id="mediaMarkers"
+                    type="geojson"
+                    cluster={true}
+                    clusterRadius={50}
+                    data={{
+                        type: 'FeatureCollection',
+                        features: markers.map((marker) => {
+                            return {
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [marker.location[1], marker.location[0]]
+                                },
+                                properties: marker,
+                                type: 'Feature'
+                            }
+                        })
+                    }}
+                >
+                    {layers.map((layer, k) => <Layer
+                        key={k}
+                        {...layer}
+                    />)}
+                </Source>
+                {Object.keys(markersOnScreen).map((key) => <MarkerEl
+                    key={key}
+                    latitude={markersOnScreen[key].marker.getLngLat().lat}
+                    longitude={markersOnScreen[key].marker.getLngLat().lng}
+                >
+                    <HTMLMarker k={key} />
+                </MarkerEl>)}
+            </Map>
+        </div>
         <Drawer active={unknownVisible}>
             <GalleryView
                 media={unknown}
@@ -253,9 +289,8 @@ export const MapView = () => {
             active={true}
             side={'bottom'}
         >
-            <GalleryView
-                media={media}
-                targetRowHeight={120}
+            <FilmStrip
+                media={mediaInBounds}
             />
         </Drawer>
         <NoLocationButton />

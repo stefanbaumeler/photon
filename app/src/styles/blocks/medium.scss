@@ -1,6 +1,5 @@
 @mixin medium-root {
     height: 100%;
-    width: 100%;
     position: relative;
     transition: opacity .5s, scale .1s;
 
@@ -12,8 +11,12 @@
         scale: .925;
     }
 
-    @at-root .map & {
+    @at-root .map__map & {
         transition: none;
+    }
+
+    @at-root .film-strip {
+        flex-shrink: 0;
     }
 
     &--loading:not(.medium--placeholder) {
@@ -37,7 +40,7 @@
 @mixin medium-image {
     object-fit: contain;
 
-    @at-root .map & {
+    @at-root .map__map & {
         object-fit: cover;
     }
 

@@ -61,6 +61,9 @@ const Medium = ({
 
     return <div
         className={classes}
+        style={{
+            aspectRatio: medium.meta.width / medium.meta.height
+        }}
         ref={ref as Ref<HTMLDivElement>}
     >
         {ImageOrVideo}

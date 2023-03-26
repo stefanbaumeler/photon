@@ -1,0 +1,20 @@
+@mixin film-strip-root {
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+
+    &:after {
+        content: '';
+        width: 20px;
+        flex-shrink: 0;
+    }
+}
+
+@mixin film-strip {
+    .film-strip {
+        @include film-strip-root;
+    }
+}
+
+@include film-strip;

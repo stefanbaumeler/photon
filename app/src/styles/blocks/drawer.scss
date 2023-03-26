@@ -18,8 +18,9 @@
     &--bottom {
         bottom: 0;
         left: $sidebar-width;
-        height: $sidebar-width * 1.5;
-        width: 100%;
+        height: $sidebar-width;
+        width: calc(100vw - #{$sidebar-width});
+        padding-bottom: 10px;
     }
 
     &--active {

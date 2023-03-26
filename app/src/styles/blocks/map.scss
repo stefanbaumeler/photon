@@ -3,6 +3,10 @@
     inset: 0;
 }
 
+@mixin map-map {
+    height: calc(100% - #{$sidebar-width});
+}
+
 @mixin map-button {
     position: absolute;
     top: 10px;
@@ -64,6 +68,10 @@
     .map {
         @include map-root;
 
+        &__map {
+            @include map-map;
+        }
+
         &__button {
             @include map-button;
         }
@@ -83,44 +91,3 @@
 }
 
 @include map;
-
-
-.mapboxgl-marker:hover {
-    z-index: 100000;
-}
-
-.mapboxgl-ctrl-top-left {
-    display: flex;
-
-    > .mapboxgl-ctrl {
-        margin: 5px;
-
-        &:first-child {
-            margin-top: 4px;
-            margin-right: 3px;
-            margin-left: 7px;
-        }
-    }
-}
-
-.mapboxgl-ctrl-attrib.mapboxgl-compact .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-attrib.mapboxgl-compact-show .mapboxgl-ctrl-attrib-inner {
-    filter: opacity(.75);
-    height: 22px;
-    background-position: center;
-}
-
-.mapboxgl-ctrl-attrib.mapboxgl-compact {
-    padding-bottom: 0;
-}
-
-.mapboxgl-ctrl-bottom-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show, .mapboxgl-ctrl-top-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show {
-    padding-top: 1px;
-    padding-bottom: 0;
-    transform: translateY(1px);
-}
-
-.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
-    opacity: .65;
-    background-color: transparent;
-    padding-left: 0;
-}
