@@ -1,31 +1,31 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Page } from '@playwright/test'
 import { predefinedAlbumUUIDs } from '../../../../api/src/database/helpers/ids'
 import { globalBeforeEach } from '../support/common'
 
 globalBeforeEach()
 
+const getAlbumTeaserCount = async (page: Page) => {
+    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
+
+    return await page.getByTestId('album-teaser').count()
+}
+
 test('can delete', async ({ page }) => {
     await page.goto('/albums')
 
-    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
-
-    const count = await page.getByTestId('album-teaser').count()
+    const count = await getAlbumTeaserCount(page)
 
     await page.getByTestId('album-controls').first().click()
     await page.getByTestId('album-delete').first().click()
     await page.getByTestId('album-confirm-delete').click()
 
-    await page.getByTestId('album-teaser')
-
-    await expect(await page.getByTestId('album-teaser')).toHaveCount(count - 1)
+    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBe(count - 1)
 })
 
 test('can create from media', async ({ page }) => {
     await page.goto('/albums')
 
-    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
-
-    const count = await page.getByTestId('album-teaser').count()
+    const count = await getAlbumTeaserCount(page)
 
     await page.goto('/')
 
@@ -49,8 +49,8 @@ test('can create from media', async ({ page }) => {
 
 test('can create empty', async ({ page }) => {
     await page.goto('/albums')
-    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
-    const count = await page.getByTestId('album-teaser').count()
+
+    const count = await getAlbumTeaserCount(page)
 
     await page.getByTestId('album-create').click()
     await page.getByTestId('album-back').click()
@@ -60,6 +60,7 @@ test('can create empty', async ({ page }) => {
 
 test('can add media and avoids duplicates', async ({ page }) => {
     await page.goto(`/albums/${predefinedAlbumUUIDs[3]}`)
+
     await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 
@@ -78,6 +79,7 @@ test('can add media and avoids duplicates', async ({ page }) => {
 
 test('can remove media and change title', async ({ page }) => {
     await page.goto(`/albums/${predefinedAlbumUUIDs[0]}`)
+
     await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
     const count = await page.getByTestId('teaser').count()
 

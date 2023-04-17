@@ -1,6 +1,5 @@
 import AlbumsMediaService from './albumsMedia'
 import { DeepPartial } from '../types'
-import UsersService from './users'
 import { getDatabase } from '../database'
 import { TAlbum, TAlbumInput } from '@photon/schema'
 import { Prisma } from '@prisma/client'
@@ -8,11 +7,7 @@ import { Prisma } from '@prisma/client'
 export default class AlbumsService {
     prisma = getDatabase()
 
-    context
-
-    constructor (context?: { user: { id: string } }) {
-        this.context = context
-    }
+    constructor (public context?: { user: { id: string } }) {}
 
     createOne = async (album: DeepPartial<TAlbum>, media?: { id: string }[]) => {
         if (media?.length) {

@@ -18,7 +18,8 @@ export const ViewControl = () => {
                 layout.setLayout(ELayout.GALLERY)
                 setViewDropdownActive(false)
             },
-            icon: Icons.mdiViewCompact
+            icon: Icons.mdiViewCompact,
+            testId: 'gallery-view'
         },
         {
             label: t(ETrans.MAP_VIEW),
@@ -26,7 +27,8 @@ export const ViewControl = () => {
                 layout.setLayout(ELayout.MAP)
                 setViewDropdownActive(false)
             },
-            icon: Icons.mdiMapMarker
+            icon: Icons.mdiMapMarker,
+            testId: 'map-view'
         },
         {
             label: t(ETrans.LIST_VIEW),
@@ -34,7 +36,8 @@ export const ViewControl = () => {
                 layout.setLayout(ELayout.LIST)
                 setViewDropdownActive(false)
             },
-            icon: Icons.mdiFormatListBulletedSquare
+            icon: Icons.mdiFormatListBulletedSquare,
+            testId: 'list-view'
         }
     ]
 
@@ -47,6 +50,7 @@ export const ViewControl = () => {
             hint={t(ETrans.VIEW)}
             icon={Icons.mdiEye}
             onClick={() => setViewDropdownActive(!viewDropdownActive)}
+            testId="view-control"
         />
     </Dropdown>
 }

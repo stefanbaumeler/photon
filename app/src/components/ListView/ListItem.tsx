@@ -38,6 +38,7 @@ const ListItem = ({ medium }: Props) => {
                 borderColor="#888899"
                 boxSize={40}
                 blankHoverColor="#546119"
+                testId="list-check"
             />
         </td>
         <td

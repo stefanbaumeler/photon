@@ -31,7 +31,7 @@
         "build": "run-s build:lerna build:db",
         "build:lerna": "lerna run build",
         "build:db": "run-s start:docker db:up",
-        "test": "run-s test:api test:app",
+        "test": "NODE_ENV=test run-s test:api test:app",
         "test:app": "yarn workspace @photon/app test",
         "test:api": "jest -i",
         "seed-and-test": "start-server-and-test watch:api 11011 test"
@@ -44,6 +44,7 @@
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^12.2.3",
+        "@testing-library/jest-dom": "^5.16.5",
         "@types/jest": "^29.2.5",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",

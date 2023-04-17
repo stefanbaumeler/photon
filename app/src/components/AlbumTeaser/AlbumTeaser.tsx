@@ -26,10 +26,6 @@ export const AlbumTeaser = ({ album }: Props) => {
 
     const deleteAlbumDialog = useDeleteAlbumDialog(album.id)
 
-    if (albumMediaQuery.loading) {
-        return <></>
-    }
-
     const media = albumMediaQuery.data?.albumMedia
 
     const moreItems = [
@@ -41,6 +37,22 @@ export const AlbumTeaser = ({ album }: Props) => {
             callback: deleteAlbumDialog
         }
     ]
+
+    const Count = () => {
+        if (!media) {
+            return <></>
+        }
+
+        return <span
+            className="album__count"
+            data-testid="album-teaser-count"
+        >
+            {`${media?.length} `}
+            {t(ETrans.ELEMENT, {
+                count: media?.length
+            })}
+        </span>
+    }
 
     return <div
         className="album"
@@ -77,15 +89,7 @@ export const AlbumTeaser = ({ album }: Props) => {
                     {album?.title || t(ETrans.UNTITLED)}
                 </span>
                 <div className="album__misc">
-                    <span
-                        className="album__count"
-                        data-testid="album-teaser-count"
-                    >
-                        {`${media?.length} `}
-                        {t(ETrans.ELEMENT, {
-                            count: media?.length
-                        })}
-                    </span>
+                    <Count />
                 </div>
             </div>
         </Link>

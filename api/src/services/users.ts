@@ -7,11 +7,7 @@ import { Response } from 'express'
 export default class UsersService {
     prisma = getDatabase()
 
-    context
-
-    constructor (context?: { user: { id: string }, res: Response, req: Request }) {
-        this.context = context
-    }
+    constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
     createOne = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
         const encryptedPassword = await argon2.hash(user.password)

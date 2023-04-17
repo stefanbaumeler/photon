@@ -12,11 +12,11 @@
         "db:setup": "ts-node src/database/setup.ts",
         "db:generate": "prisma generate",
         "start": "node dist",
-        "test": "run-s search:setup jest",
+        "test": "NODE_ENV=test run-s search:setup jest",
         "search:setup": "ts-node src/search/setup.ts",
         "search:sync": "ts-node src/search/sync.ts",
         "postinstall": "npx prisma generate",
-        "seed": "ts-node setups"
+        "seed": "NODE_ENV=development ts-node setups"
     },
     "dependencies": {
         "@apollo/server": "^4.3.0",

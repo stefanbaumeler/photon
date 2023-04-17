@@ -50,6 +50,10 @@ test('can select on details page', async ({ page }) => {
     await expect(await page.getByTestId('teaser').first()).not.toHaveClass(/teaser--selected/)
 })
 
+test('can sort', async ({ page }) => {
+    // TODO
+})
+
 test('can rotate', async ({ page }) => {
     // TODO
     // await page.goto('/')

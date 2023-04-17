@@ -23,11 +23,7 @@ export default class MediaService {
 
     typesense = getTypesense()
 
-    context
-
-    constructor (context?: { user: { id: string } }) {
-        this.context = context
-    }
+    constructor (public context?: { user: { id: string } }) {}
 
     createOne = async (medium: DeepPartial<TMedium> & { id?: string }) => {
         const existing = await this.prisma.medium.findFirst({

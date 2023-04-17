@@ -5,11 +5,7 @@ import { Response } from 'express'
 export default class DevicesService {
     prisma = getDatabase()
 
-    context
-
-    constructor (context?: { user: { id: string }, res: Response, req: Request }) {
-        this.context = context
-    }
+    constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
     readMany = async () => {
         return this.prisma.device.findMany({

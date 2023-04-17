@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 import { Check, Medium } from '../'
 import { ESelectionMode } from '@/types/app'
 import useKeyboard from '../../hooks/keyboard'
 import bem from '../../util/bem'
-import { isEqual } from 'lodash'
 import TeaserMeta from './TeaserMeta'
 import { useTeaserContext } from './TeaserContext'
 
@@ -14,8 +13,7 @@ const Teaser = () => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
-
-    const { hits: media } = useSearchContext()
+    // const { hits: media } = useSearchContext()
 
     const [shift, setShift] = useState(false)
 
@@ -55,24 +53,24 @@ const Teaser = () => {
     }
 
     const updateShiftTargets = (clear = false) => {
-        if (selection.mode !== ESelectionMode.SELECT) {
-            return
-        }
+        // if (selection.mode !== ESelectionMode.SELECT) {
+        //     return
+        // }
+        //
+        // if (clear) {
+        //     selection.setShiftTargets([])
+        //     return
+        // }
 
-        if (clear) {
-            selection.setShiftTargets([])
-            return
-        }
+        // const ids = media.map((medium) => medium.id)
+        // const lastIndex = ids.indexOf(selection.lastAdded?.id)
+        // const hoverIndex = ids.indexOf(teaser.medium.id)
 
-        const ids = media.map((medium) => medium.id)
-        const lastIndex = ids.indexOf(selection.lastAdded?.id)
-        const hoverIndex = ids.indexOf(teaser.medium.id)
+        // const newShiftTargets = lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)
 
-        const newShiftTargets = lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)
-
-        if (shift && !isEqual(selection.shiftTargets, newShiftTargets)) {
-            selection.setShiftTargets(newShiftTargets)
-        }
+        // if (shift && !isEqual(selection.shiftTargets, newShiftTargets)) {
+        //     selection.setShiftTargets(newShiftTargets)
+        // }
     }
 
     const classes = bem('teaser', [
@@ -124,13 +122,13 @@ const Teaser = () => {
     >
         <div
             className="teaser__check"
-            data-testid="teaser-check"
         >
             <Check
                 onClick={select}
                 ready={selection.mode !== ESelectionMode.OFF}
                 checked={selection.isSelected(teaser.medium)}
                 remove={selection.mode === ESelectionMode.DELETE}
+                testId="teaser-check"
             />
         </div>
         <TeaserMeta />

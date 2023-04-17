@@ -2,17 +2,14 @@ import { DetectLabelsCommand, DetectTextCommand, DetectFacesCommand, Rekognition
 import type { CVDriver } from '@photon/cv'
 
 export default class CVRekognitionDriver implements CVDriver {
-    client: RekognitionClient
+    client = new RekognitionClient({
+        region: process.env.CV_REKOGNITION_REGION,
+        credentials: {
+            accessKeyId: process.env.CV_REKOGNITION_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.CV_REKOGNITION_SECRET_ACCESS_KEY as string
+        }
+    })
 
-    constructor () {
-        this.client = new RekognitionClient({
-            region: process.env.CV_REKOGNITION_REGION,
-            credentials: {
-                accessKeyId: process.env.CV_REKOGNITION_ACCESS_KEY_ID as string,
-                secretAccessKey: process.env.CV_REKOGNITION_SECRET_ACCESS_KEY as string
-            }
-        })
-    }
     labels = async (buffer: Buffer) => {
         const command = new DetectLabelsCommand({
             Image: {

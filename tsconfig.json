@@ -12,14 +12,13 @@
         "resolveJsonModule": true,
         "jsx": "react-jsx",
         "noEmit": true,
-        "types": ["node", "jest"],
+        "types": ["node", "jest", "@testing-library/jest-dom"],
         "isolatedModules": false,
         "paths": {
             "@/*": ["app/*", "app/src/*"]
         }
     },
     "include": [
-        "./tests/**/*.ts",
         "app/*",
         "api/*"
     ],
