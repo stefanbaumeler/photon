@@ -21,6 +21,7 @@
         height: $sidebar-width;
         width: calc(100vw - #{$sidebar-width});
         padding-bottom: 10px;
+        transform: translateY(100%);
     }
 
     &--active {

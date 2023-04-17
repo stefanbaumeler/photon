@@ -278,15 +278,16 @@ export const MapView = () => {
                 </MarkerEl>)}
             </Map>
         </div>
-        <Drawer active={unknownVisible}>
-            <GalleryView
+        <Drawer
+            active={unknownVisible}
+            side={'bottom'}
+        >
+            <FilmStrip
                 media={unknown}
-                targetRowHeight={120}
-                containerWidth={621}
             />
         </Drawer>
         <Drawer
-            active={true}
+            active={!unknownVisible}
             side={'bottom'}
         >
             <FilmStrip

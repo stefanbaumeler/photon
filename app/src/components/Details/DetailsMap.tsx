@@ -10,10 +10,6 @@ export const DetailsMap = () => {
         longitude: details.medium.location[1]
     })
 
-    if (!details.medium.location[0] || !details.medium.location[1]) {
-        return <></>
-    }
-
     useEffect(() => {
         setMapState({
             latitude: details.medium.location[0],
@@ -21,6 +17,9 @@ export const DetailsMap = () => {
         })
     }, [details.medium.location])
 
+    if (!details.medium.location[0] || !details.medium.location[1]) {
+        return <></>
+    }
     return <div className="details__map">
         <Map
             {...mapState}

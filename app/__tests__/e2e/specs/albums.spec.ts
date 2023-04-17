@@ -88,9 +88,10 @@ test('can remove media and change title', async ({ page }) => {
     await page.getByTestId('album-title').type('Changed Title')
     await page.getByTestId('teaser').first().click()
 
+    await page.getByTestId('save-changes').click()
+
     await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count - 1)
 
-    await page.getByTestId('save-changes').click()
     await page.getByTestId('album-back').click()
 
     expect(await page.getByTestId('Changed Title')).toBeDefined()
