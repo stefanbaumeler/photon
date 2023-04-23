@@ -26,7 +26,7 @@ export default gql`
         deleteAlbum(ids: [ID]!): Count @auth
         addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]! @auth
         removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album @auth
-        updateAlbum(idAlbum: ID!, fields: AlbumInput): Album @auth
+        updateAlbum(idAlbum: ID!, fields: AlbumInput!): Album @auth
         createAlbum(album: AlbumInput, media: [ID]): Album @auth
     }
 `

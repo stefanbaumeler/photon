@@ -1,18 +1,16 @@
-import { getDatabase } from '../database'
 import { TUser } from '@photon/schema'
 import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express'
+import { DB } from '../database'
 
 export default class UsersService {
-    prisma = getDatabase()
-
     constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
     createOne = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
         const encryptedPassword = await argon2.hash(user.password)
 
-        return this.prisma.user.create({
+        return DB.user.create({
             data: {
                 ...user,
                 password: encryptedPassword
@@ -34,7 +32,7 @@ export default class UsersService {
         })
 
         const hashedUsers = await Promise.all(hashPromises)
-        const createdUsers = await this.prisma.user.createMany({
+        const createdUsers = await DB.user.createMany({
             data: hashedUsers,
             skipDuplicates: true
         })
@@ -43,7 +41,7 @@ export default class UsersService {
     }
 
     readOne = async (id: string) => {
-        const res = await this.prisma.user.findFirst({
+        const res = await DB.user.findFirst({
             where: {
                 id
             }
@@ -57,7 +55,7 @@ export default class UsersService {
     }
 
     readOneByMail = async (mail: string) => {
-        return this.prisma.user.findFirst({
+        return DB.user.findFirst({
             where: {
                 mail
             }
@@ -65,7 +63,7 @@ export default class UsersService {
     }
 
     readMany = async (take = 100) => {
-        return this.prisma.user.findMany({
+        return DB.user.findMany({
             take
         })
     }

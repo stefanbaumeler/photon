@@ -40,7 +40,7 @@ export const GalleryView = () => {
             })
 
             if (!mediaMatchingThisGroup.length) {
-                return <></>
+                return
             }
 
             return <GallerySection

@@ -2,8 +2,8 @@ import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } f
 import { FileUpload } from 'graphql-upload-minimal'
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type Maybe<T> = Partial<T> | T | null;
-export type InputMaybe<T> = Partial<T> | T | null;
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -88,7 +88,7 @@ export type TMedium = {
   dateTaken?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   favoredBy?: Maybe<Array<Maybe<TUser>>>;
-  filenameDisk: Scalars['String'];
+  filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
   generatedTags?: Maybe<Array<Maybe<Scalars['String']>>>;
   hash?: Maybe<Scalars['String']>;
@@ -117,7 +117,7 @@ export type TMutation = {
   register: TDevice;
   removeFromAlbum?: Maybe<TAlbum>;
   removeFromFavorites: Array<TMedium>;
-  rotate: TMedium;
+  rotate?: Maybe<TMedium>;
   setMediaStatus: Array<TMedium>;
   signIn?: Maybe<TToken>;
   signOut?: Maybe<Scalars['Boolean']>;
@@ -176,7 +176,7 @@ export type TMutationRotateArgs = {
 
 
 export type TMutationSetMediaStatusArgs = {
-  media: Array<InputMaybe<Scalars['ID']>>;
+  media: Array<Scalars['ID']>;
   status: Scalars['String'];
 };
 
@@ -196,7 +196,7 @@ export type TMutationSignUpArgs = {
 
 
 export type TMutationUpdateAlbumArgs = {
-  fields?: InputMaybe<TAlbumInput>;
+  fields: TAlbumInput;
   idAlbum: Scalars['ID'];
 };
 
@@ -362,6 +362,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type TResolversUnionTypes = {
+  Meta: ( TImageMeta ) | ( TVideoMeta );
+};
+
+/** Mapping of union parent types */
+export type TResolversUnionParentTypes = {
+  Meta: ( TImageMeta ) | ( TVideoMeta );
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type TResolversTypes = {
   Album: ResolverTypeWrapper<TAlbum>;
@@ -378,7 +388,7 @@ export type TResolversTypes = {
   ImageMeta: ResolverTypeWrapper<TImageMeta>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Medium: ResolverTypeWrapper<Omit<TMedium, 'meta'> & { meta?: Maybe<TResolversTypes['Meta']> }>;
-  Meta: TResolversTypes['ImageMeta'] | TResolversTypes['VideoMeta'];
+  Meta: ResolverTypeWrapper<TResolversUnionTypes['Meta']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -407,7 +417,7 @@ export type TResolversParentTypes = {
   ImageMeta: TImageMeta;
   Int: Scalars['Int'];
   Medium: Omit<TMedium, 'meta'> & { meta?: Maybe<TResolversParentTypes['Meta']> };
-  Meta: TResolversParentTypes['ImageMeta'] | TResolversParentTypes['VideoMeta'];
+  Meta: TResolversUnionParentTypes['Meta'];
   Mutation: {};
   Query: {};
   String: Scalars['String'];
@@ -482,7 +492,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   dateTaken?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   favoredBy?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
-  filenameDisk?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   generatedTags?: Resolver<Maybe<Array<Maybe<TResolversTypes['String']>>>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
@@ -513,12 +523,12 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   register?: Resolver<TResolversTypes['Device'], ParentType, ContextType, RequireFields<TMutationRegisterArgs, 'device'>>;
   removeFromAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationRemoveFromAlbumArgs, 'idAlbum' | 'media'>>;
   removeFromFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRemoveFromFavoritesArgs, 'media'>>;
-  rotate?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
+  rotate?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationRotateArgs, 'id'>>;
   setMediaStatus?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
-  updateAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'idAlbum'>>;
+  updateAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'fields' | 'idAlbum'>>;
   upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
 
@@ -941,7 +951,7 @@ export type TMRotateVariables = Exact<{
 
 export type TMRotate = (
   { __typename?: 'Mutation' }
-  & { rotate: (
+  & { rotate?: Maybe<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
     & { favoredBy?: Maybe<Array<Maybe<(
@@ -960,11 +970,11 @@ export type TMRotate = (
       { __typename?: 'VideoMeta' }
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
-  ) }
+  )> }
 );
 
 export type TMSetMediaStatusVariables = Exact<{
-  media: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
+  media: Array<Scalars['ID']> | Scalars['ID'];
   status: Scalars['String'];
 }>;
 
@@ -1708,7 +1718,7 @@ export type MRotateHookResult = ReturnType<typeof useMRotate>;
 export type MRotateMutationResult = Apollo.MutationResult<TMRotate>;
 export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRotateVariables>;
 export const MSetMediaStatusDocument = gql`
-    mutation MSetMediaStatus($media: [ID]!, $status: String!) {
+    mutation MSetMediaStatus($media: [ID!]!, $status: String!) {
   setMediaStatus(media: $media, status: $status) {
     id
   }

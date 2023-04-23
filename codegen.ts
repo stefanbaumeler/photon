@@ -30,7 +30,6 @@ export default {
                     Upload: 'Promise<FileUpload>'
                 },
                 preResolveTypes: false,
-                maybeValue: 'Partial<T> | T | null',
                 useTypeImports: true,
                 withMutationFn: true,
                 typesPrefix: 'T',

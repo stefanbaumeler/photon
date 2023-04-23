@@ -19,3 +19,5 @@ export const getDatabase = () => {
 
     return globalForPrisma.prisma
 }
+
+export const DB = getDatabase()

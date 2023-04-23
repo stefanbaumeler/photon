@@ -26,7 +26,7 @@ export default gql`
         dateModified: Date
         dateModifiedStatus: Date
         dateTaken: Date
-        filenameDisk: String!
+        filenameDisk: String
         filenameDownload: String
         title: String
         description: String
@@ -78,8 +78,8 @@ export default gql`
 
     type Mutation {
         deleteMedia(ids: [ID!]!): [Medium!]! @auth
-        rotate(id: ID!): Medium! @auth
-        setMediaStatus(media: [ID]!, status: String!): [Medium!]! @auth
+        rotate(id: ID!): Medium @auth
+        setMediaStatus(media: [ID!]!, status: String!): [Medium!]! @auth
         upload(files: [Upload!]!): [Medium!]! @auth
         emptyTrash: [Medium!]! @auth
     }

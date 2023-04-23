@@ -1,5 +1,6 @@
 import MediaService from '../../services/media'
 import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
+import { GraphQLError } from 'graphql/error'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
@@ -50,10 +51,16 @@ const mutations: Partial<TMutationResolvers> = {
         return service.createMany(media)
     },
     setMediaStatus: async (_, input, context) => {
-        return new MediaService(context).setStatus(input.media as string[], input.status)
+        return new MediaService(context).setStatus(input.media, input.status)
     },
     rotate: async (_, input, context) => {
-        return await new MediaService(context).rotate(input.id)
+        const updated = await new MediaService(context).rotate(input.id)
+
+        if (!updated) {
+            throw new GraphQLError(`Could not rotate image: Image with id ${input.id} not found on database.`)
+        }
+
+        return updated
     },
     deleteMedia: async (_, input, context) => {
         return await new MediaService(context).destroy(input.ids)

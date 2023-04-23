@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
 import { DateTimeScalar } from 'graphql-date-scalars'
-import { TUser, TMeta, TMetaResolvers, TVideoMeta } from '@photon/schema'
+import { TUser, TMetaResolvers, TVideoMeta, TMediumResolvers } from '@photon/schema'
 import { GraphQLUpload } from 'graphql-upload-minimal'
 
 const global = gql`
@@ -27,16 +27,24 @@ const resolvers = {
     Upload: GraphQLUpload,
     Date: DateTimeScalar,
     Medium: {
-        owner: (obj: { owner: TUser }) => {
-            return new UsersService().readOne(obj.owner?.id)
+        owner: (obj) => {
+            if (obj.owner?.id) {
+                return new UsersService().readOne(obj.owner.id)
+            }
+
+            return obj.owner
         },
-        uploader: (obj: { uploader: TUser }) => {
-            return new UsersService().readOne(obj.uploader?.id)
+        uploader: (obj) => {
+            if (obj.uploader?.id) {
+                return new UsersService().readOne(obj.uploader.id)
+            }
+
+            return obj.uploader
         },
-        location: (obj: { location: string }) => {
-            return JSON.parse(obj.location)
+        location: (obj) => {
+            return obj.location
         }
-    },
+    } as TMediumResolvers,
     Album: {
         owner: (obj: { owner: TUser }) => {
             return new UsersService().readOne(obj.owner?.id)

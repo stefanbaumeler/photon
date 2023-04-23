@@ -1,5 +1,5 @@
 import { exec } from 'child_process'
-import { setDbUrl } from './index'
+import { setDbUrl } from '.'
 import { getEnv } from '../../env'
 
 const env = getEnv()

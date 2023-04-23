@@ -1,6 +1,11 @@
+import { TMeta } from '@photon/schema'
+
 export * from './user'
 export * from './album'
 
-export type DeepPartial<T> = T extends object ? {
-    [P in keyof T]?: DeepPartial<T[P]>;
-} : T
+declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace PrismaJson {
+        type Meta = TMeta
+    }
+}

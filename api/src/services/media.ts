@@ -1,12 +1,9 @@
-import { getDatabase } from '../database'
-import { TMedium } from '@photon/schema'
+import { DB } from '../database'
 import sharp from 'sharp'
 import { randomUUID } from 'crypto'
 import fs from 'fs'
-import { DeepPartial } from '../types'
-import { Prisma } from '.prisma/client'
+import { Prisma } from '@prisma/client'
 import Enumerable = Prisma.Enumerable
-import MediumOrderByWithRelationInput = Prisma.MediumOrderByWithRelationInput
 import { fileToMedium } from '../helpers/exif'
 import { FileUpload } from 'graphql-upload-minimal'
 import { getCV } from '../../drivers'
@@ -19,21 +16,19 @@ import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
 const env = getEnv()
 
 export default class MediaService {
-    prisma = getDatabase()
-
     typesense = getTypesense()
 
     constructor (public context?: { user: { id: string } }) {}
 
-    createOne = async (medium: DeepPartial<TMedium> & { id?: string }) => {
-        const existing = await this.prisma.medium.findFirst({
+    createOne = async (medium: Prisma.MediumCreateInput) => {
+        const existing = await DB.medium.findFirst({
             where: {
                 OR: {
                     hash: medium.hash,
                     id: medium.id
                 }
             }
-        }) as TMedium | null
+        })
 
         if (existing && medium.filenameDisk) {
             const existingPath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
@@ -45,44 +40,24 @@ export default class MediaService {
             return existing
         }
 
-        const locationData = medium.location && medium.location[0] && medium.location[1]
-            ? await this.getLocationData([medium.location[0], medium.location[1]])
-            : {}
+        const locationData = await this.getLocationData(medium.location)
 
-        return await this.prisma.medium.create({
+        return DB.medium.create({
             data: {
-                ...medium as DeepPartial<TMedium>,
-                ...locationData,
-                generatedTags: medium.generatedTags?.join(', '),
-                owner: {
-                    connect: {
-                        id: medium.owner?.id
-                    }
-                },
-                uploader: {
-                    connect: {
-                        id: medium.uploader?.id
-                    }
-                },
-                meta: medium.meta as string,
-                favoredBy: {
-                    connect: medium.favoredBy?.map((fav) => ({
-                        id: fav?.id
-                    }))
-                },
-                location: JSON.stringify(medium.location)
+                ...medium,
+                ...locationData
             }
 
-        }) as TMedium
+        })
     }
 
-    createMany = async (media: (DeepPartial<TMedium> & { id?: string })[]) => {
+    createMany = async (media: Prisma.MediumCreateInput[]) => {
         const promises = media.map((medium) => {
             return this.createOne(medium)
         })
 
         return Promise.all(promises).then((results) => {
-            return results.filter((result) => result !== undefined) as TMedium[]
+            return results.filter((result) => result !== undefined)
         })
     }
 
@@ -117,7 +92,7 @@ export default class MediaService {
             return !p.includes('__MACOSX')
         })
 
-        const promises = noMacOS.map((filePath) => new Promise<DeepPartial<TMedium>>((resolve) => {
+        const promises = noMacOS.map(async (filePath) => {
             const name = randomUUID()
             const pathName = `${env.API_UPLOADS_DIR}/${name}`
 
@@ -125,17 +100,15 @@ export default class MediaService {
 
             this.generateTags(pathName, name)
 
-            const m = fileToMedium({
+            return await fileToMedium({
                 filePath: pathName,
                 fileName: name,
                 originalName: filePath.split('/').pop() || '',
-                user: this.context!.user.id
-            }) as DeepPartial<TMedium>
+                user: this.context?.user.id || ''
+            })
+        })
 
-            resolve(m)
-        }))
-
-        const results = await Promise.all(promises) as TMedium[]
+        const results = await Promise.all(promises)
 
         fs.rm(`${env.API_UPLOADS_DIR}/temp`, {
             recursive: true
@@ -160,14 +133,14 @@ export default class MediaService {
             // application/x-rar
             // console.log(file.mimetype)
 
-            return await new Promise<Promise<TMedium | TMedium[]>>((resolve) => {
+            return await new Promise<Prisma.MediumCreateInput[] | Prisma.MediumCreateInput>((resolve) => {
                 stream.pipe(fs.createWriteStream(pathName)).on('finish', async () => {
                     if (file.mimetype === 'application/zip') {
                         resolve(this.handleZip(pathName))
                     }
 
                     if (!this.context?.user.id) {
-                        return {} as DeepPartial<TMedium>
+                        return {}
                     }
 
                     this.generateTags(pathName, name)
@@ -177,22 +150,16 @@ export default class MediaService {
                         fileName: name,
                         originalName: file.filename,
                         user: this.context.user.id
-                    }) as Promise<TMedium>
+                    })
 
                     resolve(medium)
                 })
-            }) as TMedium
+            })
         })
 
-        const media = await Promise.all(promises) as (TMedium[] | TMedium)[]
+        const media = await Promise.all(promises)
 
-        const results: TMedium[] = []
-
-        media.forEach((medium) => {
-            Array.isArray(medium) ? results.push(...medium) : results.push(medium)
-        })
-
-        return results
+        return media.flat()
     }
 
     reduceToFileSize = async (buffer: Buffer, sizeInMB: number, quality = 80, attempts = 10): Promise<Buffer> => {
@@ -230,13 +197,17 @@ export default class MediaService {
         }
     }
 
-    getLocationData = async (location: number[]) => {
+    getLocationData = async (location?: Prisma.InputJsonValue) => {
+        if (!location || typeof location !== 'object' || !Array.isArray(location) || !location[0] || !location[1]) {
+            return {}
+        }
+
         const geocodingClient = GeocodingClient({
             accessToken: env.MAPBOX_KEY
         })
 
         const result = await geocodingClient.reverseGeocode({
-            query: [location[1] || 0, location[0] || 0]
+            query: [location[1], location[0]]
         }).send()
 
         const countryFeature = result.body.features.find((feature) => feature.place_type[0] === 'country')
@@ -244,7 +215,7 @@ export default class MediaService {
         const placeFeature = result.body.features.find((feature) => feature.place_type[0] === 'place')
         const addressFeature = result.body.features.find((feature) => feature.place_type[0] === 'address')
 
-        const data = {} as Partial<TMedium>
+        const data = {} as Partial<Prisma.MediumCreateInput>
 
         if (countryFeature) {
             data.country = countryFeature.text
@@ -272,18 +243,18 @@ export default class MediaService {
             return
         }
 
-        await this.prisma.medium.update({
+        await DB.medium.update({
             where: {
                 id: medium.id
             },
             data: {
-                generatedTags: tags.join(', ')
+                generatedTags: tags
             }
         })
     }
 
-    async readOne (id: string) {
-        const medium = await this.prisma.medium.findFirst({
+    readOne = async (id: string) => {
+        return DB.medium.findFirst({
             where: {
                 id
             },
@@ -293,25 +264,14 @@ export default class MediaService {
                 favoredBy: {
                     where: {
                         id: this.context?.user.id
-                    },
-                    include: {
-                        favorites: {
-                            where: {
-                                id: this.context?.user.id
-                            }
-                        }
                     }
                 }
             }
         })
-
-        return medium as TMedium
     }
 
     readOneFromDisk = async (filenameDisk: string) => {
-        const db = getDatabase()
-
-        return db.medium.findFirst({
+        return DB.medium.findFirst({
             where: {
                 filenameDisk
             },
@@ -328,11 +288,11 @@ export default class MediaService {
     }
 
     countByYear = async (conditions: Prisma.MediumWhereInput = {}) => {
-        const [{ _count: count }, dateSets] = await this.prisma.$transaction([
-            this.prisma.medium.aggregate({
+        const [{ _count: count }, dateSets] = await DB.$transaction([
+            DB.medium.aggregate({
                 _count: true
             }),
-            this.prisma.medium.findMany({
+            DB.medium.findMany({
                 where: conditions,
                 select: {
                     dateTaken: true,
@@ -388,9 +348,9 @@ export default class MediaService {
     }
 
     readMany = async ({
-        conditions, orderBy, take = 100
-    }: { conditions?: Prisma.MediumWhereInput, orderBy?: Enumerable<MediumOrderByWithRelationInput>, take?: number } = {}) => {
-        return await this.prisma.medium.findMany({
+        conditions, orderBy, take
+    }: { conditions?: Prisma.MediumWhereInput, orderBy?: Enumerable<Prisma.MediumOrderByWithRelationInput>, take?: number } = {}) => {
+        return DB.medium.findMany({
             where: conditions,
             orderBy,
             take,
@@ -403,7 +363,7 @@ export default class MediaService {
                     }
                 }
             }
-        }) as TMedium[]
+        })
     }
 
     destroy = async (ids: string[] | string) => {
@@ -421,7 +381,7 @@ export default class MediaService {
             fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
         })
 
-        await this.prisma.medium.deleteMany({
+        await DB.medium.deleteMany({
             where: {
                 id: {
                     in: idsToDestroy
@@ -435,6 +395,10 @@ export default class MediaService {
     rotate = async (id: string) => {
         const medium = await this.readOne(id)
 
+        if (!medium) {
+            return
+        }
+
         const filePath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
         const filePathOld = path.join(__dirname, '../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
         await fs.renameSync(filePath, filePathOld)
@@ -447,7 +411,7 @@ export default class MediaService {
             height: row.height
         }
 
-        const response = await this.prisma.medium.update({
+        await DB.medium.update({
             where: {
                 id
             },
@@ -458,11 +422,15 @@ export default class MediaService {
 
         fs.unlinkSync(filePathOld)
 
-        return response as TMedium
+        const updated = await this.readOne(id)
+
+        if (updated) {
+            return updated
+        }
     }
 
     setStatus = async (ids: string[], status: string) => {
-        await this.prisma.medium.updateMany({
+        await DB.medium.updateMany({
             where: {
                 id: {
                     in: ids

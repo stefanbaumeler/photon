@@ -1,7 +1,6 @@
 import { Client } from 'typesense'
 import { getEnv } from '../../env'
-import { Prisma } from '@prisma/client'
-import { TUser } from '@photon/schema'
+import { TMedium } from '@photon/schema'
 
 const env = getEnv()
 
@@ -26,15 +25,11 @@ export const getTypesense = () => {
     return search
 }
 
-export type SearchMedium = {
-    id: string
-    dateTaken?: string | null
-    dateTakenSort?: number | null
-    title?: string | null
-    generatedTags?: string[] | null
-    meta: Prisma.JsonValue
-    mimetype?: string | null
-    filenameDisk?: string | null
-    status?: string | null
-    favoredBy?: TUser | null
+export interface SearchMediumProps extends Omit<TMedium, 'favoredBy'> {
+    dateTakenSort: number
+    isFavorite: boolean
+    isArchived: boolean
+    isTrash: boolean
+    albums: string[]
+    favoredBy?: string[]
 }

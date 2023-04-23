@@ -31,6 +31,7 @@ const DetailsProvider = ({ children }: Props) => {
         medium,
         setMedium,
         open: (newMedium) => {
+            console.log(newMedium)
             setMedium(newMedium)
             setActive(true)
 

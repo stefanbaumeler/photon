@@ -1,32 +1,24 @@
 import AlbumsMediaService from './albumsMedia'
-import { DeepPartial } from '../types'
-import { getDatabase } from '../database'
-import { TAlbum, TAlbumInput } from '@photon/schema'
 import { Prisma } from '@prisma/client'
+import { DB } from '../database'
 
 export default class AlbumsService {
-    prisma = getDatabase()
-
     constructor (public context?: { user: { id: string } }) {}
 
-    createOne = async (album: DeepPartial<TAlbum>, media?: { id: string }[]) => {
+    createOne = async (album: Prisma.AlbumCreateInput, media?: { id: string }[]) => {
         if (media?.length) {
-            album.cover = media[0]
+            album.cover = {
+                connect: {
+                    id: media[0].id
+                }
+            }
         }
 
-        const created = await this.prisma.album.create({
+        const created = await DB.album.create({
             data: {
                 ...album,
-                cover: album.cover ? {
-                    connect: {
-                        id: album.cover?.id
-                    }
-                } : undefined,
-                owner: album.owner ? {
-                    connect: {
-                        id: album.owner.id
-                    }
-                } : {
+                cover: album.cover,
+                owner: album.owner ? album.owner : {
                     connect: {
                         id: this.context?.user.id
                     }
@@ -47,11 +39,11 @@ export default class AlbumsService {
             await albumsMediaService.createMany(albumsMedia)
         }
 
-        return created as TAlbum
+        return created
     }
 
     readOne = async (id: string) => {
-        const album = await this.prisma.album.findFirst({
+        return DB.album.findFirst({
             where: {
                 id
             },
@@ -64,12 +56,10 @@ export default class AlbumsService {
                 }
             }
         })
-
-        return album as TAlbum
     }
 
     readMany = async (conditions: Prisma.AlbumWhereInput = {}, take = 100) => {
-        const data = await this.prisma.album.findMany({
+        return DB.album.findMany({
             where: conditions,
             take,
             include: {
@@ -81,14 +71,12 @@ export default class AlbumsService {
                 }
             }
         })
-
-        return data as TAlbum[]
     }
 
-    updateMany = async (ids: string[], newProps: Partial<TAlbum>) => {
+    updateMany = async (ids: string[], newProps: Prisma.AlbumUpdateInput) => {
         delete newProps.id
 
-        return this.prisma.album.updateMany({
+        return DB.album.updateMany({
             where: {
                 id: {
                     in: ids
@@ -98,20 +86,16 @@ export default class AlbumsService {
         })
     }
 
-    update = async (id: string, newProps: TAlbumInput | undefined | null) => {
+    update = async (id: string, newProps?: Prisma.AlbumUpdateInput) => {
         delete newProps?.id
 
-        return await this.prisma.album.update({
+        return DB.album.update({
             where: {
                 id
             },
             data: {
-                ...newProps as Omit<TAlbumInput, 'id'>,
-                cover: newProps?.cover ? {
-                    connect: {
-                        id: newProps.cover
-                    }
-                } : undefined
+                ...newProps,
+                cover: newProps?.cover
             },
             include: {
                 owner: true,
@@ -121,13 +105,13 @@ export default class AlbumsService {
                     }
                 }
             }
-        }) as TAlbum
+        })
     }
 
     destroy = async (keys: (string | null)[] | string) => {
         const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
 
-        return this.prisma.album.deleteMany({
+        return DB.album.deleteMany({
             where: {
                 id: {
                     in: keysToDestroy

@@ -1,5 +1,5 @@
 import { TAlbum } from '@photon/schema'
-import { AlbumTeaser } from './index'
+import { AlbumTeaser } from '.'
 
 type Props = {
     albums: Partial<TAlbum>[]

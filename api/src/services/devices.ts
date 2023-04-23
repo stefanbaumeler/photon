@@ -1,14 +1,12 @@
-import { getDatabase } from '../database'
 import { TDevice } from '@photon/schema'
 import { Response } from 'express'
+import { DB } from '../database'
 
 export default class DevicesService {
-    prisma = getDatabase()
-
     constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
     readMany = async () => {
-        return this.prisma.device.findMany({
+        return DB.device.findMany({
             where: {
                 users: {
                     some: {
@@ -21,7 +19,7 @@ export default class DevicesService {
     }
 
     register = async (newDevice: Pick<TDevice, 'name' | 'type'>) => {
-        return this.prisma.device.create({
+        return DB.device.create({
             data: newDevice
         })
     }

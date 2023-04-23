@@ -1,6 +1,6 @@
 import AlbumsService from '../../services/albums'
 import AlbumsMediaService from '../../services/albumsMedia'
-import { TQueryResolvers, TMutationResolvers, TAlbum } from '@photon/schema'
+import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
     albums: (_, input, context) => {
@@ -31,14 +31,30 @@ const mutations: Partial<TMutationResolvers> = {
         return new AlbumsService(context).readOne(input.idAlbum)
     },
     updateAlbum: async (_, input, context) => {
-        return  new AlbumsService(context).update(input.idAlbum, input.fields)
+        return new AlbumsService(context).update(input.idAlbum, {
+            ...input.fields,
+            id: input.fields?.id || undefined,
+            cover: input.fields?.cover ? {
+                connect: {
+                    id: input.fields.cover
+                }
+            } : undefined
+        })
     },
     createAlbum: async (_, input, context) => {
         const media = input.media?.map((medium) => ({
             id: medium as string
         })) || []
 
-        return await new AlbumsService(context).createOne((input.album || {}) as TAlbum, media)
+        return await new AlbumsService(context).createOne({
+            ...input.album,
+            id: input.album?.id || undefined,
+            cover: input.album?.cover ? {
+                connect: {
+                    id: input.album.cover
+                }
+            } : undefined
+        }, media)
     }
 }
 

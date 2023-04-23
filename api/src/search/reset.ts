@@ -1,6 +1,7 @@
-import { getTypesense, SearchMedium } from './'
+import { getTypesense, SearchMediumProps } from './'
 import MediaService from '../services/media'
 import { getDatabase } from '../database'
+import { TMedium } from '@photon/schema'
 
 const reset = async () => {
     const typesense = getTypesense()
@@ -15,42 +16,24 @@ const reset = async () => {
         name: 'media',
         fields: [
             {
-                name: 'dateTakenSort',
-                type: 'int32',
-                sort: true
-            },
-            {
-                name: 'dateTaken',
-                type: 'string'
-            },
-            {
-                name: 'title',
-                type: 'string'
-            },
-            {
-                name: 'generatedTags',
-                type: 'string[]',
-                facet: true
-            },
-            {
-                name: 'isFavorite',
-                type: 'bool',
-                facet: true
-            },
-            {
-                name: 'isArchived',
-                type: 'bool',
-                facet: true
-            },
-            {
-                name: 'isTrash',
-                type: 'bool',
-                facet: true
-            },
-            {
-                name: 'status',
+                name: 'country',
                 type: 'string',
-                facet: true
+                optional: true
+            },
+            {
+                name: 'region',
+                type: 'string',
+                optional: true
+            },
+            {
+                name: 'place',
+                type: 'string',
+                optional: true
+            },
+            {
+                name: 'address',
+                type: 'string',
+                optional: true
             },
             {
                 name: 'albums',
@@ -58,26 +41,60 @@ const reset = async () => {
                 facet: true
             },
             {
-                name: 'country',
-                type: 'string',
-                facet: true
+                name: '.*',
+                type: 'auto'
             },
             {
-                name: 'region',
-                type: 'string',
-                facet: true
-            },
-            {
-                name: 'place',
-                type: 'string',
-                facet: true
-            },
-            {
-                name: 'address',
-                type: 'string',
+                'name': 'is.*',
+                type: 'auto',
                 facet: true
             }
         ]
+        // fields: [
+        //     {
+        //         name: 'dateTakenSort',
+        //         type: 'int32',
+        //         sort: true
+        //     },
+        //     {
+        //         name: 'dateTaken',
+        //         type: 'string'
+        //     },
+        //     {
+        //         name: 'title',
+        //         type: 'string'
+        //     },
+        //     {
+        //         name: 'generatedTags',
+        //         type: 'string[]',
+        //         facet: true
+        //     },
+        //     {
+        //         name: 'isFavorite',
+        //         type: 'bool',
+        //         facet: true
+        //     },
+        //     {
+        //         name: 'isArchived',
+        //         type: 'bool',
+        //         facet: true
+        //     },
+        //     {
+        //         name: 'isTrash',
+        //         type: 'bool',
+        //         facet: true
+        //     },
+        //     {
+        //         name: 'status',
+        //         type: 'string',
+        //         facet: true
+        //     },
+        //     {
+        //         name: 'location',
+        //         type: 'float[]',
+        //         optional: true
+        //     }
+        // ]
     })
 
     const mediaService = new MediaService()
@@ -102,32 +119,17 @@ const reset = async () => {
         })
     })])
 
-    const sync = documentsToSync.map((document, k) => {
+    const sync = documentsToSync.map((document, k): SearchMediumProps => {
         const albumIds = albumIdTransaction[k].map(({ idAlbum }) => idAlbum)
-        const location = Array.isArray(document.location) ? document.location : JSON.parse(document.location as unknown as string) as string[]
-
         return {
-            id: document.id,
-            title: document.title,
-            dateTakenSort: Math.floor(document.dateTaken.getTime() / 1000),
-            dateTaken: document.dateTaken,
-            generatedTags: document.generatedTags,
-            meta: document.meta,
-            mimetype: document.mimetype,
-            filenameDisk: document.filenameDisk,
-            filenameDownload: document.filenameDownload,
-            status: document.status,
-            favoredBy: document.favoredBy || null,
+            ...document,
+            dateTakenSort: document.dateTaken ? Math.floor(document.dateTaken.getTime() / 1000) : 0,
+            favoredBy: document.favoredBy.map((fav) => fav.id) || [],
             isFavorite: !!document.favoredBy?.length,
             isArchived: document.status === 'archived',
             isTrash: document.status === 'trash',
-            location: location.map((c) => typeof c === 'number' ? c : 0),
-            country: document.country || '',
-            region: document.region || '',
-            place: document.place || '',
-            address: document.address || '',
             albums: albumIds
-        } as unknown as SearchMedium
+        }
     })
 
     if (sync.length) {

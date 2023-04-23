@@ -36,15 +36,11 @@ export const getRelativeTime = (d1: Date | string, d2 = new Date()) => {
     }
 }
 
-export const formatDate = (date?: Date | number | string, format: EDateFormat = EDateFormat.SHORT) => {
+const asDate = (date: string | number | Date) => {
     let d = date
 
-    if (typeof date === 'undefined' || date === null) {
-        return
-    }
-
     if (typeof d === 'string') {
-        if (isNaN(d as unknown as number)) {
+        if (d.includes('Z')) {
             d = new Date(d)
         }
         else {
@@ -55,6 +51,16 @@ export const formatDate = (date?: Date | number | string, format: EDateFormat = 
     if (typeof d === 'number') {
         d = new Date(d)
     }
+
+    return d
+}
+
+export const formatDate = (date?: Date | number | string, format: EDateFormat = EDateFormat.SHORT) => {
+    if (typeof date === 'undefined' || date === null) {
+        return
+    }
+
+    const d = asDate(date)
 
     if (format === EDateFormat.LONG) {
         if (d.getFullYear() === new Date().getFullYear()) {

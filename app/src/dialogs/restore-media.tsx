@@ -5,11 +5,11 @@ import useSetMediaStatus from '../hooks/set-status'
 import { EMediumStatus } from '@/types/app'
 import { TMedium } from '@photon/schema'
 
-const useRestoreMediaDialog = (idMedia: TMedium[] | Set<TMedium> | TMedium) => {
+const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const { t } = useTranslation()
-    const restore = useSetMediaStatus(idMedia, EMediumStatus.ALL)
+    const restore = useSetMediaStatus(media, EMediumStatus.ALL)
 
     const confirm = () => {
         restore()

@@ -4,8 +4,8 @@ import path from 'path'
 import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
-import { TMedium, TVideoMeta, TImageMeta } from '@photon/schema'
-import { DeepPartial } from '../types'
+import { TVideoMeta, TImageMeta } from '@photon/schema'
+import { Prisma } from '@prisma/client'
 import mime from 'mime-types'
 
 export const hash = (str: string, seed = 0) => {
@@ -149,10 +149,10 @@ const handleImage = async (filePath: string) => {
     const lat = Number.isNaN(rawLat) ? null : rawLat
     const lng = Number.isNaN(rawLng) ? null : rawLng
 
-    const mediumData: Partial<TMedium> = {
+    const mediumData = {
         dateTaken: dateTime,
         hash: hash(JSON.stringify(rawMeta)).toString(),
-        location: [lat, lng]
+        location: lat && lng ? [lat, lng] : undefined
     }
 
     const meta: Partial<TImageMeta> = {
@@ -172,7 +172,7 @@ const handleImage = async (filePath: string) => {
     }
 }
 
-const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, meta: Partial<TVideoMeta> }>((resolve) => {
+const handleVideo = async (filePath: string) => {
     const analyze = async () => {
         const readChunk: ReadChunkFunc = async (size, offset) => {
             const buffer = new Uint8Array(size)
@@ -200,48 +200,45 @@ const handleVideo = (filePath: string) => new Promise<{ data: Partial<TMedium>, 
         })
     }
 
-    return analyze().then((result) => {
-        if (isValidVideoMetadata(result)) {
-            const coordinates = getCoordinates(result)
-            const dateTaken = getDateTaken(result)
-            const dimensions = getDimensions(result)
-            const duration = getDuration(result)
+    const result = await analyze()
 
-            const meta: TVideoMeta = {
-                duration,
-                height: dimensions.height || 0,
-                width: dimensions.width || 0
-            }
+    if (isValidVideoMetadata(result)) {
+        const coordinates = getCoordinates(result)
+        const dateTaken = getDateTaken(result)
+        const dimensions = getDimensions(result)
+        const duration = getDuration(result)
 
-            const mediumData: Partial<TMedium> = {
-                dateTaken: dateTaken.toISOString(),
-                hash: hash(JSON.stringify(result)).toString()
-            }
-
-            if (coordinates.length) {
-                mediumData.location = coordinates
-            }
-
-            resolve({
-                data: mediumData,
-                meta
-            })
+        const meta: TVideoMeta = {
+            duration,
+            height: dimensions.height || 0,
+            width: dimensions.width || 0
         }
 
-        resolve({
-            data: {},
-            meta: {}
-        })
-    })
-})
+        const mediumData = {
+            dateTaken: dateTaken.toISOString(),
+            hash: hash(JSON.stringify(result)).toString(),
+            location: coordinates.length ? coordinates : undefined
+        }
+
+        return {
+            data: mediumData,
+            meta
+        }
+    }
+
+    return {
+        data: {},
+        meta: {}
+    }
+}
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type, user
-}: { filePath: string, fileName: string, originalName: string, type?: string, user: string }) => {
+}: { filePath: string, fileName: string, originalName: string, type?: string, user: string }): Promise<Prisma.MediumCreateInput> => {
     const mimetype = type || mime.lookup(originalName) || ''
     const mediumType = mimetype.split('/')[0]
 
-    const handleMeta = (info: { data?: Partial<TMedium>, meta?: Partial<TImageMeta | TVideoMeta> }) => {
+    const combine = (info: { data?: Partial<Prisma.MediumCreateInput>, meta?: Partial<TImageMeta | TVideoMeta> }): Prisma.MediumCreateInput => {
         return {
             mimetype,
             filenameDisk: fileName,
@@ -251,19 +248,21 @@ export const fileToMedium = async ({
             ...info.data,
             meta: info.meta,
             owner: {
-                id: user
+                connect: {
+                    id: user
+                }
             },
             uploader: {
-                id: user
+                connect: {
+                    id: user
+                }
             }
-        } as DeepPartial<TMedium> & { id?: string }
+        }
     }
 
     if (mediumType === 'image') {
-        return handleImage(filePath).then(handleMeta)
+        return handleImage(filePath).then(combine)
     }
 
-    if (mediumType === 'video') {
-        return handleVideo(filePath).then(handleMeta)
-    }
+    return handleVideo(filePath).then(combine)
 }

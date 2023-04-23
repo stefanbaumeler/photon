@@ -1,4 +1,4 @@
-import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions } from './index'
+import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions } from '.'
 
 export const SearchBar = () => {
     return <div className="searchbar">

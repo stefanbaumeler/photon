@@ -1,14 +1,11 @@
-import { getDatabase } from '../database'
-import { TMedium } from '@photon/schema'
 import { Response } from 'express'
+import { DB } from '../database'
 
 export default class FavoritesService {
-    prisma = getDatabase()
-
     constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
     readMany = async () => {
-        const res = await this.prisma.user.findFirst({
+        const res = await DB.user.findFirst({
             where: {
                 id: this.context?.user.id
             },
@@ -26,13 +23,13 @@ export default class FavoritesService {
             throw new Error()
         }
 
-        return res.favorites as TMedium[]
+        return res.favorites
     }
 
     create = async (idMedia: string[]) => {
         const idMediaArray = Array.isArray(idMedia) ? idMedia : [idMedia]
 
-        const updatedUser = await this.prisma.user.update({
+        const updatedUser = await DB.user.update({
             where: {
                 id: this.context?.user.id
             },
@@ -53,13 +50,13 @@ export default class FavoritesService {
             }
         })
 
-        return updatedUser.favorites as TMedium[]
+        return updatedUser.favorites
     }
 
     remove = async (idMedia: string[] | string) => {
         const idMediaArray = Array.isArray(idMedia) ? idMedia : [idMedia]
 
-        const updatedUser = await this.prisma.user.update({
+        const updatedUser = await DB.user.update({
             where: {
                 id: this.context?.user.id
             },
@@ -80,6 +77,6 @@ export default class FavoritesService {
             }
         })
 
-        return updatedUser.favorites as TMedium[]
+        return updatedUser.favorites
     }
 }

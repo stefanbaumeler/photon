@@ -1,5 +1,5 @@
-import { MainNav } from './index'
-import { useNavContext } from '../providers'
+import { MainNav } from '.'
+import { useNavContext } from '@/providers'
 
 export const Sidebar = () => {
     const navs = useNavContext()

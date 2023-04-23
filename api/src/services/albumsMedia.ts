@@ -1,12 +1,10 @@
 import { AlbumsMedia } from '../types'
-import { getDatabase } from '../database'
-import { TMedium } from '@photon/schema'
+import { PrismaClient } from '@prisma/client'
+import { DB } from '../database'
 
 export default class AlbumsMediaService {
-    prisma = getDatabase()
-
     createOne = async (albumMedium: Omit<AlbumsMedia, 'id'>) => {
-        return this.prisma.albumMedium.upsert({
+        return DB.albumMedium.upsert({
             where: {
                 idAlbum_idMedium: {
                     idAlbum: albumMedium.idAlbum,
@@ -26,9 +24,9 @@ export default class AlbumsMediaService {
     }
 
     createMany = async (albumsMedia: Omit<AlbumsMedia, 'id'>[]) => {
-        const results = await this.prisma.$transaction(
+        const results = await DB.$transaction(
             albumsMedia.map((albumMedium) => {
-                return this.prisma.albumMedium.upsert({
+                return DB.albumMedium.upsert({
                     where: {
                         idAlbum_idMedium: {
                             idAlbum: albumMedium.idAlbum,
@@ -48,11 +46,11 @@ export default class AlbumsMediaService {
             })
         )
 
-        return results.map(({ medium }) => medium) as TMedium[]
+        return results.map(({ medium }) => medium)
     }
 
     removeFromAlbum = async (idAlbum: string, mediaIds: string[]) => {
-        return this.prisma.albumMedium.deleteMany({
+        return DB.albumMedium.deleteMany({
             where: {
                 idAlbum,
                 idMedium: {
@@ -63,7 +61,7 @@ export default class AlbumsMediaService {
     }
 
     readAlbumsOfMedium = async (idMedium: string) => {
-        const res = await this.prisma.albumMedium.findMany({
+        const res = await DB.albumMedium.findMany({
             where: {
                 medium: {
                     id: idMedium,
@@ -85,7 +83,7 @@ export default class AlbumsMediaService {
     }
 
     readMediaOfAlbum = async (idAlbum: string) => {
-        const res = await this.prisma.albumMedium.findMany({
+        const res = await DB.albumMedium.findMany({
             where: {
                 album: {
                     id: idAlbum
@@ -105,6 +103,6 @@ export default class AlbumsMediaService {
             }
         })
 
-        return res.map((r) => r.medium) as TMedium[]
+        return res.map((r) => r.medium)
     }
 }
