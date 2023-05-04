@@ -1,0 +1,30 @@
+@mixin drag-overlay-root {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: opacity .25s;
+    background-color: rgba($color-black, .25);
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+    left: $sidebar-width;
+
+    &--active {
+        opacity: 1;
+    }
+
+    @at-root .sidebar & {
+        left: 0;
+        width: $sidebar-width;
+        z-index: 4;
+    }
+}
+
+@mixin drag-overlay {
+    .drag-overlay {
+        @include drag-overlay-root;
+    }
+}
+
+@include drag-overlay;

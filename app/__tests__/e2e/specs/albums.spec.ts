@@ -5,9 +5,9 @@ import { globalBeforeEach } from '../support/common'
 globalBeforeEach()
 
 const getAlbumTeaserCount = async (page: Page) => {
-    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBeGreaterThan(0)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
 
-    return await page.getByTestId('album-teaser').count()
+    return await page.getByTestId('teaser').count()
 }
 
 test('can delete', async ({ page }) => {
@@ -19,7 +19,7 @@ test('can delete', async ({ page }) => {
     await page.getByTestId('album-delete').first().click()
     await page.getByTestId('album-confirm-delete').click()
 
-    await expect.poll(async () => await page.getByTestId('album-teaser').count()).toBe(count - 1)
+    await expect.poll(async () => await page.getByTestId('teaser').count()).toBe(count - 1)
 })
 
 test('can create from media', async ({ page }) => {
@@ -44,7 +44,7 @@ test('can create from media', async ({ page }) => {
 
     await page.getByTestId('album-back').click()
 
-    await expect(await page.getByTestId('album-teaser')).toHaveCount(count + 1)
+    await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
 })
 
 test('can create empty', async ({ page }) => {
@@ -55,7 +55,7 @@ test('can create empty', async ({ page }) => {
     await page.getByTestId('album-create').click()
     await page.getByTestId('album-back').click()
 
-    await expect(await page.getByTestId('album-teaser')).toHaveCount(count + 1)
+    await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
 })
 
 test('can add media and avoids duplicates', async ({ page }) => {
@@ -110,7 +110,7 @@ test('can set cover', async ({ page }) => {
     await page.getByTestId('save-changes').click()
 
     const link = await page.locator(`[href="/albums/${predefinedAlbumUUIDs[0]}"]`)
-    const imageSrc = await link.getByTestId('album-image').getAttribute('src')
+    const imageSrc = await link.getByTestId('teaser-image').getAttribute('src')
 
     expect(imageSrc).toContain(id)
 })

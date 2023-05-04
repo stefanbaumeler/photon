@@ -53,6 +53,11 @@ export default class AlbumsService {
                     include: {
                         owner: true
                     }
+                },
+                albumMedia: {
+                    select: {
+                        idMedium: true
+                    }
                 }
             }
         })
@@ -67,6 +72,11 @@ export default class AlbumsService {
                 cover: {
                     include: {
                         owner: true
+                    }
+                },
+                albumMedia: {
+                    select: {
+                        idMedium: true
                     }
                 }
             }

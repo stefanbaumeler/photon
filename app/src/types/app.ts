@@ -16,6 +16,8 @@ export type TNavItem = {
     href?: string
     type?: ENavItemType
     testId?: string
+    onDrop?: () => void
+    canDrop?: boolean
 }
 
 export type TNav = {
@@ -59,7 +61,9 @@ export enum ENavs {
 }
 
 export enum ENavItemType {
-    ALBUMS = 'ALBUMS'
+    ALL = 'ALL',
+    ALBUMS = 'ALBUMS',
+    FAVORITES = 'FAVORITES'
 }
 
 export enum ESelectionMode {
@@ -109,5 +113,6 @@ export enum EMediumSort {
 export enum ELayout {
     MAP = 'MAP',
     LIST = 'LIST',
-    GALLERY = 'GALLERY'
+    GALLERY = 'GALLERY',
+    GRID = 'GRID'
 }

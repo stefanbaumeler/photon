@@ -8,8 +8,8 @@ export * from './actions/ListItemActions'
 
 export * from './controls/SortControl'
 export * from './controls/ViewControl'
+export * from './controls/AlbumsViewControl'
 
-export * from './AlbumTeaser'
 export * from './Albums'
 export * from './Sidebar'
 export * from './Brand'
@@ -37,6 +37,7 @@ export * from './LinkButton'
 export * from './Checkbox'
 export * from './Scrollbar'
 export * from './FilmStrip'
+export * from './DragOverlay'
 
 export { default as Check } from './Check'
 export { default as Medium } from './Medium'

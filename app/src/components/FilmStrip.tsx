@@ -1,5 +1,5 @@
 import { TMedium } from '@photon/schema'
-import { Medium, Teaser } from '@/components'
+import { Teaser } from '@/components'
 
 type Props = {
     media: TMedium[]
@@ -8,7 +8,7 @@ type Props = {
 export const FilmStrip = ({ media }: Props) => {
     const items = media.map((medium, k) => {
         return <Teaser
-            medium={medium}
+            element={medium}
             key={k}
         />
     })

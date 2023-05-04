@@ -1,28 +1,62 @@
-import { TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema'
 import { Check, ListItemActions, Medium } from '../'
 import { formatDate } from '@/util/date'
 import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import Tippy from '@tippyjs/react'
+import { useRouter } from 'next/router'
+import { isMedium } from '@/util/is'
 
 type Props = {
-    medium: TMedium
+    element: TMedium | TAlbum
 }
 
-const ListItem = ({ medium }: Props) => {
+const ListItem = ({ element }: Props) => {
+    const router = useRouter()
     const selection = useSelectionContext()
     const details = useDetailsContext()
+
+    const cover = isMedium(element) ? element : element.cover
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        selection.toggle(medium)
+        selection.toggle(element)
     }
 
     const open = () => {
-        details.open(medium)
+        if (isMedium(element)) {
+            details.open(element)
+        } else {
+            router.push(`albums/${element.id}`)
+        }
+    }
+
+    const AlbumCells = () => {
+        return <></>
+    }
+
+    const MediumCells = () => {
+        if (!isMedium(element)) {
+            return <></>
+        }
+
+        return <>
+            <td
+                className="list-view__cell"
+                onClick={open}
+            >
+                {formatDate(element.dateTaken)}
+            </td>
+            <td
+                className="list-view__cell"
+                onClick={open}
+            >
+                {element.mimetype}
+            </td>
+        </>
     }
 
     return <tr
@@ -32,7 +66,7 @@ const ListItem = ({ medium }: Props) => {
             <Check
                 onClick={select}
                 ready={true}
-                checked={selection.isSelected(medium)}
+                checked={selection.isSelected(element)}
                 round={false}
                 iconSize={1.125}
                 borderColor="#888899"
@@ -49,7 +83,7 @@ const ListItem = ({ medium }: Props) => {
                 className="list-view__tip"
                 followCursor={true}
                 content={<Medium
-                    medium={medium}
+                    medium={cover}
                     width={500}
                     position={'top'}
                 />}
@@ -57,7 +91,7 @@ const ListItem = ({ medium }: Props) => {
                 zIndex={102}
             >
                 <Medium
-                    medium={medium}
+                    medium={cover}
                     width={50}
                 />
             </Tippy>
@@ -66,29 +100,19 @@ const ListItem = ({ medium }: Props) => {
             className="list-view__cell list-view__cell--title"
             onClick={open}
         >
-            {medium.title}
+            {element.title}
         </td>
+        <MediumCells />
+        <AlbumCells />
         <td
             className="list-view__cell"
             onClick={open}
         >
-            {formatDate(medium.dateTaken)}
-        </td>
-        <td
-            className="list-view__cell"
-            onClick={open}
-        >
-            {medium.mimetype}
-        </td>
-        <td
-            className="list-view__cell"
-            onClick={open}
-        >
-            Stefan Baumeler
+            {`${element.owner.firstName} ${element.owner.lastName}`}
         </td>
         <td className="list-view__cell">
             <ListItemActions
-                medium={medium}
+                element={element}
             />
         </td>
     </tr>

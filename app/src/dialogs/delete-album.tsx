@@ -3,7 +3,7 @@ import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useDeleteAlbum from '../hooks/delete-album'
 
-const useDeleteAlbumDialog = (id?: string) => {
+const useDeleteAlbumDialog = (id?: string | string[]) => {
     const dialog = useDialogContext()
     const { t } = useTranslation()
 

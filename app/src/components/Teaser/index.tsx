@@ -1,21 +1,21 @@
 import { TeaserProvider } from './TeaserContext'
 import TeaserComponent from './Teaser'
-import { TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema'
 
 type Props = {
-    medium: TMedium
+    element: TMedium | TAlbum
     width?: number
     height?: number
 }
 
 export const Teaser = ({
-    medium, width, height
+    element, width, height
 }: Props) => {
-    if (!medium) {
+    if (!element) {
         return <></>
     }
     return <TeaserProvider
-        medium={medium}
+        element={element}
         width={width}
         height={height}
     >

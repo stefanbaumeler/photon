@@ -1,15 +1,15 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
-    medium: TMedium
+    element: TMedium | TAlbum
     width?: number
     height?: number
 }
 
 interface TeaserContext {
-    medium: TMedium
+    element: TMedium | TAlbum
     width?: number
     height?: number
 }
@@ -17,10 +17,10 @@ interface TeaserContext {
 const TeaserContext = createContext<TeaserContext | null>(null)
 
 const TeaserProvider = ({
-    children, medium, width, height
+    children, element, width, height
 }: Props) => {
     return <TeaserContext.Provider value={{
-        medium,
+        element,
         width,
         height
     }}

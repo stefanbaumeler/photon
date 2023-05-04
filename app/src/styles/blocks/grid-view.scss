@@ -1,0 +1,21 @@
+@mixin grid-view-root {
+
+}
+
+@mixin grid-view-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+@mixin grid-view {
+    .grid-view {
+        @include grid-view-root;
+
+        &__items {
+            @include grid-view-items;
+        }
+    }
+}
+
+@include grid-view;

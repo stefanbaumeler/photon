@@ -11,6 +11,7 @@ interface DetailsContext {
     infos: boolean
     medium: TMedium
     setMedium: Dispatch<SetStateAction<TMedium>>
+    getUrl: (medium: TMedium) => string
     open: (medium: TMedium) => void
     close: () => void
     openInfos: () => void
@@ -25,28 +26,32 @@ const DetailsProvider = ({ children }: Props) => {
     const [infos, setInfos] = useState(true)
     const router = useRouter()
 
+    const getUrl = (medium: TMedium) => {
+        const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
+        let newUrl = `${path}/media/${medium.id}`
+
+        if (router.query.idAlbum) {
+            newUrl = `/albums/${router.query.idAlbum}/media/${medium.id}`
+        }
+
+        if (path.includes('favorites')) {
+            newUrl = `${path}/${medium.id}`
+        }
+
+        return newUrl
+    }
+
     return <DetailsContext.Provider value={{
         active,
         infos,
         medium,
         setMedium,
+        getUrl,
         open: (newMedium) => {
-            console.log(newMedium)
             setMedium(newMedium)
             setActive(true)
 
-            const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
-            let newUrl = `${path}/media/${newMedium.id}`
-
-            if (router.query.idAlbum) {
-                newUrl = `/albums/${router.query.idAlbum}/media/${newMedium.id}`
-            }
-
-            if (path.includes('favorites')) {
-                newUrl = `${path}/${newMedium.id}`
-            }
-
-            router.push(newUrl, null, {
+            router.push(getUrl(newMedium), null, {
                 shallow: true
             })
         },

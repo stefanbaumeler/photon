@@ -1,5 +1,4 @@
 import { AlbumsMedia } from '../types'
-import { PrismaClient } from '@prisma/client'
 import { DB } from '../database'
 
 export default class AlbumsMediaService {

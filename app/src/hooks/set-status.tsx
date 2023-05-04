@@ -1,10 +1,10 @@
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
-import { QAlbumsDocument, QFavoritesDocument, TMedium, useMSetMediaStatus } from '@photon/schema'
+import { QAlbumsDocument, QFavoritesDocument, useMSetMediaStatus } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
 
-const useSetMediaStatus = (media: TMedium[] | Set<TMedium> | TMedium, status: EMediumStatus) => {
+const useSetMediaStatus = (media: { id: string }[] | Set<{ id: string }> | { id: string }, status: EMediumStatus) => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const search = useSearchContext()

@@ -9,6 +9,10 @@
     box-sizing: border-box;
     grid-area: sidebar;
     padding: 16px 0;
+
+    @at-root .drag-overlay--active ~ & {
+        z-index: 5;
+    }
 }
 
 @mixin sidebar {

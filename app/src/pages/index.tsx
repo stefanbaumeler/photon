@@ -30,16 +30,12 @@ const HomePage = () => {
     }, [trashMenu.canRefine])
 
     return <Layout>
-        <section>
-            <div>
-                <Dialog />
-                <Uploader />
-                <DetailsProvider>
-                    <Details />
-                    <Media />
-                </DetailsProvider>
-            </div>
-        </section>
+        <Dialog />
+        <Uploader />
+        <DetailsProvider>
+            <Details />
+            <Media />
+        </DetailsProvider>
     </Layout>
 }
 

@@ -4,10 +4,15 @@ query QAlbums {
         title
         description
         cover {
-            id
+            ...FMedia
         }
         owner {
             id
+            firstName
+            lastName
+        },
+        albumMedia {
+            idMedium
         }
     }
 }

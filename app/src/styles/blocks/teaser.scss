@@ -2,7 +2,7 @@
     margin: 2px;
     position: relative;
     cursor: pointer;
-    background-color: $color-gray-light;
+
 
     &--removed {
         display: none;
@@ -24,7 +24,7 @@
 
 @mixin teaser-container {
     pointer-events: all;
-    height: 100%;
+    background-color: $color-gray-light;
 }
 
 @mixin teaser-image-container {
@@ -74,7 +74,7 @@
     }
 }
 
-@mixin teaser-meta {
+@mixin teaser-nav {
     color: $color-white;
     font-size: 14px;
     position: absolute;
@@ -84,7 +84,11 @@
     display: flex;
     gap: 4px;
     align-items: center;
-    pointer-events: none;
+    transition: translate .1s;
+
+    @at-root .teaser--selected & {
+        translate: -8px 2px;
+    }
 }
 
 @mixin teaser-open-fallback {
@@ -101,7 +105,7 @@
     transition: opacity .1s, translate .1s;
 
     @at-root .teaser--selected & {
-        translate: -20px -20px;
+        translate: -8px -2px;
     }
 
     > svg {
@@ -129,10 +133,27 @@
     left: 0;
     padding: 4px;
     z-index: 1;
+    transition: translate .1s;
+
+    @at-root .teaser--selected & {
+        translate: 8px -2px;
+    }
 }
 
 @mixin teaser-favorite {
     color: $color-white;
+}
+
+@mixin teaser-title {
+    display: block;
+    font-weight: 600;
+    color: $color-black;
+    padding: 8px 0 4px;
+}
+
+@mixin teaser-misc {
+    color: $color-gray;
+    font-size: 12px;
 }
 
 @mixin teaser {
@@ -151,8 +172,8 @@
             @include teaser-check;
         }
 
-        &__meta {
-            @include teaser-meta;
+        &__nav {
+            @include teaser-nav;
         }
 
         &__open-fallback {
@@ -165,6 +186,14 @@
 
         &__favorite {
             @include teaser-favorite;
+        }
+
+        &__title {
+            @include teaser-title;
+        }
+
+        &__misc {
+            @include teaser-misc;
         }
     }
 }

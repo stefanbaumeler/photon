@@ -6,5 +6,6 @@ export * from './EditProvider'
 export * from './LayoutProvider'
 export * from './SortProvider'
 export * from './SearchProvider'
+export * from './DragProvider'
 
 export { default as ProviderProvider } from './ProviderProvider'

@@ -207,7 +207,8 @@ export default class MediaService {
         })
 
         const result = await geocodingClient.reverseGeocode({
-            query: [location[1], location[0]]
+            query: [location[1], location[0]],
+            language: ['en-US']
         }).send()
 
         const countryFeature = result.body.features.find((feature) => feature.place_type[0] === 'country')

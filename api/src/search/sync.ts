@@ -1,4 +1,3 @@
-import { TMedium } from '@photon/schema'
 import { getTypesense, SearchMediumProps } from './'
 import { Prisma, PrismaClient } from '@prisma/client'
 import MediaService from '../services/media'
@@ -92,6 +91,7 @@ export default (database: PrismaClient) => {
         rows.map((row, k): SearchMediumProps => {
             return {
                 ...row,
+                __typename: 'Medium',
                 dateTakenSort: row.dateTaken ? Math.floor(row.dateTaken.getTime() / 1000) : 0,
                 favoredBy: row.favoredBy?.map((fav) => fav.id) || [],
                 isFavorite: !!row.favoredBy?.length,

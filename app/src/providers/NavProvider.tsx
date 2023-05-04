@@ -1,9 +1,12 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { useRouter } from 'next/router'
-import { ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
+import { EMediumStatus, ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
+import { useDragContext, useSelectionContext } from '@/providers'
+import useAddToFavorites from '@/hooks/add-to-favorites'
+import useSetMediaStatus from '@/hooks/set-status'
 
 type Props = {
     children?: ReactNode
@@ -14,10 +17,34 @@ const NavContext = createContext<TNavContext>(null)
 const NavProvider = ({ children }: Props) => {
     const router = useRouter()
     const { t } = useTranslation()
+    const selection = useSelectionContext()
+
+    const drag = useDragContext()
+
+    let actUpon = [...selection.selected]
+
+    if (!actUpon.length) {
+        actUpon = drag.dragging ? [drag.dragging] : []
+    }
+
+    const addToFavorites = useAddToFavorites(actUpon.map((element) => element?.id))
+    const archive = useSetMediaStatus(actUpon, EMediumStatus.ARCHIVED)
+    const trash = useSetMediaStatus(actUpon, EMediumStatus.TRASH)
+    const moveToAll = useSetMediaStatus(actUpon, EMediumStatus.ALL)
 
     const defaultNav = router.route.split('/')[1].toUpperCase()
 
     const [active, setActive] = useState([Object.keys(ENavs).includes(defaultNav.toUpperCase()) ? defaultNav : ENavs.HOME])
+
+    const getActiveItem = () => {
+        const activeNav = navs.find((nav) => nav.items.find((item: TNavItem) => item.active))
+
+        if (activeNav) {
+            return activeNav.items.find((item: TNavItem) => item.active)
+        }
+
+        return navs[0].items[0]
+    }
 
     const navs = [
         {
@@ -28,7 +55,10 @@ const NavProvider = ({ children }: Props) => {
                     label: t(ETrans.PHOTO_PLURAL),
                     icon: Icons.mdiImageOutline,
                     href: '',
-                    testId: 'nav-index'
+                    testId: 'nav-index',
+                    onDrop: moveToAll,
+                    canDrop: router.pathname !== '/' && router.pathname !== '/favorites',
+                    type: ENavItemType.ALL
                 },
                 {
                     label: t(ETrans.ALBUM_PLURAL),
@@ -40,7 +70,9 @@ const NavProvider = ({ children }: Props) => {
                     label: t(ETrans.FAVORITES),
                     icon: Icons.mdiStar,
                     href: 'favorites',
-                    testId: 'nav-favorites'
+                    testId: 'nav-favorites',
+                    onDrop: addToFavorites,
+                    type: ENavItemType.FAVORITES
                 },
                 {
                     label: t(ETrans.SHARING),
@@ -50,13 +82,15 @@ const NavProvider = ({ children }: Props) => {
                 {
                     label: t(ETrans.ARCHIVE),
                     icon: Icons.mdiArchiveOutline,
-                    href: 'archive'
+                    href: 'archive',
+                    onDrop: archive
                 },
                 {
                     label: t(ETrans.TRASH),
                     icon: Icons.mdiTrashCanOutline,
                     href: 'trash',
-                    testId: 'nav-trash'
+                    testId: 'nav-trash',
+                    onDrop: trash
                 }
             ]
         },
@@ -162,16 +196,6 @@ const NavProvider = ({ children }: Props) => {
     }
 
     setActiveItem(navs)
-
-    const getActiveItem = () => {
-        const activeNav = navs.find((nav) => nav.items.find((item: TNavItem) => item.active))
-
-        if (activeNav) {
-            return activeNav.items.find((item: TNavItem) => item.active)
-        }
-
-        return navs[0].items[0]
-    }
 
     return <NavContext.Provider value={{
         active,

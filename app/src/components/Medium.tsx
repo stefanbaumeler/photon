@@ -1,8 +1,10 @@
 import { TMedium } from '@photon/schema'
-import { Ref, useMemo, forwardRef, useState } from 'react'
+import { forwardRef, Ref, useMemo, useState } from 'react'
 import Image from 'next/image'
-import { useDetailsContext } from '@/providers'
+import { useDetailsContext, useLayoutContext } from '@/providers'
 import bem from '../util/bem'
+import { ELayout } from '@/types/app'
+import { useRouter } from 'next/router'
 
 type Props = {
     medium: TMedium
@@ -17,12 +19,22 @@ const Medium = ({
     medium, width, testId, priority = false, position, placeholder
 }: Props, ref?: Ref<unknown>) => {
     const details = useDetailsContext()
+    const layout = useLayoutContext()
+    const router = useRouter()
 
     const [loaded, setLoaded] = useState(false)
+
+    const classes = bem('medium', [
+        ['position', !!position],
+        ['placeholder', !!placeholder],
+        ['loading', !loaded && !!medium],
+        ['none', !medium]
+    ])
+
     const ImageOrVideo = useMemo(() => {
         let el
 
-        if (!width) {
+        if (!width || !medium) {
             return <></>
         }
 
@@ -53,16 +65,16 @@ const Medium = ({
         return el
     }, [medium, width, loaded])
 
-    const classes = bem('medium', [
-        ['position', !!position],
-        ['placeholder', !!placeholder],
-        ['loading', !loaded]
-    ])
+    if (!medium) {
+        return <div className={classes}>
+            <div className="medium__image"></div>
+        </div>
+    }
 
     return <div
         className={classes}
         style={{
-            aspectRatio: medium.meta.width / medium.meta.height
+            aspectRatio: router.pathname === '/albums' && layout.albumsLayout === ELayout.GRID ? 1.5 : medium.meta.width / medium.meta.height
         }}
         ref={ref as Ref<HTMLDivElement>}
     >

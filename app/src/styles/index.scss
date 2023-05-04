@@ -11,7 +11,6 @@
 @import 'lib/tippy';
 
 @import 'blocks/actions';
-@import 'blocks/album';
 @import 'blocks/album-details';
 @import 'blocks/albums';
 @import 'blocks/body';
@@ -26,6 +25,7 @@
 @import 'blocks/dropdown';
 @import 'blocks/gallery';
 @import 'blocks/gallery-section';
+@import 'blocks/grid-view';
 @import 'blocks/icon-button';
 @import 'blocks/input';
 @import 'blocks/link-button';
@@ -46,3 +46,5 @@
 @import 'blocks/toolbar';
 @import 'blocks/uploader';
 @import 'blocks/film-strip';
+@import 'blocks/drag-overlay';
+@import 'blocks/wrap';

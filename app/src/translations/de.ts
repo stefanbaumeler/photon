@@ -61,6 +61,7 @@ export default {
     map_view: 'Kartenansicht',
     list_view: 'Listenansicht',
     gallery_view: 'Galerieansicht',
+    grid_view: 'Rasteransicht',
     mail: 'E-Mail',
     password: 'Passwort',
     sign_in: 'Anmelden',

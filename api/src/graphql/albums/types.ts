@@ -1,12 +1,18 @@
 import gql from 'graphql-tag'
 
 export default gql`
+
+    type AlbumMedium {
+        idMedium: ID
+    }
+
     type Album {
         id: ID!
         title: String
         description: String
         cover: Medium
         owner: User
+        albumMedia: [AlbumMedium]
     }
 
     input AlbumInput {

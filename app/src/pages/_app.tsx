@@ -6,7 +6,8 @@ import { NavProvider,
     EditProvider,
     LayoutProvider,
     SortProvider,
-    SearchProvider } from '../providers'
+    SearchProvider,
+    DragProvider } from '../providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -40,7 +41,7 @@ const Photon = ({
                 indexName="media"
             >
                 <SearchSetup />
-                <ProviderProvider components={[NavProvider, DialogProvider, SelectionProvider, EditProvider, LayoutProvider, SortProvider, SearchProvider]}>
+                <ProviderProvider components={[SearchProvider, DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
                     <Component {...pageProps} />
                 </ProviderProvider>
             </InstantSearch>

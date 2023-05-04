@@ -62,6 +62,7 @@ export enum ETrans {
     MAP_VIEW = 'map_view',
     LIST_VIEW = 'list_view',
     GALLERY_VIEW = 'gallery_view',
+    GRID_VIEW = 'grid_view',
     MAIL = 'mail',
     PASSWORD = 'password',
     SIGN_IN = 'sign_in',

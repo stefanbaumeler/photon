@@ -1,19 +1,30 @@
 import { TAlbum } from '@photon/schema'
-import { AlbumTeaser } from '.'
+import { ListView } from '.'
+import { ELayout } from '@/types/app'
+import { useDialogContext, useLayoutContext, useSelectionContext } from '@/providers'
+import { GridView } from '@/components/GridView'
+import useKeyboard from '@/hooks/keyboard'
 
 type Props = {
-    albums: Partial<TAlbum>[]
+    albums: TAlbum[]
 }
 
 export const Albums = ({ albums }: Props) => {
-    const albumElements = albums.map((album, k) => <AlbumTeaser
-        album={album}
-        key={k}
-    />)
+    const layout = useLayoutContext()
+    const dialog = useDialogContext()
+    const selection = useSelectionContext()
 
-    return <div className="albums">
-        <div className="albums__items">
-            {albumElements}
-        </div>
-    </div>
+    useKeyboard('keydown', 'Escape', () => {
+        if (!dialog.active) {
+            selection.clear()
+        }
+    }, [dialog.active])
+
+    if (layout.albumsLayout === ELayout.GRID) {
+        return <GridView elements={albums} />
+    }
+
+    if (layout.albumsLayout === ELayout.LIST) {
+        return <ListView elements={albums} />
+    }
 }

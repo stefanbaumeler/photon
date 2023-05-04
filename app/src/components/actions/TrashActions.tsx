@@ -5,6 +5,7 @@ import useDeleteMediaDialog from '../../dialogs/delete-media'
 import useRestoreMediaDialog from '../../dialogs/restore-media'
 import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
+import { TMedium } from '@photon/schema'
 
 type Props = {
     white?: boolean
@@ -14,7 +15,7 @@ const TrashActions = ({ white }: Props) => {
     const { t } = useTranslation()
 
     const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(selection.selected)
+    const restoreMediaDialog = useRestoreMediaDialog(selection.selected as Set<TMedium>)
 
     return <>
         <IconButton

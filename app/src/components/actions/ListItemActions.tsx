@@ -4,24 +4,24 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EMediumStatus } from '@/types/app'
 import { useState } from 'react'
-import { TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema'
 import useMoveToTrashDialog from '../../dialogs/move-to-trash'
 import useRotate from '../../hooks/rotate'
 import useSetMediaStatus from '../../hooks/set-status'
+import useDeleteAlbumDialog from '@/dialogs/delete-album'
+import { isMedium } from '@/util/is'
 
 type Props = {
-    medium: TMedium
+    element: TMedium | TAlbum
 }
 
-export const ListItemActions = ({ medium }: Props) => {
+export const ListItemActions = ({ element }: Props) => {
     const { t } = useTranslation()
 
     const [moreActive, setMoreActive] = useState(false)
 
-    const moveToTrashDialog = useMoveToTrashDialog(medium)
-
-    const rotate = useRotate(medium.id)
-    const archive = useSetMediaStatus(medium, medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
+    const moveToTrashDialog = isMedium(element) ? useMoveToTrashDialog(element) : useDeleteAlbumDialog(element.id)
+    const src = isMedium(element) && element.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${element.filenameDisk}` : '#'
 
     const moreItems = [
         {
@@ -30,24 +30,29 @@ export const ListItemActions = ({ medium }: Props) => {
                 moveToTrashDialog()
                 setMoreActive(false)
             }
-        },
-        {
+        }
+    ]
+
+    if (isMedium(element)) {
+        const rotate = useRotate(element.id)
+        const archive = useSetMediaStatus(element, element.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
+
+        moreItems.push({
             label: t(ETrans.ROTATE_LEFT),
             callback: () => {
                 rotate()
                 setMoreActive(false)
             }
-        },
-        {
-            label: medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
+        })
+
+        moreItems.push({
+            label: element.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
             callback: () => {
                 archive()
                 setMoreActive(false)
             }
-        }
-    ]
-
-    const src = medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}` : '#'
+        })
+    }
 
     return <div className="actions">
         <IconButton

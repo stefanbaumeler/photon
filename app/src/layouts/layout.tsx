@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { SearchBar, Sidebar } from '@/components'
+import { SearchBar, Sidebar, DragOverlay } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
@@ -22,6 +22,7 @@ const Layout = ({ children }: Props) => {
             data-testid="content-root"
             className={classes}
         >
+            <DragOverlay />
             <SearchBar />
             <Sidebar />
             <main

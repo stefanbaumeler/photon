@@ -1,127 +1,30 @@
-import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
-import {  useState } from 'react'
 import { useSelectionContext } from '@/providers'
-import { ETrans } from '@/types/translations'
-import { useTranslation } from 'react-i18next'
-import { EMediumStatus, ESelectionMode } from '@/types/app'
-import useAddToAlbumDialog from '../../dialogs/add-to-album'
-import useSetMediaStatus from '../../hooks/set-status'
-import useMoveToTrashDialog from '../../dialogs/move-to-trash'
-import { useRouter } from 'next/router'
-import bem from '../../util/bem'
-import TrashActions from './TrashActions'
-import useAddToFavorites from '../../hooks/add-to-favorites'
-import useRemoveFromFavorites from '../../hooks/remove-from-favorites'
-import useDownload  from '../../hooks/download'
+import { BulkMediaActions } from './BulkMediaActions'
+import { BulkAlbumsActions } from './BulkAlbumsActions'
+import { TAlbum, TMedium } from '@photon/schema'
+import { isAlbum, isMedium } from '@/util/is'
 
 export const BulkActions = () => {
-    const { t } = useTranslation()
-    const router = useRouter()
-
     const selection = useSelectionContext()
+    const elements = [...selection.selected]
 
-    const trashMediaDialog = useMoveToTrashDialog(selection.selected)
-    const archive = useSetMediaStatus(selection.selected, EMediumStatus.ARCHIVED)
-    const unarchive = useSetMediaStatus(selection.selected, EMediumStatus.ALL)
-
-    const [moreActive, setMoreActive] = useState(false)
-    const [skipDownload, setSkipDownload] = useState(true)
-
-    const download = useDownload(skipDownload)
-
-    if (download.data?.download) {
-        router.push(`http://localhost:11011${download.data.download.url}`)
-        setSkipDownload(true)
-    }
-
-    const addToAlbumDialog = useAddToAlbumDialog()
-    const addToFavorites = useAddToFavorites(Array.from(selection.selected).map((selected) => selected.id))
-    const removeFromFavorites = useRemoveFromFavorites(Array.from(selection.selected).map((selected) => selected.id))
-
-    if (selection.mode !== ESelectionMode.SELECT) {
+    if (!elements.length) {
         return <></>
     }
 
-    const selectionContainsUnfavorited = Array.from(selection.selected).find((selected) => selected.favoredBy?.length === 0)
-
-    const moreItems = [
-        Array.from(selection.selected)[0]?.status === EMediumStatus.ARCHIVED ? {
-            testId: 'unarchive',
-            label: t(ETrans.UNARCHIVE),
-            callback: unarchive
-        } : {
-            testId: 'archive',
-            label: t(ETrans.MOVE_TO_ARCHIVE),
-            callback: archive
-        },
-        selectionContainsUnfavorited ? {
-            testId: 'favorite',
-            label: t(ETrans.FAVORITE),
-            callback: addToFavorites
-        } : {
-            testId: 'unfavorite',
-            label: t(ETrans.UNFAVORITE),
-            callback: removeFromFavorites
-        }
-    ]
-
-    const RegularActions = () => {
-        return <>
-            <IconButton
-                testId="add-to"
-                hint={t(ETrans.ADD_TO)}
-                icon={Icons.mdiPlus}
-                onClick={addToAlbumDialog}
-            />
-            <IconButton
-                hint={t(ETrans.DOWNLOAD)}
-                icon={Icons.mdiTrayArrowDown}
-                onClick={() => setSkipDownload(false)}
-            />
-            <IconButton
-                testId="move-to-trash"
-                hint={t(ETrans.DELETE)}
-                onClick={trashMediaDialog}
-                icon={Icons.mdiTrashCanOutline}
-            />
-            <Dropdown
-                items={moreItems}
-                active={moreActive}
-                onClickOutside={() => setMoreActive(false)}
-            >
-                <IconButton
-                    testId="bulk-more"
-                    hint={t(ETrans.MORE_OPTIONS)}
-                    icon={Icons.mdiDotsVertical}
-                    onClick={() => setMoreActive(!moreActive)}
-                />
-            </Dropdown>
-        </>
+    const isAlbums = (elements: (TAlbum | TMedium)[]): elements is TAlbum[] => {
+        return !elements.find((element) => !isAlbum(element))
     }
 
-    const Actions = () => {
-        if (router.pathname === '/trash') {
-            return <TrashActions />
-        }
-        else {
-            return <RegularActions />
-        }
+    const isMedia = (elements: (TAlbum | TMedium)[]): elements is TMedium[] => {
+        return !elements.find((element) => !isMedium(element))
     }
 
-    const classes = bem('actions', [
-        ['labeled', router.pathname === '/trash']
-    ])
+    if (isMedia(elements)) {
+        return <BulkMediaActions selected={elements} />
+    }
 
-    return <div className={classes}>
-        <span
-            className="actions__count"
-            data-testid="select-count"
-        >
-            {t(ETrans.N_SELECTED, {
-                n: selection.selected.size
-            })}
-        </span>
-        <Actions />
-    </div>
+    if (isAlbums(elements)) {
+        return <BulkAlbumsActions selected={elements} />
+    }
 }

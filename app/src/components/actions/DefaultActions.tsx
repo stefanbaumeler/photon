@@ -3,8 +3,8 @@ import { IconButton } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef } from 'react'
-import { useNavContext, useSelectionContext } from '@/providers'
-import { ENavItemType, ESelectionMode } from '@/types/app'
+import { useSelectionContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
 import useUpload from '../../hooks/upload'
 import { useRouter } from 'next/router'
 import bem from '../../util/bem'
@@ -16,14 +16,11 @@ export const DefaultActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
-    const nav = useNavContext()
     const selection = useSelectionContext()
 
     const emptyTrashDialog = useEmptyTrashDialog()
 
     const uploadRef = useRef<HTMLInputElement>(null)
-
-    const item = nav.getActiveItem()
 
     const clickUpload = () => {
         uploadRef.current.click()
@@ -39,7 +36,7 @@ export const DefaultActions = () => {
         })
     }
 
-    if (item.type === ENavItemType.ALBUMS || selection.mode !== ESelectionMode.OFF || nav.pathname === '/albums/[idAlbum]') {
+    if (router.pathname === '/albums' || selection.mode !== ESelectionMode.OFF || router.pathname === '/albums/[idAlbum]') {
         return <></>
     }
 

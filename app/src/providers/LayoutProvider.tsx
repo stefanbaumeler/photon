@@ -16,6 +16,8 @@ type LayoutProps = {
 interface LayoutContext {
     layout: ELayout
     setLayout: Dispatch<SetStateAction<ELayout>>
+    albumsLayout: ELayout
+    setAlbumsLayout: Dispatch<SetStateAction<ELayout>>
     getLayoutProps: (id: string) => LayoutProps
 }
 
@@ -25,6 +27,7 @@ const LayoutProvider = ({ children }: Props) => {
     const { t } = useTranslation()
 
     const [layout, setLayout] = useState(ELayout.GALLERY)
+    const [albumsLayout, setAlbumsLayout] = useState(ELayout.GRID)
 
     const getLayoutProps = (id: string) => {
         switch (id) {
@@ -49,7 +52,9 @@ const LayoutProvider = ({ children }: Props) => {
     return <LayoutContext.Provider value={{
         layout,
         setLayout,
-        getLayoutProps
+        getLayoutProps,
+        albumsLayout,
+        setAlbumsLayout
     }}
     >
         {children}

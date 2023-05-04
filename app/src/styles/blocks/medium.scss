@@ -43,14 +43,14 @@
 }
 
 @mixin medium-image {
-    object-fit: contain;
-
-    @at-root .map__map & {
-        object-fit: cover;
-    }
+    object-fit: cover;
 
     @at-root .medium--top & {
         object-position: top;
+    }
+
+    @at-root .medium--none & {
+        aspect-ratio: 1.5;
     }
 }
 

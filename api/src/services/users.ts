@@ -3,11 +3,12 @@ import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express'
 import { DB } from '../database'
+import { Prisma } from '@prisma/client'
 
 export default class UsersService {
     constructor (public context?: { user: { id: string }, res: Response, req: Request }) {}
 
-    createOne = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
+    createOne = async (user: Prisma.UserCreateInput) => {
         const encryptedPassword = await argon2.hash(user.password)
 
         return DB.user.create({
@@ -18,7 +19,7 @@ export default class UsersService {
         })
     }
 
-    createMany = async (users: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>[]) => {
+    createMany = async (users: Prisma.UserCreateInput[]) => {
         const hashPromises: Promise<typeof users[0]>[] = []
 
         users.forEach((user) => {
@@ -68,7 +69,7 @@ export default class UsersService {
         })
     }
 
-    setUserCookie = async (user: TUser, res?: Response) => {
+    setUserCookie = async (user: Awaited<Promise<Prisma.PromiseReturnType<typeof this.createOne>>>, res?: Response) => {
         const accessToken = jwt.sign(
             {
                 id: user.id,
@@ -114,7 +115,7 @@ export default class UsersService {
         }
     }
 
-    signUp = async (user: Pick<TUser, 'firstName' | 'lastName' | 'mail' | 'password'>) => {
+    signUp = async (user: Prisma.UserCreateInput) => {
         const oldUser = await this.readOneByMail(user.mail)
 
         if (oldUser) {
@@ -128,7 +129,7 @@ export default class UsersService {
         return this.setUserCookie(createdUser, this.context?.res)
     }
 
-    signIn = async (credentials: Pick<TUser, 'mail' | 'password'>) => {
+    signIn = async (credentials: {  mail: string, password: string }) => {
         const existingUser = await this.readOneByMail(credentials.mail)
 
         if (!existingUser) {

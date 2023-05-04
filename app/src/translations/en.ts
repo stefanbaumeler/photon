@@ -61,6 +61,7 @@ export default {
     map_view: 'Map view',
     list_view: 'List view',
     gallery_view: 'Gallery view',
+    grid_view: 'Grid view',
     mail: 'Email address',
     password: 'Password',
     sign_in: 'Sign In',

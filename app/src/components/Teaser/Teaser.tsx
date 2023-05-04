@@ -1,51 +1,40 @@
-import { useState } from 'react'
-import { useDetailsContext, useSelectionContext } from '@/providers'
-import * as Icons from '@mdi/js'
-import Icon from '@mdi/react'
-import { Check, Medium } from '../'
+import { useDetailsContext, useDragContext, useSearchContext, useSelectionContext } from '@/providers'
+import { Medium } from '../'
 import { ESelectionMode } from '@/types/app'
-import useKeyboard from '../../hooks/keyboard'
 import bem from '../../util/bem'
-import TeaserMeta from './TeaserMeta'
 import { useTeaserContext } from './TeaserContext'
+import { useRouter } from 'next/router'
+import { TeaserContent } from './TeaserContent'
+import { TeaserTopRightCorner } from './TeaserTopRightCorner'
+import { TeaserBottomRightCorner } from './TeaserBottomRightCorner'
+import { TeaserBottomLeftCorner } from './TeaserBottomLeftCorner'
+import { TeaserTopLeftCorner } from '@/components/Teaser/TeaserTopLeftCorner'
+import { isAlbum, isMedium } from '@/util/is'
+import Link from 'next/link'
+import { MouseEvent } from 'react'
 
 const Teaser = () => {
+    const router = useRouter()
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
-    // const { hits: media } = useSearchContext()
-
-    const [shift, setShift] = useState(false)
-
-    useKeyboard('keydown', 'Shift', () => {
-        setShift(true)
-    }, [])
-
-    useKeyboard('keyup', 'Shift', () => {
-        setShift(false)
-    }, [])
-
-    const select = () => {
-        if (selection.mode === ESelectionMode.OFF) {
-            selection.setMode(ESelectionMode.SELECT)
-        }
-
-        if (shift && selection.mode === ESelectionMode.SELECT) {
-            selection.add(selection.shiftTargets)
-            selection.setShiftTargets([])
-        }
-        else {
-            selection.toggle(teaser.medium)
-        }
-    }
+    const { element } = teaser
+    const drag = useDragContext()
+    const { hits: media } = useSearchContext()
 
     const forceOpen = () => {
-        details.open(teaser.medium)
+        if (isMedium(element)) {
+            details.open(element)
+        } else {
+            router.push(`albums/${element.id}`)
+        }
     }
 
-    const open = () => {
+    const open = (event: MouseEvent) => {
+        event.preventDefault()
+
         if (selection.mode !== ESelectionMode.OFF) {
-            select()
+            selection.toggle(element)
             return
         }
 
@@ -53,51 +42,33 @@ const Teaser = () => {
     }
 
     const updateShiftTargets = (clear = false) => {
-        // if (selection.mode !== ESelectionMode.SELECT) {
-        //     return
-        // }
-        //
-        // if (clear) {
-        //     selection.setShiftTargets([])
-        //     return
-        // }
+        if (selection.mode !== ESelectionMode.SELECT) {
+            return
+        }
 
-        // const ids = media.map((medium) => medium.id)
-        // const lastIndex = ids.indexOf(selection.lastAdded?.id)
-        // const hoverIndex = ids.indexOf(teaser.medium.id)
+        if (clear) {
+            selection.setShiftTargets([])
+            return
+        }
 
-        // const newShiftTargets = lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)
+        const ids = media.map((medium) => medium.id)
+        const lastIndex = ids.indexOf(selection.lastAdded?.id)
+        const hoverIndex = ids.indexOf(teaser.element.id)
 
-        // if (shift && !isEqual(selection.shiftTargets, newShiftTargets)) {
-        //     selection.setShiftTargets(newShiftTargets)
-        // }
+        const newShiftTargets = lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)
+
+        if (selection.shift) {
+            selection.setShiftTargets(newShiftTargets)
+        }
     }
 
     const classes = bem('teaser', [
-        ['selected', selection.isSelected(teaser.medium)],
-        ['removed', selection.isSelected(teaser.medium) && selection.mode === ESelectionMode.DELETE],
-        ['removable', !selection.isSelected(teaser.medium) && selection.mode === ESelectionMode.DELETE],
-        ['last', selection.lastAdded?.id === teaser.medium.id],
-        ['shift', selection.shiftTargets.map((medium) => medium.id).includes(teaser.medium.id) && shift]
+        ['selected', selection.isSelected(element)],
+        ['removed', selection.isSelected(element) && selection.mode === ESelectionMode.DELETE],
+        ['removable', !selection.isSelected(element) && selection.mode === ESelectionMode.DELETE],
+        ['last', selection.lastAdded?.id === element.id],
+        ['shift', selection.shiftTargets.map((medium) => medium.id).includes(element.id) && selection.shift]
     ])
-
-    const fallbackButtonClasses = bem('teaser__open-fallback', [
-        ['delete', selection.mode === ESelectionMode.DELETE],
-        ['single', selection.mode === ESelectionMode.SINGLE]
-    ])
-
-    const Favorite = () => {
-        if (!teaser.medium.favoredBy?.length) {
-            return <></>
-        }
-
-        return <Icon
-            data-testid={'favorite-mark'}
-            path={Icons.mdiStar}
-            className="teaser__favorite"
-            size={1}
-        />
-    }
 
     let height
     let width
@@ -114,38 +85,34 @@ const Teaser = () => {
         height = '100%'
     }
 
+    const cover = isMedium(element) ? element : element.cover
+
+    const onDragStart = () => {
+        if (isMedium(element)) {
+            drag.setDragging(element)
+        }
+    }
+
+    const onDragEnd = () => {
+        if (isMedium(element)) {
+            drag.setDragging(undefined)
+        }
+    }
+
     return <div
         data-testid="teaser"
         className={classes}
         onMouseOver={() => updateShiftTargets(false)}
         onMouseOut={() => updateShiftTargets(true)}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
     >
-        <div
-            className="teaser__check"
-        >
-            <Check
-                onClick={select}
-                ready={selection.mode !== ESelectionMode.OFF}
-                checked={selection.isSelected(teaser.medium)}
-                remove={selection.mode === ESelectionMode.DELETE}
-                testId="teaser-check"
-            />
-        </div>
-        <TeaserMeta />
-        <button
-            data-testid="teaser-details-fallback"
-            className={fallbackButtonClasses}
-            onClick={forceOpen}
-        >
-            <Icon
-                path={Icons.mdiMagnifyPlusOutline}
-                size={1}
-            />
-        </button>
-        <div className="teaser__categories">
-            <Favorite />
-        </div>
-        <div
+        <TeaserTopLeftCorner />
+        <TeaserTopRightCorner />
+        <TeaserBottomRightCorner />
+        <TeaserBottomLeftCorner />
+        <Link
+            href={isAlbum(element) ? `albums/${element.id}` : details.getUrl(element)}
             className="teaser__container"
             onClick={open}
         >
@@ -158,11 +125,12 @@ const Teaser = () => {
             >
                 <Medium
                     testId="teaser-image"
-                    medium={teaser.medium}
-                    width={(teaser.width ? teaser.width : teaser.height / teaser.medium.meta.height * teaser.medium.meta.width) || 300}
+                    medium={cover}
+                    width={teaser.width ? teaser.width : teaser.height / cover?.meta.height * cover?.meta.width || 300}
                 />
             </div>
-        </div>
+            <TeaserContent />
+        </Link>
     </div>
 }
 

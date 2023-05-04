@@ -28,7 +28,7 @@ export const Media = () => {
     }
 
     if (layout.layout === ELayout.LIST) {
-        return <ListView media={media} />
+        return <ListView elements={media} />
     }
 
     if (layout.layout === ELayout.MAP) {

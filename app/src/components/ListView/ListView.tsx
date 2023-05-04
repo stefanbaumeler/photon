@@ -1,17 +1,24 @@
-import ListItems from './ListItems'
-import { TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema'
+import ListItem from '@/components/ListView/ListItem'
 
 type Props = {
-    media: TMedium[]
+    elements: (TMedium | TAlbum)[]
 }
 
-export const ListView = ({ media }: Props) => {
+export const ListView = ({ elements }: Props) => {
+    const items = elements.map((element, k) => {
+        return <ListItem
+            element={element}
+            key={k}
+        />
+    })
+
     return <div className="list-view">
         <div className="list-view__header">
         </div>
         <table className="list-view__table">
             <tbody className="list-view__tbody">
-                <ListItems media={media} />
+                {items}
             </tbody>
         </table>
     </div>

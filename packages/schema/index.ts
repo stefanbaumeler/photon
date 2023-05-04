@@ -23,6 +23,7 @@ export type Scalars = {
 
 export type TAlbum = {
   __typename?: 'Album';
+  albumMedia?: Maybe<Array<Maybe<TAlbumMedium>>>;
   cover?: Maybe<TMedium>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -35,6 +36,11 @@ export type TAlbumInput = {
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+export type TAlbumMedium = {
+  __typename?: 'AlbumMedium';
+  idMedium?: Maybe<Scalars['ID']>;
 };
 
 export type TCount = {
@@ -259,14 +265,14 @@ export type TToken = {
 
 export type TUser = {
   __typename?: 'User';
-  dateCreated: Scalars['DateTime'];
-  dateModified: Scalars['DateTime'];
+  dateCreated?: Maybe<Scalars['DateTime']>;
+  dateModified?: Maybe<Scalars['DateTime']>;
   favorites?: Maybe<Array<Maybe<TMedium>>>;
-  firstName: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  lastName: Scalars['String'];
-  mail: Scalars['String'];
-  password: Scalars['String'];
+  lastName?: Maybe<Scalars['String']>;
+  mail?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
 };
 
 export type TVideoMeta = {
@@ -376,6 +382,7 @@ export type TResolversUnionParentTypes = {
 export type TResolversTypes = {
   Album: ResolverTypeWrapper<TAlbum>;
   AlbumInput: TAlbumInput;
+  AlbumMedium: ResolverTypeWrapper<TAlbumMedium>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Count: ResolverTypeWrapper<TCount>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
@@ -405,6 +412,7 @@ export type TResolversTypes = {
 export type TResolversParentTypes = {
   Album: TAlbum;
   AlbumInput: TAlbumInput;
+  AlbumMedium: TAlbumMedium;
   Boolean: Scalars['Boolean'];
   Count: TCount;
   DateTime: Scalars['DateTime'];
@@ -435,11 +443,17 @@ export type TAuthDirectiveArgs = { };
 export type TAuthDirectiveResolver<Result, Parent, ContextType = any, Args = TAuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type TAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Album'] = TResolversParentTypes['Album']> = {
+  albumMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['AlbumMedium']>>>, ParentType, ContextType>;
   cover?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TAlbumMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['AlbumMedium'] = TResolversParentTypes['AlbumMedium']> = {
+  idMedium?: Resolver<Maybe<TResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -557,14 +571,14 @@ export interface TUploadScalarConfig extends GraphQLScalarTypeConfig<TResolversT
 }
 
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
-  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateCreated?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateModified?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   favorites?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
-  firstName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
-  lastName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  mail?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  lastName?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  mail?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -596,6 +610,7 @@ export type TYearCountResultResolvers<ContextType = any, ParentType extends TRes
 
 export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
+  AlbumMedium?: TAlbumMediumResolvers<ContextType>;
   Count?: TCountResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Device?: TDeviceResolvers<ContextType>;
@@ -713,11 +728,30 @@ export type TQAlbums = (
     & Pick<TAlbum, 'id' | 'title' | 'description'>
     & { cover?: Maybe<(
       { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
+      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+      & { favoredBy?: Maybe<Array<Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>>>, owner?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, uploader?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, meta?: Maybe<(
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+      )> }
     )>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )> }
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
+    )>, albumMedia?: Maybe<Array<Maybe<(
+      { __typename?: 'AlbumMedium' }
+      & Pick<TAlbumMedium, 'idMedium'>
+    )>>> }
   )> }
 );
 
@@ -1201,14 +1235,19 @@ export const QAlbumsDocument = gql`
     title
     description
     cover {
-      id
+      ...FMedia
     }
     owner {
       id
+      firstName
+      lastName
+    }
+    albumMedia {
+      idMedium
     }
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQAlbums__

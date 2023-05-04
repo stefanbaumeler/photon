@@ -1,7 +1,6 @@
 import { getTypesense, SearchMediumProps } from './'
 import MediaService from '../services/media'
 import { getDatabase } from '../database'
-import { TMedium } from '@photon/schema'
 
 const reset = async () => {
     const typesense = getTypesense()
@@ -122,6 +121,7 @@ const reset = async () => {
     const sync = documentsToSync.map((document, k): SearchMediumProps => {
         const albumIds = albumIdTransaction[k].map(({ idAlbum }) => idAlbum)
         return {
+            __typename: 'Medium',
             ...document,
             dateTakenSort: document.dateTaken ? Math.floor(document.dateTaken.getTime() / 1000) : 0,
             favoredBy: document.favoredBy.map((fav) => fav.id) || [],

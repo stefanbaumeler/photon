@@ -36,7 +36,7 @@ export const GallerySection = ({
         })
 
         return media.map((medium, k) => <Teaser
-            medium={medium}
+            element={medium}
             width={dimensions[k].width}
             height={dimensions[k].height}
             key={k}

@@ -1,0 +1,11 @@
+@mixin wrap-root {
+
+}
+
+@mixin wrap {
+    .wrap {
+        @include wrap-root;
+    }
+}
+
+@include wrap;
