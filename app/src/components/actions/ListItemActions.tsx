@@ -9,7 +9,9 @@ import useMoveToTrashDialog from '../../dialogs/move-to-trash'
 import useRotate from '../../hooks/rotate'
 import useSetMediaStatus from '../../hooks/set-status'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
-import { isMedium } from '@/util/is'
+import { isAlbum, isMedium } from '@/util/is'
+import useDownload from '@/hooks/download'
+import { useRouter } from 'next/router'
 
 type Props = {
     element: TMedium | TAlbum
@@ -17,11 +19,12 @@ type Props = {
 
 export const ListItemActions = ({ element }: Props) => {
     const { t } = useTranslation()
+    const router = useRouter()
 
     const [moreActive, setMoreActive] = useState(false)
 
     const moveToTrashDialog = isMedium(element) ? useMoveToTrashDialog(element) : useDeleteAlbumDialog(element.id)
-    const src = isMedium(element) && element.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${element.filenameDisk}` : '#'
+    const download = useDownload(isAlbum(element) ? element.albumMedia.map(({ idMedium }) => idMedium) : [element.id])
 
     const moreItems = [
         {
@@ -56,9 +59,9 @@ export const ListItemActions = ({ element }: Props) => {
 
     return <div className="actions">
         <IconButton
-            href={`${src}?download=true`}
             hint={t(ETrans.DOWNLOAD)}
             icon={Icons.mdiTrayArrowDown}
+            onClick={download}
         />
         <Dropdown
             items={moreItems}

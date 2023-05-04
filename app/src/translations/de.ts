@@ -30,6 +30,7 @@ export default {
     cancel: 'Abbrechen',
     delete: 'Löschen',
     download: 'Herunterladen',
+    download_thing: '{{thing}} herunterladen',
     addto: 'Hinzufügen zu...',
     create_thing: '{{thing}} erstellen',
     save: 'Änderungen speichern',

@@ -8,11 +8,14 @@ import { useState } from 'react'
 import { TVideoMeta } from '@photon/schema'
 import { secondsToTime } from '@/util/date'
 import Icon from '@mdi/react'
-import { isMedium } from '@/util/is'
+import { isAlbum, isMedium } from '@/util/is'
+import useDownload from '@/hooks/download'
+import { useRouter } from 'next/router'
 
 export const TeaserTopRightCorner = () => {
     const { element } = useTeaserContext()
     const { t } = useTranslation()
+    const router = useRouter()
 
     if (isMedium(element)) {
         if (element.mimetype.startsWith('video')) {
@@ -32,6 +35,8 @@ export const TeaserTopRightCorner = () => {
 
     const [moreActive, setMoreActive] = useState(false)
 
+    const download = useDownload(element.albumMedia.map(({ idMedium }) => idMedium))
+
     const deleteAlbumDialog = useDeleteAlbumDialog(element.id)
 
     const moreItems = [
@@ -41,6 +46,12 @@ export const TeaserTopRightCorner = () => {
                 thing: t(ETrans.ALBUM)
             }),
             callback: deleteAlbumDialog
+        },
+        {
+            label: t(ETrans.DOWNLOAD_THING, {
+                thing: t(ETrans.ALBUM)
+            }),
+            callback: download
         }
     ]
 

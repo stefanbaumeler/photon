@@ -24,6 +24,10 @@
         max-width: 100%;
     }
 
+    @at-root .list-view__cell & {
+        width: 100%;
+    }
+
     &--loading:not(.medium--placeholder) {
         opacity: 0;
     }

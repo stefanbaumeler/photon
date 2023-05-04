@@ -78,16 +78,34 @@
     color: $color-white;
     font-size: 14px;
     position: absolute;
-    top: 10px;
-    right: 8px;
+    top: 4px;
+    right: 2px;
     z-index: 2;
     display: flex;
     gap: 4px;
     align-items: center;
-    transition: translate .1s;
+    transition: translate .1s, opacity .1s;
+    opacity: 0;
+    pointer-events: none;
 
-    @at-root .teaser--selected & {
-        translate: -8px 2px;
+    @at-root .teaser:hover & {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    @at-root .teaser:has(.dropdown--active) & {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    @at-root .root--selecting & {
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    @at-root .root--selecting .teaser:hover & {
+        pointer-events: none;
+        opacity: 0;
     }
 }
 

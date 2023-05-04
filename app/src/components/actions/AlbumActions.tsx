@@ -5,15 +5,19 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import useDeleteAlbumDialog from '../../dialogs/delete-album'
 import { useRouter } from 'next/router'
-import { useSelectionContext } from '@/providers'
+import { useSearchContext, useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
+import useDownload from '@/hooks/download'
 
 export const AlbumActions = () => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
     const router = useRouter()
+    const { hits } = useSearchContext()
 
     const deleteAlbumDialog = useDeleteAlbumDialog()
+
+    const download = useDownload(hits.map(({ id }) => id))
 
     const setAlbumCover = () => {
         setMoreActive(false)
@@ -31,6 +35,12 @@ export const AlbumActions = () => {
             label: t(ETrans.SET_ALBUM_COVER),
             callback: setAlbumCover,
             testId: 'album-set-cover'
+        },
+        {
+            label: t(ETrans.DOWNLOAD_THING, {
+                thing: t(ETrans.ALBUM)
+            }),
+            callback: download
         }
     ]
 

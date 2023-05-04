@@ -33,6 +33,7 @@ export enum ETrans {
     CANCEL = 'cancel',
     DELETE = 'delete',
     DOWNLOAD = 'download',
+    DOWNLOAD_THING = 'download_thing',
     ADD_TO = 'addto',
     CREATE_THING = 'create_thing',
     SAVE = 'save',

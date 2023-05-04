@@ -15,6 +15,7 @@ test('can delete', async ({ page }) => {
 
     const count = await getAlbumTeaserCount(page)
 
+    await page.getByTestId('teaser').first().hover()
     await page.getByTestId('album-controls').first().click()
     await page.getByTestId('album-delete').first().click()
     await page.getByTestId('album-confirm-delete').click()

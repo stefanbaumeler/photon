@@ -6,6 +6,12 @@ import { ESelectionMode } from '@/types/app'
 import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
 import { isMedium } from '@/util/is'
+import { ETrans } from '@/types/translations'
+import { useTranslation } from 'react-i18next'
+import Icon from '@mdi/react'
+import * as Icons from '@mdi/js'
+import useAddToFavorites from '@/hooks/add-to-favorites'
+import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
 
 type Props = {
     element: TMedium | TAlbum
@@ -15,6 +21,10 @@ const ListItem = ({ element }: Props) => {
     const router = useRouter()
     const selection = useSelectionContext()
     const details = useDetailsContext()
+    const { t } = useTranslation()
+
+    const addToFavorites = useAddToFavorites([element.id])
+    const removeFromFavorites = useRemoveFromFavorites([element.id])
 
     const cover = isMedium(element) ? element : element.cover
 
@@ -34,8 +44,38 @@ const ListItem = ({ element }: Props) => {
         }
     }
 
+    const CategoryCells = () => {
+        if (!isMedium(element)) {
+            return <></>
+        }
+
+        return <td
+            className="list-view__cell"
+            onClick={element.favoredBy.length ? removeFromFavorites : addToFavorites}
+        >
+            <Icon
+                path={element.favoredBy.length ? Icons.mdiStar : Icons.mdiStarOutline}
+                size={1}
+            />
+        </td>
+    }
+
     const AlbumCells = () => {
-        return <></>
+        if (isMedium(element)) {
+            return <></>
+        }
+
+        return <>
+            <td
+                className="list-view__cell"
+                onClick={open}
+            >
+                {`${element.albumMedia.length} `}
+                {t(ETrans.ELEMENT, {
+                    count: element.albumMedia.length
+                })}
+            </td>
+        </>
     }
 
     const MediumCells = () => {
@@ -75,8 +115,9 @@ const ListItem = ({ element }: Props) => {
                 testId="list-check"
             />
         </td>
+        <CategoryCells />
         <td
-            className="list-view__cell"
+            className="list-view__cell list-view__cell--image"
             onClick={open}
         >
             <Tippy

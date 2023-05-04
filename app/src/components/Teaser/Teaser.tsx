@@ -113,21 +113,23 @@ const Teaser = () => {
         <TeaserBottomLeftCorner />
         <Link
             href={isAlbum(element) ? `albums/${element.id}` : details.getUrl(element)}
-            className="teaser__container"
+            className="teaser__link"
             onClick={open}
         >
-            <div
-                className="teaser__image-container"
-                style={{
-                    width,
-                    height
-                }}
-            >
-                <Medium
-                    testId="teaser-image"
-                    medium={cover}
-                    width={teaser.width ? teaser.width : teaser.height / cover?.meta.height * cover?.meta.width || 300}
-                />
+            <div className="teaser__container">
+                <div
+                    className="teaser__image-container"
+                    style={{
+                        width,
+                        height
+                    }}
+                >
+                    <Medium
+                        testId="teaser-image"
+                        medium={cover}
+                        width={teaser.width ? teaser.width : teaser.height / cover?.meta.height * cover?.meta.width || 300}
+                    />
+                </div>
             </div>
             <TeaserContent />
         </Link>

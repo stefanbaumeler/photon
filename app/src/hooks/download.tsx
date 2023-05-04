@@ -1,11 +1,15 @@
 import { useQDownload } from '@photon/schema'
 import { useSelectionContext } from '@/providers'
 import { isAlbum } from '@/util/is'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
-const useDownload = (skip: boolean) => {
+const useDownload = (ids?: string[]) => {
     const selection = useSelectionContext()
+    const router = useRouter()
+    const [skip, setSkip] = useState(true)
 
-    const ids = [...selection.selected].map((element) => {
+    const media = ids ? ids : [...selection.selected].map((element) => {
         if (isAlbum(element)) {
             return element.albumMedia.map((albumMedium) => {
                 return albumMedium.idMedium
@@ -15,12 +19,24 @@ const useDownload = (skip: boolean) => {
         return element.id
     }).flat()
 
-    return useQDownload({
+    const download = useQDownload({
         variables: {
-            media: ids
+            media
         },
         skip
     })
+
+    useEffect(() => {
+        if (download.data) {
+            router.push(`http://localhost:11011${download.data?.download.url}`)
+        }
+
+        setSkip(true)
+    }, [download.data])
+
+    return () => {
+        setSkip(false)
+    }
 }
 
 export default useDownload

@@ -31,24 +31,18 @@ export const BulkMediaActions = ({ selected }: Props) => {
     const unarchive = useSetMediaStatus(selected, EMediumStatus.ALL)
 
     const [moreActive, setMoreActive] = useState(false)
-    const [skipDownload, setSkipDownload] = useState(true)
 
-    const download = useDownload(skipDownload)
-
-    if (download.data?.download) {
-        router.push(`http://localhost:11011${download.data.download.url}`)
-        setSkipDownload(true)
-    }
+    const download = useDownload()
 
     const addToAlbumDialog = useAddToAlbumDialog()
-    const addToFavorites = useAddToFavorites(Array.from(selected).map((selected) => selected.id))
-    const removeFromFavorites = useRemoveFromFavorites(Array.from(selected).map((selected) => selected.id))
+    const addToFavorites = useAddToFavorites([...selected].map((selected) => selected.id))
+    const removeFromFavorites = useRemoveFromFavorites([...selected].map((selected) => selected.id))
 
     if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
 
-    const selectionContainsUnfavorited = Array.from(selected).find((selected) => selected.favoredBy?.length === 0)
+    const selectionContainsUnfavorited = [...selected].find((selected) => selected.favoredBy?.length === 0)
 
     const moreItems = [
         Array.from(selected)[0]?.status === EMediumStatus.ARCHIVED ? {
@@ -82,7 +76,7 @@ export const BulkMediaActions = ({ selected }: Props) => {
             <IconButton
                 hint={t(ETrans.DOWNLOAD)}
                 icon={Icons.mdiTrayArrowDown}
-                onClick={() => setSkipDownload(false)}
+                onClick={download}
             />
             <IconButton
                 testId="move-to-trash"

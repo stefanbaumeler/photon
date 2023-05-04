@@ -26,7 +26,6 @@
 }
 
 @mixin list-view-cell {
-    min-width: 100px;
     min-height: 64px;
     text-align: left;
     padding: 8px 16px;
@@ -44,6 +43,10 @@
 
     &--title {
         flex-grow: 1;
+    }
+
+    &--image {
+        width: 100px;
     }
 }
 

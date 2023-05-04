@@ -23,14 +23,7 @@ export const BulkAlbumsActions = ({ selected }: Props) => {
 
     const deleteAlbumDialog = useDeleteAlbumDialog([...selection.selected].map((element) => element.id))
 
-    const [skipDownload, setSkipDownload] = useState(true)
-
-    const download = useDownload(skipDownload)
-
-    if (download.data?.download) {
-        router.push(`http://localhost:11011${download.data.download.url}`)
-        setSkipDownload(true)
-    }
+    const download = useDownload()
 
     if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
@@ -41,7 +34,7 @@ export const BulkAlbumsActions = ({ selected }: Props) => {
             <IconButton
                 hint={t(ETrans.DOWNLOAD)}
                 icon={Icons.mdiTrayArrowDown}
-                onClick={() => setSkipDownload(false)}
+                onClick={download}
             />
             <IconButton
                 testId="move-to-trash"
