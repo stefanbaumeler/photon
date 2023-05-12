@@ -222,6 +222,7 @@ export type TQuery = {
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
   medium?: Maybe<TMedium>;
+  translate: Scalars['String'];
   user: TUser;
   users: Array<TUser>;
 };
@@ -250,6 +251,11 @@ export type TQueryMediaArgs = {
 
 export type TQueryMediumArgs = {
   id: Scalars['ID'];
+};
+
+
+export type TQueryTranslateArgs = {
+  query: Scalars['String'];
 };
 
 
@@ -556,6 +562,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
   medium?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
+  translate?: Resolver<TResolversTypes['String'], ParentType, ContextType, RequireFields<TQueryTranslateArgs, 'query'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
 };
@@ -1032,6 +1039,16 @@ export type TMUpload = (
     { __typename?: 'Medium' }
     & Pick<TMedium, 'id'>
   )> }
+);
+
+export type TQTranslateVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type TQTranslate = (
+  { __typename?: 'Query' }
+  & Pick<TQuery, 'translate'>
 );
 
 export type TMSignInVariables = Exact<{
@@ -1823,6 +1840,39 @@ export function useMUpload(baseOptions?: Apollo.MutationHookOptions<TMUpload, TM
 export type MUploadHookResult = ReturnType<typeof useMUpload>;
 export type MUploadMutationResult = Apollo.MutationResult<TMUpload>;
 export type MUploadMutationOptions = Apollo.BaseMutationOptions<TMUpload, TMUploadVariables>;
+export const QTranslateDocument = gql`
+    query QTranslate($query: String!) {
+  translate(query: $query)
+}
+    `;
+
+/**
+ * __useQTranslate__
+ *
+ * To run a query within a React component, call `useQTranslate` and pass it any options that fit your needs.
+ * When your component renders, `useQTranslate` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQTranslate({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useQTranslate(baseOptions: Apollo.QueryHookOptions<TQTranslate, TQTranslateVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TQTranslate, TQTranslateVariables>(QTranslateDocument, options);
+      }
+export function useQTranslateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQTranslate, TQTranslateVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TQTranslate, TQTranslateVariables>(QTranslateDocument, options);
+        }
+export type QTranslateHookResult = ReturnType<typeof useQTranslate>;
+export type QTranslateLazyQueryHookResult = ReturnType<typeof useQTranslateLazyQuery>;
+export type QTranslateQueryResult = Apollo.QueryResult<TQTranslate, TQTranslateVariables>;
 export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {
   signIn(mail: $mail, password: $password) {

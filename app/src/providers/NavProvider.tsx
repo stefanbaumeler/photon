@@ -57,7 +57,7 @@ const NavProvider = ({ children }: Props) => {
                     href: '',
                     testId: 'nav-index',
                     onDrop: moveToAll,
-                    canDrop: router.pathname !== '/' && router.pathname !== '/favorites',
+                    canDrop: router.pathname !== '/' && router.pathname !== '/favorites' && !router.pathname.includes('/albums'),
                     type: ENavItemType.ALL
                 },
                 {

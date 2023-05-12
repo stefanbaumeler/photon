@@ -3,6 +3,7 @@ import media from './media'
 import users from './users'
 import favorites from './favorites'
 import devices from './devices'
+import search from './search'
 import gql from 'graphql-tag'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import UsersService from '../services/users'
@@ -21,7 +22,7 @@ const global = gql`
     }
 `
 
-const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs, favorites.typeDefs, devices.typeDefs])
+const typeDefs = mergeTypeDefs([global, users.typeDefs, media.typeDefs, albums.typeDefs, favorites.typeDefs, devices.typeDefs, search.typeDefs])
 
 const resolvers = {
     Upload: GraphQLUpload,
@@ -66,14 +67,16 @@ const resolvers = {
         ...media.resolvers.queries,
         ...albums.resolvers.queries,
         ...favorites.resolvers.queries,
-        ...devices.resolvers.queries
+        ...devices.resolvers.queries,
+        ...search.resolvers.queries
     },
     Mutation: {
         ...users.resolvers.mutations,
         ...media.resolvers.mutations,
         ...albums.resolvers.mutations,
         ...favorites.resolvers.mutations,
-        ...devices.resolvers.mutations
+        ...devices.resolvers.mutations,
+        ...search.resolvers.mutations
     }
 }
 

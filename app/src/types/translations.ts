@@ -17,6 +17,7 @@ export enum ETrans {
     USER_PLURAL = 'user_plural',
     API = 'api',
     SEARCH = 'search',
+    SEARCH_YOUR_PHOTOS = 'search_your_photos',
     SYNC = 'sync',
     DEVICE = 'device',
     DEVICE_PLURAL = 'device_plural',
@@ -93,5 +94,6 @@ export enum ETrans {
     MOST_RECENT = 'most_recent',
     FILTER = 'filter',
     VIEW = 'view',
-    LOCATION_UNKNOWN = 'location_unknown'
+    LOCATION_UNKNOWN = 'location_unknown',
+    CLEAR = 'clear'
 }

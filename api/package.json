@@ -22,6 +22,7 @@
         "@apollo/server": "^4.3.0",
         "@ffmpeg/core": "^0.11.0",
         "@ffmpeg/ffmpeg": "^0.11.6",
+        "@google-cloud/translate": "^7.2.1",
         "@mapbox/mapbox-sdk": "^0.15.0",
         "@photon/cv": "*",
         "@photon/schema": "*",

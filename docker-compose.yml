@@ -69,6 +69,15 @@ services:
             interval: 10s
             timeout: 5s
             retries: 20
+    translate:
+        container_name: translate_c
+        image: libretranslate/libretranslate:latest
+        restart: unless-stopped
+        ports:
+            - '11012:11012'
+        expose:
+            - 11012
+        entrypoint: ['./venv/bin/libretranslate', '--host', '0.0.0.0', '--port', '11012']
     test:
         container_name: test_c
         build:

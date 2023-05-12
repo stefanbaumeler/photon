@@ -1,0 +1,3 @@
+query QTranslate($query: String!) {
+    translate(query: $query)
+}

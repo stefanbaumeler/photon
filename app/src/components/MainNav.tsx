@@ -20,44 +20,53 @@ export const MainNav = ({ nav }: Props) => {
         }
     }
 
+    const NavItem = ({ item }: { item: TNavItem }) => {
+        const itemClasses = bem(`${nav.type}__item`, [
+            ['drop', !!item.onDrop && item.canDrop !== false]
+        ])
+
+        const onDrop = () => {
+            if (item.canDrop) {
+                item.onDrop()
+            }
+        }
+
+        return <li
+            className={itemClasses}
+            onDragOver={(event) => {
+                event.preventDefault()
+            }}
+            onDrop={onDrop}
+        >
+            <Link
+                data-testid={item.testId}
+                href={`/${item.href || '#'}`}
+                className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
+                onClick={() => click(item)}
+            >
+                <span
+                    className={`${nav.type}__icon`}
+                >
+                    <Icon
+                        path={item.icon}
+                        size={1}
+                    />
+                </span>
+                <span
+                    className={`${nav.type}__label`}
+                >
+                    {item.label}
+                </span>
+            </Link>
+        </li>
+    }
+
     return <nav className={nav.type}>
         <ul className={`${nav.type}__list`} >
-            {nav.items.map((item, key) => {
-                const itemClasses = bem(`${nav.type}__item`, [
-                    ['drop', !!item.onDrop && item.canDrop !== false]
-                ])
-
-                return <li
-                    key={key}
-                    className={itemClasses}
-                    onDragOver={(event) => {
-                        event.preventDefault()
-                    }}
-                    onDrop={item.onDrop}
-                >
-                    <Link
-                        data-testid={item.testId}
-                        href={`/${item.href || '#'}`}
-                        className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
-                        onClick={() => click(item)}
-                    >
-                        <span
-                            className={`${nav.type}__icon`}
-                        >
-                            <Icon
-                                path={item.icon}
-                                size={1}
-                            />
-                        </span>
-                        <span
-                            className={`${nav.type}__label`}
-                        >
-                            {item.label}
-                        </span>
-                    </Link>
-                </li>
-            }
-            )}
+            {nav.items.map((item, key) => <NavItem
+                item={item}
+                key={key}
+            />)}
         </ul>
     </nav>
 }

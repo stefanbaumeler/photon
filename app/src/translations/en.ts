@@ -14,6 +14,7 @@ export default {
     user_plural: 'Users',
     api: 'API',
     search: 'Search',
+    search_your_photos: 'Search your photos',
     sync: 'Sync',
     device: 'Device',
     device_plural: 'Devices',
@@ -92,5 +93,6 @@ export default {
     most_recent: 'Recently added',
     filter: 'Filter',
     view: 'View',
-    location_unknown: 'Media with unknown location'
+    location_unknown: 'Media with unknown location',
+    clear: 'Clear'
 }

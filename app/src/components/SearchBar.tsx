@@ -1,7 +1,8 @@
-import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions } from '.'
+import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions, FocusOverlay } from '.'
 
 export const SearchBar = () => {
     return <div className="searchbar">
+        <FocusOverlay />
         <div className="searchbar__section searchbar__section--left">
             <Brand />
         </div>

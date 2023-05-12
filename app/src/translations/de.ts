@@ -14,6 +14,7 @@ export default {
     user_plural: 'Benutzer',
     api: 'API',
     search: 'Suche',
+    search_your_photos: 'Deine Fotos durchsuchen',
     sync: 'Synchronisieren',
     device: 'Gerät',
     device_plural: 'Geräte',
@@ -92,5 +93,6 @@ export default {
     most_recent: 'Kürzlich hinzugefügt',
     filter: 'Filtern',
     view: 'Ansicht',
-    location_unknown: 'Medien ohne Koordinaten'
+    location_unknown: 'Medien ohne Koordinaten',
+    clear: 'Suche zurücksetzen'
 }

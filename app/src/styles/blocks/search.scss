@@ -6,6 +6,15 @@
     max-width: 500px;
 }
 
+@mixin search-input-container {
+    position: relative;
+
+    &:has(.search__input:focus) {
+        z-index: 1000;
+        position: relative;
+    }
+}
+
 @mixin search-input {
     font-size: 16px;
     line-height: 16px;
@@ -30,8 +39,10 @@
     }
 
     &::placeholder {
+        font-size: 14px;
+        line-height: 14px;
         opacity: .25;
-        font-weight: bold;
+        font-weight: 600;
     }
 }
 
@@ -43,42 +54,56 @@
     display: none;
 }
 
-@mixin search-reset {
+@mixin search-clear {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 56px;
     cursor: pointer;
     width: 40px;
     height: 38px;
     border-radius: 5px;
-    transition: background-color .25s;
+    display: none;
+    right: 56px;
+
+    &:after {
+        display: none;
+    }
 
     &:hover {
         background-color: $color-secondary-highlight;
+    }
+
+    &--active {
+        display: flex;
     }
 }
 
 @mixin search-filter {
     position: absolute;
     top: 50%;
-    right: 12px;
     transform: translateY(-50%);
+    cursor: pointer;
+    width: 40px;
+    height: 38px;
+    border-radius: 5px;
+    right: 12px;
 
-    .icon-button {
-        border-radius: 5px;
-        width: 40px;
-        height: 38px;
+    &:after {
+        display: none;
+    }
 
-        &:hover {
-            background-color: $color-secondary-highlight;
-        }
+    &:hover {
+        background-color: $color-secondary-highlight;
     }
 }
 
 @mixin search {
     .search {
         @include search-root;
+
+        &__input-container {
+            @include search-input-container;
+        }
 
         &__input {
             @include search-input;
@@ -92,8 +117,8 @@
             @include search-submit;
         }
 
-        &__reset {
-            @include search-reset;
+        &__clear {
+            @include search-clear;
         }
 
         &__filter {

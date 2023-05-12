@@ -37,7 +37,7 @@ export * from './LinkButton'
 export * from './Checkbox'
 export * from './Scrollbar'
 export * from './FilmStrip'
-export * from './DragOverlay'
+export * from './FocusOverlay'
 
 export { default as Check } from './Check'
 export { default as Medium } from './Medium'

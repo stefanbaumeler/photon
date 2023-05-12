@@ -22,6 +22,7 @@ type TApiEnv = { [key: string]: string | undefined } & {
     TYPESENSE_SECURE: string
     TYPESENSE_ADMIN_KEY: string
     MAPBOX_KEY: string
+    GCC_TRANSLATE_KEY: string
 }
 
 export const getEnv = () => {
