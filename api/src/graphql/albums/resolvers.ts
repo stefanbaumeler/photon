@@ -7,7 +7,12 @@ const queries: Partial<TQueryResolvers> = {
         return new AlbumsService(context).readMany({
             owner: {
                 id: context.user.id
-            }
+            },
+            albumMedia: input.idMedium ? {
+                some: {
+                    idMedium: input.idMedium
+                }
+            } : undefined
         })
     },
     album: async (_, input, context) => new AlbumsService(context).readOne(input.id),

@@ -17,10 +17,12 @@ export const DetailsImageMeta = () => {
             return <></>
         }
 
+        const subtitle = [details.medium.address,  details.medium.place].filter((val) => !!val)
+
         return <Detail
             icon={Icons.mdiMapMarkerOutline}
             title={`${details.medium.region}, ${details.medium.country}`}
-            values={[details.medium.address,  details.medium.place]}
+            values={subtitle.length ? subtitle : undefined}
         />
     }
 

@@ -20,6 +20,7 @@
     transition: translate .25s;
     translate: 100%;
     flex-shrink: 0;
+    overflow: auto;
 
     @at-root .details--active & {
         translate: none;
@@ -157,6 +158,38 @@
     margin-top: 20px;
 }
 
+@mixin details-section {
+    border-bottom: 1px solid $color-gray-light;
+    padding-top: 24px;
+
+    &:has(+ .details__map) {
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+}
+
+@mixin details-title {
+    font-size: 10px;
+    line-height: 10px;
+    letter-spacing: 1.5px;
+    color: $color-gray;
+    font-weight: 600;
+    padding-left: 14px;
+    text-transform: uppercase;
+}
+
+@mixin details-description-container {
+    padding: 24px 14px 0;
+}
+
+@mixin details-description {
+    border-width: 0 0 2px 0;
+    height: 1.5em;
+    border-color: $color-gray-light;
+    width: 100%;
+    resize: none;
+}
+
 @mixin details {
     .details {
         @include details-root;
@@ -199,6 +232,22 @@
 
         &__map {
             @include details-map;
+        }
+
+        &__section {
+            @include details-section;
+        }
+
+        &__title {
+            @include details-title;
+        }
+
+        &__description-container {
+            @include details-description-container;
+        }
+
+        &__description {
+            @include details-description;
         }
     }
 }

@@ -25,6 +25,8 @@ export type TAlbum = {
   __typename?: 'Album';
   albumMedia?: Maybe<Array<Maybe<TAlbumMedium>>>;
   cover?: Maybe<TMedium>;
+  dateCreated?: Maybe<Scalars['DateTime']>;
+  dateModified?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   owner?: Maybe<TUser>;
@@ -235,6 +237,11 @@ export type TQueryAlbumArgs = {
 
 export type TQueryAlbumMediaArgs = {
   id: Scalars['ID'];
+};
+
+
+export type TQueryAlbumsArgs = {
+  idMedium?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -451,6 +458,8 @@ export type TAuthDirectiveResolver<Result, Parent, ContextType = any, Args = TAu
 export type TAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Album'] = TResolversParentTypes['Album']> = {
   albumMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['AlbumMedium']>>>, ParentType, ContextType>;
   cover?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
+  dateCreated?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateModified?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
@@ -555,7 +564,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
   album?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TQueryAlbumArgs, 'id'>>;
   albumMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryAlbumMediaArgs, 'id'>>;
-  albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
+  albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, Partial<TQueryAlbumsArgs>>;
   devices?: Resolver<Array<TResolversTypes['Device']>, ParentType, ContextType>;
   download?: Resolver<TResolversTypes['Download'], ParentType, ContextType, RequireFields<TQueryDownloadArgs, 'media'>>;
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
@@ -685,7 +694,7 @@ export type TQAlbum = (
   { __typename?: 'Query' }
   & { album?: Maybe<(
     { __typename?: 'Album' }
-    & Pick<TAlbum, 'id' | 'title' | 'description'>
+    & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
       { __typename?: 'Medium' }
       & Pick<TMedium, 'id'>
@@ -725,14 +734,16 @@ export type TQAlbumMedia = (
   )> }
 );
 
-export type TQAlbumsVariables = Exact<{ [key: string]: never; }>;
+export type TQAlbumsVariables = Exact<{
+  idMedium?: InputMaybe<Scalars['ID']>;
+}>;
 
 
 export type TQAlbums = (
   { __typename?: 'Query' }
   & { albums: Array<(
     { __typename?: 'Album' }
-    & Pick<TAlbum, 'id' | 'title' | 'description'>
+    & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
       { __typename?: 'Medium' }
       & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
@@ -1173,6 +1184,8 @@ export const QAlbumDocument = gql`
     id
     title
     description
+    dateCreated
+    dateModified
     cover {
       id
     }
@@ -1246,11 +1259,13 @@ export type QAlbumMediaHookResult = ReturnType<typeof useQAlbumMedia>;
 export type QAlbumMediaLazyQueryHookResult = ReturnType<typeof useQAlbumMediaLazyQuery>;
 export type QAlbumMediaQueryResult = Apollo.QueryResult<TQAlbumMedia, TQAlbumMediaVariables>;
 export const QAlbumsDocument = gql`
-    query QAlbums {
-  albums {
+    query QAlbums($idMedium: ID) {
+  albums(idMedium: $idMedium) {
     id
     title
     description
+    dateCreated
+    dateModified
     cover {
       ...FMedia
     }
@@ -1278,6 +1293,7 @@ export const QAlbumsDocument = gql`
  * @example
  * const { data, loading, error } = useQAlbums({
  *   variables: {
+ *      idMedium: // value for 'idMedium'
  *   },
  * });
  */

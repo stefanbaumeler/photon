@@ -95,5 +95,9 @@ export enum ETrans {
     FILTER = 'filter',
     VIEW = 'view',
     LOCATION_UNKNOWN = 'location_unknown',
-    CLEAR = 'clear'
+    CLEAR = 'clear',
+    DETAILS = 'details',
+    ADD_DESCRIPTION = 'add_description',
+    OWNED_BY = 'owned_by',
+    SHARED_WITH = 'shared_with'
 }

@@ -69,6 +69,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public."Album" (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
+    date_created timestamp(6) with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+    date_modified timestamp(6) with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
     title character varying(100),
     description text,
     id_cover uuid,

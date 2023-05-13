@@ -3,6 +3,8 @@ query QAlbum($id: ID!) {
         id
         title
         description
+        dateCreated
+        dateModified
         cover {
             id
         }

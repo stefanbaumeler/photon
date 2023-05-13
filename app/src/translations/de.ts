@@ -94,5 +94,9 @@ export default {
     filter: 'Filtern',
     view: 'Ansicht',
     location_unknown: 'Medien ohne Koordinaten',
-    clear: 'Suche zurücksetzen'
+    clear: 'Suche zurücksetzen',
+    details: 'Details',
+    add_description: 'Beschreibung hinzufügen',
+    owned_by: 'Im Besitz von',
+    shared_with: 'Geteilt mit'
 }

@@ -12,7 +12,12 @@ import { useRouter } from 'next/router'
 import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
+import { DetailsDescription } from './DetailsDescription'
+import { DetailsAlbums } from './DetailsAlbums'
 import { DetailsMap } from './DetailsMap'
+import { DetailsSection } from './DetailsSection'
+import { DetailsOwner } from './DetailsOwner'
+import { DetailsShares } from './DetailsShares'
 
 export const Details = () => {
     const { t } = useTranslation()
@@ -183,9 +188,15 @@ export const Details = () => {
                 </div>
             </div>
             <div className="details__sidebar-content">
-                <ConditionalDateDetail />
-                <DetailsImageMeta />
-                <DetailsVideoMeta />
+                <DetailsDescription />
+                <DetailsAlbums />
+                <DetailsSection title={t(ETrans.DETAILS)}>
+                    <ConditionalDateDetail />
+                    <DetailsImageMeta />
+                    <DetailsVideoMeta />
+                </DetailsSection>
+                <DetailsOwner />
+                <DetailsShares />
                 <DetailsMap />
             </div>
         </aside>

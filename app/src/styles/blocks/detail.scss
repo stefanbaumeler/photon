@@ -2,6 +2,12 @@
     display: flex;
 }
 
+@mixin detail-image {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+}
+
 @mixin detail-icon {
     width: 64px;
     height: 64px;
@@ -35,6 +41,10 @@
 @mixin detail {
     .detail {
         @include detail-root;
+
+        &__image {
+            @include detail-image;
+        }
 
         &__icon {
             @include detail-icon;

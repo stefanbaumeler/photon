@@ -149,7 +149,7 @@ const ListItem = ({ element }: Props) => {
             className="list-view__cell"
             onClick={open}
         >
-            {`${element.owner.firstName} ${element.owner.lastName}`}
+            {`${element.owner?.firstName} ${element.owner?.lastName}`}
         </td>
         <td className="list-view__cell">
             <ListItemActions

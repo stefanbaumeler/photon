@@ -1,8 +1,10 @@
-query QAlbums {
-    albums {
+query QAlbums($idMedium: ID) {
+    albums(idMedium: $idMedium) {
         id
         title
         description
+        dateCreated
+        dateModified
         cover {
             ...FMedia
         }

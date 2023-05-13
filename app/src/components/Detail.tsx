@@ -1,9 +1,11 @@
 import Icon from '@mdi/react'
+import { TMedium } from '@photon/schema'
+import { Thumbnail } from '@/components/Thumbnail'
 
 type Props = {
-    icon: string
+    icon: string | TMedium
     title: string
-    values: string | string[]
+    values?: string | string[]
 }
 
 export const Detail = ({
@@ -11,12 +13,25 @@ export const Detail = ({
 }: Props) => {
     values = Array.isArray(values) ? values : [values]
 
-    return <div className="detail">
-        <div className="detail__icon">
-            <Icon
+    const IconOrThumbnail = () => {
+        if (typeof icon === 'string') {
+            return <Icon
                 path={icon}
                 size={1}
             />
+        }
+        else {
+            return <img
+                className="detail__image"
+                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${icon.filenameDisk}?w=100`}
+                alt=""
+            />
+        }
+    }
+
+    return <div className="detail">
+        <div className="detail__icon">
+            <IconOrThumbnail />
         </div>
         <div className="detail__content">
             <span className="detail__title">

@@ -43,14 +43,15 @@
     }
 }
 
-@mixin medium-image-container {
-}
-
 @mixin medium-image {
     object-fit: cover;
 
     @at-root .medium--top & {
         object-position: top;
+    }
+
+    @at-root .details__container & {
+        object-fit: contain;
     }
 
     @at-root .medium--none & {
@@ -70,10 +71,6 @@
 @mixin medium {
     .medium {
         @include medium-root;
-
-        &__image-container {
-            @include medium-image-container;
-        }
 
         &__image {
             @include medium-image;

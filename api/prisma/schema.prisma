@@ -16,6 +16,8 @@ datasource db {
 
 model Album {
   id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dateCreated        DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified       DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
   title       String?       @db.VarChar(100)
   description String?
   idCover     String?       @map("id_cover") @db.Uuid

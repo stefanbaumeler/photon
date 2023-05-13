@@ -94,5 +94,9 @@ export default {
     filter: 'Filter',
     view: 'View',
     location_unknown: 'Media with unknown location',
-    clear: 'Clear'
+    clear: 'Clear',
+    details: 'Details',
+    add_description: 'Add a description',
+    owned_by: 'Owned by',
+    shared_with: 'Shared with'
 }

@@ -8,6 +8,8 @@ export default gql`
 
     type Album {
         id: ID!
+        dateCreated: Date
+        dateModified: Date
         title: String
         description: String
         cover: Medium
@@ -23,7 +25,7 @@ export default gql`
     }
 
     type Query {
-        albums: [Album!]! @auth
+        albums(idMedium: ID): [Album!]! @auth
         album(id: ID!): Album @auth
         albumMedia(id: ID!): [Medium!]! @auth
     }
