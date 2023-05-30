@@ -1,4 +1,4 @@
-import { getTypesense, SearchMediumProps } from './'
+import { getTypesense, SearchMediumProps } from '.'
 import { Prisma, PrismaClient } from '@prisma/client'
 import MediaService from '../services/media'
 

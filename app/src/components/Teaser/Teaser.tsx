@@ -1,5 +1,5 @@
 import { useDetailsContext, useDragContext, useSearchContext, useSelectionContext } from '@/providers'
-import { Medium } from '../'
+import { Medium } from '..'
 import { ESelectionMode } from '@/types/app'
 import bem from '../../util/bem'
 import { useTeaserContext } from './TeaserContext'

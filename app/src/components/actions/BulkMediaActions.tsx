@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
+import { Dropdown, IconButton } from '..'
 import {  useState } from 'react'
 import { useSelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'

@@ -1,4 +1,4 @@
-import { getTypesense, SearchMediumProps } from './'
+import { getTypesense, SearchMediumProps } from '.'
 import MediaService from '../services/media'
 import { getDatabase } from '../database'
 

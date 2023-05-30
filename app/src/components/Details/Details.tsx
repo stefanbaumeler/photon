@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import { Detail, DetailsActions, IconButton, Medium } from '../'
+import { Detail, DetailsActions, IconButton, Medium } from '..'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'

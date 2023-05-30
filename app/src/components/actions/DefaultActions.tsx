@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton } from '../'
+import { IconButton } from '..'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef } from 'react'

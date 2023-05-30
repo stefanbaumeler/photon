@@ -1,28 +1,35 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strict": false,
-        "forceConsistentCasingInFileNames": true,
-        "incremental": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "jsx": "react-jsx",
-        "noEmit": true,
-        "types": ["node", "jest", "@testing-library/jest-dom"],
-        "isolatedModules": false,
-        "paths": {
-            "@/*": ["app/*", "app/src/*"]
-        }
-    },
-    "include": [
-        "app/*",
-        "api/*"
+  "compilerOptions": {
+    "baseUrl": "./",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
     ],
-    "exclude": [
-        "node_modules"
-    ]
+    "isolatedModules": false,
+    "paths": {
+      "@/*": [
+        "app/*",
+        "app/src/*"
+      ]
+    }
+  },
+  "include": [
+    "app/*",
+    "api/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

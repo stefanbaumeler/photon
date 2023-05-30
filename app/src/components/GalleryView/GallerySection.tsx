@@ -1,6 +1,6 @@
 import { TMedium } from '@photon/schema'
 import { ESelectionMode } from '@/types/app'
-import { Check, Teaser } from '../'
+import { Check, Teaser } from '..'
 import { useEffect, useMemo, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { useSelectionContext } from '@/providers'

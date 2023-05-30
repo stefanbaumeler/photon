@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Check, Dropdown, IconButton } from '../'
+import { Check, Dropdown, IconButton } from '..'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { ELayout, EMediumStatus, ESelectionMode } from '@/types/app'
