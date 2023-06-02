@@ -32,7 +32,7 @@
     "build:packages": "nx run-many -t build",
     "build:db": "run-s start:docker db:up",
     "test": "NODE_ENV=test run-s test:api test:app",
-    "test:app": "nx run -t @photon/app test",
+    "test:app": "nx run @photon/app:test",
     "test:api": "jest -i",
     "seed-and-test": "start-server-and-test watch:api 11011 test"
   },

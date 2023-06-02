@@ -150,7 +150,8 @@ CREATE TABLE public."User" (
     mail character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
     first_name character varying(255) NOT NULL,
-    last_name character varying(255) NOT NULL
+    last_name character varying(255) NOT NULL,
+    language character varying(255) NOT NULL DEFAULT 'en-US'
 );
 
 

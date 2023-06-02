@@ -3102,13 +3102,13 @@
     picocolors "^1.0.0"
     tslib "^2.5.0"
 
-"@playwright/test@^1.29.2":
-  version "1.34.2"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.34.2.tgz#938ccfb8c162e8ef83dbef3d88ce6851acd469e6"
-  integrity sha512-v/LBnwzD0225q8xEv3t9DmNPX61yvNnEbiA8PoNk1fbkxApJFCWYLPpQbdVWzHaARdZD9g1PYBoOvnffortfKw==
+"@playwright/test@^1.34.3":
+  version "1.34.3"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.34.3.tgz#d9f1ac3f1a09633b5ca5351c50c308bf802bde53"
+  integrity sha512-zPLef6w9P6T/iT6XDYG3mvGOqOyb6eHaV9XtkunYs0+OzxBtrPAAaHotc0X+PJ00WPPnLfFBTl7mf45Mn8DBmw==
   dependencies:
     "@types/node" "*"
-    playwright-core "1.34.2"
+    playwright-core "1.34.3"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -3556,13 +3556,6 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@types/dom-speech-recognition/-/dom-speech-recognition-0.0.1.tgz#e326761a04b4a49c0eec2ac7948afc1c6aa12baa"
   integrity sha512-udCxb8DvjcDKfk1WTBzDsxFbLgYxmQGKrE/ricoMqHRNjSlSUCcamVTA5lIQqzY10mY5qCY0QDwBfFEwhfoDPw==
-
-"@types/exif-reader@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/exif-reader/-/exif-reader-1.0.0.tgz#c80e8ddb98c6319e350f49168f81c129a5895c9a"
-  integrity sha512-LRdFMxMD8z7vmfVSMwP9U0yENM7J7hbIyXgoNhRqraAAYdUrQuE9CaK8nL1YCIhWedFg4C1gGE75+AbbCO4l8A==
-  dependencies:
-    "@types/node" "*"
 
 "@types/express-serve-static-core@^4.17.30", "@types/express-serve-static-core@^4.17.33":
   version "4.17.35"
@@ -6335,7 +6328,7 @@ execa@^7.1.1:
     signal-exit "^3.0.7"
     strip-final-newline "^3.0.0"
 
-exifreader@^4.5.1:
+exifreader@^4.12.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/exifreader/-/exifreader-4.12.0.tgz#e3857f39f54b73b84549e9a9e114f292e85bb87a"
   integrity sha512-aRSmNyw2c6f6qPK4jmC56W/5XePDN7LVwt8tQjgMchxoY3MCxqEToegirKdS7A3CYCWAOPehfypMZWGWxtLhzw==
@@ -9716,10 +9709,10 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.34.2:
-  version "1.34.2"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.34.2.tgz#4989ba082f623f21679724033629b2333b626569"
-  integrity sha512-MrkgGWLANc5qthXduvIY1a/tuafROyTORVd86fwKwgoYrmnBooN/GgeZSBm7ljTLV2FCWNSXV3se7qeScKn83g==
+playwright-core@1.34.3:
+  version "1.34.3"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.34.3.tgz#bc906ea1b26bb66116ce329436ee59ba2e78fe9f"
+  integrity sha512-2pWd6G7OHKemc5x1r1rp8aQcpvDh7goMBZlJv6Co5vCNLVcQJdhxRL09SGaY6HcyHH9aT4tiynZabMofVasBYw==
 
 postcss-value-parser@^4.2.0:
   version "4.2.0"

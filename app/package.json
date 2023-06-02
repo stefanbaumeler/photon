@@ -11,7 +11,7 @@
         "start": "next start -p 3030",
         "lint": "next lint",
         "test": "NODE_ENV=test run-s playwright:*",
-        "playwright:install": "npx playwright install",
+        "playwright:install": "npx playwright install && npx playwright install-deps",
         "playwright:test": "npx playwright test"
     },
     "dependencies": {
@@ -50,7 +50,7 @@
         "@graphql-codegen/cli": "^2.6.2",
         "@graphql-codegen/typescript-operations": "^2.4.2",
         "@graphql-codegen/typescript-react-apollo": "^3.2.16",
-        "@playwright/test": "^1.29.2",
+        "@playwright/test": "^1.34.3",
         "@tauri-apps/cli": "^1.2.2",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
