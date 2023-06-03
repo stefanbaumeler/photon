@@ -1,60 +1,60 @@
 {
-    "name": "photon",
-    "private": true,
-    "version": "1.0.0",
-    "main": "index.js",
-    "workspaces": [
-        "app",
-        "api",
-        "packages/*"
-    ],
-    "engines": {
-        "node": "^18.12.1"
-    },
-    "engineStrict": true,
-    "scripts": {
-        "dev": "NODE_ENV=development run-s start:docker watch",
-        "prod:api": "run-s start:docker watch:api",
-        "watch": "run-p watch:*",
-        "watch:api": "yarn workspace @photon/api watch",
-        "watch:app": "yarn workspace @photon/app watch",
-        "watch:schema": "run-p schema:*",
-        "schema:generate": "graphql-codegen -c codegen.ts -w",
-        "schema:compile": "yarn workspace @photon/schema build",
-        "start": "run-p start:api start:app",
-        "start:api": "yarn workspace @photon/api start",
-        "start:app": "yarn workspace @photon/app start",
-        "start:docker": "docker-compose up -d db search",
-        "db:up": "yarn workspace @photon/api db:up",
-        "db:down": "yarn workspace @photon/api db:down",
-        "search:setup": "yarn workspace @photon/api search:setup",
-        "build": "run-s build:lerna build:db",
-        "build:lerna": "lerna run build",
-        "build:db": "run-s start:docker db:up",
-        "test": "NODE_ENV=test run-s test:api test:app",
-        "test:app": "yarn workspace @photon/app test",
-        "test:api": "jest -i",
-        "seed-and-test": "start-server-and-test watch:api 11011 test"
-    },
-    "dependencies": {
-        "@photon/cv": "1.0.0",
-        "dotenv": "^16.0.3",
-        "graphql": "^16.6.0",
-        "typescript": "^4.7.4"
-    },
-    "devDependencies": {
-        "@next/eslint-plugin-next": "^12.2.3",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@types/jest": "^29.2.5",
-        "@typescript-eslint/eslint-plugin": "^5.29.0",
-        "@typescript-eslint/parser": "^5.29.0",
-        "eslint": "^8.20.0",
-        "eslint-plugin-react": "^7.30.1",
-        "jest": "^29.3.1",
-        "lerna": "^6.1.0",
-        "npm-run-all": "^4.1.5",
-        "start-server-and-test": "^1.15.2",
-        "ts-jest": "^29.0.3",
-        "ts-node": "^10.9.1"
-    }
+  "name": "photon",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "workspaces": [
+    "web",
+    "api",
+    "packages/*"
+  ],
+  "engines": {
+    "node": "^18.12.1"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "dev": "NODE_ENV=development run-s start:docker watch",
+    "prod:api": "run-s start:docker watch:api",
+    "watch": "run-p watch:*",
+    "watch:api": "nx run @photon/api:watch",
+    "watch:web": "nx run @photon/web:watch",
+    "watch:schema": "run-p schema:*",
+    "schema:generate": "graphql-codegen -c codegen.ts -w",
+    "schema:compile": "nx run @photon/schema:build",
+    "start": "run-p start:api start:web",
+    "start:api": "nx run @photon/api:start",
+    "start:web": "nx run @photon/web:start",
+    "start:docker": "docker-compose up -d db search",
+    "db:up": "nx run @photon/api:db:up",
+    "db:down": "nx run @photon/api:db:down",
+    "search:setup": "nx run @photon/api:search:setup",
+    "build": "run-s build:packages build:db",
+    "build:packages": "nx run-many -t build",
+    "build:db": "run-s start:docker db:up",
+    "test": "NODE_ENV=test run-s test:api test:web",
+    "test:web": "nx run @photon/web:test",
+    "test:api": "jest -i",
+    "seed-and-test": "start-server-and-test watch:api 11011 test"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^12.2.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@types/jest": "^29.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "eslint": "^8.20.0",
+    "eslint-plugin-react": "^7.30.1",
+    "jest": "^29.3.1",
+    "npm-run-all": "^4.1.5",
+    "nx-cloud": "latest",
+    "start-server-and-test": "^1.15.2",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "nx": "16.2.2"
+  }
 }

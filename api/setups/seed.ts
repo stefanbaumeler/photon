@@ -18,6 +18,10 @@ export default async (setup: string, force = false) => {
     const uploadsDir = path.join(__dirname, '../', env.API_UPLOADS_DIR)
     const zipPath = path.join(__dirname, `${setup}/uploads.zip`)
 
+    if (!fs.existsSync(uploadsDir)){
+        fs.mkdirSync(uploadsDir);
+    }
+
     const unzip = async () => {
         const zip = new AdmZip(zipPath)
 

@@ -16,7 +16,7 @@ services:
         container_name: api_c
         restart: unless-stopped
         links:
-            - app
+            - web
         build:
             context: .
             target: api
@@ -30,15 +30,15 @@ services:
             - '11011:11011'
         expose:
             - 11011
-    app:
-        container_name: app_c
+    web:
+        container_name: web_c
         restart: unless-stopped
         build:
             context: .
-            target: app
+            target: web
         environment:
             PORT: 3030
-        entrypoint: ['node', 'app/server.js']
+        entrypoint: ['node', 'web/server.js']
         ports:
             - '3030:3030'
         expose:
@@ -65,7 +65,7 @@ services:
         volumes:
             - search-data:/data
         healthcheck:
-            test: ['CMD-SHELL', 'apt-get update && apt-get install -y curl && curl -f http://localhost:8108/health']
+            test: ['CMD-SHELL', 'apt-get update && apt-get install -y curl && curl -f http://0.0.0.0:8108/health']
             interval: 10s
             timeout: 5s
             retries: 20

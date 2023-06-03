@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import ExifReader from 'exifreader'
+import ExifReader, { XmpTag } from 'exifreader'
 import path from 'path'
 import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
@@ -127,24 +127,30 @@ const getDuration = (result: ResultObject) => {
 }
 
 const handleImage = async (filePath: string) => {
-    const sharpMeta = await sharp(filePath).metadata()
-    const rawMeta = await ExifReader.load(filePath)
-
-    let fNumber = rawMeta.FNumber?.value
-
-    if (fNumber && Array.isArray(fNumber)) {
-        fNumber = fNumber.reduce((a, b) => a / b)
+    const isXmpTag = (element: unknown): element is XmpTag  => {
+        return typeof element === 'object'
     }
 
-    const date = rawMeta.DateTime?.value[0].split(' ')[0].split(':').join('-')
-    const time = rawMeta.DateTime?.value[0].split(' ')[1]
+    const sharpMeta = await sharp(filePath).metadata()
+    const rawMeta = (await ExifReader.load(filePath, { expanded: true })).exif
+
+    let fNumber = rawMeta?.FNumber?.value
+
+    if (fNumber && Array.isArray(fNumber)) {
+        fNumber = fNumber.reduce((a, b) => {
+            return a / b
+        })
+    }
+
+    const date = rawMeta?.DateTime?.value[0].split(' ')[0].split(':').join('-');
+    const time = rawMeta?.DateTime?.value[0].split(' ')[1]
     const dateTime = new Date([date, time].join(' '))
 
-    const latRef = rawMeta.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
-    const lngRef = rawMeta.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
+    const latRef = rawMeta?.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
+    const lngRef = rawMeta?.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
 
-    const rawLat = parseFloat(rawMeta.GPSLatitude?.description || '') * latRef
-    const rawLng = parseFloat(rawMeta.GPSLongitude?.description || '') * lngRef
+    const rawLat = parseFloat(rawMeta?.GPSLatitude?.description || '') * latRef
+    const rawLng = parseFloat(rawMeta?.GPSLongitude?.description || '') * lngRef
 
     const lat = Number.isNaN(rawLat) ? null : rawLat
     const lng = Number.isNaN(rawLng) ? null : rawLng
@@ -158,12 +164,12 @@ const handleImage = async (filePath: string) => {
     const meta: Partial<TImageMeta> = {
         height: sharpMeta.height || 0,
         width: sharpMeta.width || 0,
-        cameraMake: rawMeta.Make?.value[0],
-        cameraModel: rawMeta.Model?.value[0],
-        flash: rawMeta.Flash?.value,
+        cameraMake: rawMeta?.Make?.value[0],
+        cameraModel: rawMeta?.Model?.value[0],
+        flash: rawMeta?.Flash?.value,
         fNumber: fNumber,
-        iso: rawMeta.ISOSpeedRatings?.value,
-        focalLength: rawMeta.FocalLength?.description
+        iso: rawMeta?.ISOSpeedRatings?.value,
+        focalLength: rawMeta?.FocalLength?.description
     }
 
     return {

@@ -12,7 +12,7 @@ const config: JestConfigWithTsJest = {
     testEnvironment: 'jsdom',
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
-    setupFilesAfterEnv: ['<rootDir>/app/__tests__/setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/web/__tests__/setup.ts'],
     bail: true,
     testTimeout: 50000
 }
