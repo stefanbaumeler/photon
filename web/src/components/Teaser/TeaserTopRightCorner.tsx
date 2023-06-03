@@ -1,0 +1,74 @@
+import * as Icons from '@mdi/js'
+import { useTeaserContext } from './TeaserContext'
+import { Dropdown, IconButton } from 'web/src/components'
+import { useTranslation } from 'react-i18next'
+import { ETrans } from 'web/src/types/translations'
+import useDeleteAlbumDialog from 'web/src/dialogs/delete-album'
+import { useState } from 'react'
+import { TVideoMeta } from '@photon/schema'
+import { secondsToTime } from 'web/src/util/date'
+import Icon from '@mdi/react'
+import { isAlbum, isMedium } from 'web/src/util/is'
+import useDownload from 'web/src/hooks/download'
+import { useRouter } from 'next/router'
+
+export const TeaserTopRightCorner = () => {
+    const { element } = useTeaserContext()
+    const { t } = useTranslation()
+    const router = useRouter()
+
+    if (isMedium(element)) {
+        if (element.mimetype.startsWith('video')) {
+            const meta = element.meta as TVideoMeta
+            const seconds = secondsToTime(meta.duration)
+            return <div className="teaser__nav">
+                {seconds}
+                <Icon
+                    path={Icons.mdiPlayCircleOutline}
+                    size={.75}
+                />
+            </div>
+        }
+
+        return <></>
+    }
+
+    const [moreActive, setMoreActive] = useState(false)
+
+    const download = useDownload(element.albumMedia.map(({ idMedium }) => idMedium))
+
+    const deleteAlbumDialog = useDeleteAlbumDialog(element.id)
+
+    const moreItems = [
+        {
+            testId: 'album-delete',
+            label: t(ETrans.DELETE_THING, {
+                thing: t(ETrans.ALBUM)
+            }),
+            callback: deleteAlbumDialog
+        },
+        {
+            label: t(ETrans.DOWNLOAD_THING, {
+                thing: t(ETrans.ALBUM)
+            }),
+            callback: download
+        }
+    ]
+
+    return <div className="teaser__nav">
+        <Dropdown
+            items={moreItems}
+            active={moreActive}
+            onClickOutside={() => setMoreActive(false)}
+            smallButton={true}
+        >
+            <IconButton
+                testId="album-controls"
+                icon={Icons.mdiDotsVertical}
+                white={true}
+                onClick={() => setMoreActive(!moreActive)}
+                small={true}
+            />
+        </Dropdown>
+    </div>
+}

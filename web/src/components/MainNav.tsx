@@ -1,0 +1,72 @@
+import Icon from '@mdi/react'
+import { TNav, TNavItem } from 'web/src/types/app'
+import { useNavContext, useSelectionContext } from 'web/src/providers'
+import Link from 'next/link'
+import bem from 'web/src/util/bem'
+
+type Props = {
+    nav: TNav
+}
+
+export const MainNav = ({ nav }: Props) => {
+    const navs = useNavContext()
+    const selection = useSelectionContext()
+
+    const click = (item: TNavItem) => {
+        selection.clear()
+
+        if (item.subNav) {
+            navs.setActive([item.subNav])
+        }
+    }
+
+    const NavItem = ({ item }: { item: TNavItem }) => {
+        const itemClasses = bem(`${nav.type}__item`, [
+            ['drop', !!item.onDrop && item.canDrop !== false]
+        ])
+
+        const onDrop = () => {
+            if (item.canDrop) {
+                item.onDrop()
+            }
+        }
+
+        return <li
+            className={itemClasses}
+            onDragOver={(event) => {
+                event.preventDefault()
+            }}
+            onDrop={onDrop}
+        >
+            <Link
+                data-testid={item.testId}
+                href={`/${item.href || '#'}`}
+                className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
+                onClick={() => click(item)}
+            >
+                <span
+                    className={`${nav.type}__icon`}
+                >
+                    <Icon
+                        path={item.icon}
+                        size={1}
+                    />
+                </span>
+                <span
+                    className={`${nav.type}__label`}
+                >
+                    {item.label}
+                </span>
+            </Link>
+        </li>
+    }
+
+    return <nav className={nav.type}>
+        <ul className={`${nav.type}__list`} >
+            {nav.items.map((item, key) => <NavItem
+                item={item}
+                key={key}
+            />)}
+        </ul>
+    </nav>
+}

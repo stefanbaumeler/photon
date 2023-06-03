@@ -30,7 +30,7 @@ WORKDIR /photon
 
 COPY api/package.json api/
 
-COPY app/package.json app/
+COPY web/package.json web/
 
 COPY api/prisma/schema.prisma api/prisma/
 
@@ -78,29 +78,29 @@ COPY --from=api-build photon/api/dist/ api/dist/
 RUN mkdir api/dist/uploads
 
 
-FROM install as app-build
+FROM install as web-build
 
 WORKDIR /photon
 
-COPY app app
+COPY web web
 
-COPY app/.env.ci app/.env
+COPY web/.env.ci web/.env
 
-WORKDIR /photon/app
+WORKDIR /photon/web
 
 RUN yarn build
 
 
-FROM base as app-prod
+FROM base as web-prod
 
 WORKDIR /photon
 
-COPY app/package.json app/
+COPY web/package.json web/
 
 RUN yarn install --prod --network-timeout 300000
 
 
-FROM node:18.12.1-slim as app
+FROM node:18.12.1-slim as web
 
 WORKDIR /photon
 
@@ -108,13 +108,13 @@ COPY package.json .
 
 COPY yarn.lock .
 
-COPY app/package.json app/
+COPY web/package.json web/
 
-COPY --from=app-prod photon/node_modules/ node_modules/
+COPY --from=web-prod photon/node_modules/ node_modules/
 
-COPY --from=app-build photon/app/.next/standalone .
+COPY --from=web-build photon/web/.next/standalone .
 
-COPY --from=app-build photon/app/.next/static/ app/.next/static/
+COPY --from=web-build photon/web/.next/static/ web/.next/static/
 
 
 FROM mcr.microsoft.com/playwright:v1.30.0-focal as test
@@ -125,15 +125,15 @@ WORKDIR /photon
 
 COPY --from=install photon/ .
 
-COPY app/__tests__ app/__tests__
+COPY web/__tests__ web/__tests__
 
-COPY app/playwright.config.ts app/
+COPY web/playwright.config.ts web/
 
-COPY app/.env.ci app/.env
+COPY web/.env.ci web/.env
 
-COPY app/.env.ci app/.env.test
+COPY web/.env.ci web/.env.test
 
-COPY app/env.ts app/
+COPY web/env.ts web/
 
 COPY api api
 

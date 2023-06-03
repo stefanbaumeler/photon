@@ -20,13 +20,13 @@
     "isolatedModules": false,
     "paths": {
       "@/*": [
-        "app/*",
-        "app/src/*"
+        "web/*",
+        "web/src/*"
       ]
     }
   },
   "include": [
-    "app/*",
+    "web/*",
     "api/*"
   ],
   "exclude": [
