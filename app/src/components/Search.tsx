@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { IconButton } from '@/components/IconButton'
+import { Button } from '@/components'
 import * as Icons from '@mdi/js'
 import { useQTranslate } from '@photon/schema'
 import { useEffect, KeyboardEvent, useState, ChangeEvent } from 'react'
@@ -65,17 +65,25 @@ export const Search = () => {
                 onChange={onChange}
                 value={text}
             />
-            <IconButton
-                icon={Icons.mdiClose}
-                hint={t(ETrans.CLEAR)}
-                className={clearClasses}
-                onClick={clear}
-            />
-            <IconButton
-                className="search__filter"
-                icon={Icons.mdiFilterVariant}
-                hint={t(ETrans.FILTER)}
-            />
+            <div className="search__buttons">
+                <Button
+                    icon={Icons.mdiClose}
+                    hint={t(ETrans.CLEAR)}
+                    appearance={{
+                        shape: 'square'
+                    }}
+                    className={clearClasses}
+                    onClick={clear}
+                />
+                <Button
+                    className="search__filter"
+                    appearance={{
+                        shape: 'square'
+                    }}
+                    icon={Icons.mdiFilterVariant}
+                    hint={t(ETrans.FILTER)}
+                />
+            </div>
         </div>
     </div>
 }

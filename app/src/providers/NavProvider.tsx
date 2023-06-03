@@ -126,6 +126,11 @@ const NavProvider = ({ children }: Props) => {
                     href: 'settings/user'
                 },
                 {
+                    label: t(ETrans.BILLING),
+                    icon: Icons.mdiCashMultiple,
+                    href: 'settings/billing'
+                },
+                {
                     label: t(ETrans.SHARING),
                     icon: Icons.mdiShareVariant,
                     href: 'settings/sharing'

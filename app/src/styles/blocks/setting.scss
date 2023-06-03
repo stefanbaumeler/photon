@@ -1,0 +1,51 @@
+@mixin setting-root {
+    display: flex;
+    border-bottom: 1px solid $color-gray-light;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+@mixin setting-row {
+    width: 50%;
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    &:last-child {
+        align-items: flex-end;
+    }
+}
+
+@mixin setting-title {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+@mixin setting-description {
+    color: $color-gray;
+    font-size: 12px;
+    line-height: 20px;
+    padding-top: 10px;
+}
+
+@mixin setting {
+    .setting {
+        @include setting-root;
+
+        &__row {
+            @include setting-row;
+        }
+
+        &__title {
+            @include setting-title;
+        }
+
+        &__description {
+            @include setting-description;
+        }
+    }
+}
+
+@include setting;

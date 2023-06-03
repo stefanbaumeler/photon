@@ -91,4 +91,5 @@ model User {
   uploadedMedia Medium[] @relation("medium_uploader")
   devices       Device[]
   favorites     Medium[]
+  language      String
 }

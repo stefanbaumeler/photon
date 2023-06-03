@@ -1,19 +1,19 @@
 import * as Icons from '@mdi/js'
-import { Check, Dropdown, IconButton } from '../'
+import { Button, Check, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { ELayout, EMediumStatus, ESelectionMode } from '@/types/app'
 import { useState } from 'react'
 import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
-import useSetAlbumCover from '../../hooks/set-album-cover'
-import useMoveToTrashDialog from '../../dialogs/move-to-trash'
-import useRotate from '../../hooks/rotate'
+import useSetAlbumCover from '@/hooks/set-album-cover'
+import useMoveToTrashDialog from '@/dialogs/move-to-trash'
+import useRotate from '@/hooks/rotate'
 import { useRouter } from 'next/router'
-import useSetMediaStatus from '../../hooks/set-status'
+import useSetMediaStatus from '@/hooks/set-status'
 import TrashActions from './TrashActions'
-import useAddToFavorites from '../../hooks/add-to-favorites'
-import useRemoveFromFavorites from '../../hooks/remove-from-favorites'
+import useAddToFavorites from '@/hooks/add-to-favorites'
+import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
 
 export const DetailsActions = () => {
     const { t } = useTranslation()
@@ -83,23 +83,29 @@ export const DetailsActions = () => {
 
     const RegularActions = () => {
         return <>
-            <IconButton
+            <Button
                 href={`${src}?download=true`}
                 hint={t(ETrans.DOWNLOAD)}
-                white={true}
+                appearance={{
+                    text: 'light'
+                }}
                 icon={Icons.mdiTrayArrowDown}
             />
-            {details.medium.favoredBy?.length ? <IconButton
+            {details.medium.favoredBy?.length ? <Button
                 testId={'details-unfavorite'}
                 onClick={removeFromFavorites}
                 hint={t(ETrans.UNFAVORITE)}
-                white={true}
+                appearance={{
+                    text: 'light'
+                }}
                 icon={Icons.mdiStar}
-            /> : <IconButton
+            /> : <Button
                 testId={'details-favorite'}
                 onClick={addToFavorites}
                 hint={t(ETrans.FAVORITE)}
-                white={true}
+                appearance={{
+                    text: 'light'
+                }}
                 icon={Icons.mdiStarOutline}
             />}
             <Dropdown
@@ -107,11 +113,13 @@ export const DetailsActions = () => {
                 active={moreActive}
                 onClickOutside={() => setMoreActive(false)}
             >
-                <IconButton
+                <Button
                     testId={'details-more'}
                     hint={t(ETrans.MORE_OPTIONS)}
                     icon={Icons.mdiDotsVertical}
-                    white={true}
+                    appearance={{
+                        text: 'light'
+                    }}
                     onClick={() => setMoreActive(!moreActive)}
                 />
             </Dropdown>

@@ -1,29 +1,64 @@
 import Layout from '../../layouts/layout'
-import { Uploader } from '@/components'
+import { Uploader, Setting, LanguagePicker, Heading, Button } from '@/components'
+import { ETrans } from '@/types/translations'
+import { useTranslation } from 'react-i18next'
 
 const SettingsPage = () => {
+    const { t } = useTranslation()
+
     return <Layout>
-        <section>
-            <div>
-                <Uploader />
-                <div>
-                    <h1>
-                        Settings
-                    </h1>
-                    <ul>
-                        <li>
+        <Uploader />
+        <div className="page">
+            <Heading
+                level={1}
+                text={'Settings'}
+            />
+            <Setting
+                title={t(ETrans.LANGUAGE)}
+                description={'Language'}
+            >
+                <LanguagePicker />
+            </Setting>
+            <Setting
+                title={'Automatically clear trash'}
+                description={'Permanently remove media from your trashcan once it has been there for a while.'}
+            >
+            </Setting>
+            <Setting title={t(ETrans.PASSWORD)}>
+                <Button
+                    appearance={{
+                        type: 'secondary',
+                        size: 'small'
+                    }}
+                    label={t(ETrans.CHANGE_PASSWORD)}
+                />
+            </Setting>
+            <Setting title={'2FA'}>
+            </Setting>
+            <Setting title={'Delete account'}>
+                <Button
+                    appearance={{
+                        type: 'danger',
+                        size: 'small'
+                    }}
+                    label={'Delete Account'}
+                />
+            </Setting>
+            <ul>
+                <li>
                             Trash deletion offset
-                        </li>
-                        <li>
+                </li>
+                <li>
                             Language
-                        </li>
-                        <li>
+                </li>
+                <li>
                             Default view
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+                </li>
+                <li>
+                            Delete account
+                </li>
+            </ul>
+        </div>
     </Layout>
 }
 

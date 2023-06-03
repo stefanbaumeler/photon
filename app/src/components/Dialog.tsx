@@ -1,7 +1,7 @@
 import { useDialogContext } from '@/providers'
-import { TDialogButton } from '@/types/app'
 import useKeyboard from '../hooks/keyboard'
 import bem from '../util/bem'
+import { Button } from '@/components/Button'
 
 export const Dialog = () => {
     const dialog = useDialogContext()
@@ -9,19 +9,6 @@ export const Dialog = () => {
     useKeyboard('keydown', 'Escape', () => {
         dialog.close()
     }, [])
-
-    const DialogButton = (btn: TDialogButton) => {
-        const classes = bem('dialog__button', [[btn.type || 'primary']])
-
-        return <button
-            className={classes}
-            onClick={btn.action}
-            data-testid={btn.testId}
-        >
-            {btn.label}
-        </button>
-    }
-
     const DialogContent = () => {
         if (!dialog.content) {
             return <></>
@@ -53,12 +40,9 @@ export const Dialog = () => {
                 <DialogContent />
             </div>
             <div className="dialog__controls">
-                {dialog.buttons.map((button, k) => <DialogButton
+                {dialog.buttons.map((button, k) => <Button
+                    {...button}
                     key={k}
-                    label={button.label}
-                    action={button.action}
-                    type={button.type}
-                    testId={button.testId}
                 />)}
             </div>
         </div>

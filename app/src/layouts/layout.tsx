@@ -25,9 +25,7 @@ const Layout = ({ children }: Props) => {
             <FocusOverlay />
             <SearchBar />
             <Sidebar />
-            <main
-                className="main"
-            >
+            <main className="main">
                 {children}
             </main>
         </div>

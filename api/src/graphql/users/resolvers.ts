@@ -13,7 +13,11 @@ const mutations: Partial<TMutationResolvers> = {
     signOut: (_, input, context) => {
         return new UsersService(context).signOut()
     },
-    signUp: (_, input, context) => new UsersService(context).signUp(input)
+    signUp: (_, input, context) => new UsersService(context).signUp(input),
+
+    changeLanguage: (_, { language }, context) => {
+        return new UsersService(context).changeLanguage(language)
+    }
 }
 
 export default {

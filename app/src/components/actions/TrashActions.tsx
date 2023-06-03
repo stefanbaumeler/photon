@@ -1,4 +1,4 @@
-import { IconButton } from '../'
+import { Button } from '../'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import useDeleteMediaDialog from '../../dialogs/delete-media'
@@ -18,19 +18,23 @@ const TrashActions = ({ white }: Props) => {
     const restoreMediaDialog = useRestoreMediaDialog(selection.selected as Set<TMedium>)
 
     return <>
-        <IconButton
+        <Button
             label={t(ETrans.DELETE)}
             onClick={deleteMediaDialog}
             icon={Icons.mdiDeleteForever}
             testId="trash-delete"
-            white={white}
+            appearance={{
+                text: white ? 'light' : undefined
+            }}
         />
-        <IconButton
+        <Button
             label={t(ETrans.RESTORE)}
             onClick={restoreMediaDialog}
             icon={Icons.mdiDeleteRestore}
             testId="trash-restore"
-            white={white}
+            appearance={{
+                text: white ? 'light' : undefined
+            }}
         />
     </>
 }

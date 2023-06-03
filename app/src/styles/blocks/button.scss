@@ -1,22 +1,202 @@
 @mixin button-root {
-    padding: 16px 24px;
-    background-color: $color-secondary;
-    color: $color-white;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+@mixin button-prefix {
+    font-size: 14px;
+}
+
+@mixin button-suffix {
+    font-size: 14px;
+}
+
+@mixin button-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: inherit;
+    gap: 8px;
     font-weight: bold;
     font-size: 14px;
-    cursor: pointer;
-    transition: box-shadow .125s;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    transition: color .1s;
 
-    &:focus,
-    &:hover {
-        outline: none;
-        box-shadow: inset 0 0 0 2px $color-secondary, inset 0 0 0 3px $color-secondary-light;
+    &:before,
+    &:after {
+        content: '';
+        transition: background-color;
+        position: absolute;
+        border-radius: 50%;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        z-index: -1;
+
+        @at-root .button--square & {
+            border-radius: 4px;
+        }
+    }
+
+    &:after {
+        background-color: rgba($color-gray, .25);
+        opacity: 0;
+        transition: opacity .25s;
+    }
+
+    &:hover:after {
+        opacity: 1;
+    }
+
+    @at-root .button--text-light & {
+        color: $color-white;
+    }
+
+    @at-root .button--small & {
+        width: 32px;
+        height: 32px;
+    }
+
+    &:has(.button__label) {
+        width: auto;
+        border-radius: 4px;
+        margin: 0 4px;
+        padding: 0 16px;
+        color: $color-white;
+
+        &:before {
+            z-index: -1;
+            background-color: $color-secondary;
+            border-radius: 4px;
+
+            @at-root .button--secondary & {
+                background-color: transparent;
+            }
+
+            @at-root .button--tertiary & {
+                background-color: transparent;
+            }
+
+            @at-root .button--danger & {
+                background-color: transparent;
+            }
+        }
+
+        @at-root .button--secondary & {
+            border: 1px solid rgba($color-gray, .25);
+            font-weight: normal;
+            color: $color-black;
+        }
+
+        @at-root .button--tertiary & {
+            color: $color-black;
+        }
+
+        @at-root .button--danger & {
+            border: 1px solid $color-danger;
+            font-weight: normal;
+            color: $color-black;
+        }
+
+        &:hover {
+            @at-root .button--danger & {
+                color: $color-white;
+            }
+        }
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &:after {
+            border-radius: 0;
+            background-color: rgba($color-white, .25);
+
+            @at-root .button--secondary & {
+                background-color: rgba($color-gray, .25);
+            }
+
+            @at-root .button--danger & {
+                background-color: $color-danger
+            }
+        }
+
+        @at-root .button--small & {
+            padding: 0 8px;
+        }
+    }
+}
+
+@mixin button-icon {
+    @at-root .button--text-light & {
+        color: $color-white;
+    }
+}
+
+@mixin button-label {
+    @at-root .button--text-light & {
+        color: $color-white;
+    }
+}
+
+@mixin button-badge {
+    font-size: 14px;
+    font-weight: normal;
+    color: $color-white;
+    padding: 1px 8px 2px;
+    border-radius: 9px;
+    position: absolute;
+    background-color: $color-primary;
+    margin-top: 4px;
+    top: 50%;
+    left: 60%;
+
+    &--below {
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
 @mixin button {
     .button {
         @include button-root;
+
+        &__prefix {
+            @include button-prefix;
+        }
+
+        &__suffix {
+            @include button-suffix;
+        }
+
+        &__button {
+            @include button-button;
+        }
+
+        &__icon {
+            @include button-icon;
+        }
+
+        &__label {
+            @include button-label;
+        }
+
+        &__badge {
+            @include button-badge;
+        }
     }
 }
 

@@ -7,14 +7,14 @@ import { NavProvider,
     LayoutProvider,
     SortProvider,
     SearchProvider,
-    DragProvider } from '../providers'
+    DragProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { client } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
-import i18next from '../translations'
-import tauri from '../tauri'
+import i18next from '@/translations'
+import tauri from '@/tauri'
 import tippy, { followCursor }  from 'tippy.js'
-import '../styles/index.scss'
+import '@/styles/index.scss'
 import { I18nextProvider } from 'react-i18next'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'tippy.js/themes/light.css'

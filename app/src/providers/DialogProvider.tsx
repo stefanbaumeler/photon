@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
-import { TDialogButton } from '../types/app'
+import { Button } from '@/components'
 
 type Props = {
     children?: ReactNode
@@ -9,7 +9,7 @@ type TDialogConfig = {
     id: string
     title?: string
     text?: string
-    buttons: TDialogButton[]
+    buttons: (Parameters<typeof Button>[0])[]
     content?: ReactNode
 }
 
@@ -18,7 +18,7 @@ interface DialogContext {
     active: boolean
     title: string
     text: string
-    buttons: TDialogButton[]
+    buttons: (Parameters<typeof Button>[0])[]
     content: ReactNode
     close: () => void
     open: (props: TDialogConfig) => void

@@ -29,13 +29,15 @@ const useMoveToTrashDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
         buttons: [
             {
                 label: t(ETrans.CANCEL),
-                action: dialog.close,
-                type: 'secondary'
+                onClick: dialog.close,
+                appearance: {
+                    type: 'secondary'
+                }
             },
             {
                 testId: 'move-to-trash-confirm',
                 label: t(ETrans.MOVE_TO_TRASH),
-                action: confirm
+                onClick: confirm
             }
         ]
     })

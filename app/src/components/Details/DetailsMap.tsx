@@ -1,6 +1,7 @@
 import { Map, Marker } from 'react-map-gl'
 import { useDetailsContext } from '@/providers'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export const DetailsMap = () => {
     const details = useDetailsContext()
@@ -25,23 +26,29 @@ export const DetailsMap = () => {
     }
 
     return <div className="details__map">
-        <Map
-            {...mapState}
-            style={{
-                width: '100%',
-                aspectRatio: 1
-            }}
-            initialViewState={{
-                zoom: 13
-            }}
-            dragPan={false}
-            mapStyle="mapbox://styles/mapbox/streets-v12"
-            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+        <Link
+            href={`https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`}
+            target="_blank"
         >
-            <Marker
-                latitude={mapState.latitude}
-                longitude={mapState.longitude}
-            />
-        </Map>
+            <Map
+                reuseMaps={true}
+                interactive={false}
+                {...mapState}
+                style={{
+                    width: '100%',
+                    aspectRatio: 1
+                }}
+                initialViewState={{
+                    zoom: 13
+                }}
+                mapStyle="mapbox://styles/mapbox/streets-v12"
+                mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+            >
+                <Marker
+                    latitude={mapState.latitude}
+                    longitude={mapState.longitude}
+                />
+            </Map>
+        </Link>
     </div>
 }

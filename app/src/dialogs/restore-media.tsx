@@ -28,13 +28,15 @@ const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
         buttons: [
             {
                 label: t(ETrans.CANCEL),
-                action: dialog.close,
-                type: 'secondary'
+                onClick: dialog.close,
+                appearance: {
+                    type: 'secondary'
+                }
             },
             {
                 testId: 'trash-restore-confirm',
                 label: t(ETrans.RESTORE),
-                action: confirm
+                onClick: confirm
             }
         ]
     })

@@ -1,6 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton } from '../'
-import { useState } from 'react'
+import { Button } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { ESelectionMode } from '@/types/app'
@@ -31,12 +30,12 @@ export const BulkAlbumsActions = ({ selected }: Props) => {
 
     const RegularActions = () => {
         return <>
-            <IconButton
+            <Button
                 hint={t(ETrans.DOWNLOAD)}
                 icon={Icons.mdiTrayArrowDown}
                 onClick={download}
             />
-            <IconButton
+            <Button
                 testId="move-to-trash"
                 hint={t(ETrans.DELETE_THING, {
                     thing: t(ETrans.ALBUM_PLURAL)

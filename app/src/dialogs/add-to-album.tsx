@@ -13,8 +13,10 @@ const useAddToAlbumDialog = () => {
         buttons: [
             {
                 label: t(ETrans.CANCEL),
-                action: dialog.close,
-                type: 'secondary'
+                onClick: dialog.close,
+                appearance: {
+                    type: 'secondary'
+                }
             }
         ],
         content: <Thumbnails />

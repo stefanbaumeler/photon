@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { ETrans } from '../types/translations'
-import { Brand, Button, LinkButton, TextBox } from '../components'
+import { ETrans } from '@/types/translations'
+import { Brand, Button, LinkButton, TextBox } from '@/components'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 

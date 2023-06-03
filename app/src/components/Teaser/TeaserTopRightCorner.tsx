@@ -1,6 +1,6 @@
 import * as Icons from '@mdi/js'
 import { useTeaserContext } from './TeaserContext'
-import { Dropdown, IconButton } from '@/components'
+import { Dropdown, Button } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
@@ -8,14 +8,12 @@ import { useState } from 'react'
 import { TVideoMeta } from '@photon/schema'
 import { secondsToTime } from '@/util/date'
 import Icon from '@mdi/react'
-import { isAlbum, isMedium } from '@/util/is'
+import { isMedium } from '@/util/is'
 import useDownload from '@/hooks/download'
-import { useRouter } from 'next/router'
 
 export const TeaserTopRightCorner = () => {
     const { element } = useTeaserContext()
     const { t } = useTranslation()
-    const router = useRouter()
 
     if (isMedium(element)) {
         if (element.mimetype.startsWith('video')) {
@@ -62,12 +60,14 @@ export const TeaserTopRightCorner = () => {
             onClickOutside={() => setMoreActive(false)}
             smallButton={true}
         >
-            <IconButton
+            <Button
                 testId="album-controls"
                 icon={Icons.mdiDotsVertical}
-                white={true}
                 onClick={() => setMoreActive(!moreActive)}
-                small={true}
+                appearance={{
+                    text: 'light',
+                    size: 'small'
+                }}
             />
         </Dropdown>
     </div>

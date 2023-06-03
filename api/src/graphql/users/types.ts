@@ -25,6 +25,7 @@ export default gql`
     type Mutation {
         signIn(mail: String!, password: String!): Token
         signOut: Boolean
-        signUp(mail: String!, password: String!, firstName: String!, lastName: String!): Token
+        signUp(mail: String!, password: String!, firstName: String!, lastName: String!, language: String!): Token
+        changeLanguage(language: String!): String
     }
 `

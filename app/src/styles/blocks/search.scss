@@ -54,24 +54,19 @@
     display: none;
 }
 
-@mixin search-clear {
+@mixin search-buttons {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
-    width: 40px;
     height: 38px;
-    border-radius: 5px;
+    display: flex;
+    gap: 4px;
+    right: 4px;
+}
+
+@mixin search-clear {
+    width: 40px;
     display: none;
-    right: 56px;
-
-    &:after {
-        display: none;
-    }
-
-    &:hover {
-        background-color: $color-secondary-highlight;
-    }
 
     &--active {
         display: flex;
@@ -79,22 +74,7 @@
 }
 
 @mixin search-filter {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
     width: 40px;
-    height: 38px;
-    border-radius: 5px;
-    right: 12px;
-
-    &:after {
-        display: none;
-    }
-
-    &:hover {
-        background-color: $color-secondary-highlight;
-    }
 }
 
 @mixin search {
@@ -115,6 +95,10 @@
 
         &__submit {
             @include search-submit;
+        }
+
+        &__buttons {
+            @include search-buttons;
         }
 
         &__clear {

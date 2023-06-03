@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
+import { Dropdown, Button } from '@/components'
 import {  useState } from 'react'
 import { useSelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'
@@ -67,18 +67,18 @@ export const BulkMediaActions = ({ selected }: Props) => {
 
     const RegularActions = () => {
         return <>
-            <IconButton
+            <Button
                 testId="add-to"
                 hint={t(ETrans.ADD_TO)}
                 icon={Icons.mdiPlus}
                 onClick={addToAlbumDialog}
             />
-            <IconButton
+            <Button
                 hint={t(ETrans.DOWNLOAD)}
                 icon={Icons.mdiTrayArrowDown}
                 onClick={download}
             />
-            <IconButton
+            <Button
                 testId="move-to-trash"
                 hint={t(ETrans.DELETE)}
                 onClick={trashMediaDialog}
@@ -89,7 +89,7 @@ export const BulkMediaActions = ({ selected }: Props) => {
                 active={moreActive}
                 onClickOutside={() => setMoreActive(false)}
             >
-                <IconButton
+                <Button
                     testId="bulk-more"
                     hint={t(ETrans.MORE_OPTIONS)}
                     icon={Icons.mdiDotsVertical}

@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
+import { Dropdown, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
@@ -37,7 +37,7 @@ export const AlbumsViewControl = () => {
         active={viewDropdownActive}
         onClickOutside={() => setViewDropdownActive(false)}
     >
-        <IconButton
+        <Button
             hint={t(ETrans.VIEW)}
             icon={Icons.mdiEye}
             onClick={() => setViewDropdownActive(!viewDropdownActive)}

@@ -66,6 +66,7 @@ export default {
     grid_view: 'Rasteransicht',
     mail: 'E-Mail',
     password: 'Passwort',
+    change_password: 'Passwort ändern',
     sign_in: 'Anmelden',
     sign_out: 'Abmelden',
     sign_up: 'Registrieren',
@@ -98,5 +99,8 @@ export default {
     details: 'Details',
     add_description: 'Beschreibung hinzufügen',
     owned_by: 'Im Besitz von',
-    shared_with: 'Geteilt mit'
+    shared_with: 'Geteilt mit',
+    language: 'Sprache',
+    language_description: 'Wähle eine Sprache, ',
+    billing: 'Bezahlung'
 }

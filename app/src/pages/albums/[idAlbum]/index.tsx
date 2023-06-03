@@ -1,6 +1,6 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
-import { Details, Dialog, IconButton, Uploader, Media } from '@/components'
+import { Details, Dialog, Button, Uploader, Media } from '@/components'
 import { DetailsProvider, useEditContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
@@ -174,12 +174,13 @@ const AlbumPage = () => {
             <div className="album-details">
                 <div className="album-details__header">
                     <div className="albums-details__back">
-                        <IconButton
+                        <Button
                             testId="album-back"
-                            hint={t(ETrans.BACK)}
-                            hintPlacement={'right'}
+                            hint={{
+                                label: t(ETrans.BACK),
+                                placement: 'right'
+                            }}
                             icon={Icons.mdiArrowLeft}
-                            solid={true}
                             onClick={back}
                         />
                     </div>

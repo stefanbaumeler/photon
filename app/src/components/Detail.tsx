@@ -38,7 +38,7 @@ export const Detail = ({
                 {title}
             </span>
             <div className="detail__values">
-                {values.map((value, k) => <span
+                {values.filter((val) => !!val).map((value, k) => <span
                     key={k}
                     className="detail__value"
                 >

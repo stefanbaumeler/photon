@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import { Detail, DetailsActions, IconButton, Medium } from '../'
+import { Button, Detail, DetailsActions, Medium } from '../'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'
@@ -65,12 +65,14 @@ export const Details = () => {
             return <></>
         }
 
-        return <IconButton
+        return <Button
             testId="show-infos"
             hint={t(ETrans.SHOW_THING, {
                 thing: t(ETrans.INFO_PLURAL)
             })}
-            white={true}
+            appearance={{
+                text: 'light'
+            }}
             onClick={details.openInfos}
             icon={Icons.mdiInformation}
         />
@@ -138,10 +140,12 @@ export const Details = () => {
             </button>
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
-                    <IconButton
+                    <Button
                         testId="close-details"
                         hint={t(ETrans.BACK)}
-                        white={true}
+                        appearance={{
+                            text: 'light'
+                        }}
                         onClick={details.close}
                         icon={Icons.mdiArrowLeft}
                     />
@@ -177,7 +181,7 @@ export const Details = () => {
         >
             <div className="toolbar">
                 <div className="toolbar__section toolbar__section--left">
-                    <IconButton
+                    <Button
                         testId="hide-infos"
                         hint={t(ETrans.HIDE_THING, {
                             thing: t(ETrans.INFO_PLURAL)

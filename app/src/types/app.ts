@@ -1,13 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 import { TMedium } from '@photon/schema'
 
-export type TDialogButton = {
-    label: string
-    action: () => void
-    type?: 'secondary'
-    testId?: string
-}
-
 export type TNavItem = {
     label: string
     icon: string

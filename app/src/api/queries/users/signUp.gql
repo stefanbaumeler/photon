@@ -9,6 +9,7 @@ mutation MSignUp (
         password: $password
         firstName: $firstName
         lastName: $lastName
+        language: "en-US"
     ) {
         accessToken
     }

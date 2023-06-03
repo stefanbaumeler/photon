@@ -21,13 +21,15 @@ const useDeleteMediaDialog = () => {
         buttons: [
             {
                 label: t(ETrans.CANCEL),
-                action: dialog.close,
-                type: 'secondary'
+                onClick: dialog.close,
+                appearance: {
+                    type: 'secondary'
+                }
             },
             {
                 testId: 'trash-delete-confirm',
                 label: t(ETrans.PERMANENTLY_DELETE),
-                action: confirm
+                onClick: confirm
             }
         ]
     })

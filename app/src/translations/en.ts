@@ -66,6 +66,7 @@ export default {
     grid_view: 'Grid view',
     mail: 'Email address',
     password: 'Password',
+    change_password: 'Change password',
     sign_in: 'Sign In',
     sign_out: 'Sign Out',
     sign_up: 'Sign Up',
@@ -98,5 +99,7 @@ export default {
     details: 'Details',
     add_description: 'Add a description',
     owned_by: 'Owned by',
-    shared_with: 'Shared with'
+    shared_with: 'Shared with',
+    language: 'language',
+    billing: 'Billing'
 }

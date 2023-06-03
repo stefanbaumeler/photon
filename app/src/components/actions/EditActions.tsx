@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton } from '../'
+import { Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EEditState, ESelectionMode } from '@/types/app'
@@ -24,13 +24,13 @@ export const EditActions = () => {
     }
 
     return <div className="actions">
-        <IconButton
+        <Button
             testId="save-changes"
             hint={t(ETrans.SAVE)}
             icon={Icons.mdiCheck}
             onClick={confirm}
         />
-        <IconButton
+        <Button
             testId="discard-changes"
             hint={t(ETrans.DISCARD)}
             onClick={discard}

@@ -1,6 +1,6 @@
 import { TMedium } from '@photon/schema'
 import { useDetailsContext, useSearchContext } from '@/providers'
-import { LngLat, LngLatBounds, MapboxGeoJSONFeature, Marker } from 'mapbox-gl'
+import { MapboxGeoJSONFeature, Marker } from 'mapbox-gl'
 import Map, { GeoJSONSource,
     Layer,
     LayerProps,
@@ -13,9 +13,7 @@ import { useEffect, useRef, useState } from 'react'
 import * as Icons from '@mdi/js'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { IconButton } from '@/components/IconButton'
-import { Drawer } from '@/components/Drawer'
-import { FilmStrip, GalleryView, Medium } from '@/components'
+import { FilmStrip, Medium, Button, Drawer } from '@/components'
 
 export const MapView = () => {
     const mapRef = useRef<MapRef>(null)
@@ -56,14 +54,18 @@ export const MapView = () => {
             return <></>
         }
 
-        return <IconButton
-            hintPlacement="right"
+        return <Button
+            hint={{
+                label: t(ETrans.LOCATION_UNKNOWN),
+                placement: 'right'
+            }}
             className="map__button"
             onClick={() => setUnknownVisible(!unknownVisible)}
-            hint={t(ETrans.LOCATION_UNKNOWN)}
             icon={Icons.mdiMapMarkerQuestionOutline}
-            badge={unknown.length.toString()}
-            badgePlacement={unknown.length >= 10 ? 'below' : 'bottom-right'}
+            badge={{
+                label: unknown.length.toString(),
+                placement: unknown.length >= 10 ? 'below' : 'bottom-right'
+            }}
         />
     }
 

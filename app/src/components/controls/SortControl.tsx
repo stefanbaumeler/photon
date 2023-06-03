@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
+import { Dropdown, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
@@ -40,7 +40,7 @@ export const SortControl = () => {
         active={sortDropdownActive}
         onClickOutside={() => setSortDropdownActive(false)}
     >
-        <IconButton
+        <Button
             hint={t(ETrans.SORT)}
             icon={Icons.mdiSwapVertical}
             onClick={() => setSortDropdownActive(!sortDropdownActive)}

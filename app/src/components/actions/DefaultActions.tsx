@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton } from '../'
+import { Button, ViewControl, SortControl } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useRef } from 'react'
@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 import bem from '../../util/bem'
 import useEmptyTrashDialog from '../../dialogs/empty-trash'
 import { useMSignOut } from '@photon/schema'
-import { ViewControl, SortControl } from '@/components'
 
 export const DefaultActions = () => {
     const { t } = useTranslation()
@@ -50,14 +49,14 @@ export const DefaultActions = () => {
                 onChange={upload}
                 multiple={true}
             />
-            <IconButton
+            <Button
                 hint={t(ETrans.UPLOAD)}
                 icon={Icons.mdiTrayArrowUp}
                 onClick={clickUpload}
             />
             <SortControl />
             <ViewControl />
-            <IconButton
+            <Button
                 hint={t(ETrans.SIGN_OUT)}
                 icon={Icons.mdiLogout}
                 onClick={signOut}
@@ -67,7 +66,7 @@ export const DefaultActions = () => {
 
     const TrashActions = () => {
         return <>
-            <IconButton
+            <Button
                 label={t(ETrans.EMPTY_TRASH)}
                 icon={Icons.mdiDeleteForever}
                 onClick={emptyTrashDialog}

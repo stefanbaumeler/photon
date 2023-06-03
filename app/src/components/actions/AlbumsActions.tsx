@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton, AlbumsViewControl } from '../'
+import { Button, AlbumsViewControl } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useSelectionContext } from '@/providers'
@@ -20,7 +20,7 @@ export const AlbumsActions = () => {
 
     return <div className="actions">
         <AlbumsViewControl />
-        <IconButton
+        <Button
             testId="album-create"
             hint={t(ETrans.CREATE_THING, {
                 thing: t(ETrans.ALBUM)

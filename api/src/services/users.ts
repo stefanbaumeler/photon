@@ -192,4 +192,17 @@ export default class UsersService {
 
         return newAccessToken
     }
+
+    changeLanguage = async (language: string ) => {
+        await DB.user.update({
+            where: {
+                id: this.context?.user.id
+            },
+            data: {
+                language
+            }
+        })
+
+        return ''
+    }
 }

@@ -1,0 +1,22 @@
+@mixin heading-root {
+    &--1 {
+        font-size: 32px;
+        line-height: 32px;
+        padding-bottom: 32px;
+        width: 100%;
+        color: $color-gray-dark;
+    }
+
+    &:has(+ .setting) {
+        max-width: 1024px;
+        margin: 0 auto;
+    }
+}
+
+@mixin heading {
+    .heading {
+        @include heading-root;
+    }
+}
+
+@include heading;

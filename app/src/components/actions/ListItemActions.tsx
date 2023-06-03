@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, IconButton } from '../'
+import { Dropdown, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EMediumStatus } from '@/types/app'
@@ -11,7 +11,6 @@ import useSetMediaStatus from '../../hooks/set-status'
 import useDeleteAlbumDialog from '@/dialogs/delete-album'
 import { isAlbum, isMedium } from '@/util/is'
 import useDownload from '@/hooks/download'
-import { useRouter } from 'next/router'
 
 type Props = {
     element: TMedium | TAlbum
@@ -19,7 +18,6 @@ type Props = {
 
 export const ListItemActions = ({ element }: Props) => {
     const { t } = useTranslation()
-    const router = useRouter()
 
     const [moreActive, setMoreActive] = useState(false)
 
@@ -58,7 +56,7 @@ export const ListItemActions = ({ element }: Props) => {
     }
 
     return <div className="actions">
-        <IconButton
+        <Button
             hint={t(ETrans.DOWNLOAD)}
             icon={Icons.mdiTrayArrowDown}
             onClick={download}
@@ -68,7 +66,7 @@ export const ListItemActions = ({ element }: Props) => {
             active={moreActive}
             onClickOutside={() => setMoreActive(false)}
         >
-            <IconButton
+            <Button
                 hint={t(ETrans.MORE_OPTIONS)}
                 icon={Icons.mdiDotsVertical}
                 onClick={() => setMoreActive(!moreActive)}

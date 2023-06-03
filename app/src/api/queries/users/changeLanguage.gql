@@ -1,0 +1,3 @@
+mutation MChangeLanguage($language: String!) {
+    changeLanguage(language: $language)
+}

@@ -13,7 +13,7 @@ export const DetailsImageMeta = () => {
     }
 
     const LocationMeta = () => {
-        if (!location) {
+        if (!details.medium.region && !details.medium.country) {
             return <></>
         }
 
@@ -26,11 +26,14 @@ export const DetailsImageMeta = () => {
         />
     }
 
+    const f = meta.fNumber ? `f/${meta.fNumber}` : undefined
+    const iso = meta.iso ? `ISO${meta.iso}` : undefined
+
     return <>
         <Detail
             icon={Icons.mdiCameraIris}
             title={`${meta.cameraMake} ${meta.cameraModel}`}
-            values={[`f/${meta.fNumber}`, meta.focalLength, `ISO${meta.iso}`]}
+            values={[f, meta.focalLength, iso]}
         />
         <Detail
             icon={Icons.mdiImageOutline}

@@ -118,6 +118,7 @@ export type TMutation = {
   __typename?: 'Mutation';
   addToAlbum: Array<TMedium>;
   addToFavorites: Array<TMedium>;
+  changeLanguage?: Maybe<Scalars['String']>;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum?: Maybe<TCount>;
   deleteMedia: Array<TMedium>;
@@ -143,6 +144,11 @@ export type TMutationAddToAlbumArgs = {
 
 export type TMutationAddToFavoritesArgs = {
   media: Array<Scalars['ID']>;
+};
+
+
+export type TMutationChangeLanguageArgs = {
+  language: Scalars['String'];
 };
 
 
@@ -197,6 +203,7 @@ export type TMutationSignInArgs = {
 
 export type TMutationSignUpArgs = {
   firstName: Scalars['String'];
+  language: Scalars['String'];
   lastName: Scalars['String'];
   mail: Scalars['String'];
   password: Scalars['String'];
@@ -545,6 +552,7 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
   addToAlbum?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
   addToFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToFavoritesArgs, 'media'>>;
+  changeLanguage?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
   deleteAlbum?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
   deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
@@ -556,7 +564,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   setMediaStatus?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationSetMediaStatusArgs, 'media' | 'status'>>;
   signIn?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
-  signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'lastName' | 'mail' | 'password'>>;
+  signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'language' | 'lastName' | 'mail' | 'password'>>;
   updateAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'fields' | 'idAlbum'>>;
   upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
@@ -1060,6 +1068,16 @@ export type TQTranslateVariables = Exact<{
 export type TQTranslate = (
   { __typename?: 'Query' }
   & Pick<TQuery, 'translate'>
+);
+
+export type TMChangeLanguageVariables = Exact<{
+  language: Scalars['String'];
+}>;
+
+
+export type TMChangeLanguage = (
+  { __typename?: 'Mutation' }
+  & Pick<TMutation, 'changeLanguage'>
 );
 
 export type TMSignInVariables = Exact<{
@@ -1889,6 +1907,37 @@ export function useQTranslateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type QTranslateHookResult = ReturnType<typeof useQTranslate>;
 export type QTranslateLazyQueryHookResult = ReturnType<typeof useQTranslateLazyQuery>;
 export type QTranslateQueryResult = Apollo.QueryResult<TQTranslate, TQTranslateVariables>;
+export const MChangeLanguageDocument = gql`
+    mutation MChangeLanguage($language: String!) {
+  changeLanguage(language: $language)
+}
+    `;
+export type TMChangeLanguageMutationFn = Apollo.MutationFunction<TMChangeLanguage, TMChangeLanguageVariables>;
+
+/**
+ * __useMChangeLanguage__
+ *
+ * To run a mutation, you first call `useMChangeLanguage` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMChangeLanguage` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mChangeLanguage, { data, loading, error }] = useMChangeLanguage({
+ *   variables: {
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useMChangeLanguage(baseOptions?: Apollo.MutationHookOptions<TMChangeLanguage, TMChangeLanguageVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument, options);
+      }
+export type MChangeLanguageHookResult = ReturnType<typeof useMChangeLanguage>;
+export type MChangeLanguageMutationResult = Apollo.MutationResult<TMChangeLanguage>;
+export type MChangeLanguageMutationOptions = Apollo.BaseMutationOptions<TMChangeLanguage, TMChangeLanguageVariables>;
 export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {
   signIn(mail: $mail, password: $password) {
@@ -1960,6 +2009,7 @@ export const MSignUpDocument = gql`
     password: $password
     firstName: $firstName
     lastName: $lastName
+    language: "en-US"
   ) {
     accessToken
   }

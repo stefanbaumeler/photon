@@ -1,17 +1,24 @@
 import { useDetailsContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
+import { useState } from 'react'
 
 export const DetailsDescription = () => {
     const details = useDetailsContext()
     const { t } = useTranslation()
 
+    const [description, setDescription] = useState(details.medium.description)
+
+    const onChange = () => {
+        setDescription(description)
+    }
+
     return <div className="details__description-container">
         <textarea
             className="details__description"
             placeholder={t(ETrans.ADD_DESCRIPTION)}
-        >
-            {details.medium.description}
-        </textarea>
+            defaultValue={description}
+            onChange={onChange}
+        />
     </div>
 }

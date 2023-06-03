@@ -13,6 +13,7 @@ export enum ETrans {
     SETTING_PLURAL = 'setting_plural',
     GENERAL = 'general',
     SECURITY = 'security',
+    BILLING = 'billing',
     USER = 'user',
     USER_PLURAL = 'user_plural',
     API = 'api',
@@ -67,6 +68,7 @@ export enum ETrans {
     GRID_VIEW = 'grid_view',
     MAIL = 'mail',
     PASSWORD = 'password',
+    CHANGE_PASSWORD = 'change_password',
     SIGN_IN = 'sign_in',
     SIGN_OUT = 'sign_out',
     SIGN_UP = 'sign_up',
@@ -99,5 +101,6 @@ export enum ETrans {
     DETAILS = 'details',
     ADD_DESCRIPTION = 'add_description',
     OWNED_BY = 'owned_by',
-    SHARED_WITH = 'shared_with'
+    SHARED_WITH = 'shared_with',
+    LANGUAGE = 'language'
 }

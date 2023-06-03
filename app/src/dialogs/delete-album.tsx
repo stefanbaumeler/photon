@@ -18,13 +18,15 @@ const useDeleteAlbumDialog = (id?: string | string[]) => {
         buttons: [
             {
                 label: t(ETrans.CANCEL),
-                action: dialog.close,
-                type: 'secondary'
+                onClick: dialog.close,
+                appearance: {
+                    type: 'secondary'
+                }
             },
             {
                 testId: 'album-confirm-delete',
                 label: t(ETrans.PERMANENTLY_DELETE),
-                action: confirm
+                onClick: confirm
             }
         ]
     })

@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { IconButton, Dropdown, ViewControl } from '../'
+import { Dropdown, ViewControl, Button } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
@@ -57,7 +57,7 @@ export const AlbumActions = () => {
             active={moreActive}
             onClickOutside={() => setMoreActive(false)}
         >
-            <IconButton
+            <Button
                 hint={t(ETrans.MORE_OPTIONS)}
                 icon={Icons.mdiDotsVertical}
                 onClick={() => setMoreActive(!moreActive)}

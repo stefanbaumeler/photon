@@ -1,0 +1,12 @@
+@mixin page-root {
+    padding-top: 64px;
+    width: 100%;
+}
+
+@mixin page {
+    .page {
+        @include page-root;
+    }
+}
+
+@include page;
