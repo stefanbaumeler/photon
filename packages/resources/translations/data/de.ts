@@ -102,5 +102,6 @@ export default {
     shared_with: 'Geteilt mit',
     language: 'Sprache',
     language_description: 'Wähle eine Sprache, ',
-    billing: 'Bezahlung'
+    billing: 'Bezahlung',
+    library: 'Bibliothek'
 }

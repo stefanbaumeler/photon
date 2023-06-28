@@ -1,0 +1,15 @@
+{
+    "name": "@photon/resources",
+    "private": true,
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "generate": "run-p generate:*",
+        "generate:translations": "ts-node translations",
+        "generate:colors": "ts-node colors"
+    },
+    "devDependencies": {
+        "typescript": "^4.7.4",
+        "ts-node": "*"
+    }
+}

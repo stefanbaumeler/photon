@@ -11,8 +11,9 @@
         "start": "next start -p 3030",
         "lint": "next lint",
         "test": "NODE_ENV=test run-s playwright:*",
-        "playwright:install": "npx playwright install && npx playwright install-deps",
-        "playwright:test": "npx playwright test"
+        "playwright:install": "playwright install && playwright install-deps",
+        "playwright:test": "playwright test",
+        "generate": "ts-node codegen.ts"
     },
     "dependencies": {
         "@apollo/client": "^3.7.0",
@@ -50,6 +51,7 @@
         "@graphql-codegen/cli": "^2.6.2",
         "@graphql-codegen/typescript-operations": "^2.4.2",
         "@graphql-codegen/typescript-react-apollo": "^3.2.16",
+        "@photon/resources": "*",
         "@playwright/test": "^1.34.3",
         "@tauri-apps/cli": "^1.2.2",
         "@testing-library/jest-dom": "^5.16.5",
@@ -63,6 +65,7 @@
         "eslint-plugin-unused-imports": "^2.0.0",
         "postcss": "^8.4.14",
         "sass": "^1.54.3",
+        "ts-node":  "*",
         "typescript": "^4.7.4"
     }
 }

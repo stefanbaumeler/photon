@@ -1,0 +1,11 @@
+{
+    "name": "@photon/app",
+    "version": "1.0.0",
+    "scripts": {
+        "generate": "ts-node codegen.ts"
+    },
+    "devDependencies": {
+        "@photon/resources": "*",
+        "ts-node": "*"
+    }
+}

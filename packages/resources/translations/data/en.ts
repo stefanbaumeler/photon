@@ -101,5 +101,6 @@ export default {
     owned_by: 'Owned by',
     shared_with: 'Shared with',
     language: 'language',
-    billing: 'Billing'
+    billing: 'Billing',
+    library: 'Library'
 }

@@ -15,7 +15,7 @@
         "test": "NODE_ENV=test run-s search:setup jest",
         "search:setup": "ts-node src/search/setup.ts",
         "search:sync": "ts-node src/search/sync.ts",
-        "postinstall": "npx prisma generate",
+        "postinstall": "prisma generate",
         "seed": "NODE_ENV=development ts-node setups"
     },
     "dependencies": {

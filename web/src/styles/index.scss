@@ -1,6 +1,7 @@
-@import '../../../node_modules/tippy.js/dist/tippy.css';
-
+@import 'tippy.js/dist/tippy.css';
 @import 'mapbox-gl/dist/mapbox-gl';
+
+@import 'generated/colors.scss';
 
 @import 'util/fonts';
 @import 'util/vars';
