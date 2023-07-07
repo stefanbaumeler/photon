@@ -3,7 +3,6 @@ import 'package:app/settings/photon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:app/state.dart';
 
 class MainNav extends StatelessWidget {
   const MainNav({super.key});

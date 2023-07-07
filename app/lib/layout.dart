@@ -1,5 +1,5 @@
 import 'package:app/settings/layout_type.dart';
-import 'package:app/state.dart';
+import 'package:app/state/page_index_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +8,7 @@ class Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LayoutType layout = context.watch<PageIndex>().layoutType;
+    LayoutType layout = context.watch<PageIndexProvider>().layoutType;
 
     return Scaffold(
       appBar: layout.actions,

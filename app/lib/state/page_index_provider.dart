@@ -1,7 +1,7 @@
 import 'package:app/settings/layout_type.dart';
 import 'package:flutter/foundation.dart';
 
-class PageIndex with ChangeNotifier, DiagnosticableTreeMixin {
+class PageIndexProvider with ChangeNotifier, DiagnosticableTreeMixin {
   LayoutType _layout = LayoutType.gallery;
 
   LayoutType get layoutType => _layout;
