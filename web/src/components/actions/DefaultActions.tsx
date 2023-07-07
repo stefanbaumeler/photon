@@ -71,6 +71,9 @@ export const DefaultActions = () => {
                 icon={Icons.mdiDeleteForever}
                 onClick={emptyTrashDialog}
                 testId="trash-empty"
+                appearance={{
+                    type: 'tertiary'
+                }}
             />
             <ViewControl />
         </>

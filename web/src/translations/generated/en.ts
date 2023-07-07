@@ -100,7 +100,7 @@ export default {
     add_description: 'Add a description',
     owned_by: 'Owned by',
     shared_with: 'Shared with',
-    language: 'language',
+    language: 'Language',
     billing: 'Billing',
     library: 'Library'
 }
