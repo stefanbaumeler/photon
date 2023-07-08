@@ -30,7 +30,7 @@ const useAddToNewAlbum = () => {
                 })
             })
         }
-    }, [newAlbum])
+    }, [createAlbumMutation, dialog, router, selection, newAlbum])
 
     return () => {
         setNewAlbum(true)

@@ -15,7 +15,7 @@ const FavoritesPage = () => {
         favoritesMenu.refine({
             isRefined: true
         })
-    }, [favoritesMenu.canRefine])
+    }, [favoritesMenu])
 
     const notTrashMenu = useToggleRefinement({
         attribute: 'isTrash',
@@ -27,7 +27,7 @@ const FavoritesPage = () => {
         notTrashMenu.refine({
             isRefined: true
         })
-    }, [notTrashMenu.canRefine])
+    }, [notTrashMenu])
 
     return <Layout>
         <section>

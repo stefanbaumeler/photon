@@ -20,6 +20,16 @@ const LoginPage = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
 
+    const submit = () => {
+        if (loginFormMode === ELoginFormMode.DEFAULT) {
+            signInUser()
+        }
+
+        if (loginFormMode === ELoginFormMode.SIGNUP) {
+            signUpUser()
+        }
+    }
+
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {
             if (event.key === 'Enter') {
@@ -42,7 +52,7 @@ const LoginPage = () => {
         return () => {
             document.removeEventListener('keydown', keyDownHandler)
         }
-    }, [mail, password, firstName, lastName, loginFormMode])
+    }, [submit, mail, password, firstName, lastName, loginFormMode])
 
     const router = useRouter()
 
@@ -114,16 +124,6 @@ const LoginPage = () => {
             label={t(ETrans.REMEMBER_ME)}
         />
     </> : <></>
-
-    const submit = () => {
-        if (loginFormMode === ELoginFormMode.DEFAULT) {
-            signInUser()
-        }
-
-        if (loginFormMode === ELoginFormMode.SIGNUP) {
-            signUpUser()
-        }
-    }
 
     return <section>
         <div className="login">

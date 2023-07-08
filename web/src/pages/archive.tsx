@@ -21,13 +21,13 @@ const ArchivePage = () => {
         archivedMenu.refine({
             isRefined: true
         })
-    }, [archivedMenu.canRefine])
+    }, [archivedMenu])
 
     useEffect(() => {
         trashMenu.refine({
             isRefined: true
         })
-    }, [trashMenu.canRefine])
+    }, [trashMenu])
 
     return <Layout>
         <section>

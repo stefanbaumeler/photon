@@ -1,13 +1,14 @@
-import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 import { QAlbumsDocument, QFavoritesDocument, useMSetMediaStatus } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useSetMediaStatus = (media: { id: string }[] | Set<{ id: string }> | { id: string }, status: EMediumStatus) => {
     const details = useDetailsContext()
     const selection = useSelectionContext()
-    const search = useSearchContext()
+    const instantSearch = useInstantSearch()
 
     const router = useRouter()
 
@@ -30,7 +31,7 @@ const useSetMediaStatus = (media: { id: string }[] | Set<{ id: string }> | { id:
 
     return () => {
         setMediaStatus().then(() => {
-            search.instantSearch.refresh()
+            instantSearch.refresh()
             selection.clear()
             details?.close()
 

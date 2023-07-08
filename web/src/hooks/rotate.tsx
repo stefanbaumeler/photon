@@ -1,9 +1,10 @@
-import { useDetailsContext, useSearchContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 import { useMRotate } from '@photon/schema'
+import { useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const useRotate = (idMedium: string) => {
     const details = useDetailsContext()
-    const search = useSearchContext()
+    const instantSearch = useInstantSearch()
 
     const [rotate] = useMRotate({
         variables: {
@@ -14,7 +15,7 @@ const useRotate = (idMedium: string) => {
 
     return () => {
         rotate().then(() => {
-            search.instantSearch.refresh()
+            instantSearch.refresh()
             details.setMedium(details.medium)
         })
     }

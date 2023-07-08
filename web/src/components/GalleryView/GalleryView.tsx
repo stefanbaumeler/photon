@@ -51,7 +51,7 @@ export const GalleryView = () => {
         })
 
         setSections(newSections)
-    }, [gallery.media, sort.sort])
+    }, [selection.mode, selection.selected, gallery.media, sort.sort])
 
     return <div className="gallery">
         <div className="gallery__sections">

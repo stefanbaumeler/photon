@@ -27,7 +27,7 @@ export const Search = () => {
         else if (translate.data) {
             box.refine(translate.data.translate)
         }
-    }, [query, translate.data])
+    }, [box, query, translate.data])
 
     const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {

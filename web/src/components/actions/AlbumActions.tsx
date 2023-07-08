@@ -13,11 +13,11 @@ export const AlbumActions = () => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
     const router = useRouter()
-    const { hits } = useSearchContext()
+    const { hits: media } = useSearchContext()
 
     const deleteAlbumDialog = useDeleteAlbumDialog()
 
-    const download = useDownload(hits.map(({ id }) => id))
+    const download = useDownload(media.map(({ id }) => id))
 
     const setAlbumCover = () => {
         setMoreActive(false)

@@ -31,7 +31,7 @@ const SortProvider = ({ children }: Props) => {
 
     useEffect(() => {
         sortBy.refine(`media/sort/dateTakenSort:${sort === EMediumSort.OLDEST ? 'asc' : 'desc'}`)
-    }, [sort])
+    }, [sort, sortBy])
 
     return <SortContext.Provider value={{
         sort,

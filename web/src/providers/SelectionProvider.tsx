@@ -1,7 +1,7 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { TAlbum, TMedium } from '@photon/schema'
 import { ESelectionMode } from '@/types/app'
-import useKeyboard from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks/keyboard'
 
 type Props = {
     children?: ReactNode
@@ -94,21 +94,23 @@ const SelectionProvider = ({ children }: Props) => {
     }
 
     const clear = () => {
-        setSelected(new Set())
-        setMode(ESelectionMode.OFF)
-        setShiftTargets([])
-        setLastAdded(undefined)
+        if (selected.size) {
+            setSelected(new Set())
+            setMode(ESelectionMode.OFF)
+            setShiftTargets([])
+            setLastAdded(undefined)
+        }
     }
 
     const [shift, setShift] = useState(false)
 
     useKeyboard('keydown', 'Shift', () => {
         setShift(true)
-    }, [])
+    })
 
     useKeyboard('keyup', 'Shift', () => {
         setShift(false)
-    }, [])
+    })
 
     return <SelectionContext.Provider value={{
         shift,

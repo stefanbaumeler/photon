@@ -24,7 +24,7 @@ export const Uploader = () => {
         window.addEventListener('dragover', drag)
 
         return () => window.removeEventListener('dragover', drag)
-    }, [])
+    }, [drag])
 
     const upload = useUpload()
 

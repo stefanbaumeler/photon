@@ -40,9 +40,11 @@ const Photon = ({
                 searchClient={typesenseAdapter.searchClient}
                 indexName="media"
             >
-                <SearchSetup />
-                <ProviderProvider components={[SearchProvider, DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
-                    <Component {...pageProps} />
+                <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
+                    <SearchSetup />
+                    <SearchProvider>
+                        <Component {...pageProps} />
+                    </SearchProvider>
                 </ProviderProvider>
             </InstantSearch>
         </I18nextProvider>

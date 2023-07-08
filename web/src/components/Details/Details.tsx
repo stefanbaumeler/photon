@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Button, Detail, DetailsActions, Medium } from '../'
@@ -6,9 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
-import useKeyboard from '../../hooks/keyboard'
+import { useKeyboard } from '@/hooks/keyboard'
 import bem from '../../util/bem'
-import { useRouter } from 'next/router'
 import { EDateFormat } from '@/types/app'
 import { DetailsImageMeta } from './DetailsImageMeta'
 import { DetailsVideoMeta } from './DetailsVideoMeta'
@@ -24,23 +22,9 @@ export const Details = () => {
     const details = useDetailsContext()
     const dialog = useDialogContext()
     const { hits: media } = useSearchContext()
-
-    const router = useRouter()
-
-    const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
-
-    useEffect(() => {
-        if (idMedium) {
-            const mediumToOpen = media.find((medium) => medium.id === idMedium)
-            if (mediumToOpen) {
-                details.open(mediumToOpen)
-            }
-        }
-    }, [media, idMedium])
+    const index = media.indexOf(details.medium)
 
     const slide = (direction: number) => {
-        const index = media.indexOf(details.medium)
-
         if (media[index + direction] && details.active) {
             details.open(media[index + direction])
         }
@@ -48,24 +32,20 @@ export const Details = () => {
 
     useKeyboard('keydown', 'ArrowLeft', () => {
         slide(-1)
-    }, [media, details.medium])
+    })
 
     useKeyboard('keydown', 'ArrowRight', () => {
         slide(1)
-    }, [media, details.medium])
+    })
 
     useKeyboard('keydown', 'Escape', () => {
         if (!dialog.active) {
             details.close()
         }
-    }, [dialog.active])
+    })
 
     const OpenInfosButton = () => {
-        if (details.infos) {
-            return <></>
-        }
-
-        return <Button
+        return !details.infos && <Button
             testId="show-infos"
             hint={t(ETrans.SHOW_THING, {
                 thing: t(ETrans.INFO_PLURAL)
@@ -79,15 +59,11 @@ export const Details = () => {
     }
 
     const ConditionalDateDetail = () => {
-        if (details.medium.dateTaken) {
-            return <Detail
-                icon={Icons.mdiCalendar}
-                title={formatDate(details.medium.dateTaken, EDateFormat.LONG)}
-                values={getRelativeTime(details.medium.dateTaken)}
-            />
-        }
-
-        return <></>
+        return details.medium.dateTaken && <Detail
+            icon={Icons.mdiCalendar}
+            title={formatDate(details.medium.dateTaken, EDateFormat.LONG)}
+            values={getRelativeTime(details.medium.dateTaken)}
+        />
     }
 
     const classes = bem('details', [
@@ -105,8 +81,8 @@ export const Details = () => {
 
     const previewClasses = bem('details__preview', [
         ['video', details.medium.mimetype?.startsWith('video')],
-        ['first', media.indexOf(details.medium) === 0],
-        ['last', media.indexOf(details.medium) === media.length - 1]
+        ['first', index === 0],
+        ['last', index === media.length - 1]
     ])
 
     return <div

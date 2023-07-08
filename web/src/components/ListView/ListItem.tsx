@@ -51,10 +51,10 @@ const ListItem = ({ element }: Props) => {
 
         return <td
             className="list-view__cell"
-            onClick={element.favoredBy.length ? removeFromFavorites : addToFavorites}
+            onClick={element.favoredBy?.length ? removeFromFavorites : addToFavorites}
         >
             <Icon
-                path={element.favoredBy.length ? Icons.mdiStar : Icons.mdiStarOutline}
+                path={element.favoredBy?.length ? Icons.mdiStar : Icons.mdiStarOutline}
                 size={1}
             />
         </td>

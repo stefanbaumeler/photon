@@ -12,8 +12,8 @@ import useRotate from '@/hooks/rotate'
 import { useRouter } from 'next/router'
 import useSetMediaStatus from '@/hooks/set-status'
 import TrashActions from './TrashActions'
-import useAddToFavorites from '@/hooks/add-to-favorites'
-import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
+import { useKeyboard } from '@/hooks/keyboard'
+import { FavoriteControl } from '@/components/controls/FavoriteControl'
 
 export const DetailsActions = () => {
     const { t } = useTranslation()
@@ -27,8 +27,6 @@ export const DetailsActions = () => {
     const layout = useLayoutContext()
 
     const moveToTrashDialog = useMoveToTrashDialog(details.medium)
-    const addToFavorites = useAddToFavorites([details.medium.id])
-    const removeFromFavorites = useRemoveFromFavorites([details.medium.id])
 
     const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
 
@@ -41,6 +39,8 @@ export const DetailsActions = () => {
     const select = () => {
         selection.toggle(details.medium)
     }
+
+    useKeyboard('keyup', 'a', archive)
 
     if (selection.mode === ESelectionMode.SELECT) {
         return <Tippy
@@ -91,23 +91,7 @@ export const DetailsActions = () => {
                 }}
                 icon={Icons.mdiTrayArrowDown}
             />
-            {details.medium.favoredBy?.length ? <Button
-                testId={'details-unfavorite'}
-                onClick={removeFromFavorites}
-                hint={t(ETrans.UNFAVORITE)}
-                appearance={{
-                    text: 'light'
-                }}
-                icon={Icons.mdiStar}
-            /> : <Button
-                testId={'details-favorite'}
-                onClick={addToFavorites}
-                hint={t(ETrans.FAVORITE)}
-                appearance={{
-                    text: 'light'
-                }}
-                icon={Icons.mdiStarOutline}
-            />}
+            <FavoriteControl medium={details.medium} />
             <Dropdown
                 items={moreItems}
                 active={moreActive}

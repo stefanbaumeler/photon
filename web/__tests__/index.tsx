@@ -25,7 +25,7 @@ const TestProvider = (props: Props) => {
     return (
         <MockedProvider>
             <I18nextProvider i18n={i18next}>
-                <ProviderProvider components={[SearchProvider, DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
+                <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
                     {children}
                 </ProviderProvider>
             </I18nextProvider>

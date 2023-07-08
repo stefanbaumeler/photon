@@ -15,7 +15,7 @@ const TrashPage = () => {
         trashMenu.refine({
             isRefined: true
         })
-    }, [trashMenu.canRefine])
+    }, [trashMenu])
 
     return <Layout>
         <section>

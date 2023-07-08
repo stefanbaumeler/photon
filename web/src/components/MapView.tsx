@@ -200,7 +200,7 @@ export const MapView = () => {
 
     useEffect(() => {
         recalculateMediaInBounds()
-    }, [])
+    }, [recalculateMediaInBounds])
 
     const HTMLMarker = ({ k }: { k: string }) => {
         const medium = markers.find((marker) => marker.id === k)

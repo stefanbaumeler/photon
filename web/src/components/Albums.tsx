@@ -3,7 +3,7 @@ import { ListView } from '.'
 import { ELayout } from '@/types/app'
 import { useDialogContext, useLayoutContext, useSelectionContext } from '@/providers'
 import { GridView } from '@/components/GridView'
-import useKeyboard from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks/keyboard'
 
 type Props = {
     albums: TAlbum[]
@@ -18,7 +18,7 @@ export const Albums = ({ albums }: Props) => {
         if (!dialog.active) {
             selection.clear()
         }
-    }, [dialog.active])
+    })
 
     if (layout.albumsLayout === ELayout.GRID) {
         return <GridView elements={albums} />

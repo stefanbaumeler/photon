@@ -1,26 +1,31 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { useHits, useInstantSearch } from 'react-instantsearch-hooks-web'
-import { TMedium } from '@photon/schema'
+import { useHits } from 'react-instantsearch-hooks-web'
+import { TMedium, useQMedia } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
 }
 
 interface SearchContext {
-    instantSearch: ReturnType<typeof useInstantSearch>
     hits: TMedium[]
 }
 
 const SearchContext = createContext<SearchContext | null>(null)
 
 const SearchProvider = ({ children }: Props) => {
-    const instantSearch = useInstantSearch()
-
     const { hits } = useHits<TMedium>()
+    const media = useQMedia()
+
+    const hitIds = hits.map((hit) => hit.id)
+
+    const m = media.data?.media.filter((medium) => {
+        return hitIds.includes(medium.id)
+    }).sort((a, b) => {
+        return hitIds.indexOf(a.id) - hitIds.indexOf(b.id)
+    })
 
     return <SearchContext.Provider value={{
-        instantSearch,
-        hits
+        hits: m || []
     }}
     >
         {children}

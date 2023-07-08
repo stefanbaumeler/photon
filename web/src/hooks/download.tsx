@@ -32,7 +32,7 @@ const useDownload = (ids?: string[]) => {
         }
 
         setSkip(true)
-    }, [download.data])
+    }, [router, download.data])
 
     return () => {
         setSkip(false)

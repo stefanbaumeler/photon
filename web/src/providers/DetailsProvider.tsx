@@ -1,5 +1,5 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { TMedium } from '@photon/schema'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { TMedium, useQMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
 
 type Props = {
@@ -21,10 +21,27 @@ interface DetailsContext {
 const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
-    const [medium, setMedium] = useState<TMedium>()
-    const [active, setActive] = useState(false)
     const [infos, setInfos] = useState(true)
     const router = useRouter()
+
+    const [medium, setMedium] = useState<TMedium>()
+    const [active, setActive] = useState(false)
+
+    const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
+
+    const mediumQuery = useQMedium({
+        variables: {
+            id: idMedium
+        },
+        skip: !idMedium
+    })
+
+    useEffect(() => {
+        if (mediumQuery.data) {
+            setMedium(mediumQuery.data.medium)
+            setActive(!!mediumQuery.data.medium)
+        }
+    }, [mediumQuery.data])
 
     const getUrl = (medium: TMedium) => {
         const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
@@ -41,20 +58,28 @@ const DetailsProvider = ({ children }: Props) => {
         return newUrl
     }
 
+    const open = (newMedium: TMedium) => {
+        if (!newMedium) {
+            return
+        }
+
+        setMedium(newMedium)
+        setActive(true)
+
+        if (router.query.idMedium !== newMedium.id) {
+            router.push(getUrl(newMedium), null, {
+                shallow: true
+            })
+        }
+    }
+
     return <DetailsContext.Provider value={{
         active,
         infos,
         medium,
         setMedium,
         getUrl,
-        open: (newMedium) => {
-            setMedium(newMedium)
-            setActive(true)
-
-            router.push(getUrl(newMedium), null, {
-                shallow: true
-            })
-        },
+        open,
         close: () => {
             let newUrl = router.pathname
 

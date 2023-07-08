@@ -1,6 +1,6 @@
 import { useDetailsContext } from '@/providers'
 import { TAlbum, useQAlbums } from '@photon/schema'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -16,8 +16,7 @@ export const DetailsAlbums = () => {
     const albumsResult = useQAlbums({
         variables: {
             idMedium: details.medium.id
-        },
-        skip: !!albums
+        }
     })
 
     useEffect(() => {
@@ -26,28 +25,34 @@ export const DetailsAlbums = () => {
         }
     }, [albumsResult.data])
 
+    const a = useMemo(() => {
+        const DetailsAlbum = ({ album }: { album: TAlbum}) => {
+            const count = t(ETrans.ELEMENT_COUNT, {
+                count: album.albumMedia.length
+            })
+
+            const date = formatDate(album.dateCreated, EDateFormat.SHORT)
+
+            return <Detail
+                icon={album.cover}
+                title={album.title || ''}
+                values={[count, date]}
+            />
+        }
+
+        return <>
+            {albums?.map((album, key) => <DetailsAlbum
+                album={album}
+                key={key}
+            />)}
+        </>
+    }, [albums, t])
+
     if (!albums?.length) {
         return <></>
     }
 
-    const DetailsAlbum = ({ album }: { album: TAlbum}) => {
-        const count = t(ETrans.ELEMENT_COUNT, {
-            count: album.albumMedia.length
-        })
-
-        const date = formatDate(album.dateCreated, EDateFormat.SHORT)
-
-        return <Detail
-            icon={album.cover}
-            title={album.title || ''}
-            values={[count, date]}
-        />
-    }
-
     return <DetailsSection title={t(ETrans.ALBUM_PLURAL)}>
-        {albums?.map((album, key) => <DetailsAlbum
-            album={album}
-            key={key}
-        />)}
+        {a}
     </DetailsSection>
 }

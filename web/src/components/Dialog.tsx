@@ -1,4 +1,4 @@
-import useKeyboard from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks/keyboard'
 import { useDialogContext } from '@/providers'
 import bem from '@/util/bem'
 import { Button } from '@/components'
@@ -8,7 +8,7 @@ export const Dialog = () => {
 
     useKeyboard('keydown', 'Escape', () => {
         dialog.close()
-    }, [])
+    })
     const DialogContent = () => {
         if (!dialog.content) {
             return <></>

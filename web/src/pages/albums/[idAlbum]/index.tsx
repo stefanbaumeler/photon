@@ -16,7 +16,7 @@ import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '@/hooks/set-album-cover'
 import { useMenu } from 'react-instantsearch-hooks'
-import { useCurrentRefinements } from 'react-instantsearch-hooks-web'
+import { useCurrentRefinements, useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const AlbumPage = () => {
     const currentRefinements = useCurrentRefinements()
@@ -26,8 +26,8 @@ const AlbumPage = () => {
 
     const selection = useSelectionContext()
     const edit = useEditContext()
-    const search = useSearchContext()
-    const media = search.hits
+    const { hits: media } = useSearchContext()
+    const instantSearch = useInstantSearch()
 
     const albumsMenu = useMenu({
         attribute: 'albums'
@@ -85,7 +85,7 @@ const AlbumPage = () => {
         if (albumsMenu.items.length && albumsMenu.canRefine && id && !currentRefinements.items.find((refinement) => refinement.label === 'albums')) {
             albumsMenu.refine(id)
         }
-    }, [albumsMenu.canRefine, albumsMenu.items.length, id])
+    }, [albumsMenu, currentRefinements.items, id])
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -104,7 +104,7 @@ const AlbumPage = () => {
         if (edit.state === EEditState.CONFIRMED) {
             if (selection.mode === ESelectionMode.DELETE) {
                 Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
-                    search.instantSearch.refresh()
+                    instantSearch.refresh()
                     selection.clear()
                 })
             }
@@ -121,7 +121,7 @@ const AlbumPage = () => {
             setTitle(album?.title || '')
             edit.setState(EEditState.OFF)
         }
-    }, [edit.state])
+    }, [album?.title, edit, removeFromAlbum, instantSearch, selection, setAlbumCover, updateAlbumTitle])
 
     useEffect(() => {
         const mediaSortedByDateTaken = media

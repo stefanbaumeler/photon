@@ -1,5 +1,5 @@
 import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext, useSelectionContext } from '@/providers'
-import useKeyboard from '../hooks/keyboard'
+import { useKeyboard } from '@/hooks/keyboard'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '.'
 import { useEffect } from 'react'
@@ -15,13 +15,13 @@ export const Media = () => {
         if (details.medium && Object.keys(details.medium).length && media) {
             details.setMedium(media.find((m) => m.id === details.medium.id))
         }
-    }, [media])
+    }, [details, media])
 
     useKeyboard('keydown', 'Escape', () => {
         if (!details.active && !dialog.active) {
             selection.clear()
         }
-    }, [details.active, dialog.active])
+    })
 
     if (layout.layout === ELayout.GALLERY) {
         return <GalleryView media={media} />

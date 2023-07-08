@@ -19,7 +19,7 @@ export const DetailsMap = () => {
             latitude,
             longitude
         })
-    }, [details.medium.location])
+    }, [latitude, longitude, details.medium.location])
 
     if (!hasLocation) {
         return <></>

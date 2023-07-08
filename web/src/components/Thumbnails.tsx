@@ -1,6 +1,5 @@
 import { Thumbnail } from '.'
 import { EThumbnailType, TThumbnail } from '@/types/app'
-import { useEffect, useState } from 'react'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import useAddToNewAlbum from '../hooks/add-to-new-album'
@@ -14,24 +13,18 @@ export const Thumbnails = () => {
     const addToNewAlbum = useAddToNewAlbum()
     const addToAlbum = useAddToAlbum()
 
-    const [thumbnails, setThumbnails]  = useState([])
+    const thumbnails = albums?.albums.map<TThumbnail>((album) => ({
+        type: EThumbnailType.DEFAULT,
+        title: album.title,
+        idMedium: album.cover.id,
+        onClick: () => addToAlbum(album.id)
+    })) || []
 
-    useEffect(() => {
-        const albumThumbnails = albums?.albums.map<TThumbnail>((album) => ({
-            type: EThumbnailType.DEFAULT,
-            title: album.title,
-            idMedium: album.cover.id,
-            onClick: () => addToAlbum(album.id)
-        })) || []
-
-        albumThumbnails.push({
-            type: EThumbnailType.ADD,
-            title: t(ETrans.NEW_ALBUM),
-            onClick: addToNewAlbum
-        })
-
-        setThumbnails(albumThumbnails)
-    }, [albums])
+    thumbnails.push({
+        type: EThumbnailType.ADD,
+        title: t(ETrans.NEW_ALBUM),
+        onClick: addToNewAlbum
+    })
 
     return <div className="thumbnails">
         {thumbnails.map((thumbnail, k) => <Thumbnail
