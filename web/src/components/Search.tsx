@@ -4,14 +4,12 @@ import { Button } from '@/components'
 import * as Icons from '@mdi/js'
 import { useQTranslate } from '@photon/schema'
 import { useEffect, KeyboardEvent, useState, ChangeEvent } from 'react'
-import { useSearchBox } from 'react-instantsearch-hooks-web'
 import bem from '@/util/bem'
 
 export const Search = () => {
     const { t } = useTranslation()
     const [query, setQuery] = useState('')
     const [text, setText] = useState('')
-    const box = useSearchBox()
 
     const translate = useQTranslate({
         variables: {
@@ -20,14 +18,14 @@ export const Search = () => {
         skip: !query.length
     })
 
-    useEffect(() => {
-        if (!query.length) {
-            box.refine('')
-        }
-        else if (translate.data) {
-            box.refine(translate.data.translate)
-        }
-    }, [box, query, translate.data])
+    // useEffect(() => {
+    //     if (!query.length) {
+    //         box.refine('')
+    //     }
+    //     else if (translate.data) {
+    //         box.refine(translate.data.translate)
+    //     }
+    // }, [box, query, translate.data])
 
     const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {

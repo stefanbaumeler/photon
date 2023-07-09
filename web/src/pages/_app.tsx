@@ -18,9 +18,6 @@ import '@/styles/index.scss'
 import { I18nextProvider } from 'react-i18next'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'tippy.js/themes/light.css'
-import { InstantSearch } from 'react-instantsearch-hooks-web'
-import { typesenseAdapter } from '@/api/search'
-import { SearchSetup } from '@/components'
 
 tippy.setDefaultProps({
     zIndex: 101,
@@ -36,17 +33,11 @@ const Photon = ({
 }: AppProps) => {
     return <ApolloProvider client={client}>
         <I18nextProvider i18n={i18next}>
-            <InstantSearch
-                searchClient={typesenseAdapter.searchClient}
-                indexName="media"
-            >
-                <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
-                    <SearchSetup />
-                    <SearchProvider>
-                        <Component {...pageProps} />
-                    </SearchProvider>
-                </ProviderProvider>
-            </InstantSearch>
+            <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
+                <SearchProvider>
+                    <Component {...pageProps} />
+                </SearchProvider>
+            </ProviderProvider>
         </I18nextProvider>
     </ApolloProvider>
 }

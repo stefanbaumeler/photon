@@ -41,7 +41,7 @@
         "seed-and-test": "start-server-and-test watch:api 11011 test"
     },
     "dependencies": {
-        "dotenv": "^16.0.3",
+        "dotenv": "^16.3.1",
         "graphql": "^16.6.0",
         "typescript": "^4.7.4"
     },

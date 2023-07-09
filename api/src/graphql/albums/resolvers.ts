@@ -1,5 +1,4 @@
 import AlbumsService from '../../services/albums'
-import AlbumsMediaService from '../../services/albumsMedia'
 import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 
 const queries: Partial<TQueryResolvers> = {
@@ -8,31 +7,31 @@ const queries: Partial<TQueryResolvers> = {
             owner: {
                 id: context.user.id
             },
-            albumMedia: input.idMedium ? {
-                some: {
-                    idMedium: input.idMedium
+            media: input.idMedium ? {
+                every: {
+                    id: input.idMedium
                 }
             } : undefined
         })
     },
     album: async (_, input, context) => new AlbumsService(context).readOne(input.id),
-    albumMedia: (_, input) => new AlbumsMediaService().readMediaOfAlbum(input.id)
+    albumMedia: async (_, input) => {
+        const result = await new AlbumsService().readOne(input.id)
+        return result?.media || []
+    }
 }
 
 const mutations: Partial<TMutationResolvers> = {
     deleteAlbum: (_, input, context) => {
         return new AlbumsService(context).destroy(input.ids)
     },
-    addToAlbum: (_, input) => {
-        const albumsMedia = input.media.map((medium) => ({
-            idAlbum: input.idAlbum,
-            idMedium: medium
-        }))
+    addToAlbum: async (_, input) => {
+        const result = await new AlbumsService().addToAlbum(input.idAlbum, input.media)
 
-        return new AlbumsMediaService().createMany(albumsMedia)
+        return result.media
     },
     removeFromAlbum: async (_, input, context) => {
-        await new AlbumsMediaService().removeFromAlbum(input.idAlbum, input.media)
+        await new AlbumsService().removeFromAlbum(input.idAlbum, input.media)
         return new AlbumsService(context).readOne(input.idAlbum)
     },
     updateAlbum: async (_, input, context) => {

@@ -1,11 +1,6 @@
 import gql from 'graphql-tag'
 
 export default gql`
-
-    type AlbumMedium {
-        idMedium: ID
-    }
-
     type Album {
         id: ID!
         dateCreated: Date
@@ -14,7 +9,7 @@ export default gql`
         description: String
         cover: Medium
         owner: User
-        albumMedia: [AlbumMedium]
+        media: [Medium]
     }
 
     input AlbumInput {

@@ -5,8 +5,6 @@ import { useQAlbums } from '@photon/schema'
 const AlbumsPage = () => {
     const albums = useQAlbums()
 
-    console.log(albums)
-
     return <Layout>
         <section>
             <div>

@@ -28,8 +28,6 @@ export const Detail = ({
         }
     }
 
-    console.log('ch')
-
     return <div className="detail">
         <div className="detail__icon">
             <IconOrThumbnail />

@@ -3,13 +3,11 @@ import { TMedium } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
-    media: TMedium[]
     containerWidth: number
     targetRowHeight: number
 }
 
 interface GalleryContext {
-    media: TMedium[]
     containerWidth: number
     targetRowHeight: number
 }
@@ -17,10 +15,9 @@ interface GalleryContext {
 const GalleryContext = createContext<GalleryContext | null>(null)
 
 const GalleryProvider = ({
-    containerWidth, targetRowHeight, media, children
+    containerWidth, targetRowHeight, children
 }: Props) => {
     return <GalleryContext.Provider value={{
-        media,
         containerWidth,
         targetRowHeight
     }}

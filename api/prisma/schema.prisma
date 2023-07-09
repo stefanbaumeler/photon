@@ -1,11 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
   binaryTargets   = ["native", "linux-musl"]
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "fullTextSearch", "fullTextIndex"]
 }
 
 generator json {
-    provider = "prisma-json-types-generator"
+  provider = "prisma-json-types-generator"
 }
 
 datasource db {
@@ -15,58 +15,59 @@ datasource db {
 }
 
 model Album {
-  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dateCreated        DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
-  dateModified       DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
-  title       String?       @db.VarChar(100)
-  description String?
-  idCover     String?       @map("id_cover") @db.Uuid
-  idOwner     String?       @map("id_owner") @db.Uuid
-  cover       Medium?       @relation(fields: [idCover], references: [id], onUpdate: NoAction, map: "album_id_medium_foreign")
-  owner       User?         @relation(fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_owner_foreign")
-  albumMedia  AlbumMedium[]
-}
-
-model AlbumMedium {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idAlbum  String @map("id_album") @db.Uuid
-  idMedium String @map("id_medium") @db.Uuid
-  album    Album  @relation(fields: [idAlbum], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_medium_id_album_foreign")
-  medium   Medium @relation(fields: [idMedium], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_medium_id_medium_foreign")
-
-  @@unique([idAlbum, idMedium])
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dateCreated  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
+  title        String?  @db.VarChar(100)
+  description  String?
+  idCover      String?  @map("id_cover") @db.Uuid
+  idOwner      String?  @map("id_owner") @db.Uuid
+  cover        Medium?  @relation("album_cover", fields: [idCover], references: [id], onUpdate: NoAction, map: "album_cover_foreign")
+  owner        User?    @relation(fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "album_owner_foreign")
+  media        Medium[]
 }
 
 model Medium {
-  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  hash               String?       @db.VarChar(255)
-  dateCreated        DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
-  dateModified       DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
-  dateModifiedStatus DateTime      @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified_status") @db.Timestamptz(6)
-  dateTaken          DateTime?     @map("date_taken") @db.Timestamptz(6)
-  filenameDisk       String        @map("filename_disk") @db.VarChar(100)
-  filenameDownload   String?       @map("filename_download") @db.VarChar(100)
-  title              String?       @db.VarChar(100)
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hash               String?   @db.VarChar(255)
+  dateCreated        DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified       DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
+  dateModifiedStatus DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified_status") @db.Timestamptz(6)
+  dateTaken          DateTime? @map("date_taken") @db.Timestamptz(6)
+  filenameDisk       String    @map("filename_disk") @db.VarChar(100)
+  filenameDownload   String?   @map("filename_download") @db.VarChar(100)
+  title              String?   @db.VarChar(100)
   description        String?
   location           Float[]
-  status             String?       @default("all")
-  mimetype           String?       @db.VarChar(255)
+  status             String?   @default("all")
+  mimetype           String?   @db.VarChar(255)
   /// [Meta]
-  meta               Json?         @db.Json
-  idOwner            String?       @db.Uuid
-  owner              User?         @relation("medium_owner", fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "medium_owner_foreign")
-  idUploader         String?       @db.Uuid
-  uploader           User?         @relation("medium_uploader", fields: [idUploader], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medium_uploader_foreign")
+  meta               Json?     @db.Json
+  idOwner            String?   @db.Uuid
+  owner              User?     @relation("medium_owner", fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "medium_owner_foreign")
+  idUploader         String?   @db.Uuid
+  uploader           User?     @relation("medium_uploader", fields: [idUploader], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medium_uploader_foreign")
   albums             Album[]
-  albumMedia         AlbumMedium[]
   favoredBy          User[]
-  generatedTags      String[]
-  country            String?       @default("")
-  region             String?       @default("")
-  place              String?       @default("")
-  address            String?       @default("")
+  country            String?   @default("")
+  region             String?   @default("")
+  place              String?   @default("")
+  address            String?   @default("")
+  tags               Tag[]
+  coverOfAlbums      Album[]   @relation("album_cover")
 
   @@unique(hash)
+}
+
+model Tag {
+  id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  label  String
+  idUser String   @map("id_user") @db.Uuid
+  user   User     @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "tag_id_user_foreign")
+  media  Medium[]
+  source String   @default("generated")
+
+  @@unique([idUser, label])
 }
 
 model Device {
@@ -92,4 +93,5 @@ model User {
   devices       Device[]
   favorites     Medium[]
   language      String
+  createdTags   Tag[]
 }

@@ -1,5 +1,5 @@
-query QMedia($status: String, $sort: String) {
-    media(status: $status, sort: $sort) {
+query QMedia($status: String, $sort: String, $album: String, $q: String) {
+    media(status: $status, sort: $sort, album: $album, q: $q) {
         ...FMedia
     }
 }

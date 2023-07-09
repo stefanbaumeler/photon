@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import sync from '../search/sync'
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
 export const setDbUrl = () => {
@@ -14,8 +13,6 @@ export const getDatabase = () => {
     globalForPrisma.prisma = new PrismaClient()
 
     setDbUrl()
-
-    sync(globalForPrisma.prisma)
 
     return globalForPrisma.prisma
 }

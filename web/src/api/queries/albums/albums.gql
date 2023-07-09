@@ -13,8 +13,8 @@ query QAlbums($idMedium: ID) {
             firstName
             lastName
         },
-        albumMedia {
-            idMedium
+        media {
+            ...FMedia
         }
     }
 }

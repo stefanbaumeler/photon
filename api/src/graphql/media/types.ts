@@ -20,6 +20,13 @@ export default gql`
 
     union Meta = VideoMeta | ImageMeta
 
+    type Tag {
+        id: ID!
+        label: String!
+        source: String!
+        idUser: String!
+    }
+
     type Medium {
         id: ID!
         dateCreated: Date
@@ -38,7 +45,7 @@ export default gql`
         uploader: User
         hash: String
         favoredBy: [User]
-        generatedTags: [String]
+        tags: [Tag]
         country: String
         region: String
         place: String
@@ -70,7 +77,7 @@ export default gql`
     }
 
     type Query {
-        media(status: String, sort: String): [Medium!] @auth
+        media(status: String, sort: String, album: String, q: String): [Medium!] @auth
         medium(id: ID!): Medium @auth
         mediaCountByYear: YearCountResult! @auth
         download(media: [ID!]!): Download! @auth

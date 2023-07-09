@@ -1,25 +1,22 @@
-// docker exec -t db_c pg_dump photos -c --if-exists -U stefanbaumeler > dump.sql
-
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+import devEnv from './data/dev'
+import testEnv from './data/test'
 import { getEnv } from '../env'
-import { promisify } from 'util'
-import { exec } from 'child_process'
+import { setDbUrl } from '../src/database'
 import path from 'path'
-import reset from '../src/search/reset'
-import https from 'https'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
-import { setDbUrl } from '../src/database'
+import https from 'https'
 
-const exc = promisify(exec)
-
-export default async (setup: string, force = false) => {
+async function main (setup: string, force = false) {
     const env = getEnv()
     setDbUrl()
     const uploadsDir = path.join(__dirname, '../', env.API_UPLOADS_DIR)
-    const zipPath = path.join(__dirname, `${setup}/uploads.zip`)
+    const zipPath = path.join(__dirname, `./data/${setup}/uploads.zip`)
 
-    if (!fs.existsSync(uploadsDir)){
-        fs.mkdirSync(uploadsDir);
+    if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir)
     }
 
     const unzip = async () => {
@@ -56,14 +53,25 @@ export default async (setup: string, force = false) => {
         })
     }
 
-    try {
-        const res = await exc(`PGPASSWORD=postgres psql ${env.DB_DATABASE} -U ${env.DB_USER} -h ${env.DB_HOST} -p ${env.DB_PORT} -f ${path.join(__dirname, setup, 'dump.sql')}`)
-        if (res.stderr) {
-            console.log(res.stderr)
-        }
+    if (setup === 'dev') {
+        await devEnv()
+        return
     }
-    catch (err) {
-        console.log(err)
+
+    if (setup === 'test') {
+        await testEnv()
     }
-    await reset()
 }
+
+const force = process.argv[process.argv.length - 1] === '-f'
+const setup = force ? process.argv[process.argv.length - 2] : process.argv[process.argv.length - 1]
+
+main(setup, force)
+    .then(async () => {
+        await prisma.$disconnect()
+    })
+    .catch(async (e) => {
+        console.error(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })

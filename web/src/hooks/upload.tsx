@@ -2,12 +2,12 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { QMediaYearCountDocument, useMUpload } from '@photon/schema'
 import tauri from '../tauri'
 import { FileUpload } from 'graphql-upload-minimal'
-import { useInstantSearch } from 'react-instantsearch-hooks-web'
+import { useSearchContext } from '@/providers'
 
 const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
 
-    const instantSearch = useInstantSearch()
+    const search = useSearchContext()
 
     const [upload] = useMUpload({
         variables: {
@@ -25,11 +25,11 @@ const useUpload = () => {
             tauri.upload(files)
 
             upload().then(() => {
-                instantSearch.refresh()
+                search.refetch()
                 setFiles(undefined)
             })
         }
-    }, [instantSearch, upload, files])
+    }, [search, upload, files])
 
     return async (event: ChangeEvent<HTMLInputElement> | string[]) => {
         let files: File[]

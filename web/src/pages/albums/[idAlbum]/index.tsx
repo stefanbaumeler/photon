@@ -15,11 +15,8 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '@/hooks/set-album-cover'
-import { useMenu } from 'react-instantsearch-hooks'
-import { useCurrentRefinements, useInstantSearch } from 'react-instantsearch-hooks-web'
 
 const AlbumPage = () => {
-    const currentRefinements = useCurrentRefinements()
     const router = useRouter()
     const { t } = useTranslation()
     const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
@@ -27,11 +24,6 @@ const AlbumPage = () => {
     const selection = useSelectionContext()
     const edit = useEditContext()
     const { hits: media } = useSearchContext()
-    const instantSearch = useInstantSearch()
-
-    const albumsMenu = useMenu({
-        attribute: 'albums'
-    })
 
     const titleEl = useRef(null)
 
@@ -82,12 +74,6 @@ const AlbumPage = () => {
     const setAlbumCover = useSetAlbumCover(id)
 
     useEffect(() => {
-        if (albumsMenu.items.length && albumsMenu.canRefine && id && !currentRefinements.items.find((refinement) => refinement.label === 'albums')) {
-            albumsMenu.refine(id)
-        }
-    }, [albumsMenu, currentRefinements.items, id])
-
-    useEffect(() => {
         if (albumQuery.data) {
             setAlbum(albumQuery.data.album as TAlbum)
             setTitle(albumQuery.data.album.title || '')
@@ -104,7 +90,6 @@ const AlbumPage = () => {
         if (edit.state === EEditState.CONFIRMED) {
             if (selection.mode === ESelectionMode.DELETE) {
                 Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
-                    instantSearch.refresh()
                     selection.clear()
                 })
             }
@@ -121,10 +106,10 @@ const AlbumPage = () => {
             setTitle(album?.title || '')
             edit.setState(EEditState.OFF)
         }
-    }, [album?.title, edit, removeFromAlbum, instantSearch, selection, setAlbumCover, updateAlbumTitle])
+    }, [album?.title, edit, removeFromAlbum, selection, setAlbumCover, updateAlbumTitle])
 
     useEffect(() => {
-        const mediaSortedByDateTaken = media
+        const mediaSortedByDateTaken = [...media]
             .sort((a, b) => new Date(a.dateTaken).getTime() - new Date(b.dateTaken).getTime())
 
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))

@@ -1,21 +1,15 @@
 import Layout from '../layouts/layout'
 import { Details, Dialog, Media, Uploader } from '@/components'
-import { DetailsProvider } from '@/providers'
-import { useToggleRefinement } from 'react-instantsearch-hooks'
+import { DetailsProvider, useSearchContext } from '@/providers'
 import { useEffect } from 'react'
+import { EMediumStatus } from '@/types/app'
 
 const TrashPage = () => {
-    const trashMenu = useToggleRefinement({
-        attribute: 'isTrash',
-        on: false,
-        off: true
-    })
+    const search = useSearchContext()
 
     useEffect(() => {
-        trashMenu.refine({
-            isRefined: true
-        })
-    }, [trashMenu])
+        search.setStatus(EMediumStatus.TRASH)
+    }, [search])
 
     return <Layout>
         <section>

@@ -1,4 +1,3 @@
-import AlbumsMediaService from './albumsMedia'
 import { Prisma } from '@prisma/client'
 import { DB } from '../database'
 
@@ -14,7 +13,7 @@ export default class AlbumsService {
             }
         }
 
-        const created = await DB.album.create({
+        return DB.album.create({
             data: {
                 ...album,
                 cover: album.cover,
@@ -22,24 +21,19 @@ export default class AlbumsService {
                     connect: {
                         id: this.context?.user.id
                     }
-                }
+                },
+                media: media ? {
+                    connect: media.map((medium) => {
+                        return {
+                            id: medium.id
+                        }
+                    })
+                } : undefined
             },
             include: {
                 owner: true
             }
         })
-
-        if (media && created) {
-            const albumsMediaService = new AlbumsMediaService()
-            const albumsMedia = media.map((medium) => ({
-                idMedium: medium.id,
-                idAlbum: created.id
-            })) || []
-
-            await albumsMediaService.createMany(albumsMedia)
-        }
-
-        return created
     }
 
     readOne = async (id: string) => {
@@ -54,11 +48,7 @@ export default class AlbumsService {
                         owner: true
                     }
                 },
-                albumMedia: {
-                    select: {
-                        idMedium: true
-                    }
-                }
+                media: true
             }
         })
     }
@@ -69,16 +59,8 @@ export default class AlbumsService {
             take,
             include: {
                 owner: true,
-                cover: {
-                    include: {
-                        owner: true
-                    }
-                },
-                albumMedia: {
-                    select: {
-                        idMedium: true
-                    }
-                }
+                media: true,
+                cover: true
             }
         })
     }
@@ -106,6 +88,57 @@ export default class AlbumsService {
             data: {
                 ...newProps,
                 cover: newProps?.cover
+            },
+            include: {
+                owner: true,
+                cover: {
+                    include: {
+                        owner: true
+                    }
+                }
+            }
+        })
+    }
+
+    addToAlbum = async (id: string, mediaToAdd: string[]) => {
+        return DB.album.update({
+            where: {
+                id
+            },
+            data: {
+                media: {
+                    connect: mediaToAdd.map((mediumToAdd) => {
+                        return {
+                            id: mediumToAdd
+                        }
+                    })
+                }
+            },
+            include: {
+                media: true,
+                owner: true,
+                cover: {
+                    include: {
+                        owner: true
+                    }
+                }
+            }
+        })
+    }
+
+    removeFromAlbum = async (id: string, mediaToRemove: string[]) => {
+        return DB.album.update({
+            where: {
+                id
+            },
+            data: {
+                media: {
+                    disconnect: mediaToRemove.map((mediumToRemove) => {
+                        return {
+                            id: mediumToRemove
+                        }
+                    })
+                }
             },
             include: {
                 owner: true,

@@ -11,5 +11,8 @@ query QAlbum($id: ID!) {
         owner {
             id
         }
+        media {
+            ...FMedia
+        }
     }
 }

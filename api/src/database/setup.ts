@@ -10,9 +10,3 @@ exec(`docker exec db_c createdb ${env.DB_DATABASE} -U ${env.DB_USER}`, (error) =
         throw error
     }
 })
-
-exec('prisma db push --schema ../api/prisma/schema.prisma --accept-data-loss', (schemaError) => {
-    if (schemaError !== null) {
-        throw schemaError
-    }
-})

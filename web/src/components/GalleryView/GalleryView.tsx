@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react'
 import { EMediumSort, ESelectionMode } from '@/types/app'
 import { formatDate } from '@/util/date'
 import { GallerySection } from './GallerySection'
-import { useSelectionContext, useSortContext } from '@/providers'
-import { useGalleryContext } from './GalleryContext'
+import { useSearchContext, useSelectionContext, useSortContext } from '@/providers'
 import { Scrollbar } from '@/components'
+import { sortMediaByDate } from '@/util/sort'
 
 export const GalleryView = () => {
     const selection = useSelectionContext()
-    const gallery = useGalleryContext()
+    const { hits: media } = useSearchContext()
 
     const [sections, setSections] = useState([])
     const sort = useSortContext()
 
     useEffect(() => {
-        const groups = gallery.media
+        const groups = media
             .filter((medium) => selection.mode === ESelectionMode.DELETE ? !selection.selected.has(medium) : true)
             .map((medium) => {
                 const groupByDate = sort.sort === EMediumSort.RECENT ? medium.dateCreated : medium.dateTaken
@@ -33,25 +33,27 @@ export const GalleryView = () => {
             }).map((groupDate) => formatDate(groupDate))
 
         const newSections = [...new Set(groups)].map((groupDate, key) => {
-            const mediaMatchingThisGroup = gallery.media.filter((medium) => {
+            const mediaMatchingThisGroup = media.filter((medium) => {
                 return sort.sort === EMediumSort.RECENT
                     ? formatDate(medium.dateCreated) === groupDate
                     : formatDate(medium.dateTaken) === groupDate || !medium.dateTaken && formatDate(medium.dateCreated) === groupDate
             })
 
-            if (!mediaMatchingThisGroup.length) {
+            const sortedMedia = sortMediaByDate(mediaMatchingThisGroup, sort.sort)
+
+            if (!sortedMedia.length) {
                 return
             }
 
             return <GallerySection
                 key={key}
                 title={groupDate}
-                media={mediaMatchingThisGroup}
+                media={sortedMedia}
             />
         })
 
         setSections(newSections)
-    }, [selection.mode, selection.selected, gallery.media, sort.sort])
+    }, [selection.mode, selection.selected, media, sort.sort])
 
     return <div className="gallery">
         <div className="gallery__sections">

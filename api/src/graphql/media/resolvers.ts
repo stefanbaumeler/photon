@@ -1,20 +1,32 @@
 import MediaService from '../../services/media'
 import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 import { GraphQLError } from 'graphql/error'
+import { Prisma } from '@prisma/client'
+import AlbumsService from '../../services/albums'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
+        if (input.album) {
+            const result = await new AlbumsService().readOne(input.album)
+            return result?.media || []
+        }
+
+        const conditions: Prisma.MediumWhereInput = {
+            owner: {
+                id: context.user.id
+            }
+        }
+
+        if (input.status) {
+            conditions.status = input.status
+        }
+
+        if (input.q) {
+            // conditions.generatedTags = {}
+        }
+
         return new MediaService(context).readMany({
-            conditions: input.status ? {
-                status: input.status,
-                owner: {
-                    id: context.user.id
-                }
-            } : {
-                owner: {
-                    id: context.user.id
-                }
-            },
+            conditions,
             orderBy: input.sort === 'recent' ? {
                 dateCreated: 'desc'
             } : {

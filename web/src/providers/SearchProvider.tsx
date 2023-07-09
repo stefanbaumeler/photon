@@ -1,6 +1,10 @@
-import { createContext, ReactNode, useContext } from 'react'
-import { useHits } from 'react-instantsearch-hooks-web'
-import { TMedium, useQMedia } from '@photon/schema'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
+import { Exact, TMedium, TQMedia, useQMedia } from '@photon/schema'
+import { EMediumSort, EMediumStatus } from '@/types/app'
+import { useSortContext } from '@/providers/SortProvider'
+import { useRouter } from 'next/router'
+import { ApolloQueryResult } from '@apollo/client/core/types'
+import { sortMediaByDate } from '@/util/sort'
 
 type Props = {
     children?: ReactNode
@@ -8,24 +12,37 @@ type Props = {
 
 interface SearchContext {
     hits: TMedium[]
+    setStatus: Dispatch<SetStateAction<EMediumStatus>>
+    status: EMediumStatus
+    refetch: (variables?: Partial<Exact<{status?: string, sort?: string, album?: string}>>) => Promise<ApolloQueryResult<TQMedia>>
 }
 
 const SearchContext = createContext<SearchContext | null>(null)
 
 const SearchProvider = ({ children }: Props) => {
-    const { hits } = useHits<TMedium>()
-    const media = useQMedia()
+    const router = useRouter()
 
-    const hitIds = hits.map((hit) => hit.id)
+    const album = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
-    const m = media.data?.media.filter((medium) => {
-        return hitIds.includes(medium.id)
-    }).sort((a, b) => {
-        return hitIds.indexOf(a.id) - hitIds.indexOf(b.id)
+    const [status, setStatus] = useState(EMediumStatus.ALL)
+
+    const { sort } = useSortContext()
+
+    const media = useQMedia({
+        variables: {
+            status,
+            sort,
+            album
+        }
     })
 
+    const sortedMedia = sortMediaByDate(media.data?.media || [], sort)
+
     return <SearchContext.Provider value={{
-        hits: m || []
+        hits: sortedMedia,
+        setStatus,
+        status,
+        refetch: media.refetch
     }}
     >
         {children}

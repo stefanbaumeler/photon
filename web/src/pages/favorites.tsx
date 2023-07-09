@@ -1,33 +1,15 @@
 import Layout from '../layouts/layout'
 import { Uploader, Details, Dialog, Media } from '@/components'
-import { DetailsProvider } from '@/providers'
-import { useToggleRefinement } from 'react-instantsearch-hooks'
+import { DetailsProvider, useSearchContext } from '@/providers'
 import { useEffect } from 'react'
+import { EMediumStatus } from '@/types/app'
 
 const FavoritesPage = () => {
-    const favoritesMenu = useToggleRefinement({
-        attribute: 'isFavorite',
-        on: false,
-        off: true
-    })
+    const search = useSearchContext()
 
     useEffect(() => {
-        favoritesMenu.refine({
-            isRefined: true
-        })
-    }, [favoritesMenu])
-
-    const notTrashMenu = useToggleRefinement({
-        attribute: 'isTrash',
-        on: true,
-        off: false
-    })
-
-    useEffect(() => {
-        notTrashMenu.refine({
-            isRefined: true
-        })
-    }, [notTrashMenu])
+        search.setStatus(EMediumStatus.ALL)
+    }, [search])
 
     return <Layout>
         <section>

@@ -63,7 +63,7 @@ const DetailsProvider = ({ children }: Props) => {
             return
         }
 
-        setMedium(newMedium)
+        // setMedium(newMedium)
         setActive(true)
 
         if (router.query.idMedium !== newMedium.id) {

@@ -10,14 +10,11 @@ import { getCV } from '../../drivers'
 import path from 'path'
 import { getEnv } from '../../env'
 import AdmZip from 'adm-zip'
-import { getTypesense } from '../search'
 import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
 
 const env = getEnv()
 
 export default class MediaService {
-    typesense = getTypesense()
-
     constructor (public context?: { user: { id: string } }) {}
 
     createOne = async (medium: Prisma.MediumCreateInput) => {
@@ -244,12 +241,33 @@ export default class MediaService {
             return
         }
 
+        if (!this.context) {
+            return
+        }
+
+        const userId = this.context.user.id
+
         await DB.medium.update({
             where: {
                 id: medium.id
             },
             data: {
-                generatedTags: tags
+                tags: {
+                    connectOrCreate: tags.map((tag) => {
+                        return {
+                            where: {
+                                idUser_label: {
+                                    idUser: userId,
+                                    label: tag
+                                }
+                            },
+                            create: {
+                                idUser: userId,
+                                label: tag
+                            }
+                        }
+                    })
+                }
             }
         })
     }
@@ -350,12 +368,13 @@ export default class MediaService {
 
     readMany = async ({
         conditions, orderBy, take
-    }: { conditions?: Prisma.MediumWhereInput, orderBy?: Enumerable<Prisma.MediumOrderByWithRelationInput>, take?: number } = {}) => {
+    }: { conditions?: Prisma.MediumWhereInput, orderBy?: Enumerable<Prisma.MediumOrderByWithRelationAndSearchRelevanceInput>, take?: number } = {}) => {
         return DB.medium.findMany({
             where: conditions,
             orderBy,
             take,
             include: {
+                tags: true,
                 owner: true,
                 uploader: true,
                 favoredBy: {

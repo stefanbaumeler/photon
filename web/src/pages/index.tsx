@@ -1,33 +1,15 @@
 import Layout from '../layouts/layout'
 import { Details, Dialog, Media, Uploader } from '@/components'
-import { DetailsProvider } from '@/providers'
-import { useToggleRefinement } from 'react-instantsearch-hooks'
+import { DetailsProvider, useSearchContext } from '@/providers'
 import { useEffect } from 'react'
+import { EMediumStatus } from '@/types/app'
 
 const HomePage = () => {
-    const archivedMenu = useToggleRefinement({
-        attribute: 'isArchived',
-        on: true,
-        off: false
-    })
-
-    const trashMenu = useToggleRefinement({
-        attribute: 'isTrash',
-        on: true,
-        off: false
-    })
+    const search = useSearchContext()
 
     useEffect(() => {
-        archivedMenu.refine({
-            isRefined: true
-        })
-    }, [archivedMenu])
-
-    useEffect(() => {
-        trashMenu.refine({
-            isRefined: true
-        })
-    }, [trashMenu])
+        search.setStatus(EMediumStatus.ALL)
+    }, [search])
 
     return <Layout>
         <Dialog />

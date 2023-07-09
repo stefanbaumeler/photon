@@ -23,12 +23,12 @@ export type Scalars = {
 
 export type TAlbum = {
   __typename?: 'Album';
-  albumMedia?: Maybe<Array<Maybe<TAlbumMedium>>>;
   cover?: Maybe<TMedium>;
   dateCreated?: Maybe<Scalars['DateTime']>;
   dateModified?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  media?: Maybe<Array<Maybe<TMedium>>>;
   owner?: Maybe<TUser>;
   title?: Maybe<Scalars['String']>;
 };
@@ -38,11 +38,6 @@ export type TAlbumInput = {
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   title?: InputMaybe<Scalars['String']>;
-};
-
-export type TAlbumMedium = {
-  __typename?: 'AlbumMedium';
-  idMedium?: Maybe<Scalars['ID']>;
 };
 
 export type TCount = {
@@ -98,7 +93,6 @@ export type TMedium = {
   favoredBy?: Maybe<Array<Maybe<TUser>>>;
   filenameDisk?: Maybe<Scalars['String']>;
   filenameDownload?: Maybe<Scalars['String']>;
-  generatedTags?: Maybe<Array<Maybe<Scalars['String']>>>;
   hash?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   location?: Maybe<Array<Maybe<Scalars['Float']>>>;
@@ -108,6 +102,7 @@ export type TMedium = {
   place?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<TTag>>>;
   title?: Maybe<Scalars['String']>;
   uploader?: Maybe<TUser>;
 };
@@ -258,6 +253,8 @@ export type TQueryDownloadArgs = {
 
 
 export type TQueryMediaArgs = {
+  album?: InputMaybe<Scalars['String']>;
+  q?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
 };
@@ -275,6 +272,14 @@ export type TQueryTranslateArgs = {
 
 export type TQueryUserArgs = {
   id: Scalars['ID'];
+};
+
+export type TTag = {
+  __typename?: 'Tag';
+  id: Scalars['ID'];
+  idUser: Scalars['String'];
+  label: Scalars['String'];
+  source: Scalars['String'];
 };
 
 export type TToken = {
@@ -402,7 +407,6 @@ export type TResolversUnionParentTypes = {
 export type TResolversTypes = {
   Album: ResolverTypeWrapper<TAlbum>;
   AlbumInput: TAlbumInput;
-  AlbumMedium: ResolverTypeWrapper<TAlbumMedium>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Count: ResolverTypeWrapper<TCount>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
@@ -419,6 +423,7 @@ export type TResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Tag: ResolverTypeWrapper<TTag>;
   Token: ResolverTypeWrapper<TToken>;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<TUser>;
@@ -432,7 +437,6 @@ export type TResolversTypes = {
 export type TResolversParentTypes = {
   Album: TAlbum;
   AlbumInput: TAlbumInput;
-  AlbumMedium: TAlbumMedium;
   Boolean: Scalars['Boolean'];
   Count: TCount;
   DateTime: Scalars['DateTime'];
@@ -449,6 +453,7 @@ export type TResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: Scalars['String'];
+  Tag: TTag;
   Token: TToken;
   Upload: Scalars['Upload'];
   User: TUser;
@@ -463,19 +468,14 @@ export type TAuthDirectiveArgs = { };
 export type TAuthDirectiveResolver<Result, Parent, ContextType = any, Args = TAuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type TAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Album'] = TResolversParentTypes['Album']> = {
-  albumMedia?: Resolver<Maybe<Array<Maybe<TResolversTypes['AlbumMedium']>>>, ParentType, ContextType>;
   cover?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
   dateCreated?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   dateModified?: Resolver<Maybe<TResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
+  media?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
   owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type TAlbumMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['AlbumMedium'] = TResolversParentTypes['AlbumMedium']> = {
-  idMedium?: Resolver<Maybe<TResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -530,7 +530,6 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   favoredBy?: Resolver<Maybe<Array<Maybe<TResolversTypes['User']>>>, ParentType, ContextType>;
   filenameDisk?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   filenameDownload?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  generatedTags?: Resolver<Maybe<Array<Maybe<TResolversTypes['String']>>>, ParentType, ContextType>;
   hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
   location?: Resolver<Maybe<Array<Maybe<TResolversTypes['Float']>>>, ParentType, ContextType>;
@@ -540,6 +539,7 @@ export type TMediumResolvers<ContextType = any, ParentType extends TResolversPar
   place?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   region?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<Maybe<TResolversTypes['Tag']>>>, ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   uploader?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -582,6 +582,14 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   translate?: Resolver<TResolversTypes['String'], ParentType, ContextType, RequireFields<TQueryTranslateArgs, 'query'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type TTagResolvers<ContextType = any, ParentType extends TResolversParentTypes['Tag'] = TResolversParentTypes['Tag']> = {
+  id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
+  idUser?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TTokenResolvers<ContextType = any, ParentType extends TResolversParentTypes['Token'] = TResolversParentTypes['Token']> = {
@@ -634,7 +642,6 @@ export type TYearCountResultResolvers<ContextType = any, ParentType extends TRes
 
 export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
-  AlbumMedium?: TAlbumMediumResolvers<ContextType>;
   Count?: TCountResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Device?: TDeviceResolvers<ContextType>;
@@ -645,6 +652,7 @@ export type TResolvers<ContextType = any> = {
   Meta?: TMetaResolvers<ContextType>;
   Mutation?: TMutationResolvers<ContextType>;
   Query?: TQueryResolvers<ContextType>;
+  Tag?: TTagResolvers<ContextType>;
   Token?: TTokenResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: TUserResolvers<ContextType>;
@@ -709,7 +717,26 @@ export type TQAlbum = (
     )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
-    )> }
+    )>, media?: Maybe<Array<Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+      & { favoredBy?: Maybe<Array<Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>>>, owner?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, uploader?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, meta?: Maybe<(
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+      )> }
+    )>>> }
   )> }
 );
 
@@ -774,9 +801,25 @@ export type TQAlbums = (
     )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    )>, albumMedia?: Maybe<Array<Maybe<(
-      { __typename?: 'AlbumMedium' }
-      & Pick<TAlbumMedium, 'idMedium'>
+    )>, media?: Maybe<Array<Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+      & { favoredBy?: Maybe<Array<Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>>>, owner?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, uploader?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<TUser, 'id'>
+      )>, meta?: Maybe<(
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+      )> }
     )>>> }
   )> }
 );
@@ -929,6 +972,8 @@ export type TMEmptyTrash = (
 export type TQMediaVariables = Exact<{
   status?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
+  album?: InputMaybe<Scalars['String']>;
+  q?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1210,9 +1255,12 @@ export const QAlbumDocument = gql`
     owner {
       id
     }
+    media {
+      ...FMedia
+    }
   }
 }
-    `;
+    ${FMedia}`;
 
 /**
  * __useQAlbum__
@@ -1292,8 +1340,8 @@ export const QAlbumsDocument = gql`
       firstName
       lastName
     }
-    albumMedia {
-      idMedium
+    media {
+      ...FMedia
     }
   }
 }
@@ -1662,8 +1710,8 @@ export type MEmptyTrashHookResult = ReturnType<typeof useMEmptyTrash>;
 export type MEmptyTrashMutationResult = Apollo.MutationResult<TMEmptyTrash>;
 export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash, TMEmptyTrashVariables>;
 export const QMediaDocument = gql`
-    query QMedia($status: String, $sort: String) {
-  media(status: $status, sort: $sort) {
+    query QMedia($status: String, $sort: String, $album: String, $q: String) {
+  media(status: $status, sort: $sort, album: $album, q: $q) {
     ...FMedia
   }
 }
@@ -1683,6 +1731,8 @@ export const QMediaDocument = gql`
  *   variables: {
  *      status: // value for 'status'
  *      sort: // value for 'sort'
+ *      album: // value for 'album'
+ *      q: // value for 'q'
  *   },
  * });
  */

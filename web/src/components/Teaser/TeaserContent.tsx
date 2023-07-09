@@ -16,9 +16,9 @@ export const TeaserContent = () => {
             className="teaser__count"
             data-testid="album-teaser-count"
         >
-            {`${element.albumMedia.length} `}
+            {`${element.media.length} `}
             {t(ETrans.ELEMENT, {
-                count: element.albumMedia.length
+                count: element.media.length
             })}
         </span>
     }

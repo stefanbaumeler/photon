@@ -15,6 +15,12 @@ export const TeaserTopRightCorner = () => {
     const { element } = useTeaserContext()
     const { t } = useTranslation()
 
+    const [moreActive, setMoreActive] = useState(false)
+
+    const download = useDownload(isMedium(element) ? [] : element.media.map(({ id }) => id))
+
+    const deleteAlbumDialog = useDeleteAlbumDialog(element.id)
+
     if (isMedium(element)) {
         if (element.mimetype.startsWith('video')) {
             const meta = element.meta as TVideoMeta
@@ -30,12 +36,6 @@ export const TeaserTopRightCorner = () => {
 
         return <></>
     }
-
-    const [moreActive, setMoreActive] = useState(false)
-
-    const download = useDownload(element.albumMedia.map(({ idMedium }) => idMedium))
-
-    const deleteAlbumDialog = useDeleteAlbumDialog(element.id)
 
     const moreItems = [
         {

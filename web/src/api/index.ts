@@ -21,6 +21,4 @@ const client = new ApolloClient({
     link: from([errorLink, uploadLink])
 })
 
-console.log(client)
-
 export { client }
