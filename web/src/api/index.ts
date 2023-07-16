@@ -15,10 +15,8 @@ const uploadLink = createUploadLink({
     }
 })
 
-const client = new ApolloClient({
+export default new ApolloClient({
     connectToDevTools: true,
     cache,
     link: from([errorLink, uploadLink])
 })
-
-export { client }

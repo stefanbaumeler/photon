@@ -5,11 +5,13 @@ import * as Icons from '@mdi/js'
 import { useQTranslate } from '@photon/schema'
 import { useEffect, KeyboardEvent, useState, ChangeEvent } from 'react'
 import bem from '@/util/bem'
+import { useSearchContext } from '@/providers'
 
 export const Search = () => {
     const { t } = useTranslation()
     const [query, setQuery] = useState('')
     const [text, setText] = useState('')
+    const search = useSearchContext()
 
     const translate = useQTranslate({
         variables: {
@@ -18,14 +20,9 @@ export const Search = () => {
         skip: !query.length
     })
 
-    // useEffect(() => {
-    //     if (!query.length) {
-    //         box.refine('')
-    //     }
-    //     else if (translate.data) {
-    //         box.refine(translate.data.translate)
-    //     }
-    // }, [box, query, translate.data])
+    useEffect(() => {
+        search.setQuery(query)
+    }, [query, search])
 
     const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {

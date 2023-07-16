@@ -254,6 +254,7 @@ export type TQueryDownloadArgs = {
 
 export type TQueryMediaArgs = {
   album?: InputMaybe<Scalars['String']>;
+  favorites?: InputMaybe<Scalars['Boolean']>;
   q?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
@@ -687,6 +688,11 @@ export type TFMedia = (
   )> }
 );
 
+export type TFMediaStatus = (
+  { __typename: 'Medium' }
+  & Pick<TMedium, 'id' | 'status'>
+);
+
 export type TMAddToAlbumVariables = Exact<{
   idAlbum: Scalars['ID'];
   media: Array<Scalars['ID']> | Scalars['ID'];
@@ -973,6 +979,7 @@ export type TQMediaVariables = Exact<{
   status?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   album?: InputMaybe<Scalars['String']>;
+  favorites?: InputMaybe<Scalars['Boolean']>;
   q?: InputMaybe<Scalars['String']>;
 }>;
 
@@ -1088,7 +1095,23 @@ export type TMSetMediaStatus = (
   { __typename?: 'Mutation' }
   & { setMediaStatus: Array<(
     { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>>>, owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>, meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    )> }
   )> }
 );
 
@@ -1205,6 +1228,13 @@ export const FMedia = gql`
       duration
     }
   }
+}
+    `;
+export const FMediaStatus = gql`
+    fragment FMediaStatus on Medium {
+  id
+  __typename
+  status
 }
     `;
 export const MAddToAlbumDocument = gql`
@@ -1710,8 +1740,8 @@ export type MEmptyTrashHookResult = ReturnType<typeof useMEmptyTrash>;
 export type MEmptyTrashMutationResult = Apollo.MutationResult<TMEmptyTrash>;
 export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash, TMEmptyTrashVariables>;
 export const QMediaDocument = gql`
-    query QMedia($status: String, $sort: String, $album: String, $q: String) {
-  media(status: $status, sort: $sort, album: $album, q: $q) {
+    query QMedia($status: String, $sort: String, $album: String, $favorites: Boolean, $q: String) {
+  media(status: $status, sort: $sort, album: $album, favorites: $favorites, q: $q) {
     ...FMedia
   }
 }
@@ -1732,6 +1762,7 @@ export const QMediaDocument = gql`
  *      status: // value for 'status'
  *      sort: // value for 'sort'
  *      album: // value for 'album'
+ *      favorites: // value for 'favorites'
  *      q: // value for 'q'
  *   },
  * });
@@ -1860,10 +1891,10 @@ export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRota
 export const MSetMediaStatusDocument = gql`
     mutation MSetMediaStatus($media: [ID!]!, $status: String!) {
   setMediaStatus(media: $media, status: $status) {
-    id
+    ...FMedia
   }
 }
-    `;
+    ${FMedia}`;
 export type TMSetMediaStatusMutationFn = Apollo.MutationFunction<TMSetMediaStatus, TMSetMediaStatusVariables>;
 
 /**

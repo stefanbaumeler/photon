@@ -70,9 +70,9 @@ const ListItem = ({ element }: Props) => {
                 className="list-view__cell"
                 onClick={open}
             >
-                {`${element.albumMedia.length} `}
+                {`${element.media.length} `}
                 {t(ETrans.ELEMENT, {
-                    count: element.albumMedia.length
+                    count: element.media.length
                 })}
             </td>
         </>

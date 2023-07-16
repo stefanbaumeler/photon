@@ -3,17 +3,24 @@ import { TQueryResolvers, TMutationResolvers } from '@photon/schema'
 import { GraphQLError } from 'graphql/error'
 import { Prisma } from '@prisma/client'
 import AlbumsService from '../../services/albums'
+import { v2 } from '@google-cloud/translate'
+import { getEnv } from '@photon/web/env'
 
 const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
-        if (input.album) {
-            const result = await new AlbumsService().readOne(input.album)
-            return result?.media || []
-        }
+        const env = getEnv()
 
         const conditions: Prisma.MediumWhereInput = {
             owner: {
                 id: context.user.id
+            }
+        }
+
+        if (input.favorites) {
+            conditions.favoredBy = {
+                some: {
+                    id: context.user.id
+                }
             }
         }
 
@@ -22,7 +29,31 @@ const queries: Partial<TQueryResolvers> = {
         }
 
         if (input.q) {
-            // conditions.generatedTags = {}
+            const translate = new v2.Translate({
+                key: env.GCC_TRANSLATE_KEY
+            })
+            const [translated] = await translate.translate(input.q, {
+                to: 'en',
+                from: 'de'
+            })
+
+            conditions.AND = translated.split(' ').filter((s) => s !== '').map((word) => {
+                return {
+                    tags: {
+                        some: {
+                            label: {
+                                mode: 'insensitive',
+                                search: word
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        if (input.album) {
+            const result = await new AlbumsService().readOne(input.album, conditions)
+            return result?.media || []
         }
 
         return new MediaService(context).readMany({

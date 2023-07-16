@@ -77,7 +77,7 @@ export default gql`
     }
 
     type Query {
-        media(status: String, sort: String, album: String, q: String): [Medium!] @auth
+        media(status: String, sort: String, album: String, favorites: Boolean, q: String): [Medium!] @auth
         medium(id: ID!): Medium @auth
         mediaCountByYear: YearCountResult! @auth
         download(media: [ID!]!): Download! @auth

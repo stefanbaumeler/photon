@@ -1,0 +1,5 @@
+fragment FMediaStatus on Medium {
+    id
+    __typename
+    status
+}

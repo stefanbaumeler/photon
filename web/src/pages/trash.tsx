@@ -9,6 +9,7 @@ const TrashPage = () => {
 
     useEffect(() => {
         search.setStatus(EMediumStatus.TRASH)
+        search.setFavorites(false)
     }, [search])
 
     return <Layout>

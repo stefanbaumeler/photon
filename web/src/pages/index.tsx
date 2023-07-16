@@ -9,6 +9,7 @@ const HomePage = () => {
 
     useEffect(() => {
         search.setStatus(EMediumStatus.ALL)
+        search.setFavorites(false)
     }, [search])
 
     return <Layout>

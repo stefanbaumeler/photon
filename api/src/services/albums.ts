@@ -36,7 +36,7 @@ export default class AlbumsService {
         })
     }
 
-    readOne = async (id: string) => {
+    readOne = async (id: string, mediaConditions?: Prisma.MediumWhereInput) => {
         return DB.album.findFirst({
             where: {
                 id
@@ -48,7 +48,12 @@ export default class AlbumsService {
                         owner: true
                     }
                 },
-                media: true
+                media: {
+                    where: mediaConditions,
+                    include: {
+                        favoredBy: true
+                    }
+                }
             }
         })
     }

@@ -7,9 +7,10 @@ import { NavProvider,
     LayoutProvider,
     SortProvider,
     SearchProvider,
-    DragProvider } from '@/providers'
+    DragProvider,
+    ArchiveProvider } from '@/providers'
 import { AppProps } from 'next/app'
-import { client } from '@/api'
+import client from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
 import i18next from '@/translations'
 import tauri from '@/tauri'
@@ -33,7 +34,15 @@ const Photon = ({
 }: AppProps) => {
     return <ApolloProvider client={client}>
         <I18nextProvider i18n={i18next}>
-            <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider]}>
+            <ProviderProvider components={[DialogProvider,
+                SelectionProvider,
+                DragProvider,
+                NavProvider,
+                EditProvider,
+                LayoutProvider,
+                SortProvider,
+                ArchiveProvider]}
+            >
                 <SearchProvider>
                     <Component {...pageProps} />
                 </SearchProvider>

@@ -9,6 +9,7 @@ const ArchivePage = () => {
 
     useEffect(() => {
         search.setStatus(EMediumStatus.ARCHIVED)
+        search.setFavorites(false)
     })
 
     return <Layout>

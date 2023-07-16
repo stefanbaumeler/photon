@@ -9,6 +9,7 @@ const FavoritesPage = () => {
 
     useEffect(() => {
         search.setStatus(EMediumStatus.ALL)
+        search.setFavorites(true)
     }, [search])
 
     return <Layout>

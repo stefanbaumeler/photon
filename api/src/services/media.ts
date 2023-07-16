@@ -377,11 +377,7 @@ export default class MediaService {
                 tags: true,
                 owner: true,
                 uploader: true,
-                favoredBy: {
-                    where: {
-                        id: this.context?.user.id
-                    }
-                }
+                favoredBy: true
             }
         })
     }

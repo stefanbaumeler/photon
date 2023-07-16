@@ -1,10 +1,10 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { Exact, TMedium, TQMedia, useQMedia } from '@photon/schema'
-import { EMediumSort, EMediumStatus } from '@/types/app'
+import { TMedium, useQMedia } from '@photon/schema'
+import { EMediumStatus } from '@/types/app'
 import { useSortContext } from '@/providers/SortProvider'
 import { useRouter } from 'next/router'
-import { ApolloQueryResult } from '@apollo/client/core/types'
 import { sortMediaByDate } from '@/util/sort'
+import { useArchiveContext } from '@/providers/ArchiveProvider'
 
 type Props = {
     children?: ReactNode
@@ -12,9 +12,13 @@ type Props = {
 
 interface SearchContext {
     hits: TMedium[]
-    setStatus: Dispatch<SetStateAction<EMediumStatus>>
     status: EMediumStatus
-    refetch: (variables?: Partial<Exact<{status?: string, sort?: string, album?: string}>>) => Promise<ApolloQueryResult<TQMedia>>
+    setStatus: Dispatch<SetStateAction<EMediumStatus>>
+    favorites: boolean
+    setFavorites: Dispatch<SetStateAction<boolean>>
+    query: string
+    setQuery: Dispatch<SetStateAction<string>>
+    refetch: () => void
 }
 
 const SearchContext = createContext<SearchContext | null>(null)
@@ -25,24 +29,41 @@ const SearchProvider = ({ children }: Props) => {
     const album = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     const [status, setStatus] = useState(EMediumStatus.ALL)
-
+    const [favorites, setFavorites] = useState(false)
+    const [query, setQuery] = useState('')
     const { sort } = useSortContext()
 
     const media = useQMedia({
         variables: {
             status,
             sort,
-            album
+            album,
+            favorites,
+            q: query
         }
     })
 
+    console.log(status)
     const sortedMedia = sortMediaByDate(media.data?.media || [], sort)
 
     return <SearchContext.Provider value={{
         hits: sortedMedia,
         setStatus,
         status,
-        refetch: media.refetch
+        favorites,
+        setFavorites,
+        query,
+        setQuery,
+        refetch: async () => {
+            console.log('refetch', status)
+            await media.refetch({
+                status,
+                sort,
+                album,
+                favorites,
+                q: query
+            })
+        }
     }}
     >
         {children}
