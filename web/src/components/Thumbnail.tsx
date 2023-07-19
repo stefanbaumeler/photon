@@ -15,11 +15,11 @@ export const Thumbnail = ({
 
     const [medium, setMedium] = useState<TMedium>()
 
-    const mediumQuery = useQMedium({
+    const [mediumQuery] = useQMedium({
         variables: {
             id: `${idMedium}`
         },
-        skip: !idMedium
+        pause: !idMedium
     })
 
     const labelClasses = bem('thumbnail__label', [
@@ -52,7 +52,7 @@ export const Thumbnail = ({
     }
 
     const ThumbnailImage = () => {
-        if (mediumQuery.loading) {
+        if (mediumQuery.fetching) {
             return <></>
         }
 

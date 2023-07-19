@@ -24,7 +24,7 @@ const Teaser = () => {
 
     const forceOpen = () => {
         if (isMedium(element)) {
-            details.open(element)
+            details.open(element.id)
         } else {
             router.push(`albums/${element.id}`)
         }
@@ -112,7 +112,7 @@ const Teaser = () => {
         <TeaserBottomRightCorner />
         <TeaserBottomLeftCorner />
         <Link
-            href={isAlbum(element) ? `albums/${element.id}` : details.getUrl(element)}
+            href={isAlbum(element) ? `albums/${element.id}` : details.getUrl(element.id)}
             className="teaser__link"
             onClick={open}
         >

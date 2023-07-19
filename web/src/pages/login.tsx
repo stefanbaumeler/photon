@@ -11,8 +11,8 @@ enum ELoginFormMode {
 }
 
 const LoginPage = () => {
-    const [signIn] = useMSignIn()
-    const [signUp] = useMSignUp()
+    const [, signIn] = useMSignIn()
+    const [, signUp] = useMSignUp()
     const { t } = useTranslation()
     const [loginFormMode, setLoginFormMode] = useState<ELoginFormMode>(ELoginFormMode.DEFAULT)
     const [mail, setMail] = useState('')
@@ -58,10 +58,8 @@ const LoginPage = () => {
 
     const signInUser = () => {
         signIn({
-            variables: {
-                mail,
-                password
-            }
+            mail,
+            password
         }).then(async (res) => {
             console.log(res)
             if (res.data.signIn.accessToken.length) {
@@ -72,12 +70,10 @@ const LoginPage = () => {
 
     const signUpUser = () => {
         signUp({
-            variables: {
-                firstName,
-                lastName,
-                mail,
-                password
-            }
+            firstName,
+            lastName,
+            mail,
+            password
         })
     }
 

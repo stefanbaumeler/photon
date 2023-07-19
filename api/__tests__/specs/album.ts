@@ -2,7 +2,7 @@ import * as Schema from '@photon/schema'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 import { strict as assert } from 'assert'
 import { useTestQuery } from '../utility'
-import seed from '../../setups/seed'
+import { seed } from '../../prisma/seed'
 
 beforeAll(async () => {
     await seed('test')
@@ -63,8 +63,8 @@ it('can be deleted', async () => {
         ids: [predefinedAlbumUUIDs[0]]
     })
 
-    expect(deleteQuery.body.singleResult.data?.deleteAlbum).toMatchSnapshot({
-        count: 1
+    expect(deleteQuery.body.singleResult.data?.deleteAlbum[0]).toMatchSnapshot({
+        id: expect.any(String)
     })
 
     const isDeletedQuery = await useTestQuery<Schema.TQAlbum, Schema.TQAlbumVariables>(Schema.QAlbumDocument, {

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { connectDefaultUser, createTags } from '../helpers'
+import { connectDefaultUser, connectId, createTags } from '../helpers'
 
 export const media: Prisma.MediumCreateInput[] = [
     {
@@ -27,7 +27,8 @@ export const media: Prisma.MediumCreateInput[] = [
         },
         owner: connectDefaultUser(),
         uploader: connectDefaultUser(),
-        tags: createTags(['Hut', 'Nature', 'Outdoors', 'Countryside', 'Building', 'Rural', 'Architecture', 'Shelter', 'Housing', 'Shack'])
+        tags: createTags(['Hut', 'Nature', 'Outdoors', 'Countryside', 'Building', 'Rural', 'Architecture', 'Shelter', 'Housing', 'Shack']),
+        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
     },
     {
         id: '2b96675e-2428-4520-909e-91e8a91fb5f9',
@@ -50,7 +51,8 @@ export const media: Prisma.MediumCreateInput[] = [
         },
         owner: connectDefaultUser(),
         uploader: connectDefaultUser(),
-        tags: createTags(['Scenery', 'Nature', 'Outdoors', 'Rubble', 'Gravel', 'Road', 'Rock', 'Wilderness', 'Landscape', 'Person', 'Slope', 'Mountain Range', 'Mountain'])
+        tags: createTags(['Scenery', 'Nature', 'Outdoors', 'Rubble', 'Gravel', 'Road', 'Rock', 'Wilderness', 'Landscape', 'Person', 'Slope', 'Mountain Range', 'Mountain']),
+        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
     },
     {
         id: '114d5e91-b89e-4a31-9305-d3753bf64f2c',

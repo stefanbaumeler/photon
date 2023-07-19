@@ -1,7 +1,7 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { FileUpload } from 'graphql-upload-minimal'
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -9,7 +9,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
-const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -115,7 +114,7 @@ export type TMutation = {
   addToFavorites: Array<TMedium>;
   changeLanguage?: Maybe<Scalars['String']>;
   createAlbum?: Maybe<TAlbum>;
-  deleteAlbum?: Maybe<TCount>;
+  deleteAlbum: Array<TAlbum>;
   deleteMedia: Array<TMedium>;
   emptyTrash: Array<TMedium>;
   register: TDevice;
@@ -555,7 +554,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   addToFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToFavoritesArgs, 'media'>>;
   changeLanguage?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
-  deleteAlbum?: Resolver<Maybe<TResolversTypes['Count']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
+  deleteAlbum?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
   deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
   emptyTrash?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   register?: Resolver<TResolversTypes['Device'], ParentType, ContextType, RequireFields<TMutationRegisterArgs, 'device'>>;
@@ -851,9 +850,9 @@ export type TMDeleteAlbumVariables = Exact<{
 
 export type TMDeleteAlbum = (
   { __typename?: 'Mutation' }
-  & { deleteAlbum?: Maybe<(
-    { __typename?: 'Count' }
-    & Pick<TCount, 'count'>
+  & { deleteAlbum: Array<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id'>
   )> }
 );
 
@@ -868,6 +867,10 @@ export type TMRemoveFromAlbum = (
   & { removeFromAlbum?: Maybe<(
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id'>
+    & { media?: Maybe<Array<Maybe<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id'>
+    )>>> }
   )> }
 );
 
@@ -1037,13 +1040,13 @@ export type TQMedium = (
   & { medium?: Maybe<(
     { __typename?: 'Medium' }
     & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
-    & { favoredBy?: Maybe<Array<Maybe<(
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'firstName' | 'lastName' | 'id'>
+    )>, favoredBy?: Maybe<Array<Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
-    )>>>, owner?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )>, uploader?: Maybe<(
+    )>>>, uploader?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id'>
     )>, meta?: Maybe<(
@@ -1244,33 +1247,10 @@ export const MAddToAlbumDocument = gql`
   }
 }
     `;
-export type TMAddToAlbumMutationFn = Apollo.MutationFunction<TMAddToAlbum, TMAddToAlbumVariables>;
 
-/**
- * __useMAddToAlbum__
- *
- * To run a mutation, you first call `useMAddToAlbum` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMAddToAlbum` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mAddToAlbum, { data, loading, error }] = useMAddToAlbum({
- *   variables: {
- *      idAlbum: // value for 'idAlbum'
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useMAddToAlbum(baseOptions?: Apollo.MutationHookOptions<TMAddToAlbum, TMAddToAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMAddToAlbum, TMAddToAlbumVariables>(MAddToAlbumDocument, options);
-      }
-export type MAddToAlbumHookResult = ReturnType<typeof useMAddToAlbum>;
-export type MAddToAlbumMutationResult = Apollo.MutationResult<TMAddToAlbum>;
-export type MAddToAlbumMutationOptions = Apollo.BaseMutationOptions<TMAddToAlbum, TMAddToAlbumVariables>;
+export function useMAddToAlbum() {
+  return Urql.useMutation<TMAddToAlbum, TMAddToAlbumVariables>(MAddToAlbumDocument);
+};
 export const QAlbumDocument = gql`
     query QAlbum($id: ID!) {
   album(id: $id) {
@@ -1292,33 +1272,9 @@ export const QAlbumDocument = gql`
 }
     ${FMedia}`;
 
-/**
- * __useQAlbum__
- *
- * To run a query within a React component, call `useQAlbum` and pass it any options that fit your needs.
- * When your component renders, `useQAlbum` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQAlbum({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useQAlbum(baseOptions: Apollo.QueryHookOptions<TQAlbum, TQAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQAlbum, TQAlbumVariables>(QAlbumDocument, options);
-      }
-export function useQAlbumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbum, TQAlbumVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQAlbum, TQAlbumVariables>(QAlbumDocument, options);
-        }
-export type QAlbumHookResult = ReturnType<typeof useQAlbum>;
-export type QAlbumLazyQueryHookResult = ReturnType<typeof useQAlbumLazyQuery>;
-export type QAlbumQueryResult = Apollo.QueryResult<TQAlbum, TQAlbumVariables>;
+export function useQAlbum(options: Omit<Urql.UseQueryArgs<TQAlbumVariables>, 'query'>) {
+  return Urql.useQuery<TQAlbum, TQAlbumVariables>({ query: QAlbumDocument, ...options });
+};
 export const QAlbumMediaDocument = gql`
     query QAlbumMedia($id: ID!) {
   albumMedia(id: $id) {
@@ -1327,33 +1283,9 @@ export const QAlbumMediaDocument = gql`
 }
     ${FMedia}`;
 
-/**
- * __useQAlbumMedia__
- *
- * To run a query within a React component, call `useQAlbumMedia` and pass it any options that fit your needs.
- * When your component renders, `useQAlbumMedia` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQAlbumMedia({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useQAlbumMedia(baseOptions: Apollo.QueryHookOptions<TQAlbumMedia, TQAlbumMediaVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQAlbumMedia, TQAlbumMediaVariables>(QAlbumMediaDocument, options);
-      }
-export function useQAlbumMediaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbumMedia, TQAlbumMediaVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQAlbumMedia, TQAlbumMediaVariables>(QAlbumMediaDocument, options);
-        }
-export type QAlbumMediaHookResult = ReturnType<typeof useQAlbumMedia>;
-export type QAlbumMediaLazyQueryHookResult = ReturnType<typeof useQAlbumMediaLazyQuery>;
-export type QAlbumMediaQueryResult = Apollo.QueryResult<TQAlbumMedia, TQAlbumMediaVariables>;
+export function useQAlbumMedia(options: Omit<Urql.UseQueryArgs<TQAlbumMediaVariables>, 'query'>) {
+  return Urql.useQuery<TQAlbumMedia, TQAlbumMediaVariables>({ query: QAlbumMediaDocument, ...options });
+};
 export const QAlbumsDocument = gql`
     query QAlbums($idMedium: ID) {
   albums(idMedium: $idMedium) {
@@ -1377,33 +1309,9 @@ export const QAlbumsDocument = gql`
 }
     ${FMedia}`;
 
-/**
- * __useQAlbums__
- *
- * To run a query within a React component, call `useQAlbums` and pass it any options that fit your needs.
- * When your component renders, `useQAlbums` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQAlbums({
- *   variables: {
- *      idMedium: // value for 'idMedium'
- *   },
- * });
- */
-export function useQAlbums(baseOptions?: Apollo.QueryHookOptions<TQAlbums, TQAlbumsVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQAlbums, TQAlbumsVariables>(QAlbumsDocument, options);
-      }
-export function useQAlbumsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQAlbums, TQAlbumsVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQAlbums, TQAlbumsVariables>(QAlbumsDocument, options);
-        }
-export type QAlbumsHookResult = ReturnType<typeof useQAlbums>;
-export type QAlbumsLazyQueryHookResult = ReturnType<typeof useQAlbumsLazyQuery>;
-export type QAlbumsQueryResult = Apollo.QueryResult<TQAlbums, TQAlbumsVariables>;
+export function useQAlbums(options?: Omit<Urql.UseQueryArgs<TQAlbumsVariables>, 'query'>) {
+  return Urql.useQuery<TQAlbums, TQAlbumsVariables>({ query: QAlbumsDocument, ...options });
+};
 export const MCreateAlbumDocument = gql`
     mutation MCreateAlbum($album: AlbumInput, $media: [ID]) {
   createAlbum(album: $album, media: $media) {
@@ -1411,100 +1319,35 @@ export const MCreateAlbumDocument = gql`
   }
 }
     `;
-export type TMCreateAlbumMutationFn = Apollo.MutationFunction<TMCreateAlbum, TMCreateAlbumVariables>;
 
-/**
- * __useMCreateAlbum__
- *
- * To run a mutation, you first call `useMCreateAlbum` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMCreateAlbum` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mCreateAlbum, { data, loading, error }] = useMCreateAlbum({
- *   variables: {
- *      album: // value for 'album'
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useMCreateAlbum(baseOptions?: Apollo.MutationHookOptions<TMCreateAlbum, TMCreateAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMCreateAlbum, TMCreateAlbumVariables>(MCreateAlbumDocument, options);
-      }
-export type MCreateAlbumHookResult = ReturnType<typeof useMCreateAlbum>;
-export type MCreateAlbumMutationResult = Apollo.MutationResult<TMCreateAlbum>;
-export type MCreateAlbumMutationOptions = Apollo.BaseMutationOptions<TMCreateAlbum, TMCreateAlbumVariables>;
+export function useMCreateAlbum() {
+  return Urql.useMutation<TMCreateAlbum, TMCreateAlbumVariables>(MCreateAlbumDocument);
+};
 export const MDeleteAlbumDocument = gql`
     mutation MDeleteAlbum($ids: [ID]!) {
   deleteAlbum(ids: $ids) {
-    count
-  }
-}
-    `;
-export type TMDeleteAlbumMutationFn = Apollo.MutationFunction<TMDeleteAlbum, TMDeleteAlbumVariables>;
-
-/**
- * __useMDeleteAlbum__
- *
- * To run a mutation, you first call `useMDeleteAlbum` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMDeleteAlbum` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mDeleteAlbum, { data, loading, error }] = useMDeleteAlbum({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useMDeleteAlbum(baseOptions?: Apollo.MutationHookOptions<TMDeleteAlbum, TMDeleteAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMDeleteAlbum, TMDeleteAlbumVariables>(MDeleteAlbumDocument, options);
-      }
-export type MDeleteAlbumHookResult = ReturnType<typeof useMDeleteAlbum>;
-export type MDeleteAlbumMutationResult = Apollo.MutationResult<TMDeleteAlbum>;
-export type MDeleteAlbumMutationOptions = Apollo.BaseMutationOptions<TMDeleteAlbum, TMDeleteAlbumVariables>;
-export const MRemoveFromAlbumDocument = gql`
-    mutation MRemoveFromAlbum($idAlbum: ID!, $media: [ID!]!) {
-  removeFromAlbum(idAlbum: $idAlbum, media: $media) {
     id
   }
 }
     `;
-export type TMRemoveFromAlbumMutationFn = Apollo.MutationFunction<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>;
 
-/**
- * __useMRemoveFromAlbum__
- *
- * To run a mutation, you first call `useMRemoveFromAlbum` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMRemoveFromAlbum` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mRemoveFromAlbum, { data, loading, error }] = useMRemoveFromAlbum({
- *   variables: {
- *      idAlbum: // value for 'idAlbum'
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useMRemoveFromAlbum(baseOptions?: Apollo.MutationHookOptions<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>(MRemoveFromAlbumDocument, options);
-      }
-export type MRemoveFromAlbumHookResult = ReturnType<typeof useMRemoveFromAlbum>;
-export type MRemoveFromAlbumMutationResult = Apollo.MutationResult<TMRemoveFromAlbum>;
-export type MRemoveFromAlbumMutationOptions = Apollo.BaseMutationOptions<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>;
+export function useMDeleteAlbum() {
+  return Urql.useMutation<TMDeleteAlbum, TMDeleteAlbumVariables>(MDeleteAlbumDocument);
+};
+export const MRemoveFromAlbumDocument = gql`
+    mutation MRemoveFromAlbum($idAlbum: ID!, $media: [ID!]!) {
+  removeFromAlbum(idAlbum: $idAlbum, media: $media) {
+    id
+    media {
+      id
+    }
+  }
+}
+    `;
+
+export function useMRemoveFromAlbum() {
+  return Urql.useMutation<TMRemoveFromAlbum, TMRemoveFromAlbumVariables>(MRemoveFromAlbumDocument);
+};
 export const MUpdateAlbumDocument = gql`
     mutation MUpdateAlbum($idAlbum: ID!, $fields: AlbumInput!) {
   updateAlbum(idAlbum: $idAlbum, fields: $fields) {
@@ -1512,33 +1355,10 @@ export const MUpdateAlbumDocument = gql`
   }
 }
     `;
-export type TMUpdateAlbumMutationFn = Apollo.MutationFunction<TMUpdateAlbum, TMUpdateAlbumVariables>;
 
-/**
- * __useMUpdateAlbum__
- *
- * To run a mutation, you first call `useMUpdateAlbum` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMUpdateAlbum` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mUpdateAlbum, { data, loading, error }] = useMUpdateAlbum({
- *   variables: {
- *      idAlbum: // value for 'idAlbum'
- *      fields: // value for 'fields'
- *   },
- * });
- */
-export function useMUpdateAlbum(baseOptions?: Apollo.MutationHookOptions<TMUpdateAlbum, TMUpdateAlbumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMUpdateAlbum, TMUpdateAlbumVariables>(MUpdateAlbumDocument, options);
-      }
-export type MUpdateAlbumHookResult = ReturnType<typeof useMUpdateAlbum>;
-export type MUpdateAlbumMutationResult = Apollo.MutationResult<TMUpdateAlbum>;
-export type MUpdateAlbumMutationOptions = Apollo.BaseMutationOptions<TMUpdateAlbum, TMUpdateAlbumVariables>;
+export function useMUpdateAlbum() {
+  return Urql.useMutation<TMUpdateAlbum, TMUpdateAlbumVariables>(MUpdateAlbumDocument);
+};
 export const MAddToFavoritesDocument = gql`
     mutation MAddToFavorites($media: [ID!]!) {
   addToFavorites(media: $media) {
@@ -1546,32 +1366,10 @@ export const MAddToFavoritesDocument = gql`
   }
 }
     `;
-export type TMAddToFavoritesMutationFn = Apollo.MutationFunction<TMAddToFavorites, TMAddToFavoritesVariables>;
 
-/**
- * __useMAddToFavorites__
- *
- * To run a mutation, you first call `useMAddToFavorites` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMAddToFavorites` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mAddToFavorites, { data, loading, error }] = useMAddToFavorites({
- *   variables: {
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useMAddToFavorites(baseOptions?: Apollo.MutationHookOptions<TMAddToFavorites, TMAddToFavoritesVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMAddToFavorites, TMAddToFavoritesVariables>(MAddToFavoritesDocument, options);
-      }
-export type MAddToFavoritesHookResult = ReturnType<typeof useMAddToFavorites>;
-export type MAddToFavoritesMutationResult = Apollo.MutationResult<TMAddToFavorites>;
-export type MAddToFavoritesMutationOptions = Apollo.BaseMutationOptions<TMAddToFavorites, TMAddToFavoritesVariables>;
+export function useMAddToFavorites() {
+  return Urql.useMutation<TMAddToFavorites, TMAddToFavoritesVariables>(MAddToFavoritesDocument);
+};
 export const QFavoritesDocument = gql`
     query QFavorites {
   favorites {
@@ -1580,32 +1378,9 @@ export const QFavoritesDocument = gql`
 }
     ${FMedia}`;
 
-/**
- * __useQFavorites__
- *
- * To run a query within a React component, call `useQFavorites` and pass it any options that fit your needs.
- * When your component renders, `useQFavorites` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQFavorites({
- *   variables: {
- *   },
- * });
- */
-export function useQFavorites(baseOptions?: Apollo.QueryHookOptions<TQFavorites, TQFavoritesVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQFavorites, TQFavoritesVariables>(QFavoritesDocument, options);
-      }
-export function useQFavoritesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQFavorites, TQFavoritesVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQFavorites, TQFavoritesVariables>(QFavoritesDocument, options);
-        }
-export type QFavoritesHookResult = ReturnType<typeof useQFavorites>;
-export type QFavoritesLazyQueryHookResult = ReturnType<typeof useQFavoritesLazyQuery>;
-export type QFavoritesQueryResult = Apollo.QueryResult<TQFavorites, TQFavoritesVariables>;
+export function useQFavorites(options?: Omit<Urql.UseQueryArgs<TQFavoritesVariables>, 'query'>) {
+  return Urql.useQuery<TQFavorites, TQFavoritesVariables>({ query: QFavoritesDocument, ...options });
+};
 export const MRemoveFromFavoritesDocument = gql`
     mutation MRemoveFromFavorites($media: [ID!]!) {
   removeFromFavorites(media: $media) {
@@ -1613,32 +1388,10 @@ export const MRemoveFromFavoritesDocument = gql`
   }
 }
     `;
-export type TMRemoveFromFavoritesMutationFn = Apollo.MutationFunction<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>;
 
-/**
- * __useMRemoveFromFavorites__
- *
- * To run a mutation, you first call `useMRemoveFromFavorites` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMRemoveFromFavorites` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mRemoveFromFavorites, { data, loading, error }] = useMRemoveFromFavorites({
- *   variables: {
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useMRemoveFromFavorites(baseOptions?: Apollo.MutationHookOptions<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>(MRemoveFromFavoritesDocument, options);
-      }
-export type MRemoveFromFavoritesHookResult = ReturnType<typeof useMRemoveFromFavorites>;
-export type MRemoveFromFavoritesMutationResult = Apollo.MutationResult<TMRemoveFromFavorites>;
-export type MRemoveFromFavoritesMutationOptions = Apollo.BaseMutationOptions<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>;
+export function useMRemoveFromFavorites() {
+  return Urql.useMutation<TMRemoveFromFavorites, TMRemoveFromFavoritesVariables>(MRemoveFromFavoritesDocument);
+};
 export const MDeleteMediaDocument = gql`
     mutation MDeleteMedia($ids: [ID!]!) {
   deleteMedia(ids: $ids) {
@@ -1646,32 +1399,10 @@ export const MDeleteMediaDocument = gql`
   }
 }
     `;
-export type TMDeleteMediaMutationFn = Apollo.MutationFunction<TMDeleteMedia, TMDeleteMediaVariables>;
 
-/**
- * __useMDeleteMedia__
- *
- * To run a mutation, you first call `useMDeleteMedia` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMDeleteMedia` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mDeleteMedia, { data, loading, error }] = useMDeleteMedia({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useMDeleteMedia(baseOptions?: Apollo.MutationHookOptions<TMDeleteMedia, TMDeleteMediaVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMDeleteMedia, TMDeleteMediaVariables>(MDeleteMediaDocument, options);
-      }
-export type MDeleteMediaHookResult = ReturnType<typeof useMDeleteMedia>;
-export type MDeleteMediaMutationResult = Apollo.MutationResult<TMDeleteMedia>;
-export type MDeleteMediaMutationOptions = Apollo.BaseMutationOptions<TMDeleteMedia, TMDeleteMediaVariables>;
+export function useMDeleteMedia() {
+  return Urql.useMutation<TMDeleteMedia, TMDeleteMediaVariables>(MDeleteMediaDocument);
+};
 export const QDownloadDocument = gql`
     query QDownload($media: [ID!]!) {
   download(media: $media) {
@@ -1680,33 +1411,9 @@ export const QDownloadDocument = gql`
 }
     `;
 
-/**
- * __useQDownload__
- *
- * To run a query within a React component, call `useQDownload` and pass it any options that fit your needs.
- * When your component renders, `useQDownload` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQDownload({
- *   variables: {
- *      media: // value for 'media'
- *   },
- * });
- */
-export function useQDownload(baseOptions: Apollo.QueryHookOptions<TQDownload, TQDownloadVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQDownload, TQDownloadVariables>(QDownloadDocument, options);
-      }
-export function useQDownloadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQDownload, TQDownloadVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQDownload, TQDownloadVariables>(QDownloadDocument, options);
-        }
-export type QDownloadHookResult = ReturnType<typeof useQDownload>;
-export type QDownloadLazyQueryHookResult = ReturnType<typeof useQDownloadLazyQuery>;
-export type QDownloadQueryResult = Apollo.QueryResult<TQDownload, TQDownloadVariables>;
+export function useQDownload(options: Omit<Urql.UseQueryArgs<TQDownloadVariables>, 'query'>) {
+  return Urql.useQuery<TQDownload, TQDownloadVariables>({ query: QDownloadDocument, ...options });
+};
 export const MEmptyTrashDocument = gql`
     mutation MEmptyTrash {
   emptyTrash {
@@ -1714,31 +1421,10 @@ export const MEmptyTrashDocument = gql`
   }
 }
     `;
-export type TMEmptyTrashMutationFn = Apollo.MutationFunction<TMEmptyTrash, TMEmptyTrashVariables>;
 
-/**
- * __useMEmptyTrash__
- *
- * To run a mutation, you first call `useMEmptyTrash` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMEmptyTrash` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mEmptyTrash, { data, loading, error }] = useMEmptyTrash({
- *   variables: {
- *   },
- * });
- */
-export function useMEmptyTrash(baseOptions?: Apollo.MutationHookOptions<TMEmptyTrash, TMEmptyTrashVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMEmptyTrash, TMEmptyTrashVariables>(MEmptyTrashDocument, options);
-      }
-export type MEmptyTrashHookResult = ReturnType<typeof useMEmptyTrash>;
-export type MEmptyTrashMutationResult = Apollo.MutationResult<TMEmptyTrash>;
-export type MEmptyTrashMutationOptions = Apollo.BaseMutationOptions<TMEmptyTrash, TMEmptyTrashVariables>;
+export function useMEmptyTrash() {
+  return Urql.useMutation<TMEmptyTrash, TMEmptyTrashVariables>(MEmptyTrashDocument);
+};
 export const QMediaDocument = gql`
     query QMedia($status: String, $sort: String, $album: String, $favorites: Boolean, $q: String) {
   media(status: $status, sort: $sort, album: $album, favorites: $favorites, q: $q) {
@@ -1747,37 +1433,9 @@ export const QMediaDocument = gql`
 }
     ${FMedia}`;
 
-/**
- * __useQMedia__
- *
- * To run a query within a React component, call `useQMedia` and pass it any options that fit your needs.
- * When your component renders, `useQMedia` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQMedia({
- *   variables: {
- *      status: // value for 'status'
- *      sort: // value for 'sort'
- *      album: // value for 'album'
- *      favorites: // value for 'favorites'
- *      q: // value for 'q'
- *   },
- * });
- */
-export function useQMedia(baseOptions?: Apollo.QueryHookOptions<TQMedia, TQMediaVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQMedia, TQMediaVariables>(QMediaDocument, options);
-      }
-export function useQMediaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMedia, TQMediaVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQMedia, TQMediaVariables>(QMediaDocument, options);
-        }
-export type QMediaHookResult = ReturnType<typeof useQMedia>;
-export type QMediaLazyQueryHookResult = ReturnType<typeof useQMediaLazyQuery>;
-export type QMediaQueryResult = Apollo.QueryResult<TQMedia, TQMediaVariables>;
+export function useQMedia(options?: Omit<Urql.UseQueryArgs<TQMediaVariables>, 'query'>) {
+  return Urql.useQuery<TQMedia, TQMediaVariables>({ query: QMediaDocument, ...options });
+};
 export const QMediaYearCountDocument = gql`
     query QMediaYearCount {
   mediaCountByYear {
@@ -1794,67 +1452,24 @@ export const QMediaYearCountDocument = gql`
 }
     `;
 
-/**
- * __useQMediaYearCount__
- *
- * To run a query within a React component, call `useQMediaYearCount` and pass it any options that fit your needs.
- * When your component renders, `useQMediaYearCount` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQMediaYearCount({
- *   variables: {
- *   },
- * });
- */
-export function useQMediaYearCount(baseOptions?: Apollo.QueryHookOptions<TQMediaYearCount, TQMediaYearCountVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQMediaYearCount, TQMediaYearCountVariables>(QMediaYearCountDocument, options);
-      }
-export function useQMediaYearCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMediaYearCount, TQMediaYearCountVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQMediaYearCount, TQMediaYearCountVariables>(QMediaYearCountDocument, options);
-        }
-export type QMediaYearCountHookResult = ReturnType<typeof useQMediaYearCount>;
-export type QMediaYearCountLazyQueryHookResult = ReturnType<typeof useQMediaYearCountLazyQuery>;
-export type QMediaYearCountQueryResult = Apollo.QueryResult<TQMediaYearCount, TQMediaYearCountVariables>;
+export function useQMediaYearCount(options?: Omit<Urql.UseQueryArgs<TQMediaYearCountVariables>, 'query'>) {
+  return Urql.useQuery<TQMediaYearCount, TQMediaYearCountVariables>({ query: QMediaYearCountDocument, ...options });
+};
 export const QMediumDocument = gql`
     query QMedium($id: ID!) {
   medium(id: $id) {
     ...FMedia
+    owner {
+      firstName
+      lastName
+    }
   }
 }
     ${FMedia}`;
 
-/**
- * __useQMedium__
- *
- * To run a query within a React component, call `useQMedium` and pass it any options that fit your needs.
- * When your component renders, `useQMedium` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQMedium({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useQMedium(baseOptions: Apollo.QueryHookOptions<TQMedium, TQMediumVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQMedium, TQMediumVariables>(QMediumDocument, options);
-      }
-export function useQMediumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQMedium, TQMediumVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQMedium, TQMediumVariables>(QMediumDocument, options);
-        }
-export type QMediumHookResult = ReturnType<typeof useQMedium>;
-export type QMediumLazyQueryHookResult = ReturnType<typeof useQMediumLazyQuery>;
-export type QMediumQueryResult = Apollo.QueryResult<TQMedium, TQMediumVariables>;
+export function useQMedium(options: Omit<Urql.UseQueryArgs<TQMediumVariables>, 'query'>) {
+  return Urql.useQuery<TQMedium, TQMediumVariables>({ query: QMediumDocument, ...options });
+};
 export const MRotateDocument = gql`
     mutation MRotate($id: ID!) {
   rotate(id: $id) {
@@ -1862,32 +1477,10 @@ export const MRotateDocument = gql`
   }
 }
     ${FMedia}`;
-export type TMRotateMutationFn = Apollo.MutationFunction<TMRotate, TMRotateVariables>;
 
-/**
- * __useMRotate__
- *
- * To run a mutation, you first call `useMRotate` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMRotate` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mRotate, { data, loading, error }] = useMRotate({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useMRotate(baseOptions?: Apollo.MutationHookOptions<TMRotate, TMRotateVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMRotate, TMRotateVariables>(MRotateDocument, options);
-      }
-export type MRotateHookResult = ReturnType<typeof useMRotate>;
-export type MRotateMutationResult = Apollo.MutationResult<TMRotate>;
-export type MRotateMutationOptions = Apollo.BaseMutationOptions<TMRotate, TMRotateVariables>;
+export function useMRotate() {
+  return Urql.useMutation<TMRotate, TMRotateVariables>(MRotateDocument);
+};
 export const MSetMediaStatusDocument = gql`
     mutation MSetMediaStatus($media: [ID!]!, $status: String!) {
   setMediaStatus(media: $media, status: $status) {
@@ -1895,33 +1488,10 @@ export const MSetMediaStatusDocument = gql`
   }
 }
     ${FMedia}`;
-export type TMSetMediaStatusMutationFn = Apollo.MutationFunction<TMSetMediaStatus, TMSetMediaStatusVariables>;
 
-/**
- * __useMSetMediaStatus__
- *
- * To run a mutation, you first call `useMSetMediaStatus` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMSetMediaStatus` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mSetMediaStatus, { data, loading, error }] = useMSetMediaStatus({
- *   variables: {
- *      media: // value for 'media'
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useMSetMediaStatus(baseOptions?: Apollo.MutationHookOptions<TMSetMediaStatus, TMSetMediaStatusVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMSetMediaStatus, TMSetMediaStatusVariables>(MSetMediaStatusDocument, options);
-      }
-export type MSetMediaStatusHookResult = ReturnType<typeof useMSetMediaStatus>;
-export type MSetMediaStatusMutationResult = Apollo.MutationResult<TMSetMediaStatus>;
-export type MSetMediaStatusMutationOptions = Apollo.BaseMutationOptions<TMSetMediaStatus, TMSetMediaStatusVariables>;
+export function useMSetMediaStatus() {
+  return Urql.useMutation<TMSetMediaStatus, TMSetMediaStatusVariables>(MSetMediaStatusDocument);
+};
 export const MUploadDocument = gql`
     mutation MUpload($files: [Upload!]!) {
   upload(files: $files) {
@@ -1929,96 +1499,28 @@ export const MUploadDocument = gql`
   }
 }
     `;
-export type TMUploadMutationFn = Apollo.MutationFunction<TMUpload, TMUploadVariables>;
 
-/**
- * __useMUpload__
- *
- * To run a mutation, you first call `useMUpload` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMUpload` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mUpload, { data, loading, error }] = useMUpload({
- *   variables: {
- *      files: // value for 'files'
- *   },
- * });
- */
-export function useMUpload(baseOptions?: Apollo.MutationHookOptions<TMUpload, TMUploadVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMUpload, TMUploadVariables>(MUploadDocument, options);
-      }
-export type MUploadHookResult = ReturnType<typeof useMUpload>;
-export type MUploadMutationResult = Apollo.MutationResult<TMUpload>;
-export type MUploadMutationOptions = Apollo.BaseMutationOptions<TMUpload, TMUploadVariables>;
+export function useMUpload() {
+  return Urql.useMutation<TMUpload, TMUploadVariables>(MUploadDocument);
+};
 export const QTranslateDocument = gql`
     query QTranslate($query: String!) {
   translate(query: $query)
 }
     `;
 
-/**
- * __useQTranslate__
- *
- * To run a query within a React component, call `useQTranslate` and pass it any options that fit your needs.
- * When your component renders, `useQTranslate` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useQTranslate({
- *   variables: {
- *      query: // value for 'query'
- *   },
- * });
- */
-export function useQTranslate(baseOptions: Apollo.QueryHookOptions<TQTranslate, TQTranslateVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TQTranslate, TQTranslateVariables>(QTranslateDocument, options);
-      }
-export function useQTranslateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TQTranslate, TQTranslateVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TQTranslate, TQTranslateVariables>(QTranslateDocument, options);
-        }
-export type QTranslateHookResult = ReturnType<typeof useQTranslate>;
-export type QTranslateLazyQueryHookResult = ReturnType<typeof useQTranslateLazyQuery>;
-export type QTranslateQueryResult = Apollo.QueryResult<TQTranslate, TQTranslateVariables>;
+export function useQTranslate(options: Omit<Urql.UseQueryArgs<TQTranslateVariables>, 'query'>) {
+  return Urql.useQuery<TQTranslate, TQTranslateVariables>({ query: QTranslateDocument, ...options });
+};
 export const MChangeLanguageDocument = gql`
     mutation MChangeLanguage($language: String!) {
   changeLanguage(language: $language)
 }
     `;
-export type TMChangeLanguageMutationFn = Apollo.MutationFunction<TMChangeLanguage, TMChangeLanguageVariables>;
 
-/**
- * __useMChangeLanguage__
- *
- * To run a mutation, you first call `useMChangeLanguage` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMChangeLanguage` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mChangeLanguage, { data, loading, error }] = useMChangeLanguage({
- *   variables: {
- *      language: // value for 'language'
- *   },
- * });
- */
-export function useMChangeLanguage(baseOptions?: Apollo.MutationHookOptions<TMChangeLanguage, TMChangeLanguageVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument, options);
-      }
-export type MChangeLanguageHookResult = ReturnType<typeof useMChangeLanguage>;
-export type MChangeLanguageMutationResult = Apollo.MutationResult<TMChangeLanguage>;
-export type MChangeLanguageMutationOptions = Apollo.BaseMutationOptions<TMChangeLanguage, TMChangeLanguageVariables>;
+export function useMChangeLanguage() {
+  return Urql.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument);
+};
 export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {
   signIn(mail: $mail, password: $password) {
@@ -2026,63 +1528,19 @@ export const MSignInDocument = gql`
   }
 }
     `;
-export type TMSignInMutationFn = Apollo.MutationFunction<TMSignIn, TMSignInVariables>;
 
-/**
- * __useMSignIn__
- *
- * To run a mutation, you first call `useMSignIn` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMSignIn` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mSignIn, { data, loading, error }] = useMSignIn({
- *   variables: {
- *      mail: // value for 'mail'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useMSignIn(baseOptions?: Apollo.MutationHookOptions<TMSignIn, TMSignInVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMSignIn, TMSignInVariables>(MSignInDocument, options);
-      }
-export type MSignInHookResult = ReturnType<typeof useMSignIn>;
-export type MSignInMutationResult = Apollo.MutationResult<TMSignIn>;
-export type MSignInMutationOptions = Apollo.BaseMutationOptions<TMSignIn, TMSignInVariables>;
+export function useMSignIn() {
+  return Urql.useMutation<TMSignIn, TMSignInVariables>(MSignInDocument);
+};
 export const MSignOutDocument = gql`
     mutation MSignOut {
   signOut
 }
     `;
-export type TMSignOutMutationFn = Apollo.MutationFunction<TMSignOut, TMSignOutVariables>;
 
-/**
- * __useMSignOut__
- *
- * To run a mutation, you first call `useMSignOut` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMSignOut` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mSignOut, { data, loading, error }] = useMSignOut({
- *   variables: {
- *   },
- * });
- */
-export function useMSignOut(baseOptions?: Apollo.MutationHookOptions<TMSignOut, TMSignOutVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMSignOut, TMSignOutVariables>(MSignOutDocument, options);
-      }
-export type MSignOutHookResult = ReturnType<typeof useMSignOut>;
-export type MSignOutMutationResult = Apollo.MutationResult<TMSignOut>;
-export type MSignOutMutationOptions = Apollo.BaseMutationOptions<TMSignOut, TMSignOutVariables>;
+export function useMSignOut() {
+  return Urql.useMutation<TMSignOut, TMSignOutVariables>(MSignOutDocument);
+};
 export const MSignUpDocument = gql`
     mutation MSignUp($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
   signUp(
@@ -2096,32 +1554,7 @@ export const MSignUpDocument = gql`
   }
 }
     `;
-export type TMSignUpMutationFn = Apollo.MutationFunction<TMSignUp, TMSignUpVariables>;
 
-/**
- * __useMSignUp__
- *
- * To run a mutation, you first call `useMSignUp` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMSignUp` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mSignUp, { data, loading, error }] = useMSignUp({
- *   variables: {
- *      mail: // value for 'mail'
- *      password: // value for 'password'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
- *   },
- * });
- */
-export function useMSignUp(baseOptions?: Apollo.MutationHookOptions<TMSignUp, TMSignUpVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TMSignUp, TMSignUpVariables>(MSignUpDocument, options);
-      }
-export type MSignUpHookResult = ReturnType<typeof useMSignUp>;
-export type MSignUpMutationResult = Apollo.MutationResult<TMSignUp>;
-export type MSignUpMutationOptions = Apollo.BaseMutationOptions<TMSignUp, TMSignUpVariables>;
+export function useMSignUp() {
+  return Urql.useMutation<TMSignUp, TMSignUpVariables>(MSignUpDocument);
+};

@@ -1,20 +1,15 @@
-import { useDetailsContext, useSearchContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 import { useMRotate } from '@photon/schema'
 
 const useRotate = (idMedium: string) => {
     const details = useDetailsContext()
-    const search = useSearchContext()
 
-    const [rotate] = useMRotate({
-        variables: {
-            id: idMedium
-        },
-        awaitRefetchQueries: true
-    })
+    const [, rotate] = useMRotate()
 
     return () => {
-        rotate().then(() => {
-            search.refetch()
+        rotate({
+            id: idMedium
+        }).then(() => {
             details.setMedium(details.medium)
         })
     }

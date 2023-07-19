@@ -1,4 +1,4 @@
-import { QAlbumDocument, useMUpdateAlbum } from '@photon/schema'
+import { useMUpdateAlbum } from '@photon/schema'
 import { useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
@@ -8,26 +8,16 @@ const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
 
     idMedium = idMedium || [...selection.selected][0]?.id
 
-    const [setAlbumCover] = useMUpdateAlbum({
-        variables: {
-            idAlbum,
-            fields: {
-                cover: idMedium
-            }
-        },
-        refetchQueries: [
-            {
-                query: QAlbumDocument,
-                variables: {
-                    id: idAlbum
-                }
-            }
-        ]
-    })
+    const [, setAlbumCover] = useMUpdateAlbum()
 
     return () => {
         if (idAlbum) {
-            setAlbumCover().then(() => {
+            setAlbumCover({
+                idAlbum,
+                fields: {
+                    cover: idMedium
+                }
+            }).then(() => {
                 selection.clear()
                 router.push('/albums')
             })

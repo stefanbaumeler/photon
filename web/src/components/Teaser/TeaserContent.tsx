@@ -2,6 +2,7 @@ import { useTeaserContext } from './TeaserContext'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { isAlbum } from '@/util/is'
+import { EMediumStatus } from '@/types/app'
 
 export const TeaserContent = () => {
     const { element } = useTeaserContext()
@@ -12,13 +13,15 @@ export const TeaserContent = () => {
     }
 
     const Count = () => {
+        const count = element.media.filter((el) => el.status === EMediumStatus.ALL).length
+
         return <span
             className="teaser__count"
             data-testid="album-teaser-count"
         >
-            {`${element.media.length} `}
+            {`${count} `}
             {t(ETrans.ELEMENT, {
-                count: element.media.length
+                count: count
             })}
         </span>
     }

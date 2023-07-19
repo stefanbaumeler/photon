@@ -158,13 +158,20 @@ export default class AlbumsService {
 
     destroy = async (keys: (string | null)[] | string) => {
         const keysToDestroy = (Array.isArray(keys) ? keys.filter((key) => key !== null) : [keys]) as string[]
+        const albums = await this.readMany({
+            id: {
+                in: keysToDestroy
+            }
+        })
 
-        return DB.album.deleteMany({
+        await DB.album.deleteMany({
             where: {
                 id: {
                     in: keysToDestroy
                 }
             }
         })
+
+        return albums
     }
 }

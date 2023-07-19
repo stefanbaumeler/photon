@@ -26,7 +26,7 @@ export default gql`
     }
 
     type Mutation {
-        deleteAlbum(ids: [ID]!): Count @auth
+        deleteAlbum(ids: [ID]!): [Album!]! @auth
         addToAlbum(idAlbum: ID!, media: [ID!]!): [Medium!]! @auth
         removeFromAlbum(idAlbum: ID!, media: [ID!]!): Album @auth
         updateAlbum(idAlbum: ID!, fields: AlbumInput!): Album @auth

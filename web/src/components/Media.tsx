@@ -2,7 +2,6 @@ import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext
 import { useKeyboard } from '@/hooks/keyboard'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '.'
-import { useEffect } from 'react'
 
 export const Media = () => {
     const selection = useSelectionContext()
@@ -10,12 +9,6 @@ export const Media = () => {
     const dialog = useDialogContext()
     const layout = useLayoutContext()
     const { hits: media } = useSearchContext()
-
-    useEffect(() => {
-        if (details.medium && Object.keys(details.medium).length && media) {
-            details.setMedium(media.find((m) => m.id === details.medium.id))
-        }
-    }, [details, media])
 
     useKeyboard('keydown', 'Escape', () => {
         if (!details.active && !dialog.active) {

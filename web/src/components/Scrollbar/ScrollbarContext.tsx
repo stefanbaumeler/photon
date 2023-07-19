@@ -19,7 +19,7 @@ const ScrollbarProvider = ({ children }: Props) => {
     const [years, setYears] = useState<TYearCountEntry[]>()
     const [total, setTotal] = useState<number>()
 
-    const count = useQMediaYearCount()
+    const [count] = useQMediaYearCount()
 
     useEffect(() => {
         if (count.data) {

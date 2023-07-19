@@ -1,26 +1,17 @@
-import { useDialogContext, useSelectionContext, useDetailsContext, useSearchContext } from '@/providers'
-import { QAlbumsDocument, useMDeleteMedia } from '@photon/schema'
+import { useDialogContext, useSelectionContext, useDetailsContext } from '@/providers'
+import { useMDeleteMedia } from '@photon/schema'
 
 const useDeleteMedia = () => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const details = useDetailsContext()
-    const search = useSearchContext()
 
-    const [deleteMedia] = useMDeleteMedia({
-        variables: {
-            ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
-        },
-        refetchQueries: [
-            {
-                query: QAlbumsDocument
-            }
-        ]
-    })
+    const [, deleteMedia] = useMDeleteMedia()
 
     return () => {
-        deleteMedia().then(() => {
-            search.refetch()
+        deleteMedia({
+            ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
+        }).then(() => {
             selection.clear()
             dialog.close()
             details?.close()

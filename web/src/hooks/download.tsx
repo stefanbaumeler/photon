@@ -11,19 +11,20 @@ const useDownload = (ids?: string[]) => {
 
     const media = ids ? ids : [...selection.selected].map((element) => {
         if (isAlbum(element)) {
-            return element.albumMedia.map((albumMedium) => {
-                return albumMedium.idMedium
+            return element.media.map((medium) => {
+                return medium.id
             })
         }
 
         return element.id
     }).flat()
 
-    const download = useQDownload({
+    const [download] = useQDownload({
         variables: {
             media
         },
-        skip
+        pause: skip,
+        requestPolicy: 'network-only'
     })
 
     useEffect(() => {

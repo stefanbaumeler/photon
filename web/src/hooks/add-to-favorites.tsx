@@ -1,27 +1,15 @@
-import { QFavoritesDocument, QMediaDocument, useMAddToFavorites } from '@photon/schema'
-import { useSearchContext, useSelectionContext } from '@/providers'
+import { useMAddToFavorites } from '@photon/schema'
+import { useSelectionContext } from '@/providers'
 
 const useAddToFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()
-    const search = useSearchContext()
 
-    const [addToFavorites] = useMAddToFavorites({
-        variables: {
-            media: mediaIds
-        },
-        refetchQueries: [
-            {
-                query: QFavoritesDocument
-            },
-            {
-                query: QMediaDocument
-            }
-        ]
-    })
+    const [, addToFavorites] = useMAddToFavorites()
 
     return () => {
-        addToFavorites().then(() => {
-            search.refetch()
+        addToFavorites({
+            media: mediaIds
+        }).then(() => {
             selection.clear()
         })
     }

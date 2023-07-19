@@ -9,13 +9,13 @@
         "dev": "tsc --watch"
     },
     "dependencies": {
+        "@urql/devtools": "^2.0.3",
         "graphql": "*",
-        "graphql-upload-minimal": "*",
-        "@apollo/client": "*"
+        "graphql-upload-minimal": "*"
     },
     "devDependencies": {
-        "typescript": "^4.7.4",
         "eslint": "^8.20.0",
-        "eslint-plugin-react": "^7.30.1"
+        "eslint-plugin-react": "^7.30.1",
+        "typescript": "^4.7.4"
     }
 }

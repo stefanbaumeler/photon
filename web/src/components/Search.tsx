@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Button } from '@/components'
 import * as Icons from '@mdi/js'
-import { useQTranslate } from '@photon/schema'
 import { useEffect, KeyboardEvent, useState, ChangeEvent } from 'react'
 import bem from '@/util/bem'
 import { useSearchContext } from '@/providers'
@@ -12,13 +11,6 @@ export const Search = () => {
     const [query, setQuery] = useState('')
     const [text, setText] = useState('')
     const search = useSearchContext()
-
-    const translate = useQTranslate({
-        variables: {
-            query
-        },
-        skip: !query.length
-    })
 
     useEffect(() => {
         search.setQuery(query)

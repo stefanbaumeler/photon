@@ -11,17 +11,14 @@ test('can navigate using keyboard', async ({ page }) => {
     await page.keyboard.press('ArrowRight')
 
     const image = await page.getByTestId('details-image')
-    let src = await image.getAttribute('src')
 
     await expect(page.url()).toContain(ids[1])
-    await expect(src).toContain(ids[1])
+    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
 
     await page.keyboard.press('ArrowLeft')
 
-    src = await image.getAttribute('src')
-
     await expect(page.url()).toContain(ids[0])
-    await expect(src).toContain(ids[0])
+    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[0])
 
     await page.keyboard.press('Escape')
 
@@ -36,17 +33,14 @@ test('can navigate using buttons', async ({ page }) => {
     await page.getByTestId('next-medium').click()
 
     const image = await page.getByTestId('details-image')
-    let src = await image.getAttribute('src')
 
     await expect(page.url()).toContain(ids[1])
-    await expect(src).toContain(ids[1])
+    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
 
     await page.getByTestId('prev-medium').click()
 
-    src = await image.getAttribute('src')
-
     await expect(page.url()).toContain(ids[0])
-    await expect(src).toContain(ids[0])
+    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
 })
 
 test('can open and close infos', async ({ page }) => {

@@ -1,35 +1,24 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { QMediaYearCountDocument, useMUpload } from '@photon/schema'
+import { useMUpload } from '@photon/schema'
 import tauri from '../tauri'
 import { FileUpload } from 'graphql-upload-minimal'
-import { useSearchContext } from '@/providers'
 
 const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
 
-    const search = useSearchContext()
-
-    const [upload] = useMUpload({
-        variables: {
-            files: files as unknown as Promise<FileUpload>
-        },
-        refetchQueries: [
-            {
-                query: QMediaYearCountDocument
-            }
-        ]
-    })
+    const [, upload] = useMUpload()
 
     useEffect(() => {
         if (files) {
             tauri.upload(files)
 
-            upload().then(() => {
-                search.refetch()
+            upload({
+                files: files as unknown as Promise<FileUpload>
+            }).then(() => {
                 setFiles(undefined)
             })
         }
-    }, [search, upload, files])
+    }, [upload, files])
 
     return async (event: ChangeEvent<HTMLInputElement> | string[]) => {
         let files: File[]

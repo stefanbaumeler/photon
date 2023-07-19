@@ -1,6 +1,5 @@
 import { useDialogContext, useSearchContext, useSelectionContext } from '@/providers'
-import { FMediaStatus, TFMediaStatus,
-    useMSetMediaStatus } from '@photon/schema'
+import { useMSetMediaStatus } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
@@ -14,26 +13,13 @@ const useSetMediaStatus = (media: { id: string }[] | Set<{ id: string }> | { id:
 
     const ids = asArray(media).map(({ id }) => id)
 
-    const [setMediaStatus] = useMSetMediaStatus({
-        variables: {
-            media: ids,
-            status
-        },
-        update: (cache, update) => {
-            cache.writeFragment<TFMediaStatus>({
-                id: cache.identify(update.data.setMediaStatus[0]),
-                fragment: FMediaStatus,
-                data: {
-                    __typename: update.data.setMediaStatus[0].__typename,
-                    id: update.data.setMediaStatus[0].id,
-                    status: update.data.setMediaStatus[0].status
-                }
-            })
-        }
-    })
+    const [, setMediaStatus] = useMSetMediaStatus()
 
     return () => {
-        setMediaStatus().then(() => {
+        setMediaStatus({
+            media: ids,
+            status
+        }).then(() => {
             dialog.close()
             selection.clear()
 

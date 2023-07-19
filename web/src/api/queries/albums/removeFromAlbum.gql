@@ -1,5 +1,8 @@
 mutation MRemoveFromAlbum($idAlbum: ID!, $media: [ID!]!) {
     removeFromAlbum(idAlbum: $idAlbum, media: $media) {
         id
+        media {
+            id
+        }
     }
 }

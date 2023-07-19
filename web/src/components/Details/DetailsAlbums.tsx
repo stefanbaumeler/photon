@@ -13,7 +13,7 @@ export const DetailsAlbums = () => {
     const [albums, setAlbums] = useState<TAlbum[]>()
     const { t } = useTranslation()
 
-    const albumsResult = useQAlbums({
+    const [albumsResult] = useQAlbums({
         variables: {
             idMedium: details.medium.id
         }
@@ -28,7 +28,7 @@ export const DetailsAlbums = () => {
     const a = useMemo(() => {
         const DetailsAlbum = ({ album }: { album: TAlbum}) => {
             const count = t(ETrans.ELEMENT_COUNT, {
-                count: album.albumMedia.length
+                count: album.media.length
             })
 
             const date = formatDate(album.dateCreated, EDateFormat.SHORT)

@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { TMedium } from '@photon/schema'
 
 type Props = {
     children?: ReactNode

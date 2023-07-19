@@ -1,5 +1,5 @@
 import { mapSchema, getDirective, MapperKind } from '@graphql-tools/utils'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema } from 'graphql/type/schema'
 import { defaultFieldResolver } from 'graphql/execution'
 
 export const authDirectiveTransformer = (schema: GraphQLSchema, directiveName: string) => {

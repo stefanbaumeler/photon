@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { QAlbumsDocument, useMCreateAlbum } from '@photon/schema'
+import { useMCreateAlbum } from '@photon/schema'
 import { useDialogContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
@@ -9,21 +9,14 @@ const useAddToNewAlbum = () => {
     const selection = useSelectionContext()
     const dialog = useDialogContext()
 
-    const [createAlbumMutation] = useMCreateAlbum({
-        variables: {
-            media: Array.from(selection.selected).map((s) => s.id)
-        },
-        refetchQueries: [
-            {
-                query: QAlbumsDocument
-            }
-        ]
-    })
+    const [, createAlbumMutation] = useMCreateAlbum()
 
     useEffect(() => {
         if (newAlbum) {
             setNewAlbum(false)
-            createAlbumMutation().then((result) => {
+            createAlbumMutation({
+                media: Array.from(selection.selected).map((s) => s.id)
+            }).then((result) => {
                 router.push(`/albums/${result.data.createAlbum.id}`).then(() => {
                     dialog.close()
                     selection.clear()

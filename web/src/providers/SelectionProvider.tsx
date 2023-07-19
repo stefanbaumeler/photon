@@ -94,7 +94,7 @@ const SelectionProvider = ({ children }: Props) => {
     }
 
     const clear = () => {
-        if (selected.size) {
+        if (selected.size || mode === ESelectionMode.DELETE) {
             setSelected(new Set())
             setMode(ESelectionMode.OFF)
             setShiftTargets([])

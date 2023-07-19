@@ -3,7 +3,7 @@ import { Albums, Uploader, Dialog } from '@/components'
 import { useQAlbums } from '@photon/schema'
 
 const AlbumsPage = () => {
-    const albums = useQAlbums()
+    const [albums] = useQAlbums()
 
     return <Layout>
         <section>

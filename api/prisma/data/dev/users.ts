@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-
 export const users: Prisma.UserCreateInput[] = [
     {
         id: '51dde765-a6de-48c6-b372-41534fb91d55',

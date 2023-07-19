@@ -1,20 +1,16 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
-import { Details, Dialog, Button, Uploader, Media } from '@/components'
+import { Button, Details, Dialog, Media, Uploader } from '@/components'
 import { DetailsProvider, useEditContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
-import { QAlbumMediaDocument,
-    QAlbumDocument,
-    TAlbum,
-    useQAlbum,
-    useMRemoveFromAlbum,
-    useMUpdateAlbum } from '@photon/schema'
+import { TAlbum, useMRemoveFromAlbum, useMUpdateAlbum, useQAlbum } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '@/hooks/set-album-cover'
+import useUpdateAlbum from '@/hooks/update-album'
 
 const AlbumPage = () => {
     const router = useRouter()
@@ -32,46 +28,15 @@ const AlbumPage = () => {
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
 
-    const albumQuery = useQAlbum({
+    const [albumQuery] = useQAlbum({
         variables: {
             id
         },
-        skip: !router.isReady
-    })
-
-    const [removeFromAlbum] = useMRemoveFromAlbum({
-        variables: {
-            idAlbum: `${id}`,
-            media: [...selection.selected].map((s) => s.id)
-        },
-        refetchQueries: [
-            {
-                query: QAlbumMediaDocument,
-                variables: {
-                    id
-                }
-            }
-        ]
-    })
-
-    const [updateAlbumTitle] = useMUpdateAlbum({
-        variables: {
-            idAlbum: id,
-            fields: {
-                title
-            }
-        },
-        refetchQueries: [
-            {
-                query: QAlbumDocument,
-                variables: {
-                    id
-                }
-            }
-        ]
+        pause: !router.isReady
     })
 
     const setAlbumCover = useSetAlbumCover(id)
+    const updateAlbum = useUpdateAlbum(id, title)
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -89,9 +54,7 @@ const AlbumPage = () => {
     useEffect(() => {
         if (edit.state === EEditState.CONFIRMED) {
             if (selection.mode === ESelectionMode.DELETE) {
-                Promise.all([removeFromAlbum(), updateAlbumTitle()]).then(() => {
-                    selection.clear()
-                })
+                updateAlbum()
             }
 
             if (selection.mode === ESelectionMode.SINGLE) {
@@ -106,7 +69,7 @@ const AlbumPage = () => {
             setTitle(album?.title || '')
             edit.setState(EEditState.OFF)
         }
-    }, [album?.title, edit, removeFromAlbum, selection, setAlbumCover, updateAlbumTitle])
+    }, [album?.title, edit, selection, setAlbumCover, updateAlbum, id, title])
 
     useEffect(() => {
         const mediaSortedByDateTaken = [...media]
@@ -124,7 +87,7 @@ const AlbumPage = () => {
         setTitle(event.target.value)
     }
 
-    if (albumQuery.loading) {
+    if (albumQuery.fetching) {
         return <></>
     }
 

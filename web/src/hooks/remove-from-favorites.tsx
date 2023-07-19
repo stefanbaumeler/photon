@@ -1,35 +1,20 @@
-import { QFavoritesDocument, QMediaDocument, useMRemoveFromFavorites } from '@photon/schema'
+import { useMRemoveFromFavorites } from '@photon/schema'
 import { useSelectionContext, useDetailsContext, useSearchContext } from '@/providers'
 import { useRouter } from 'next/router'
 
 const useRemoveFromFavorites = (mediaIds: string[]) => {
     const selection = useSelectionContext()
     const { hits: media } = useSearchContext()
-    const search = useSearchContext()
     const router = useRouter()
     const details = useDetailsContext()
 
-    const [removeFromFavorites] = useMRemoveFromFavorites({
-        variables: {
-            media: mediaIds
-        },
-        refetchQueries: [
-            {
-                query: QMediaDocument,
-                variables: {
-                    sort: media.sort
-                }
-            },
-            {
-                query: QFavoritesDocument
-            }
-        ]
-    })
+    const [, removeFromFavorites] = useMRemoveFromFavorites()
 
     return () => {
-        removeFromFavorites().then(() => {
+        removeFromFavorites({
+            media: mediaIds
+        }).then(() => {
             const topLevelRoute = router.pathname.split('/')[1]
-            search.refetch()
 
             if (topLevelRoute === 'favorites') {
                 const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
@@ -44,7 +29,7 @@ const useRemoveFromFavorites = (mediaIds: string[]) => {
                     }
 
                     if (newSelected) {
-                        details.open(newSelected)
+                        details.open(newSelected.id)
                     }
                 }
             }

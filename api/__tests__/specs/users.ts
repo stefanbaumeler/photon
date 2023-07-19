@@ -1,5 +1,5 @@
 import * as Schema from '@photon/schema'
-import seed from '../../setups/seed'
+import { seed } from '../../prisma/seed'
 import { useTestQuery } from '../utility'
 
 beforeAll(async () => {

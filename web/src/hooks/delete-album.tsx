@@ -1,5 +1,5 @@
 import { useDialogContext, useSelectionContext } from '@/providers'
-import { QAlbumsDocument, useMDeleteAlbum } from '@photon/schema'
+import { useMDeleteAlbum } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
 
@@ -9,19 +9,12 @@ const useDeleteAlbum = (id?: string | string[]) => {
     const selection = useSelectionContext()
     const idsToDelete = id ? asArray(id) : router.query.id
 
-    const [deleteMedia] = useMDeleteAlbum({
-        variables: {
-            ids: idsToDelete
-        },
-        refetchQueries: [
-            {
-                query: QAlbumsDocument
-            }
-        ]
-    })
+    const [, deleteMedia] = useMDeleteAlbum()
 
     return () => {
-        deleteMedia().then(() => {
+        deleteMedia({
+            ids: idsToDelete
+        }).then(() => {
             selection.clear()
             dialog.close()
             router.push('/albums')

@@ -9,7 +9,7 @@ import { useQAlbums } from '@photon/schema'
 export const Thumbnails = () => {
     const { t } = useTranslation()
 
-    const { data: albums } = useQAlbums()
+    const [{ data: albums }] = useQAlbums()
     const addToNewAlbum = useAddToNewAlbum()
     const addToAlbum = useAddToAlbum()
 

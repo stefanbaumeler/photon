@@ -1,6 +1,6 @@
 import { useTestQuery } from '../utility'
 import * as Schema from '@photon/schema'
-import seed from '../../setups/seed'
+import { seed } from '../../prisma/seed'
 import { predefinedFavoriteUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 
 beforeAll(async () => {
@@ -24,7 +24,7 @@ it('can be added', async () => {
 
     expect(beforeCount).toBeDefined()
     expect(afterCount).toBeDefined()
-    expect(beforeCount).not.toBe(afterCount)
+    expect(afterCount).not.toBe(beforeCount)
 })
 
 it('can be removed', async () => {

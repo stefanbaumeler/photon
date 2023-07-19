@@ -38,7 +38,7 @@ const ListItem = ({ element }: Props) => {
 
     const open = () => {
         if (isMedium(element)) {
-            details.open(element)
+            details.open(element.id)
         } else {
             router.push(`albums/${element.id}`)
         }

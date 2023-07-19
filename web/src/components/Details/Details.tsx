@@ -22,11 +22,11 @@ export const Details = () => {
     const details = useDetailsContext()
     const dialog = useDialogContext()
     const { hits: media } = useSearchContext()
-    const index = media.indexOf(details.medium)
+    const index = media.map(({ id }) => id).indexOf(details.medium?.id)
 
     const slide = (direction: number) => {
         if (media[index + direction] && details.active) {
-            details.open(media[index + direction])
+            details.open(media[index + direction].id)
         }
     }
 
@@ -85,6 +85,23 @@ export const Details = () => {
         ['last', index === media.length - 1]
     ])
 
+    const DetailsMedium = () => {
+        return <>
+            <Medium
+                placeholder={true}
+                priority={true}
+                medium={details.medium}
+                width={details.medium.meta.width / 20}
+            />
+            <Medium
+                priority={true}
+                testId="details-image"
+                medium={details.medium}
+                width={details.medium.meta.width / 2}
+            />
+        </>
+    }
+
     return <div
         className={classes}
         data-testid="details"
@@ -137,18 +154,7 @@ export const Details = () => {
                     aspectRatio: `${details.medium.meta.width} / ${details.medium.meta.height}`
                 }}
             >
-                <Medium
-                    placeholder={true}
-                    priority={true}
-                    medium={details.medium}
-                    width={details.medium.meta.width / 20}
-                />
-                <Medium
-                    priority={true}
-                    testId="details-image"
-                    medium={details.medium}
-                    width={details.medium.meta.width / 2}
-                />
+                <DetailsMedium />
             </div>
         </div>
         <aside

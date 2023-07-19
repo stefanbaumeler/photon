@@ -43,9 +43,9 @@ model Medium {
   mimetype           String?   @db.VarChar(255)
   /// [Meta]
   meta               Json?     @db.Json
-  idOwner            String?   @db.Uuid
+  idOwner            String?   @map("id_owner") @db.Uuid
   owner              User?     @relation("medium_owner", fields: [idOwner], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "medium_owner_foreign")
-  idUploader         String?   @db.Uuid
+  idUploader         String?   @map("id_uploader") @db.Uuid
   uploader           User?     @relation("medium_uploader", fields: [idUploader], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "medium_uploader_foreign")
   albums             Album[]
   favoredBy          User[]

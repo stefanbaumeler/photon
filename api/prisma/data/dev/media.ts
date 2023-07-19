@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { createTags, connectDefaultUser } from '../helpers'
+import { createTags, connectDefaultUser, connectId } from '../helpers'
 
 export const media: Prisma.MediumCreateInput[] = [
     {
@@ -3726,7 +3726,8 @@ export const media: Prisma.MediumCreateInput[] = [
             flash: 16,
             fNumber: 2.2,
             iso: 106
-        }
+        },
+        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
     },
     {
         tags: createTags([
@@ -3774,6 +3775,7 @@ export const media: Prisma.MediumCreateInput[] = [
             flash: 16,
             fNumber: 1.85,
             iso: 184
-        }
+        },
+        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
     }
 ]

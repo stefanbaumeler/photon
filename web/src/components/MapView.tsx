@@ -208,7 +208,7 @@ export const MapView = () => {
         if (medium) {
             return <div
                 className="map__marker"
-                onClick={() => details.open(medium)}
+                onClick={() => details.open(medium.id)}
             >
                 <Medium
                     medium={medium}

@@ -1,6 +1,6 @@
 import * as Schema from '@photon/schema'
 import { predefinedMediumUUIDs } from '../../src/database/helpers/ids'
-import seed from '../../setups/seed'
+import { seed } from '../../prisma/seed'
 import fs from 'fs'
 import path from 'path'
 import { useTestQuery } from '../utility'

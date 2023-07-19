@@ -1,5 +1,4 @@
 import { TDropdownItem } from '@/types/app'
-import * as Icons from '@mdi/js'
 import Icon from '@mdi/react'
 
 type Props = {

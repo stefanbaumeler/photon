@@ -11,8 +11,8 @@ interface DetailsContext {
     infos: boolean
     medium: TMedium
     setMedium: Dispatch<SetStateAction<TMedium>>
-    getUrl: (medium: TMedium) => string
-    open: (medium: TMedium) => void
+    getUrl: (medium: string) => string
+    open: (medium: string) => void
     close: () => void
     openInfos: () => void
     closeInfos: () => void
@@ -29,11 +29,11 @@ const DetailsProvider = ({ children }: Props) => {
 
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
 
-    const mediumQuery = useQMedium({
+    const [mediumQuery] = useQMedium({
         variables: {
             id: idMedium
         },
-        skip: !idMedium
+        pause: !idMedium
     })
 
     useEffect(() => {
@@ -43,30 +43,29 @@ const DetailsProvider = ({ children }: Props) => {
         }
     }, [mediumQuery.data])
 
-    const getUrl = (medium: TMedium) => {
+    const getUrl = (mediumId: string) => {
         const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
-        let newUrl = `${path}/media/${medium.id}`
+        let newUrl = `${path}/media/${mediumId}`
 
         if (router.query.idAlbum) {
-            newUrl = `/albums/${router.query.idAlbum}/media/${medium.id}`
+            newUrl = `/albums/${router.query.idAlbum}/media/${mediumId}`
         }
 
         if (path.includes('favorites')) {
-            newUrl = `${path}/${medium.id}`
+            newUrl = `${path}/${mediumId}`
         }
 
         return newUrl
     }
 
-    const open = (newMedium: TMedium) => {
+    const open = (newMedium: string) => {
         if (!newMedium) {
             return
         }
 
-        // setMedium(newMedium)
         setActive(true)
 
-        if (router.query.idMedium !== newMedium.id) {
+        if (router.query.idMedium !== newMedium) {
             router.push(getUrl(newMedium), null, {
                 shallow: true
             })

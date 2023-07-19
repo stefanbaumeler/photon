@@ -27,10 +27,10 @@ export const DefaultActions = () => {
 
     const upload = useUpload()
 
-    const [out] = useMSignOut()
+    const [, out] = useMSignOut()
 
     const signOut = () => {
-        out().then(() => {
+        out({}).then(() => {
             router.push('/login')
         })
     }

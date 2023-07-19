@@ -18,7 +18,7 @@ export default {
                 'typescript',
                 'typescript-resolvers',
                 'typescript-operations',
-                'typescript-react-apollo',
+                'typescript-urql',
                 {
                     add: {
                         content: 'import { FileUpload } from \'graphql-upload-minimal\''

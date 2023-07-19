@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test'
-import seed from '../../../../api/setups/seed'
+import { seed } from '../../../../api/prisma/seed'
 import { useTestQuery } from '../../../../api/__tests__/utility'
 
 export const globalBeforeEach = () => {

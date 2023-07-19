@@ -21,23 +21,28 @@ export const ListItemActions = ({ element }: Props) => {
 
     const [moreActive, setMoreActive] = useState(false)
 
-    const moveToTrashDialog = isMedium(element) ? useMoveToTrashDialog(element) : useDeleteAlbumDialog(element.id)
-    const download = useDownload(isAlbum(element) ? element.albumMedia.map(({ idMedium }) => idMedium) : [element.id])
+    const moveToTrashDialog = useMoveToTrashDialog(element as TMedium)
+    const deleteAlbumDialog = useDeleteAlbumDialog(element.id)
+    const rotate = useRotate(element.id)
+    const archive = useSetMediaStatus(element, isMedium(element) && element.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
+    const download = useDownload(isAlbum(element) ? element.media.map(({ id }) => id) : [element.id])
 
     const moreItems = [
         {
             label: t(ETrans.DELETE),
             callback: () => {
-                moveToTrashDialog()
+                if (isMedium(element)) {
+                    moveToTrashDialog()
+                }
+                else {
+                    deleteAlbumDialog()
+                }
                 setMoreActive(false)
             }
         }
     ]
 
     if (isMedium(element)) {
-        const rotate = useRotate(element.id)
-        const archive = useSetMediaStatus(element, element.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
-
         moreItems.push({
             label: t(ETrans.ROTATE_LEFT),
             callback: () => {

@@ -9,7 +9,7 @@ import fs from 'fs'
 import AdmZip from 'adm-zip'
 import https from 'https'
 
-async function main (setup: string, force = false) {
+export async function seedDatabase (setup: string, force = false) {
     const env = getEnv()
     setDbUrl()
     const uploadsDir = path.join(__dirname, '../', env.API_UPLOADS_DIR)
@@ -63,15 +63,14 @@ async function main (setup: string, force = false) {
     }
 }
 
-const force = process.argv[process.argv.length - 1] === '-f'
-const setup = force ? process.argv[process.argv.length - 2] : process.argv[process.argv.length - 1]
-
-main(setup, force)
-    .then(async () => {
-        await prisma.$disconnect()
-    })
-    .catch(async (e) => {
-        console.error(e)
-        await prisma.$disconnect()
-        process.exit(1)
-    })
+export const seed = async (setup = 'dev', force = false) => {
+    await seedDatabase(setup, force)
+        .then(async () => {
+            await prisma.$disconnect()
+        })
+        .catch(async (e) => {
+            console.error(e)
+            await prisma.$disconnect()
+            process.exit(1)
+        })
+}

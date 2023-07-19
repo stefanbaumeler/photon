@@ -4,7 +4,6 @@ import { EMediumStatus } from '@/types/app'
 import { useSortContext } from '@/providers/SortProvider'
 import { useRouter } from 'next/router'
 import { sortMediaByDate } from '@/util/sort'
-import { useArchiveContext } from '@/providers/ArchiveProvider'
 
 type Props = {
     children?: ReactNode
@@ -18,7 +17,6 @@ interface SearchContext {
     setFavorites: Dispatch<SetStateAction<boolean>>
     query: string
     setQuery: Dispatch<SetStateAction<string>>
-    refetch: () => void
 }
 
 const SearchContext = createContext<SearchContext | null>(null)
@@ -33,7 +31,7 @@ const SearchProvider = ({ children }: Props) => {
     const [query, setQuery] = useState('')
     const { sort } = useSortContext()
 
-    const media = useQMedia({
+    const [media] = useQMedia({
         variables: {
             status,
             sort,
@@ -43,7 +41,6 @@ const SearchProvider = ({ children }: Props) => {
         }
     })
 
-    console.log(status)
     const sortedMedia = sortMediaByDate(media.data?.media || [], sort)
 
     return <SearchContext.Provider value={{
@@ -53,17 +50,7 @@ const SearchProvider = ({ children }: Props) => {
         favorites,
         setFavorites,
         query,
-        setQuery,
-        refetch: async () => {
-            console.log('refetch', status)
-            await media.refetch({
-                status,
-                sort,
-                album,
-                favorites,
-                q: query
-            })
-        }
+        setQuery
     }}
     >
         {children}

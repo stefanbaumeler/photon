@@ -16,7 +16,7 @@ export const TeaserBottomRightCorner = () => {
     }
 
     const open = () => {
-        details.open(element)
+        details.open(element.id)
     }
 
     const fallbackButtonClasses = bem('teaser__open-fallback', [

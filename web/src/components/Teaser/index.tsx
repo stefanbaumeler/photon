@@ -14,6 +14,7 @@ export const Teaser = ({
     if (!element) {
         return <></>
     }
+
     return <TeaserProvider
         element={element}
         width={width}
