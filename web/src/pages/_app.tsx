@@ -6,7 +6,8 @@ import { NavProvider,
     LayoutProvider,
     SortProvider,
     SearchProvider,
-    DragProvider } from '@/providers'
+    DragProvider,
+    KeyboardProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { urql } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -33,13 +34,14 @@ const Photon = ({
 }: AppProps) => {
     return <Provider value={urql}>
         <I18nextProvider i18n={i18next}>
-            <ProviderProvider components={[DialogProvider,
+            <ProviderProvider components={[KeyboardProvider,
+                DialogProvider,
                 SelectionProvider,
                 DragProvider,
                 NavProvider,
                 EditProvider,
                 LayoutProvider,
-                SortProvider]}
+                SortProvider ]}
             >
                 <SearchProvider>
                     <Component {...pageProps} />

@@ -16,6 +16,7 @@ import { DetailsMap } from './DetailsMap'
 import { DetailsSection } from './DetailsSection'
 import { DetailsOwner } from './DetailsOwner'
 import { DetailsShares } from './DetailsShares'
+import { useMemo } from 'react'
 
 export const Details = () => {
     const { t } = useTranslation()
@@ -75,17 +76,11 @@ export const Details = () => {
         // ['rotated', rotated]
     ])
 
-    if (!details.medium || !Object.keys(details.medium).length) {
-        return <></>
-    }
+    const DetailsMedium = useMemo(() => {
+        if (!details.medium) {
+            return <div></div>
+        }
 
-    const previewClasses = bem('details__preview', [
-        ['video', details.medium.mimetype?.startsWith('video')],
-        ['first', index === 0],
-        ['last', index === media.length - 1]
-    ])
-
-    const DetailsMedium = () => {
         return <>
             <Medium
                 placeholder={true}
@@ -100,7 +95,17 @@ export const Details = () => {
                 width={details.medium.meta.width / 2}
             />
         </>
+    }, [details.medium])
+
+    if (!details.medium || !Object.keys(details.medium).length) {
+        return <></>
     }
+
+    const previewClasses = bem('details__preview', [
+        ['video', details.medium.mimetype?.startsWith('video')],
+        ['first', index === 0],
+        ['last', index === media.length - 1]
+    ])
 
     return <div
         className={classes}
@@ -154,7 +159,7 @@ export const Details = () => {
                     aspectRatio: `${details.medium.meta.width} / ${details.medium.meta.height}`
                 }}
             >
-                <DetailsMedium />
+                {DetailsMedium}
             </div>
         </div>
         <aside

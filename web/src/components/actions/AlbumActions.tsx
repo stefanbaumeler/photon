@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, ViewControl, Button } from '../'
+import { Dropdown, ViewControl, Button, SortControl } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
@@ -52,6 +52,7 @@ export const AlbumActions = () => {
 
     return <div className="actions">
         <ViewControl />
+        <SortControl />
         <Dropdown
             items={moreItems}
             active={moreActive}

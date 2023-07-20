@@ -13,7 +13,8 @@ import { DetailsProvider,
     NavProvider,
     ProviderProvider,
     SelectionProvider,
-    DragProvider } from '../src/providers'
+    DragProvider,
+    KeyboardProvider } from '../src/providers'
 
 interface Props {
     children: ReactNode
@@ -25,7 +26,7 @@ const TestProvider = (props: Props) => {
     return (
         <Provider value={urql}>
             <I18nextProvider i18n={i18next}>
-                <ProviderProvider components={[DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
+                <ProviderProvider components={[KeyboardProvider, DialogProvider, SelectionProvider, DragProvider, NavProvider, EditProvider, LayoutProvider, SortProvider, DetailsProvider]}>
                     {children}
                 </ProviderProvider>
             </I18nextProvider>

@@ -126,6 +126,7 @@ export type TMutation = {
   signOut?: Maybe<Scalars['Boolean']>;
   signUp?: Maybe<TToken>;
   updateAlbum?: Maybe<TAlbum>;
+  updateMedium: TMedium;
   upload: Array<TMedium>;
 };
 
@@ -207,6 +208,12 @@ export type TMutationSignUpArgs = {
 export type TMutationUpdateAlbumArgs = {
   fields: TAlbumInput;
   idAlbum: Scalars['ID'];
+};
+
+
+export type TMutationUpdateMediumArgs = {
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
 };
 
 
@@ -566,6 +573,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   signOut?: Resolver<Maybe<TResolversTypes['Boolean']>, ParentType, ContextType>;
   signUp?: Resolver<Maybe<TResolversTypes['Token']>, ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'language' | 'lastName' | 'mail' | 'password'>>;
   updateAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'fields' | 'idAlbum'>>;
+  updateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationUpdateMediumArgs, 'id'>>;
   upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'files'>>;
 };
 
@@ -674,10 +682,10 @@ export type TFMedia = (
     & Pick<TUser, 'id'>
   )>>>, owner?: Maybe<(
     { __typename?: 'User' }
-    & Pick<TUser, 'id'>
+    & Pick<TUser, 'id' | 'firstName' | 'lastName'>
   )>, uploader?: Maybe<(
     { __typename?: 'User' }
-    & Pick<TUser, 'id'>
+    & Pick<TUser, 'id' | 'firstName' | 'lastName'>
   )>, meta?: Maybe<(
     { __typename?: 'ImageMeta' }
     & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -730,10 +738,10 @@ export type TQAlbum = (
         & Pick<TUser, 'id'>
       )>>>, owner?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, uploader?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, meta?: Maybe<(
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -760,10 +768,10 @@ export type TQAlbumMedia = (
       & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -792,10 +800,10 @@ export type TQAlbums = (
         & Pick<TUser, 'id'>
       )>>>, owner?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, uploader?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, meta?: Maybe<(
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -814,10 +822,10 @@ export type TQAlbums = (
         & Pick<TUser, 'id'>
       )>>>, owner?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, uploader?: Maybe<(
         { __typename?: 'User' }
-        & Pick<TUser, 'id'>
+        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
       )>, meta?: Maybe<(
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -914,10 +922,10 @@ export type TQFavorites = (
       & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -997,10 +1005,10 @@ export type TQMedia = (
       & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -1048,7 +1056,7 @@ export type TQMedium = (
       & Pick<TUser, 'id'>
     )>>>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -1074,10 +1082,10 @@ export type TMRotate = (
       & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -1104,10 +1112,10 @@ export type TMSetMediaStatus = (
       & Pick<TUser, 'id'>
     )>>>, owner?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, uploader?: Maybe<(
       { __typename?: 'User' }
-      & Pick<TUser, 'id'>
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, meta?: Maybe<(
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
@@ -1116,6 +1124,36 @@ export type TMSetMediaStatus = (
       & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     )> }
   )> }
+);
+
+export type TMUpdateMediumVariables = Exact<{
+  id: Scalars['ID'];
+  description?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type TMUpdateMedium = (
+  { __typename?: 'Mutation' }
+  & { updateMedium: (
+    { __typename?: 'Medium' }
+    & Pick<TMedium, 'dateCreated' | 'dateModified' | 'dateTaken' | 'id' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'status' | 'mimetype'>
+    & { favoredBy?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id'>
+    )>>>, owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
+    )>, uploader?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
+    )>, meta?: Maybe<(
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    )> }
+  ) }
 );
 
 export type TMUploadVariables = Exact<{
@@ -1211,9 +1249,13 @@ export const FMedia = gql`
   }
   owner {
     id
+    firstName
+    lastName
   }
   uploader {
     id
+    firstName
+    lastName
   }
   meta {
     ... on ImageMeta {
@@ -1491,6 +1533,17 @@ export const MSetMediaStatusDocument = gql`
 
 export function useMSetMediaStatus() {
   return Urql.useMutation<TMSetMediaStatus, TMSetMediaStatusVariables>(MSetMediaStatusDocument);
+};
+export const MUpdateMediumDocument = gql`
+    mutation MUpdateMedium($id: ID!, $description: String) {
+  updateMedium(id: $id, description: $description) {
+    ...FMedia
+  }
+}
+    ${FMedia}`;
+
+export function useMUpdateMedium() {
+  return Urql.useMutation<TMUpdateMedium, TMUpdateMediumVariables>(MUpdateMediumDocument);
 };
 export const MUploadDocument = gql`
     mutation MUpload($files: [Upload!]!) {

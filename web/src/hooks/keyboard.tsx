@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
+import { useKeyboardContext } from '@/providers'
 
 export const useKeyboard = (event: string, key: string, callback: () => void) => {
+    const keyboard = useKeyboardContext()
+
     const ref = useRef({
         event,
         key,
@@ -14,7 +17,7 @@ export const useKeyboard = (event: string, key: string, callback: () => void) =>
 
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {
-            if (event.key === ref.current.key) {
+            if (event.key === ref.current.key && !keyboard.isTyping) {
                 ref.current.callback()
             }
         }
@@ -24,5 +27,5 @@ export const useKeyboard = (event: string, key: string, callback: () => void) =>
         return () => {
             window.removeEventListener(ref.current.event, keydown)
         }
-    }, [])
+    }, [keyboard.isTyping])
 }

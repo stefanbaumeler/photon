@@ -272,6 +272,24 @@ export default class MediaService {
         })
     }
 
+    update = async (id: string, fields: Prisma.MediumUpdateInput) => {
+        return DB.medium.update({
+            where: {
+                id
+            },
+            data: fields,
+            include: {
+                owner: true,
+                uploader: true,
+                favoredBy: {
+                    where: {
+                        id: this.context?.user.id
+                    }
+                }
+            }
+        })
+    }
+
     readOne = async (id: string) => {
         return DB.medium.findFirst({
             where: {

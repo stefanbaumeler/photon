@@ -1,0 +1,5 @@
+mutation MUpdateMedium($id: ID!, $description: String) {
+    updateMedium(id: $id, description: $description) {
+        ...FMedia
+    }
+}

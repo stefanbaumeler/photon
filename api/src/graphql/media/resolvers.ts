@@ -107,6 +107,11 @@ const mutations: Partial<TMutationResolvers> = {
     },
     deleteMedia: async (_, input, context) => {
         return await new MediaService(context).destroy(input.ids)
+    },
+    updateMedium: async (_, input, context) => {
+        return await new MediaService(context).update(input.id, {
+            description: input.description
+        })
     }
 }
 

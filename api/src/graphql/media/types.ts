@@ -89,5 +89,6 @@ export default gql`
         setMediaStatus(media: [ID!]!, status: String!): [Medium!]! @auth
         upload(files: [Upload!]!): [Medium!]! @auth
         emptyTrash: [Medium!]! @auth
+        updateMedium(id: ID!, description: String): Medium! @auth
     }
 `
