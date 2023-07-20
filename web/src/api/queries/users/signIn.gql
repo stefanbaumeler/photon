@@ -4,5 +4,9 @@ mutation MSignIn (
 ) {
     signIn(mail: $mail, password: $password) {
         accessToken
+        refreshToken
+        user {
+            ...FUser
+        }
     }
 }

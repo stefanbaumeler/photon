@@ -36,7 +36,7 @@ export * from './Scrollbar'
 export * from './FilmStrip'
 export * from './FocusOverlay'
 export * from './Setting'
-export * from './LanguagePicker'
+export * from './LanguageSwitcher'
 export * from './Heading'
 export * from './LinkButton'
 

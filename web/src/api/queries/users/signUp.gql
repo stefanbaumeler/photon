@@ -12,5 +12,9 @@ mutation MSignUp (
         language: "en-US"
     ) {
         accessToken
+        refreshToken
+        user {
+            ...FUser
+        }
     }
 }

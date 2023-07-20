@@ -1,0 +1,7 @@
+fragment FUser on User {
+    id
+    dateCreated
+    firstName
+    lastName
+    language
+}

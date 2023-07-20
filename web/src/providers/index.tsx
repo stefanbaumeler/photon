@@ -8,5 +8,6 @@ export * from './SortProvider'
 export * from './SearchProvider'
 export * from './DragProvider'
 export * from './KeyboardProvider'
+export * from './UserProvider'
 
 export { default as ProviderProvider } from './ProviderProvider'

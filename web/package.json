@@ -25,6 +25,7 @@
         "@types/react": "^18.0.14",
         "@types/react-datepicker": "^4.4.2",
         "@types/react-dom": "^18.0.5",
+        "@urql/exchange-auth": "^2.1.5",
         "eslint-config-next": "^13.0.7",
         "graphql-tag": "^2.12.6",
         "i18next": "^21.9.1",

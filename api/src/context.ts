@@ -26,11 +26,19 @@ export const context: ContextFunction<[ExpressContextFunctionArgument]> = async 
         }
     }
 
-    const accessToken = req.cookies.accessToken as string
+    const accessToken = req.cookies.accessToken
     const refreshToken = req.cookies.refreshToken
 
     let verified = false
     let userInfo
+
+    if (!accessToken) {
+        return {
+            verified,
+            res,
+            req
+        }
+    }
 
     try {
         jwt.verify(accessToken, env.JWT_SECRET as string)

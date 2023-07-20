@@ -1,4 +1,4 @@
-import { TUser } from '@photon/schema'
+import { TToken, TUser } from '@photon/schema'
 import argon2 from 'argon2'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Response } from 'express'
@@ -148,7 +148,10 @@ export default class UsersService {
             }
         }
 
-        return this.setUserCookie(existingUser, this.context?.res)
+        return {
+            ...await this.setUserCookie(existingUser, this.context?.res),
+            user: existingUser
+        }
     }
 
     signOut = () => {
@@ -194,6 +197,7 @@ export default class UsersService {
     }
 
     changeLanguage = async (language: string ) => {
+        console.log(this.context)
         await DB.user.update({
             where: {
                 id: this.context?.user.id
@@ -203,6 +207,10 @@ export default class UsersService {
             }
         })
 
-        return ''
+        if (this.context?.user.id) {
+            return this.readOne(this.context.user.id)
+        }
+
+        throw new Error('User not defined')
     }
 }

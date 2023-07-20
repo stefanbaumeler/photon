@@ -10,6 +10,8 @@ const queries: Partial<TQueryResolvers> = {
     media: async (_, input, context) => {
         const env = getEnv()
 
+        console.log(context.user.id)
+
         const conditions: Prisma.MediumWhereInput = {
             owner: {
                 id: context.user.id

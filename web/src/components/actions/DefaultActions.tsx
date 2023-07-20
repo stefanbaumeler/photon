@@ -32,6 +32,7 @@ export const DefaultActions = () => {
     const signOut = () => {
         out({}).then(() => {
             router.push('/login')
+            window.localStorage.removeItem('photon')
         })
     }
 

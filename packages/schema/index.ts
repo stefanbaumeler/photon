@@ -112,7 +112,7 @@ export type TMutation = {
   __typename?: 'Mutation';
   addToAlbum: Array<TMedium>;
   addToFavorites: Array<TMedium>;
-  changeLanguage?: Maybe<Scalars['String']>;
+  changeLanguage: TUser;
   createAlbum?: Maybe<TAlbum>;
   deleteAlbum: Array<TAlbum>;
   deleteMedia: Array<TMedium>;
@@ -293,6 +293,7 @@ export type TToken = {
   __typename?: 'Token';
   accessToken: Scalars['String'];
   refreshToken: Scalars['String'];
+  user?: Maybe<TUser>;
 };
 
 export type TUser = {
@@ -302,9 +303,9 @@ export type TUser = {
   favorites?: Maybe<Array<Maybe<TMedium>>>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  language?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   mail?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
 };
 
 export type TVideoMeta = {
@@ -559,7 +560,7 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
   addToAlbum?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToAlbumArgs, 'idAlbum' | 'media'>>;
   addToFavorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationAddToFavoritesArgs, 'media'>>;
-  changeLanguage?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
+  changeLanguage?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
   createAlbum?: Resolver<Maybe<TResolversTypes['Album']>, ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
   deleteAlbum?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumArgs, 'ids'>>;
   deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
@@ -603,6 +604,7 @@ export type TTagResolvers<ContextType = any, ParentType extends TResolversParent
 export type TTokenResolvers<ContextType = any, ParentType extends TResolversParentTypes['Token'] = TResolversParentTypes['Token']> = {
   accessToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   refreshToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -616,9 +618,9 @@ export type TUserResolvers<ContextType = any, ParentType extends TResolversParen
   favorites?: Resolver<Maybe<Array<Maybe<TResolversTypes['Medium']>>>, ParentType, ContextType>;
   firstName?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['ID'], ParentType, ContextType>;
+  language?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   mail?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
-  password?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -698,6 +700,11 @@ export type TFMedia = (
 export type TFMediaStatus = (
   { __typename: 'Medium' }
   & Pick<TMedium, 'id' | 'status'>
+);
+
+export type TFUser = (
+  { __typename?: 'User' }
+  & Pick<TUser, 'id' | 'dateCreated' | 'firstName' | 'lastName' | 'language'>
 );
 
 export type TMAddToAlbumVariables = Exact<{
@@ -1186,7 +1193,10 @@ export type TMChangeLanguageVariables = Exact<{
 
 export type TMChangeLanguage = (
   { __typename?: 'Mutation' }
-  & Pick<TMutation, 'changeLanguage'>
+  & { changeLanguage: (
+    { __typename?: 'User' }
+    & Pick<TUser, 'id' | 'dateCreated' | 'firstName' | 'lastName' | 'language'>
+  ) }
 );
 
 export type TMSignInVariables = Exact<{
@@ -1199,7 +1209,11 @@ export type TMSignIn = (
   { __typename?: 'Mutation' }
   & { signIn?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<TToken, 'accessToken'>
+    & Pick<TToken, 'accessToken' | 'refreshToken'>
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id' | 'dateCreated' | 'firstName' | 'lastName' | 'language'>
+    )> }
   )> }
 );
 
@@ -1223,7 +1237,11 @@ export type TMSignUp = (
   { __typename?: 'Mutation' }
   & { signUp?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<TToken, 'accessToken'>
+    & Pick<TToken, 'accessToken' | 'refreshToken'>
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<TUser, 'id' | 'dateCreated' | 'firstName' | 'lastName' | 'language'>
+    )> }
   )> }
 );
 
@@ -1280,6 +1298,15 @@ export const FMediaStatus = gql`
   id
   __typename
   status
+}
+    `;
+export const FUser = gql`
+    fragment FUser on User {
+  id
+  dateCreated
+  firstName
+  lastName
+  language
 }
     `;
 export const MAddToAlbumDocument = gql`
@@ -1567,9 +1594,11 @@ export function useQTranslate(options: Omit<Urql.UseQueryArgs<TQTranslateVariabl
 };
 export const MChangeLanguageDocument = gql`
     mutation MChangeLanguage($language: String!) {
-  changeLanguage(language: $language)
+  changeLanguage(language: $language) {
+    ...FUser
+  }
 }
-    `;
+    ${FUser}`;
 
 export function useMChangeLanguage() {
   return Urql.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument);
@@ -1578,9 +1607,13 @@ export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {
   signIn(mail: $mail, password: $password) {
     accessToken
+    refreshToken
+    user {
+      ...FUser
+    }
   }
 }
-    `;
+    ${FUser}`;
 
 export function useMSignIn() {
   return Urql.useMutation<TMSignIn, TMSignInVariables>(MSignInDocument);
@@ -1604,9 +1637,13 @@ export const MSignUpDocument = gql`
     language: "en-US"
   ) {
     accessToken
+    refreshToken
+    user {
+      ...FUser
+    }
   }
 }
-    `;
+    ${FUser}`;
 
 export function useMSignUp() {
   return Urql.useMutation<TMSignUp, TMSignUpVariables>(MSignUpDocument);

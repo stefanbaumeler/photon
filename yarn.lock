@@ -3755,7 +3755,7 @@
     "@typescript-eslint/types" "5.59.8"
     eslint-visitor-keys "^3.3.0"
 
-"@urql/core@^4.0.0":
+"@urql/core@>=4.0.0", "@urql/core@^4.0.0":
   version "4.0.11"
   resolved "https://packages.1up.io:443/@urql%2fcore/-/core-4.0.11.tgz#b4e8bf3a3ff1a2519bb3aec38c7be99d2523308d"
   integrity sha512-FFdY97vF5xnUrElcGw9erOLvtu+KGMLfwrLNDfv4IPgdp2IBsiGe+Kb7Aypfd3kH//BETewVSLm3+y2sSzjX6A==
@@ -3769,6 +3769,14 @@
   integrity sha512-TktPLiBS9LcBPHD6qcnb8wqOVcg3Bx0iCtvQ80uPpfofwwBGJmqnQTjUdEFU6kwaLOFZULQ9+Uo4831G823mQw==
   dependencies:
     wonka ">= 4.0.9"
+
+"@urql/exchange-auth@^2.1.5":
+  version "2.1.5"
+  resolved "https://packages.1up.io:443/@urql%2fexchange-auth/-/exchange-auth-2.1.5.tgz#6e990c36107b4e1a1408e27f9409bf5732480f47"
+  integrity sha512-HYQXX+h1+VzDFYIhFxPabq3eH6wwCCkxe9s4DIRDI7cPllVLm7ZiyMWb9612gj858hxk0e6fTyem7NHPu7sjvw==
+  dependencies:
+    "@urql/core" ">=4.0.0"
+    wonka "^6.3.2"
 
 "@whatwg-node/events@^0.0.2":
   version "0.0.2"

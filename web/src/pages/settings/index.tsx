@@ -1,5 +1,5 @@
 import Layout from '../../layouts/layout'
-import { Uploader, Setting, LanguagePicker, Heading, Button } from '@/components'
+import { Uploader, Setting, LanguageSwitcher, Heading, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,7 @@ const SettingsPage = () => {
                 title={t(ETrans.LANGUAGE)}
                 description={'Language'}
             >
-                <LanguagePicker />
+                <LanguageSwitcher />
             </Setting>
             <Setting
                 title={'Automatically clear trash'}

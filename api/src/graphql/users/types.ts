@@ -6,10 +6,16 @@ export default gql`
         dateCreated: Date
         dateModified: Date
         mail: String
-        password: String
         firstName: String
         lastName: String
         favorites: [Medium]
+        language: String
+    }
+
+    type Token {
+        accessToken: String!
+        refreshToken: String!
+        user: User
     }
 
     type Query {
@@ -17,15 +23,10 @@ export default gql`
         user(id: ID!): User! @auth
     }
 
-    type Token {
-        accessToken: String!
-        refreshToken: String!
-    }
-
     type Mutation {
         signIn(mail: String!, password: String!): Token
         signOut: Boolean
         signUp(mail: String!, password: String!, firstName: String!, lastName: String!, language: String!): Token
-        changeLanguage(language: String!): String
+        changeLanguage(language: String!): User!
     }
 `

@@ -2,8 +2,10 @@ import { useMSignIn, useMSignUp } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useUserContext } from '@/providers'
+import { initializeUrqlClient } from '@/api'
 
 enum ELoginFormMode {
     DEFAULT,
@@ -19,16 +21,43 @@ const LoginPage = () => {
     const [password, setPassword] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+    const router = useRouter()
+    const user = useUserContext()
 
-    const submit = () => {
+    const submit = useCallback(async () => {
+        let data
+
         if (loginFormMode === ELoginFormMode.DEFAULT) {
-            signInUser()
+            const res = await signIn({
+                mail,
+                password
+            })
+
+            data = res.data.signIn
         }
 
         if (loginFormMode === ELoginFormMode.SIGNUP) {
-            signUpUser()
+            const res = await signUp({
+                firstName,
+                lastName,
+                mail,
+                password
+            })
+
+            data = res.data.signUp
         }
-    }
+
+        user.setUser(data.user)
+        localStorage.photon = JSON.stringify({
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken
+        })
+
+        if (data.accessToken.length) {
+            await router.push('/')
+            initializeUrqlClient()
+        }
+    }, [loginFormMode, signIn, signUp, firstName, lastName, mail, password, router, user])
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {
@@ -53,29 +82,6 @@ const LoginPage = () => {
             document.removeEventListener('keydown', keyDownHandler)
         }
     }, [submit, mail, password, firstName, lastName, loginFormMode])
-
-    const router = useRouter()
-
-    const signInUser = () => {
-        signIn({
-            mail,
-            password
-        }).then(async (res) => {
-            console.log(res)
-            if (res.data.signIn.accessToken.length) {
-                await router.push('/')
-            }
-        })
-    }
-
-    const signUpUser = () => {
-        signUp({
-            firstName,
-            lastName,
-            mail,
-            password
-        })
-    }
 
     const title = loginFormMode === ELoginFormMode.SIGNUP ? t(ETrans.SIGN_UP) : t(ETrans.SIGN_IN)
 

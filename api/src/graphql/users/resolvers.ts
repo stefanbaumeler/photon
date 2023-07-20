@@ -16,6 +16,7 @@ const mutations: Partial<TMutationResolvers> = {
     signUp: (_, input, context) => new UsersService(context).signUp(input),
 
     changeLanguage: (_, { language }, context) => {
+        console.log(context, 'changing')
         return new UsersService(context).changeLanguage(language)
     }
 }

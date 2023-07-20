@@ -41,6 +41,8 @@ const SearchProvider = ({ children }: Props) => {
         }
     })
 
+    console.log(media)
+
     const sortedMedia = sortMediaByDate(media.data?.media || [], sort)
 
     return <SearchContext.Provider value={{
