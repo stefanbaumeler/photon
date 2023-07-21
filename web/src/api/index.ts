@@ -2,8 +2,6 @@ import { Client, cacheExchange, fetchExchange } from 'urql'
 import { devtoolsExchange } from '@urql/devtools'
 import { AuthConfig, authExchange } from '@urql/exchange-auth'
 
-let cache
-
 const initializeAuthState = async () => {
     if (typeof window === 'undefined') {
         return {
@@ -11,7 +9,7 @@ const initializeAuthState = async () => {
             refreshToken: ''
         }
     }
-    cache = JSON.parse(window.localStorage.getItem('photon'))
+    const cache = JSON.parse(window.localStorage.getItem('photon'))
 
     if (!cache || !cache.accessToken) {
         if (window.location.pathname !== '/login') {
@@ -32,9 +30,13 @@ const initializeAuthState = async () => {
 export const initializeUrqlClient = () => new Client({
     url: process.env.NEXT_PUBLIC_API_URL,
     fetchOptions: {
-        credentials: 'include'
+        credentials: process.env.NEXT_PUBLIC_API_CREDENTIALS === '0' ? 'omit' : 'include'
     },
     exchanges: [devtoolsExchange, cacheExchange, authExchange(async (utils) => {
+        if (process.env.NEXT_PUBLIC_API_CREDENTIALS === '0') {
+            return
+        }
+
         const {
             accessToken, refreshToken
         } = await initializeAuthState()

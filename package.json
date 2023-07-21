@@ -35,10 +35,12 @@
         "build": "run-s build:packages build:db",
         "build:packages": "nx run-many -t build",
         "build:db": "run-s start:docker db:up",
-        "test": "NODE_ENV=test run-s test:api test:web",
+        "test": "NODE_ENV=test run-s start:docker seed-and-test",
+        "test:watch": "run-p watch:api watch:web",
+        "test:all": "run-s test:api test:web",
         "test:web": "nx run @photon/web:test",
         "test:api": "jest -i",
-        "seed-and-test": "start-server-and-test watch:api 11011 test"
+        "seed-and-test": "start-server-and-test test:watch 11011 test:all"
     },
     "dependencies": {
         "dotenv": "^16.3.1",

@@ -13,6 +13,7 @@ it('can sign in', async () => {
     })
 
     expect(query.body.singleResult.data?.signIn).toMatchSnapshot({
+        refreshToken: expect.any(String),
         accessToken: expect.any(String)
     })
 })
@@ -32,6 +33,7 @@ it('can sign up', async () => {
     })
 
     expect(query.body.singleResult.data?.signUp).toMatchSnapshot({
+        refreshToken: expect.any(String),
         accessToken: expect.any(String)
     })
 })

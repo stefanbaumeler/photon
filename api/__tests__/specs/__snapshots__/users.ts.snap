@@ -3,6 +3,14 @@
 exports[`can sign in 1`] = `
 {
   "accessToken": Any<String>,
+  "refreshToken": Any<String>,
+  "user": {
+    "dateCreated": "2022-11-10T23:00:00.000Z",
+    "firstName": "Test",
+    "id": "51dde765-a6de-48c6-b372-41534fb91d55",
+    "language": "de-DE",
+    "lastName": "McTestFace",
+  },
 }
 `;
 
@@ -11,5 +19,7 @@ exports[`can sign out 1`] = `true`;
 exports[`can sign up 1`] = `
 {
   "accessToken": Any<String>,
+  "refreshToken": Any<String>,
+  "user": null,
 }
 `;

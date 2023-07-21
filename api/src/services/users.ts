@@ -197,7 +197,6 @@ export default class UsersService {
     }
 
     changeLanguage = async (language: string ) => {
-        console.log(this.context)
         await DB.user.update({
             where: {
                 id: this.context?.user.id
