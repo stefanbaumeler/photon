@@ -1,0 +1,5 @@
+query QProfile {
+    profile {
+        ...FUser
+    }
+}

@@ -20,7 +20,6 @@ import { I18nextProvider } from 'react-i18next'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'tippy.js/themes/light.css'
 import { Provider } from 'urql'
-import { getEnv } from '@/env'
 
 tippy.setDefaultProps({
     zIndex: 101,

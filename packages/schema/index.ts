@@ -232,6 +232,7 @@ export type TQuery = {
   media?: Maybe<Array<TMedium>>;
   mediaCountByYear: TYearCountResult;
   medium?: Maybe<TMedium>;
+  profile: TUser;
   translate: Scalars['String'];
   user: TUser;
   users: Array<TUser>;
@@ -588,6 +589,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   mediaCountByYear?: Resolver<TResolversTypes['YearCountResult'], ParentType, ContextType>;
   medium?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
+  profile?: Resolver<TResolversTypes['User'], ParentType, ContextType>;
   translate?: Resolver<TResolversTypes['String'], ParentType, ContextType, RequireFields<TQueryTranslateArgs, 'query'>>;
   user?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TQueryUserArgs, 'id'>>;
   users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
@@ -1199,6 +1201,17 @@ export type TMChangeLanguage = (
   ) }
 );
 
+export type TQProfileVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TQProfile = (
+  { __typename?: 'Query' }
+  & { profile: (
+    { __typename?: 'User' }
+    & Pick<TUser, 'id' | 'dateCreated' | 'firstName' | 'lastName' | 'language'>
+  ) }
+);
+
 export type TMSignInVariables = Exact<{
   mail: Scalars['String'];
   password: Scalars['String'];
@@ -1602,6 +1615,17 @@ export const MChangeLanguageDocument = gql`
 
 export function useMChangeLanguage() {
   return Urql.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument);
+};
+export const QProfileDocument = gql`
+    query QProfile {
+  profile {
+    ...FUser
+  }
+}
+    ${FUser}`;
+
+export function useQProfile(options?: Omit<Urql.UseQueryArgs<TQProfileVariables>, 'query'>) {
+  return Urql.useQuery<TQProfile, TQProfileVariables>({ query: QProfileDocument, ...options });
 };
 export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {

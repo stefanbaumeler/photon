@@ -12,8 +12,7 @@ i18next.use(initReactI18next).init({
             translation: translationsDe
         }
     },
-    lng: 'de',
-    fallbackLng: 'en',
+    lng: 'en-US',
     interpolation: {
         format: (value, format) => {
             if (format === 'uppercase') {

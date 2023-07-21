@@ -21,6 +21,7 @@ export default gql`
     type Query {
         users: [User!]! @auth
         user(id: ID!): User! @auth
+        profile: User! @auth
     }
 
     type Mutation {
