@@ -1,11 +1,11 @@
 import { TDropdownItem } from '@/types/app'
 import bem from '../../util/bem'
-import { ReactElement } from 'react'
+import { JSX, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import DropdownItems from './DropdownItems'
 
 type Props = {
-    items: TDropdownItem[]
+    items: (TDropdownItem | JSX.Element)[]
     active: boolean
     children: ReactElement
     onClickOutside: () => void

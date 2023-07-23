@@ -17,7 +17,7 @@ test('can delete', async ({ page }) => {
 
     await page.getByTestId('teaser').first().hover()
     await page.getByTestId('album-controls').first().click()
-    await page.getByTestId('album-delete').first().click()
+    await page.getByTestId('move-to-trash').first().click()
     await page.getByTestId('album-confirm-delete').click()
 
     await expect.poll(async () => await page.getByTestId('teaser').count()).toBe(count - 1)

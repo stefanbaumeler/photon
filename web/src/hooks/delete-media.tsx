@@ -12,7 +12,6 @@ const useDeleteMedia = () => {
         deleteMedia({
             ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
         }).then(() => {
-            selection.clear()
             dialog.close()
             details?.close()
         })

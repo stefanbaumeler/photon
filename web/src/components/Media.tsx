@@ -11,7 +11,7 @@ export const Media = () => {
     const { hits: media } = useSearchContext()
 
     useKeyboard('keydown', 'Escape', () => {
-        if (!details.active && !dialog.active) {
+        if (!details.active && !dialog.active && selection.selected.size) {
             selection.clear()
         }
     })

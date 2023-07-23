@@ -31,10 +31,16 @@
     white-space: nowrap;
     gap: 10px;
     align-items: center;
+    flex-wrap: nowrap;
 
     &:hover {
         background-color: $color-gray-light;
     }
+}
+
+@mixin dropdown-shortcut {
+    color: $color-gray;
+    margin-left: auto;
 }
 
 @mixin dropdown {
@@ -55,6 +61,10 @@
 
         &__button {
             @include dropdown-button;
+        }
+
+        &__shortcut {
+            @include dropdown-shortcut;
         }
     }
 }

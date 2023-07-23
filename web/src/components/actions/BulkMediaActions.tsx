@@ -1,20 +1,15 @@
 import * as Icons from '@mdi/js'
 import { Dropdown, Button } from '@/components'
-import {  useState } from 'react'
+import { useState } from 'react'
 import { useSelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { EMediumStatus, ESelectionMode } from '@/types/app'
-import useAddToAlbumDialog from '../../dialogs/add-to-album'
-import useSetMediaStatus from '../../hooks/set-status'
-import useMoveToTrashDialog from '../../dialogs/move-to-trash'
+import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '../../util/bem'
 import TrashActions from './TrashActions'
-import useAddToFavorites from '../../hooks/add-to-favorites'
-import useRemoveFromFavorites from '../../hooks/remove-from-favorites'
-import useDownload  from '../../hooks/download'
 import { TMedium } from '@photon/schema'
+import { FavoriteControl, ArchiveControl, DeleteControl, DownloadControl, AddToControl } from '@/components/controls'
 
 type Props = {
     selected: TMedium[]
@@ -26,63 +21,45 @@ export const BulkMediaActions = ({ selected }: Props) => {
 
     const selection = useSelectionContext()
 
-    const trashMediaDialog = useMoveToTrashDialog(selected)
-    const archive = useSetMediaStatus(selected, EMediumStatus.ARCHIVED)
-    const unarchive = useSetMediaStatus(selected, EMediumStatus.ALL)
+    const inactive = selection.mode !== ESelectionMode.SELECT
 
     const [moreActive, setMoreActive] = useState(false)
 
-    const download = useDownload()
+    const hideDropdown = () => {
+        setMoreActive(false)
+    }
 
-    const addToAlbumDialog = useAddToAlbumDialog()
-    const addToFavorites = useAddToFavorites([...selected].map((selected) => selected.id))
-    const removeFromFavorites = useRemoveFromFavorites([...selected].map((selected) => selected.id))
-
-    if (selection.mode !== ESelectionMode.SELECT) {
+    if (inactive) {
         return <></>
     }
 
-    const selectionContainsUnfavorited = [...selected].find((selected) => selected.favoredBy?.length === 0)
-
     const moreItems = [
-        Array.from(selected)[0]?.status === EMediumStatus.ARCHIVED ? {
-            testId: 'unarchive',
-            label: t(ETrans.UNARCHIVE),
-            callback: unarchive
-        } : {
-            testId: 'archive',
-            label: t(ETrans.MOVE_TO_ARCHIVE),
-            callback: archive
-        },
-        selectionContainsUnfavorited ? {
-            testId: 'favorite',
-            label: t(ETrans.FAVORITE),
-            callback: addToFavorites
-        } : {
-            testId: 'unfavorite',
-            label: t(ETrans.UNFAVORITE),
-            callback: removeFromFavorites
-        }
+        <ArchiveControl
+            dropdown={true}
+            media={selected}
+            shortcut={true}
+            callback={hideDropdown}
+            key={0}
+        />,
+        <FavoriteControl
+            dropdown={true}
+            media={selected}
+            shortcut={true}
+            callback={hideDropdown}
+            key={1}
+        />
     ]
 
     const RegularActions = () => {
         return <>
-            <Button
-                testId="add-to"
-                hint={t(ETrans.ADD_TO)}
-                icon={Icons.mdiPlus}
-                onClick={addToAlbumDialog}
+            <AddToControl media={selected} />
+            <DownloadControl
+                elements={selected}
+                shortcut={true}
             />
-            <Button
-                hint={t(ETrans.DOWNLOAD)}
-                icon={Icons.mdiTrayArrowDown}
-                onClick={download}
-            />
-            <Button
-                testId="move-to-trash"
-                hint={t(ETrans.DELETE)}
-                onClick={trashMediaDialog}
-                icon={Icons.mdiTrashCanOutline}
+            <DeleteControl
+                elements={selected}
+                shortcut={true}
             />
             <Dropdown
                 items={moreItems}

@@ -12,13 +12,13 @@ test('can navigate using keyboard', async ({ page }) => {
 
     const image = await page.getByTestId('details-image')
 
-    await expect(page.url()).toContain(ids[1])
     await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
+    await expect(page.url()).toContain(ids[1])
 
     await page.keyboard.press('ArrowLeft')
 
-    await expect(page.url()).toContain(ids[0])
     await expect.poll(async () => await image.getAttribute('src')).toContain(ids[0])
+    await expect(page.url()).toContain(ids[0])
 
     await page.keyboard.press('Escape')
 

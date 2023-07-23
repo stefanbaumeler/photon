@@ -31,6 +31,7 @@ type Props = {
     className?: string
     prefix?: string
     suffix?: string
+    shortcut?: string
 }
 
 export const Button = ({
@@ -44,25 +45,33 @@ export const Button = ({
     testId,
     className,
     prefix,
-    suffix
+    suffix,
+    shortcut
 }: Props) => {
     const ConditionalTip = ({ children }: { children: ReactElement }) => {
         if (!hint) {
+            if (shortcut) {
+                return <Tippy content={`(${shortcut})`}>
+                    {children}
+                </Tippy>
+            }
             return <>
                 {children}
             </>
         }
 
         if (typeof hint === 'string') {
+            const hintWithShortcut = shortcut ? `${hint} (${shortcut})` : hint
+
             return <Tippy
-                content={hint}
+                content={hintWithShortcut}
             >
                 {children}
             </Tippy>
         }
 
         return <Tippy
-            content={hint.label}
+            content={shortcut ? `${hint.label} (${shortcut})` : hint.label}
             placement={hint.placement}
         >
             {children}

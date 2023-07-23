@@ -17,10 +17,8 @@ const ArchivePage = () => {
             <div>
                 <Dialog />
                 <Uploader />
-                <DetailsProvider>
-                    <Details />
-                    <Media />
-                </DetailsProvider>
+                <Details />
+                <Media />
             </div>
         </section>
     </Layout>

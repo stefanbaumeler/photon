@@ -41,7 +41,7 @@ test('can unfavorite on favorites details page', async ({ page }) => {
 
     await openDetails(page)
 
-    await page.getByTestId('details-unfavorite').click()
+    await page.getByTestId('unfavorite').click()
     await page.keyboard.press('Escape')
 
     await expect(await page.getByTestId('teaser')).toHaveCount(count - 1)

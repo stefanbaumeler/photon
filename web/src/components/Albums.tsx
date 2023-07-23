@@ -15,7 +15,7 @@ export const Albums = ({ albums }: Props) => {
     const selection = useSelectionContext()
 
     useKeyboard('keydown', 'Escape', () => {
-        if (!dialog.active) {
+        if (!dialog.active && selection.selected.size) {
             selection.clear()
         }
     })

@@ -7,9 +7,7 @@ const ApiPage = () => {
         <section>
             <div>
                 <Uploader />
-                <DetailsProvider>
-                    <Details />
-                </DetailsProvider>
+                <Details />
             </div>
         </section>
     </Layout>

@@ -2,18 +2,38 @@ import { ETrans } from '@/types/translations'
 import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useDeleteAlbum from '../hooks/delete-album'
+import { asArray } from '@/util/as'
 
-const useDeleteAlbumDialog = (id?: string | string[]) => {
+type Props = {
+    id?: string | string[]
+    callback?: () => void
+}
+const useDeleteAlbumDialog = ({
+    id, callback
+}: Props) => {
     const dialog = useDialogContext()
     const { t } = useTranslation()
 
-    const confirm = useDeleteAlbum(id)
+    const deleteAlbum = useDeleteAlbum({
+        id,
+        callback
+    })
+
+    const confirm = async () => {
+        await deleteAlbum()
+
+        dialog.close()
+        callback()
+    }
 
     return () => dialog.open({
         id: 'delete-album',
         title: t(ETrans.PERMANENTLY_DELETE),
         text: t(ETrans.PERMANENTLY_DELETE_THING, {
-            thing: t(ETrans.ALBUM)
+            count: asArray(id).length || 1,
+            thing: t(ETrans.ALBUM_COUNT, {
+                count: asArray(id).length || 1
+            })
         }),
         buttons: [
             {

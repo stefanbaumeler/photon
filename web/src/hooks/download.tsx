@@ -1,19 +1,25 @@
-import { useQDownload } from '@photon/schema'
-import { useSelectionContext } from '@/providers'
+import { TAlbum, TMedium, useQDownload } from '@photon/schema'
 import { isAlbum } from '@/util/is'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { EMediumStatus } from '@/types/app'
 
-const useDownload = (ids?: string[]) => {
-    const selection = useSelectionContext()
+type Props = {
+    elements: (TMedium | TAlbum)[]
+    callback?: () => void
+}
+
+const useDownload = ({
+    elements, callback
+}: Props) => {
     const router = useRouter()
     const [skip, setSkip] = useState(true)
 
-    const media = ids ? ids : [...selection.selected].map((element) => {
+    const media = elements.map((element) => {
         if (isAlbum(element)) {
-            return element.media.map((medium) => {
-                return medium.id
-            })
+            return element.media
+                .filter((medium) => medium.status === EMediumStatus.ALL)
+                .map(({ id }) => id)
         }
 
         return element.id
@@ -23,17 +29,16 @@ const useDownload = (ids?: string[]) => {
         variables: {
             media
         },
-        pause: skip,
-        requestPolicy: 'network-only'
+        pause: skip
     })
 
     useEffect(() => {
         if (download.data) {
             router.push(`http://0.0.0.0:11011${download.data?.download.url}`)
+            callback && callback()
+            setSkip(true)
         }
-
-        setSkip(true)
-    }, [router, download.data])
+    }, [router, download.data, callback])
 
     return () => {
         setSkip(false)

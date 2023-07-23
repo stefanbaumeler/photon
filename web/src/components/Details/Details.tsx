@@ -40,7 +40,7 @@ export const Details = () => {
     })
 
     useKeyboard('keydown', 'Escape', () => {
-        if (!dialog.active) {
+        if (!dialog.active && details.active) {
             details.close()
         }
     })

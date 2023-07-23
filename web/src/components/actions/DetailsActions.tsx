@@ -2,45 +2,49 @@ import * as Icons from '@mdi/js'
 import { Button, Check, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ELayout, EMediumStatus, ESelectionMode } from '@/types/app'
+import { ELayout, ESelectionMode } from '@/types/app'
 import { useState } from 'react'
 import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
-import useSetAlbumCover from '@/hooks/set-album-cover'
-import useMoveToTrashDialog from '@/dialogs/move-to-trash'
-import useRotate from '@/hooks/rotate'
 import { useRouter } from 'next/router'
-import useSetMediaStatus from '@/hooks/set-status'
 import TrashActions from './TrashActions'
 import { useKeyboard } from '@/hooks/keyboard'
-import { FavoriteControl } from '@/components/controls/FavoriteControl'
+import { FavoriteControl,
+    DeleteControl,
+    ArchiveControl,
+    RotateControl,
+    DownloadControl,
+    SetAlbumCoverControl } from '@/components/controls'
+import { useQAlbum } from '@photon/schema'
 
 export const DetailsActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
-    const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
     const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
+
+    const [albumQuery] = useQAlbum({
+        variables: {
+            id: idAlbum
+        },
+        pause: !router.isReady
+    })
 
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const layout = useLayoutContext()
 
-    const moveToTrashDialog = useMoveToTrashDialog(details.medium)
-
-    const archive = useSetMediaStatus(details.medium, details.medium.status === EMediumStatus.ARCHIVED ? EMediumStatus.ALL : EMediumStatus.ARCHIVED)
-
-    const rotate = useRotate(details.medium.id)
-    const setAlbumCover = useSetAlbumCover(idAlbum, idMedium)
     const [moreActive, setMoreActive] = useState(false)
-
-    const src = details.medium.filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${details.medium.filenameDisk}` : '#'
 
     const select = () => {
         selection.toggle(details.medium)
     }
 
-    useKeyboard('keyup', 'a', archive)
+    const toggleDropdown = () => {
+        setMoreActive(!moreActive)
+    }
+
+    useKeyboard('keyup', ' ', selection.selected.size > 0 ? select : undefined)
 
     if (selection.mode === ESelectionMode.SELECT) {
         return <Tippy
@@ -59,39 +63,49 @@ export const DetailsActions = () => {
     }
 
     const moreItems = [
-        {
-            label: t(ETrans.DELETE),
-            callback: moveToTrashDialog
-        },
-        {
-            label: t(ETrans.ROTATE_LEFT),
-            callback: rotate,
-            testId: 'rotate'
-        },
-        {
-            label: details.medium.status === EMediumStatus.ARCHIVED ? t(ETrans.UNARCHIVE) : t(ETrans.MOVE_TO_ARCHIVE),
-            callback: archive
-        }
+        <DeleteControl
+            dropdown={true}
+            shortcut={true}
+            elements={[details.medium]}
+            callback={toggleDropdown}
+            key={0}
+        />,
+        <RotateControl
+            dropdown={true}
+            shortcut={true}
+            media={[details.medium]}
+            callback={toggleDropdown}
+            key={1}
+        />,
+        <ArchiveControl
+            dropdown={true}
+            shortcut={true}
+            media={[details.medium]}
+            callback={toggleDropdown}
+            key={2}
+        />
     ]
 
     if (idAlbum) {
-        moreItems.push({
-            label: t(ETrans.SET_AS_ALBUM_COVER),
-            callback: setAlbumCover
-        })
+        moreItems.push(<SetAlbumCoverControl
+            dropdown={true}
+            shortcut={true}
+            album={albumQuery.data?.album}
+            medium={details.medium}
+            callback={toggleDropdown}
+        />)
     }
 
     const RegularActions = () => {
         return <>
-            <Button
-                href={`${src}?download=true`}
-                hint={t(ETrans.DOWNLOAD)}
-                appearance={{
-                    text: 'light'
-                }}
-                icon={Icons.mdiTrayArrowDown}
+            <DownloadControl
+                elements={[details.medium]}
+                shortcut={true}
             />
-            <FavoriteControl medium={details.medium} />
+            <FavoriteControl
+                media={[details.medium]}
+                shortcut={true}
+            />
             <Dropdown
                 items={moreItems}
                 active={moreActive}
@@ -104,7 +118,7 @@ export const DetailsActions = () => {
                     appearance={{
                         text: 'light'
                     }}
-                    onClick={() => setMoreActive(!moreActive)}
+                    onClick={toggleDropdown}
                 />
             </Dropdown>
         </>

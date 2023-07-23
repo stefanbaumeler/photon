@@ -5,16 +5,28 @@ import useSetMediaStatus from '../hooks/set-status'
 import { EMediumStatus } from '@/types/app'
 import { TMedium } from '@photon/schema'
 
-const useMoveToTrashDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
+type Props = {
+    media: TMedium[] | Set<TMedium> | TMedium
+    callback?: () => void
+}
+
+const useMoveToTrashDialog = ({
+    media, callback
+}: Props) => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const { t } = useTranslation()
 
-    const trash = useSetMediaStatus(media, EMediumStatus.TRASH)
+    const trash = useSetMediaStatus({
+        media,
+        status: EMediumStatus.TRASH,
+        callback
+    })
 
-    const confirm = () => {
-        trash()
+    const confirm = async () => {
+        await trash()
         dialog.close()
+        callback()
     }
 
     return () => dialog.open({

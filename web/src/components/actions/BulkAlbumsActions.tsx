@@ -1,15 +1,12 @@
-import * as Icons from '@mdi/js'
-import { Button } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import TrashActions from './TrashActions'
-import useDownload  from '@/hooks/download'
 import { TAlbum } from '@photon/schema'
-import useDeleteAlbumDialog from '@/dialogs/delete-album'
 import { useSelectionContext } from '@/providers'
+import { DeleteControl, DownloadControl } from '@/components/controls'
 
 type Props = {
     selected: TAlbum[]
@@ -20,28 +17,19 @@ export const BulkAlbumsActions = ({ selected }: Props) => {
     const router = useRouter()
     const selection = useSelectionContext()
 
-    const deleteAlbumDialog = useDeleteAlbumDialog([...selection.selected].map((element) => element.id))
-
-    const download = useDownload()
-
     if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
 
     const RegularActions = () => {
         return <>
-            <Button
-                hint={t(ETrans.DOWNLOAD)}
-                icon={Icons.mdiTrayArrowDown}
-                onClick={download}
+            <DownloadControl
+                elements={[...selection.selected]}
+                shortcut={true}
             />
-            <Button
-                testId="move-to-trash"
-                hint={t(ETrans.DELETE_THING, {
-                    thing: t(ETrans.ALBUM_PLURAL)
-                })}
-                onClick={deleteAlbumDialog}
-                icon={Icons.mdiTrashCanOutline}
+            <DeleteControl
+                elements={[...selection.selected]}
+                shortcut={true}
             />
         </>
     }

@@ -19,6 +19,9 @@ export const Detail = ({
                 size={1}
             />
         }
+        else if (icon === null) {
+            return <></>
+        }
         else {
             return <img
                 className="detail__image"

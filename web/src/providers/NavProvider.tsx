@@ -28,9 +28,21 @@ const NavProvider = ({ children }: Props) => {
     }
 
     const addToFavorites = useAddToFavorites(actUpon.map((element) => element?.id))
-    const archive = useSetMediaStatus(actUpon, EMediumStatus.ARCHIVED)
-    const trash = useSetMediaStatus(actUpon, EMediumStatus.TRASH)
-    const moveToAll = useSetMediaStatus(actUpon, EMediumStatus.ALL)
+
+    const archive = useSetMediaStatus({
+        media: actUpon,
+        status: EMediumStatus.ARCHIVED
+    })
+
+    const trash = useSetMediaStatus({
+        media: actUpon,
+        status: EMediumStatus.TRASH
+    })
+
+    const moveToAll = useSetMediaStatus({
+        media: actUpon,
+        status: EMediumStatus.ALL
+    })
 
     const defaultNav = router.route.split('/')[1].toUpperCase()
 

@@ -8,7 +8,8 @@ import { NavProvider,
     SearchProvider,
     DragProvider,
     KeyboardProvider,
-    UserProvider } from '@/providers'
+    UserProvider,
+    DetailsProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { initializeUrqlClient } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
@@ -44,7 +45,8 @@ const Photon = ({
                 NavProvider,
                 EditProvider,
                 LayoutProvider,
-                SortProvider
+                SortProvider,
+                DetailsProvider
             ]}
             >
                 <SearchProvider>

@@ -1,24 +1,27 @@
-import { useDialogContext, useSelectionContext } from '@/providers'
 import { useMDeleteAlbum } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
 
-const useDeleteAlbum = (id?: string | string[]) => {
-    const dialog = useDialogContext()
+type Props = {
+    id?: string | string[]
+    callback?: () => void
+}
+
+const useDeleteAlbum = ({
+    id, callback
+}: Props) => {
     const router = useRouter()
-    const selection = useSelectionContext()
     const idsToDelete = id ? asArray(id) : router.query.id
 
     const [, deleteMedia] = useMDeleteAlbum()
 
-    return () => {
-        deleteMedia({
+    return async () => {
+        await deleteMedia({
             ids: idsToDelete
-        }).then(() => {
-            selection.clear()
-            dialog.close()
-            router.push('/albums')
         })
+
+        callback && callback()
+        router.push('/albums')
     }
 }
 

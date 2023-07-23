@@ -7,7 +7,9 @@ export const Dialog = () => {
     const dialog = useDialogContext()
 
     useKeyboard('keydown', 'Escape', () => {
-        dialog.close()
+        if (dialog.active) {
+            dialog.close()
+        }
     })
     const DialogContent = () => {
         if (!dialog.content) {

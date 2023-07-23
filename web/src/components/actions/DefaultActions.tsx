@@ -10,12 +10,14 @@ import { useRouter } from 'next/router'
 import bem from '../../util/bem'
 import useEmptyTrashDialog from '../../dialogs/empty-trash'
 import { useMSignOut } from '@photon/schema'
+import { useKeyboard } from '@/hooks/keyboard'
 
 export const DefaultActions = () => {
     const { t } = useTranslation()
     const router = useRouter()
-
     const selection = useSelectionContext()
+
+    const inactive = router.pathname === '/albums' || selection.mode !== ESelectionMode.OFF || router.pathname === '/albums/[idAlbum]'
 
     const emptyTrashDialog = useEmptyTrashDialog()
 
@@ -27,6 +29,8 @@ export const DefaultActions = () => {
 
     const upload = useUpload()
 
+    useKeyboard('keyup', 'c', inactive ? undefined : clickUpload)
+
     const [, out] = useMSignOut()
 
     const signOut = () => {
@@ -36,7 +40,7 @@ export const DefaultActions = () => {
         })
     }
 
-    if (router.pathname === '/albums' || selection.mode !== ESelectionMode.OFF || router.pathname === '/albums/[idAlbum]') {
+    if (inactive) {
         return <></>
     }
 
@@ -52,6 +56,7 @@ export const DefaultActions = () => {
             />
             <Button
                 hint={t(ETrans.UPLOAD)}
+                shortcut={'C'}
                 icon={Icons.mdiTrayArrowUp}
                 onClick={clickUpload}
             />

@@ -1,8 +1,7 @@
 import { useSelectionContext } from '@/providers'
 import { BulkMediaActions } from './BulkMediaActions'
 import { BulkAlbumsActions } from './BulkAlbumsActions'
-import { TAlbum, TMedium } from '@photon/schema'
-import { isAlbum, isMedium } from '@/util/is'
+import { isAlbums, isMedia } from '@/util/is'
 
 export const BulkActions = () => {
     const selection = useSelectionContext()
@@ -10,14 +9,6 @@ export const BulkActions = () => {
 
     if (!elements.length) {
         return <></>
-    }
-
-    const isAlbums = (elements: (TAlbum | TMedium)[]): elements is TAlbum[] => {
-        return !elements.find((element) => !isAlbum(element))
-    }
-
-    const isMedia = (elements: (TAlbum | TMedium)[]): elements is TMedium[] => {
-        return !elements.find((element) => !isMedium(element))
     }
 
     if (isMedia(elements)) {

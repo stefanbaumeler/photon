@@ -16,7 +16,7 @@ const TrashActions = ({ white }: Props) => {
     const details = useDetailsContext()
 
     const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(details ? new Set([details.medium]) : selection.selected as Set<TMedium>)
+    const restoreMediaDialog = useRestoreMediaDialog(details.active ? [details.medium] : [...selection.selected] as TMedium[])
 
     return <>
         <Button

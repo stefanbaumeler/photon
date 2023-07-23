@@ -5,28 +5,36 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout } from '@/types/app'
+import { useKeyboard } from '@/hooks/keyboard'
 
 export const AlbumsViewControl = () => {
     const { t } = useTranslation()
     const [viewDropdownActive, setViewDropdownActive] = useState(false)
     const layout = useLayoutContext()
 
+    const gridView = () => {
+        layout.setAlbumsLayout(ELayout.GRID)
+        setViewDropdownActive(false)
+    }
+
+    const listView = () => {
+        layout.setAlbumsLayout(ELayout.LIST)
+        setViewDropdownActive(false)
+    }
+
+    useKeyboard('keyup', 'g', gridView)
+    useKeyboard('keyup', 'l', listView)
+
     const viewItems = [
         {
-            label: t(ETrans.GRID_VIEW),
-            callback: () => {
-                layout.setAlbumsLayout(ELayout.GRID)
-                setViewDropdownActive(false)
-            },
+            label: `${t(ETrans.GRID_VIEW)} (G)`,
+            callback: gridView,
             icon: Icons.mdiGrid,
             testId: 'gallery-view'
         },
         {
-            label: t(ETrans.LIST_VIEW),
-            callback: () => {
-                layout.setAlbumsLayout(ELayout.LIST)
-                setViewDropdownActive(false)
-            },
+            label: `${t(ETrans.LIST_VIEW)} (L)`,
+            callback: listView,
             icon: Icons.mdiFormatListBulletedSquare,
             testId: 'list-view'
         }

@@ -3,50 +3,54 @@ import { Dropdown, ViewControl, Button, SortControl } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import useDeleteAlbumDialog from '../../dialogs/delete-album'
 import { useRouter } from 'next/router'
-import { useSearchContext, useSelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
-import useDownload from '@/hooks/download'
+import { DeleteControl, DownloadControl, SetAlbumCoverControl } from '@/components/controls'
+import { useQAlbum } from '@photon/schema'
 
 export const AlbumActions = () => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
     const router = useRouter()
-    const { hits: media } = useSearchContext()
-
-    const deleteAlbumDialog = useDeleteAlbumDialog()
-
-    const download = useDownload(media.map(({ id }) => id))
-
-    const setAlbumCover = () => {
-        setMoreActive(false)
-        selection.setMode(ESelectionMode.SINGLE)
-    }
-
-    const moreItems = [
-        {
-            label: t(ETrans.DELETE_THING, {
-                thing: t(ETrans.ALBUM)
-            }),
-            callback: deleteAlbumDialog
-        },
-        {
-            label: t(ETrans.SET_ALBUM_COVER),
-            callback: setAlbumCover,
-            testId: 'album-set-cover'
-        },
-        {
-            label: t(ETrans.DOWNLOAD_THING, {
-                thing: t(ETrans.ALBUM)
-            }),
-            callback: download
-        }
-    ]
-
+    const inactive = router.pathname !== '/albums/[idAlbum]' || selection.mode !== ESelectionMode.OFF
+    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
     const [moreActive, setMoreActive] = useState(false)
 
-    if (router.pathname !== '/albums/[idAlbum]' || selection.mode !== ESelectionMode.OFF) {
+    const [albumQuery] = useQAlbum({
+        variables: {
+            id
+        },
+        pause: !router.isReady
+    })
+
+    const album = albumQuery.data?.album
+
+    const moreItems = [
+        <DeleteControl
+            dropdown={true}
+            shortcut={true}
+            callback={() => setMoreActive(false)}
+            elements={album ? [album] : []}
+            key={0}
+        />,
+        <SetAlbumCoverControl
+            dropdown={true}
+            shortcut={true}
+            callback={() => setMoreActive(false)}
+            album={album}
+            key={1}
+        />,
+        <DownloadControl
+            dropdown={true}
+            shortcut={true}
+            callback={() => setMoreActive(false)}
+            elements={album ? [album] : []}
+            key={2}
+        />
+    ]
+
+    if (inactive) {
         return <></>
     }
 

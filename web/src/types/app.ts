@@ -45,6 +45,7 @@ export type TDropdownItem = {
     callback: () => void
     icon?: string
     testId?: string
+    shortcut?: string
 }
 
 export enum ENavs {

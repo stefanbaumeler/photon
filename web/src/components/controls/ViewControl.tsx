@@ -4,40 +4,54 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
-import { ELayout } from '@/types/app'
+import { ELayout, TDropdownItem } from '@/types/app'
+import { useKeyboard } from '@/hooks/keyboard'
 
 export const ViewControl = () => {
     const { t } = useTranslation()
     const [viewDropdownActive, setViewDropdownActive] = useState(false)
     const layout = useLayoutContext()
 
-    const viewItems = [
+    const galleryView = () => {
+        layout.setLayout(ELayout.GALLERY)
+        setViewDropdownActive(false)
+    }
+
+    const mapView = () => {
+        layout.setLayout(ELayout.MAP)
+        setViewDropdownActive(false)
+    }
+
+    const listView = () => {
+        layout.setLayout(ELayout.LIST)
+        setViewDropdownActive(false)
+    }
+
+    useKeyboard('keyup', 'g', galleryView)
+    useKeyboard('keyup', 'm', mapView)
+    useKeyboard('keyup', 'l', listView)
+
+    const viewItems: TDropdownItem[] = [
         {
             label: t(ETrans.GALLERY_VIEW),
-            callback: () => {
-                layout.setLayout(ELayout.GALLERY)
-                setViewDropdownActive(false)
-            },
+            callback: galleryView,
             icon: Icons.mdiViewCompact,
-            testId: 'gallery-view'
+            testId: 'gallery-view',
+            shortcut: 'G'
         },
         {
             label: t(ETrans.MAP_VIEW),
-            callback: () => {
-                layout.setLayout(ELayout.MAP)
-                setViewDropdownActive(false)
-            },
+            callback: mapView,
             icon: Icons.mdiMapMarker,
-            testId: 'map-view'
+            testId: 'map-view',
+            shortcut: 'M'
         },
         {
             label: t(ETrans.LIST_VIEW),
-            callback: () => {
-                layout.setLayout(ELayout.LIST)
-                setViewDropdownActive(false)
-            },
+            callback: listView,
             icon: Icons.mdiFormatListBulletedSquare,
-            testId: 'list-view'
+            testId: 'list-view',
+            shortcut: 'L'
         }
     ]
 

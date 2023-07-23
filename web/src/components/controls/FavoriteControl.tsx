@@ -1,48 +1,74 @@
 import * as Icons from '@mdi/js'
-import { Button } from '@/components'
+import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import useAddToFavorites from '@/hooks/add-to-favorites'
 import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
 import { TMedium } from '@photon/schema'
 import { useKeyboard } from '@/hooks/keyboard'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 
 type Props = {
-    medium: TMedium
+    media: TMedium[]
+    dropdown?: boolean
+    shortcut?: boolean
+    callback?: () => void
 }
 
-export const FavoriteControl = ({ medium }: Props) => {
+export const FavoriteControl = ({
+    media, dropdown, shortcut, callback
+}: Props) => {
     const { t } = useTranslation()
+    const details = useDetailsContext()
+    const selection = useSelectionContext()
 
-    const isFavorite = medium.favoredBy?.length !== 0
-    const id = medium.id
+    const hasUnfavorited = !!media.find((selected) => selected.favoredBy?.length === 0)
 
-    const addToFavorites = useAddToFavorites([id])
-    const removeFromFavorites = useRemoveFromFavorites([id])
+    const ids = media.map(({ id }) => id)
+    const addToFavorites = useAddToFavorites(ids)
+    const removeFromFavorites = useRemoveFromFavorites(ids)
 
-    useKeyboard('keyup', 'f', isFavorite ? removeFromFavorites : addToFavorites)
+    const action = () => {
+        if (hasUnfavorited) {
+            addToFavorites()
+        }
+        else {
+            removeFromFavorites()
+        }
+
+        if (selection.selected.size) {
+            selection.clear()
+        }
+
+        callback && callback()
+    }
+
+    useKeyboard('keyup', 'f', shortcut && action)
+
+    const testId = hasUnfavorited ? 'favorite' : 'unfavorite'
+    const label = t(hasUnfavorited ? ETrans.FAVORITE : ETrans.UNFAVORITE)
+    const icon = hasUnfavorited ? Icons.mdiStarOutline : Icons.mdiStar
 
     const ConditionalButton = () => {
-        if (!isFavorite) {
-            return <Button
-                testId={'details-favorite'}
-                onClick={isFavorite ? removeFromFavorites : addToFavorites}
-                hint={t(ETrans.FAVORITE)}
-                appearance={{
-                    text: 'light'
-                }}
-                icon={Icons.mdiStarOutline}
+        if (dropdown) {
+            return <DropdownItem item={{
+                testId,
+                label,
+                callback: action,
+                shortcut: shortcut && 'F'
+            }}
             />
         }
 
         return <Button
-            testId={'details-unfavorite'}
-            onClick={isFavorite ? removeFromFavorites : addToFavorites}
-            hint={t(ETrans.UNFAVORITE)}
-            appearance={{
+            testId={testId}
+            onClick={action}
+            hint={label}
+            shortcut={shortcut && 'F'}
+            appearance={details.active && {
                 text: 'light'
             }}
-            icon={Icons.mdiStar}
+            icon={icon}
         />
     }
 

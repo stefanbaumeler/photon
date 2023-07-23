@@ -1,6 +1,6 @@
 import Layout from '../layouts/layout'
 import { Uploader, Details, Dialog, Media } from '@/components'
-import { DetailsProvider, useSearchContext } from '@/providers'
+import { useSearchContext } from '@/providers'
 import { useEffect } from 'react'
 import { EMediumStatus } from '@/types/app'
 
@@ -17,10 +17,8 @@ const FavoritesPage = () => {
             <div>
                 <Dialog />
                 <Uploader />
-                <DetailsProvider>
-                    <Details />
-                    <Media />
-                </DetailsProvider>
+                <Details />
+                <Media />
             </div>
         </section>
     </Layout>

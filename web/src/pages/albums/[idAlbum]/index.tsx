@@ -1,7 +1,11 @@
 import * as Icons from '@mdi/js'
 import Layout from '../../../layouts/layout'
 import { Button, Details, Dialog, Media, Uploader } from '@/components'
-import { DetailsProvider, useEditContext, useSearchContext, useSelectionContext } from '@/providers'
+import { useDetailsContext,
+    useDialogContext,
+    useEditContext,
+    useSearchContext,
+    useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
@@ -11,11 +15,14 @@ import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import useSetAlbumCover from '@/hooks/set-album-cover'
 import useUpdateAlbum from '@/hooks/update-album'
+import { useKeyboard } from '@/hooks/keyboard'
 
 const AlbumPage = () => {
     const router = useRouter()
     const { t } = useTranslation()
-    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
+    const details = useDetailsContext()
+    const dialog = useDialogContext()
+    const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     const selection = useSelectionContext()
     const edit = useEditContext()
@@ -30,13 +37,25 @@ const AlbumPage = () => {
 
     const [albumQuery] = useQAlbum({
         variables: {
-            id
+            id: idAlbum
         },
         pause: !router.isReady
     })
 
-    const setAlbumCover = useSetAlbumCover(id)
-    const updateAlbum = useUpdateAlbum(id, title)
+    const setAlbumCover = useSetAlbumCover(idAlbum)
+    const updateAlbum = useUpdateAlbum(idAlbum, title)
+
+    const editAlbum = () => {
+        selection.setMode(ESelectionMode.DELETE)
+    }
+
+    useKeyboard('keyup', 'e', editAlbum)
+    useKeyboard('keydown', 'Escape', () => {
+        if (!dialog.active && !selection.selected.size && !details?.active && edit.state === EEditState.OFF) {
+            console.log(edit.state)
+            back()
+        }
+    })
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -69,7 +88,7 @@ const AlbumPage = () => {
             setTitle(album?.title || '')
             edit.setState(EEditState.OFF)
         }
-    }, [album?.title, edit, selection, setAlbumCover, updateAlbum, id, title])
+    }, [album?.title, edit, selection, setAlbumCover, updateAlbum, idAlbum, title])
 
     useEffect(() => {
         const mediaSortedByDateTaken = [...media]
@@ -78,10 +97,6 @@ const AlbumPage = () => {
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
     }, [media])
-
-    const editAlbum = () => {
-        selection.setMode(ESelectionMode.DELETE)
-    }
 
     const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value)
@@ -145,10 +160,8 @@ const AlbumPage = () => {
                 </div>
                 <Dialog />
                 <Uploader />
-                <DetailsProvider>
-                    <Details />
-                    <Media />
-                </DetailsProvider>
+                <Details />
+                <Media />
             </div>
         </section>
     </Layout>

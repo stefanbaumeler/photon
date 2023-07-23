@@ -17,7 +17,7 @@ export const useKeyboard = (event: string, key: string, callback: () => void) =>
 
     useEffect(() => {
         const keydown = (event: KeyboardEvent) => {
-            if (event.key === ref.current.key && !keyboard.isTyping) {
+            if (event.key === ref.current.key && !keyboard.isTyping && ref.current.callback) {
                 ref.current.callback()
             }
         }

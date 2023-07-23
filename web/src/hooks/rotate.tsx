@@ -1,14 +1,14 @@
 import { useDetailsContext } from '@/providers'
-import { useMRotate } from '@photon/schema'
+import { TMedium, useMRotate } from '@photon/schema'
 
-const useRotate = (idMedium: string) => {
+const useRotate = (medium: TMedium) => {
     const details = useDetailsContext()
 
     const [, rotate] = useMRotate()
 
     return () => {
         rotate({
-            id: idMedium
+            id: medium.id
         }).then(() => {
             details.setMedium(details.medium)
         })
