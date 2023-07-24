@@ -2,45 +2,41 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema'
-import { useDetailsContext } from '@/providers'
-import { useAddToAlbumDialog } from '@/dialogs'
+import { useEmptyTrashDialog } from '@/dialogs'
 
 type Props = {
-    media: TMedium[]
     dropdown?: boolean
     callback?: () => void
 }
 
-export const AddToControl = ({
+export const EmptyTrashControl = ({
     dropdown, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
 
-    const addToAlbumDialog = useAddToAlbumDialog()
+    const emptyTrashDialog = useEmptyTrashDialog()
 
     const action = () => {
-        addToAlbumDialog()
+        emptyTrashDialog()
         callback && callback()
     }
 
     if (dropdown) {
         return <DropdownItem item={{
-            testId: 'add-to',
-            label: t(ETrans.ADD_TO),
+            testId: 'trash-empty',
+            label: t(ETrans.EMPTY_TRASH),
             callback: action
         }}
         />
     }
 
     return <Button
-        testId="add-to"
-        hint={t(ETrans.ADD_TO)}
+        label={t(ETrans.EMPTY_TRASH)}
+        icon={Icons.mdiDeleteForever}
         onClick={action}
-        appearance={details.active && {
-            text: 'light'
+        testId="trash-empty"
+        appearance={{
+            type: 'tertiary'
         }}
-        icon={Icons.mdiPlus}
     />
 }

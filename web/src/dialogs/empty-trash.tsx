@@ -3,14 +3,14 @@ import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useEmptyTrash from '../hooks/empty-trash'
 
-const useEmptyTrashDialog = () => {
+export const useEmptyTrashDialog = () => {
     const dialog = useDialogContext()
     const { t } = useTranslation()
 
     const emptyTrash = useEmptyTrash()
 
-    const confirm = () => {
-        emptyTrash()
+    const confirm = async () => {
+        await emptyTrash()
         dialog.close()
     }
 
@@ -36,5 +36,3 @@ const useEmptyTrashDialog = () => {
         ]
     })
 }
-
-export default useEmptyTrashDialog

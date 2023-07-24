@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { EEditState, ESelectionMode } from '@/types/app'
 import { useEditContext, useSelectionContext } from '@/providers'
 
-export const EditActions = () => {
+export const EditControls = () => {
     const { t } = useTranslation()
 
     const edit = useEditContext()

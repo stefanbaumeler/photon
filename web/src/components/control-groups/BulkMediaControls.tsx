@@ -7,21 +7,16 @@ import { useTranslation } from 'react-i18next'
 import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '../../util/bem'
-import TrashActions from './TrashActions'
-import { TMedium } from '@photon/schema'
+import { TrashControls } from '@/components/control-groups'
 import { FavoriteControl, ArchiveControl, DeleteControl, DownloadControl, AddToControl } from '@/components/controls'
+import { isMedia } from '@/util/is'
 
-type Props = {
-    selected: TMedium[]
-}
-
-export const BulkMediaActions = ({ selected }: Props) => {
+export const BulkMediaControls = () => {
     const { t } = useTranslation()
     const router = useRouter()
-
     const selection = useSelectionContext()
 
-    const inactive = selection.mode !== ESelectionMode.SELECT
+    const selected = [...selection.selected]
 
     const [moreActive, setMoreActive] = useState(false)
 
@@ -29,7 +24,7 @@ export const BulkMediaActions = ({ selected }: Props) => {
         setMoreActive(false)
     }
 
-    if (inactive) {
+    if (selection.mode !== ESelectionMode.SELECT || !selected.length || !isMedia(selected)) {
         return <></>
     }
 
@@ -78,7 +73,7 @@ export const BulkMediaActions = ({ selected }: Props) => {
 
     const Actions = () => {
         if (router.pathname === '/trash') {
-            return <TrashActions />
+            return <TrashControls />
         }
         else {
             return <RegularActions />

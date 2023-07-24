@@ -3,7 +3,7 @@ import { useDialogContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useDeleteMedia from '../hooks/delete-media'
 
-const useDeleteMediaDialog = () => {
+export const useDeleteMediaDialog = () => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const { t } = useTranslation()
@@ -34,5 +34,3 @@ const useDeleteMediaDialog = () => {
         ]
     })
 }
-
-export default useDeleteMediaDialog

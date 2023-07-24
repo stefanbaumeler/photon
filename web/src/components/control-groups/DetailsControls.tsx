@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
-import TrashActions from './TrashActions'
+import { TrashControls } from '@/components/control-groups'
 import { useKeyboard } from '@/hooks/keyboard'
 import { FavoriteControl,
     DeleteControl,
@@ -17,7 +17,7 @@ import { FavoriteControl,
     SetAlbumCoverControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
 
-export const DetailsActions = () => {
+export const DetailsControls = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
@@ -126,7 +126,7 @@ export const DetailsActions = () => {
 
     const Actions = () => {
         if (router.pathname === '/trash') {
-            return <TrashActions white={true} />
+            return <TrashControls white={true} />
         }
         else {
             return <RegularActions />

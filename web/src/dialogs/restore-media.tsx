@@ -1,16 +1,14 @@
 import { ETrans } from '@/types/translations'
-import { useDialogContext, useSelectionContext } from '@/providers'
+import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import useSetMediaStatus from '../hooks/set-status'
 import { EMediumStatus } from '@/types/app'
 import { TMedium } from '@photon/schema'
+import { asArray } from '@/util/as'
 
-const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
+export const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
     const dialog = useDialogContext()
-    const selection = useSelectionContext()
     const { t } = useTranslation()
-
-    console.log(media)
 
     const restore = useSetMediaStatus({
         media,
@@ -26,9 +24,9 @@ const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
         id: 'delete-media',
         title: t(ETrans.RESTORE),
         text: t(ETrans.RESTORE_THING, {
-            count: selection.selected.size || 1,
+            count: asArray(media).length || 1,
             thing: t(ETrans.ELEMENT_COUNT, {
-                count: selection.selected.size || 1
+                count: asArray(media).length || 1
             })
         }),
         buttons: [
@@ -47,5 +45,3 @@ const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
         ]
     })
 }
-
-export default useRestoreMediaDialog

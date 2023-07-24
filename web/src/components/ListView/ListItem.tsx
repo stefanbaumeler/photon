@@ -1,5 +1,6 @@
 import { TAlbum, TMedium } from '@photon/schema'
-import { Check, ListItemActions, Medium } from '..'
+import { Check, Medium } from '@/components'
+import { ListItemControls } from '@/components/control-groups'
 import { formatDate } from '@/util/date'
 import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
@@ -152,7 +153,7 @@ const ListItem = ({ element }: Props) => {
             {`${element.owner.firstName} ${element.owner.lastName}`}
         </td>
         <td className="list-view__cell">
-            <ListItemActions
+            <ListItemControls
                 element={element}
             />
         </td>

@@ -10,7 +10,8 @@ import { TMedium } from '@photon/schema'
 type Props = {
     white?: boolean
 }
-const TrashActions = ({ white }: Props) => {
+
+export const TrashControls = ({ white }: Props) => {
     const selection = useSelectionContext()
     const { t } = useTranslation()
     const details = useDetailsContext()
@@ -41,5 +42,3 @@ const TrashActions = ({ white }: Props) => {
         />
     </>
 }
-
-export default TrashActions

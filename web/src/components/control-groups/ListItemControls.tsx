@@ -11,7 +11,7 @@ type Props = {
     element: TMedium | TAlbum
 }
 
-export const ListItemActions = ({ element }: Props) => {
+export const ListItemControls = ({ element }: Props) => {
     const { t } = useTranslation()
 
     const [moreActive, setMoreActive] = useState(false)

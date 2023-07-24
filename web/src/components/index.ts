@@ -1,15 +1,3 @@
-export * from './actions/AlbumsActions'
-export * from './actions/BulkActions'
-export * from './actions/EditActions'
-export *  from './actions/DefaultActions'
-export * from './actions/AlbumActions'
-export *  from './actions/DetailsActions'
-export * from './actions/ListItemActions'
-
-export * from './controls/SortControl'
-export * from './controls/ViewControl'
-export * from './controls/AlbumsViewControl'
-
 export * from './Albums'
 export * from './Sidebar'
 export * from './Brand'

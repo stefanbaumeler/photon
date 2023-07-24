@@ -3,44 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
-import TrashActions from './TrashActions'
-import { TAlbum } from '@photon/schema'
 import { useSelectionContext } from '@/providers'
 import { DeleteControl, DownloadControl } from '@/components/controls'
+import { isAlbums } from '@/util/is'
 
-type Props = {
-    selected: TAlbum[]
-}
-
-export const BulkAlbumsActions = ({ selected }: Props) => {
+export const BulkAlbumsControls = () => {
     const { t } = useTranslation()
     const router = useRouter()
     const selection = useSelectionContext()
+    const selected = [...selection.selected]
 
-    if (selection.mode !== ESelectionMode.SELECT) {
+    if (selection.mode !== ESelectionMode.SELECT || !selected.length || !isAlbums(selected)) {
         return <></>
-    }
-
-    const RegularActions = () => {
-        return <>
-            <DownloadControl
-                elements={[...selection.selected]}
-                shortcut={true}
-            />
-            <DeleteControl
-                elements={[...selection.selected]}
-                shortcut={true}
-            />
-        </>
-    }
-
-    const Actions = () => {
-        if (router.pathname === '/trash') {
-            return <TrashActions />
-        }
-        else {
-            return <RegularActions />
-        }
     }
 
     const classes = bem('actions', [
@@ -56,6 +30,13 @@ export const BulkAlbumsActions = ({ selected }: Props) => {
                 n: selected.length
             })}
         </span>
-        <Actions />
+        <DownloadControl
+            elements={selected}
+            shortcut={true}
+        />
+        <DeleteControl
+            elements={selected}
+            shortcut={true}
+        />
     </div>
 }

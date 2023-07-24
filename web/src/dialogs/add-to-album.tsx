@@ -3,7 +3,7 @@ import { Thumbnails } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { useDialogContext } from '@/providers'
 
-const useAddToAlbumDialog = () => {
+export const useAddToAlbumDialog = () => {
     const { t } = useTranslation()
     const dialog = useDialogContext()
 
@@ -22,5 +22,3 @@ const useAddToAlbumDialog = () => {
         content: <Thumbnails />
     })
 }
-
-export default useAddToAlbumDialog

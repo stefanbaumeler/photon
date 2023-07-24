@@ -1,6 +1,7 @@
 import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
-import { Button, Detail, DetailsActions, Medium } from '../'
+import { Button, Detail, Medium } from '@/components'
+import { DetailsControls } from '@/components/control-groups'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'
@@ -149,7 +150,7 @@ export const Details = () => {
                     />
                 </div>
                 <div className="toolbar__section toolbar__section--right">
-                    <DetailsActions />
+                    <DetailsControls />
                     <OpenInfosButton />
                 </div>
             </div>

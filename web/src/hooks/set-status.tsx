@@ -5,11 +5,10 @@ import { asArray } from '@/util/as'
 type Props = {
     media: { id: string }[] | Set<{ id: string }> | { id: string }
     status: EMediumStatus
-    callback?: () => void
 }
 
 const useSetMediaStatus = ({
-    media, status, callback
+    media, status
 }: Props) => {
     const ids = asArray(media).map(({ id }) => id)
     const [, setMediaStatus] = useMSetMediaStatus()
@@ -19,8 +18,6 @@ const useSetMediaStatus = ({
             media: ids,
             status
         })
-
-        callback && callback()
     }
 }
 

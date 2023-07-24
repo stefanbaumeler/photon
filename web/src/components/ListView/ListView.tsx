@@ -1,5 +1,5 @@
 import { TAlbum, TMedium } from '@photon/schema'
-import ListItem from '@/components/ListView/ListItem'
+import ListItem from './ListItem'
 
 type Props = {
     elements: (TMedium | TAlbum)[]

@@ -1,4 +1,9 @@
-import { Brand, Search, BulkActions, AlbumsActions, EditActions, DefaultActions, AlbumActions, FocusOverlay } from '.'
+import { Brand, Search, FocusOverlay } from '@/components'
+import { AlbumsControls,
+    EditControls,
+    DefaultControls,
+    AlbumControls,
+    BulkAlbumsControls, BulkMediaControls } from '@/components/control-groups'
 
 export const SearchBar = () => {
     return <div className="searchbar">
@@ -10,11 +15,12 @@ export const SearchBar = () => {
             <Search />
         </div>
         <div className="searchbar__section searchbar__section--right">
-            <BulkActions />
-            <EditActions />
-            <AlbumsActions />
-            <AlbumActions />
-            <DefaultActions />
+            <BulkAlbumsControls />
+            <BulkMediaControls />
+            <EditControls />
+            <AlbumsControls />
+            <AlbumControls />
+            <DefaultControls />
         </div>
     </div>
 }

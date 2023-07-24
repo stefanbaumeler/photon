@@ -27,7 +27,23 @@ export const ArchiveControl = ({
 
     const shouldArchive = Array.from(media)[0]?.status !== EMediumStatus.ARCHIVED
 
-    const actionCallback = () => {
+    const archive = useSetMediaStatus({
+        media,
+        status: EMediumStatus.ARCHIVED
+    })
+
+    const unarchive = useSetMediaStatus({
+        media,
+        status: EMediumStatus.ALL
+    })
+
+    const action = async () => {
+        if (shouldArchive) {
+            await archive()
+        } else {
+            await unarchive()
+        }
+
         if (selection.selected.size) {
             selection.clear()
         }
@@ -38,26 +54,6 @@ export const ArchiveControl = ({
             router.push('/archive', null, {
                 shallow: true
             })
-        }
-    }
-
-    const archive = useSetMediaStatus({
-        media,
-        status: EMediumStatus.ARCHIVED,
-        callback: actionCallback
-    })
-
-    const unarchive = useSetMediaStatus({
-        media,
-        status: EMediumStatus.ALL,
-        callback: actionCallback
-    })
-
-    const action = async () => {
-        if (shouldArchive) {
-            await archive()
-        } else {
-            await unarchive()
         }
 
         callback && callback()

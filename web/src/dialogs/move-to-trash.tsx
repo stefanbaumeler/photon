@@ -10,7 +10,7 @@ type Props = {
     callback?: () => void
 }
 
-const useMoveToTrashDialog = ({
+export const useMoveToTrashDialog = ({
     media, callback
 }: Props) => {
     const dialog = useDialogContext()
@@ -19,8 +19,7 @@ const useMoveToTrashDialog = ({
 
     const trash = useSetMediaStatus({
         media,
-        status: EMediumStatus.TRASH,
-        callback
+        status: EMediumStatus.TRASH
     })
 
     const confirm = async () => {
@@ -54,5 +53,3 @@ const useMoveToTrashDialog = ({
         ]
     })
 }
-
-export default useMoveToTrashDialog

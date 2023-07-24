@@ -1,15 +1,15 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, ViewControl, Button, SortControl } from '../'
+import { Dropdown, Button } from '../'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
-import { DeleteControl, DownloadControl, SetAlbumCoverControl } from '@/components/controls'
+import { DeleteControl, DownloadControl, SetAlbumCoverControl, ViewControl, SortControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
 
-export const AlbumActions = () => {
+export const AlbumControls = () => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
     const router = useRouter()

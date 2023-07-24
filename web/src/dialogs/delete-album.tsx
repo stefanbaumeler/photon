@@ -8,7 +8,7 @@ type Props = {
     id?: string | string[]
     callback?: () => void
 }
-const useDeleteAlbumDialog = ({
+export const useDeleteAlbumDialog = ({
     id, callback
 }: Props) => {
     const dialog = useDialogContext()
@@ -51,5 +51,3 @@ const useDeleteAlbumDialog = ({
         ]
     })
 }
-
-export default useDeleteAlbumDialog
