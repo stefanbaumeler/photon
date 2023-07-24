@@ -1,7 +1,7 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { TAlbum, TMedium } from '@photon/schema'
 import { ESelectionMode } from '@/types/app'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks'
 
 type Props = {
     children?: ReactNode

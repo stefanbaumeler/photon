@@ -1,10 +1,10 @@
 import { TMedium } from '@photon/schema'
 import { ESelectionMode } from '@/types/app'
-import { Check, Teaser } from '..'
+import { Check, Teaser } from '@/components'
 import { useEffect, useMemo, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { useSelectionContext } from '@/providers'
-import bem from '../../util/bem'
+import bem from '@/util/bem'
 import { useGalleryContext } from './GalleryContext'
 
 type Props = {

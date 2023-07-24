@@ -2,7 +2,7 @@ import { useMRemoveFromFavorites } from '@photon/schema'
 import { useDetailsContext, useSearchContext } from '@/providers'
 import { useRouter } from 'next/router'
 
-const useRemoveFromFavorites = (mediaIds: string[]) => {
+export const useRemoveFromFavorites = (mediaIds: string[]) => {
     const { hits: media } = useSearchContext()
     const router = useRouter()
     const details = useDetailsContext()
@@ -35,5 +35,3 @@ const useRemoveFromFavorites = (mediaIds: string[]) => {
         })
     }
 }
-
-export default useRemoveFromFavorites

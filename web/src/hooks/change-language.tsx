@@ -1,6 +1,6 @@
 import { useMChangeLanguage } from '@photon/schema'
 
-const useChangeLanguage = (language: string) => {
+export const useChangeLanguage = (language: string) => {
     const [, changeLanguage] = useMChangeLanguage()
 
     return () => {
@@ -9,5 +9,3 @@ const useChangeLanguage = (language: string) => {
         })
     }
 }
-
-export default useChangeLanguage

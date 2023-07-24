@@ -7,7 +7,7 @@ type Props = {
     callback?: () => void
 }
 
-const useDeleteAlbum = ({
+export const useDeleteAlbum = ({
     id, callback
 }: Props) => {
     const router = useRouter()
@@ -24,5 +24,3 @@ const useDeleteAlbum = ({
         router.push('/albums')
     }
 }
-
-export default useDeleteAlbum

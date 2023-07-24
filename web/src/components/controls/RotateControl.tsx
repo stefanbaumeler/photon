@@ -3,8 +3,7 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { TMedium } from '@photon/schema'
-import { useKeyboard } from '@/hooks/keyboard'
-import useRotate from '@/hooks/rotate'
+import { useKeyboard, useRotate } from '@/hooks'
 import { useDetailsContext } from '@/providers'
 
 type Props = {

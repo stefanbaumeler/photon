@@ -2,7 +2,7 @@ import { useDetailsContext, useKeyboardContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { ETrans } from '@/types/translations'
-import useUpdateMedium from '@/hooks/update-medium'
+import { useUpdateMedium } from '@/hooks'
 
 export const DetailsDescription = () => {
     const details = useDetailsContext()

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useDialogContext, useSelectionContext } from '@/providers'
 import { useMAddToAlbum } from '@photon/schema'
 
-const useAddToAlbum = () => {
+export const useAddToAlbum = () => {
     const router = useRouter()
     const dialog = useDialogContext()
     const selection = useSelectionContext()
@@ -30,5 +30,3 @@ const useAddToAlbum = () => {
         setActiveAlbum(id)
     }
 }
-
-export default useAddToAlbum

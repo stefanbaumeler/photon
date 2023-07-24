@@ -1,7 +1,7 @@
 import { useSelectionContext } from '@/providers'
 import { useMRemoveFromAlbum, useMUpdateAlbum } from '@photon/schema'
 
-const useUpdateAlbum = (id: string, title: string) => {
+export const useUpdateAlbum = (id: string, title: string) => {
     const selection = useSelectionContext()
 
     const [, removeFromAlbum] = useMRemoveFromAlbum()
@@ -22,5 +22,3 @@ const useUpdateAlbum = (id: string, title: string) => {
         })
     }
 }
-
-export default useUpdateAlbum

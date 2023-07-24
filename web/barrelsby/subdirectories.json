@@ -1,0 +1,9 @@
+{
+    "delete": true,
+    "singleQuotes": true,
+    "noSemicolon": true,
+    "directory": [
+        "./src/components/controls",
+        "./src/components/control-groups"
+    ]
+}

@@ -1,7 +1,7 @@
 import { useDialogContext, useSelectionContext, useDetailsContext } from '@/providers'
 import { useMDeleteMedia } from '@photon/schema'
 
-const useDeleteMedia = () => {
+export const useDeleteMedia = () => {
     const dialog = useDialogContext()
     const selection = useSelectionContext()
     const details = useDetailsContext()
@@ -17,5 +17,3 @@ const useDeleteMedia = () => {
         })
     }
 }
-
-export default useDeleteMedia

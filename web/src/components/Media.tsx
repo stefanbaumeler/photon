@@ -1,5 +1,5 @@
 import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext, useSelectionContext } from '@/providers'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '.'
 

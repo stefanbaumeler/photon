@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { QAlbumsDocument, useMCreateAlbum } from '@photon/schema'
+import { useMCreateAlbum } from '@photon/schema'
 
-const useCreateAlbum = () => {
+export const useCreateAlbum = () => {
     const router = useRouter()
 
     const [, createAlbumMutation] = useMCreateAlbum()
@@ -12,5 +12,3 @@ const useCreateAlbum = () => {
         })
     }
 }
-
-export default useCreateAlbum

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import { EDateFormat } from '@/types/app'
-import { DetailsSection } from '@/components/Details/DetailsSection'
+import { DetailsSection } from './DetailsSection'
 
 export const DetailsAlbums = () => {
     const details = useDetailsContext()

@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import Layout from '../../../layouts/layout'
+import Layout from '@/layouts/layout'
 import { Button, Details, Dialog, Media, Uploader } from '@/components'
 import { useDetailsContext,
     useDialogContext,
@@ -13,9 +13,7 @@ import { TAlbum, useQAlbum } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
-import useSetAlbumCover from '@/hooks/set-album-cover'
-import useUpdateAlbum from '@/hooks/update-album'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useSetAlbumCover, useUpdateAlbum, useKeyboard } from '@/hooks'
 
 const AlbumPage = () => {
     const router = useRouter()
@@ -52,7 +50,6 @@ const AlbumPage = () => {
     useKeyboard('keyup', 'e', editAlbum)
     useKeyboard('keydown', 'Escape', () => {
         if (!dialog.active && !selection.selected.size && !details?.active && edit.state === EEditState.OFF) {
-            console.log(edit.state)
             back()
         }
     })

@@ -2,10 +2,8 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import useAddToFavorites from '@/hooks/add-to-favorites'
-import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
+import { useAddToFavorites, useRemoveFromFavorites, useKeyboard } from '@/hooks'
 import { TMedium } from '@photon/schema'
-import { useKeyboard } from '@/hooks/keyboard'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 
 type Props = {

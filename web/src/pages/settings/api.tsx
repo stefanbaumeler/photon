@@ -1,6 +1,5 @@
-import Layout from '../../layouts/layout'
+import Layout from '@/layouts/layout'
 import { Uploader, Details } from '@/components'
-import { DetailsProvider } from '@/providers'
 
 const ApiPage = () => {
     return <Layout>

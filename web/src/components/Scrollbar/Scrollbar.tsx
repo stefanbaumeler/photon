@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import bem from '../../util/bem'
+import bem from '@/util/bem'
 import ScrollbarYears from './ScrollbarYears'
 import { ScrollbarPosition } from './ScrollbarPosition'
 import { ScrollbarCursor } from './ScrollbarCursor'

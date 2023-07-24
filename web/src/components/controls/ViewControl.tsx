@@ -1,11 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '../'
+import { Dropdown, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout, TDropdownItem } from '@/types/app'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks'
 
 export const ViewControl = () => {
     const { t } = useTranslation()

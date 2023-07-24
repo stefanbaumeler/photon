@@ -1,4 +1,4 @@
-import Layout from '../../layouts/layout'
+import Layout from '@/layouts/layout'
 import { Uploader, Details } from '@/components'
 
 const ExportPage = () => {

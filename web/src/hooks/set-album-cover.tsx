@@ -2,7 +2,7 @@ import { useMUpdateAlbum } from '@photon/schema'
 import { useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
-const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
+export const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
     const selection = useSelectionContext()
     const router = useRouter()
 
@@ -24,5 +24,3 @@ const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
         }
     }
 }
-
-export default useSetAlbumCover

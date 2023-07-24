@@ -3,9 +3,8 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { TAlbum, TMedium } from '@photon/schema'
-import { useKeyboard } from '@/hooks/keyboard'
 import { useDetailsContext, useSelectionContext } from '@/providers'
-import useSetAlbumCover from '@/hooks/set-album-cover'
+import { useSetAlbumCover, useKeyboard } from '@/hooks'
 import { ESelectionMode } from '@/types/app'
 
 type Props = {

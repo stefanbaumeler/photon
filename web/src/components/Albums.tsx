@@ -1,9 +1,8 @@
 import { TAlbum } from '@photon/schema'
-import { ListView } from '.'
 import { ELayout } from '@/types/app'
 import { useDialogContext, useLayoutContext, useSelectionContext } from '@/providers'
-import { GridView } from '@/components/GridView'
-import { useKeyboard } from '@/hooks/keyboard'
+import { GridView, ListView } from '@/components'
+import { useKeyboard } from '@/hooks'
 
 type Props = {
     albums: TAlbum[]

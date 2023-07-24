@@ -15,7 +15,7 @@ import { DetailsProvider,
     SelectionProvider,
     DragProvider,
     KeyboardProvider,
-    UserProvider } from '../src/providers'
+    UserProvider } from '@/providers'
 
 interface Props {
     children: ReactNode

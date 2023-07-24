@@ -1,5 +1,5 @@
 import { TDropdownItem } from '@/types/app'
-import bem from '../../util/bem'
+import bem from '@/util/bem'
 import { JSX, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import DropdownItems from './DropdownItems'

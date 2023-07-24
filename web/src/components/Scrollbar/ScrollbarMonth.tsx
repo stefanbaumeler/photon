@@ -1,5 +1,5 @@
-import { formatDate } from '../../util/date'
-import { EDateFormat } from '../../types/app'
+import { formatDate } from '@/util/date'
+import { EDateFormat } from '@/types/app'
 import { MouseEventHandler } from 'react'
 import { useScrollbarContext } from './ScrollbarContext'
 

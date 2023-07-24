@@ -3,7 +3,7 @@ import { useMCreateAlbum } from '@photon/schema'
 import { useDialogContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
-const useAddToNewAlbum = () => {
+export const useAddToNewAlbum = () => {
     const router = useRouter()
     const [newAlbum, setNewAlbum] = useState(false)
     const selection = useSelectionContext()
@@ -29,5 +29,3 @@ const useAddToNewAlbum = () => {
         setNewAlbum(true)
     }
 }
-
-export default useAddToNewAlbum

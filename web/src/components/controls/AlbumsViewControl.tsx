@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout } from '@/types/app'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks'
 
 export const AlbumsViewControl = () => {
     const { t } = useTranslation()

@@ -1,0 +1,16 @@
+{
+    "delete": true,
+    "singleQuotes": true,
+    "noSemicolon": true,
+    "name": "barrel.ts",
+    "directory": [
+        "./src/components"
+    ],
+    "include": [
+        "./src/components/[^/]+/index.ts"
+    ],
+    "exclude": [
+        "./src/components/controls",
+        "./src/components/control-groups"
+    ]
+}

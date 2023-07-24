@@ -15,7 +15,7 @@ type Props = {
     placeholder?: boolean
 }
 
-const Medium = ({
+const MediumEl = ({
     medium, width, testId, priority = false, position, placeholder
 }: Props, ref?: Ref<unknown>) => {
     const details = useDetailsContext()
@@ -82,4 +82,4 @@ const Medium = ({
     </div>
 }
 
-export default forwardRef(Medium)
+export const Medium = forwardRef(MediumEl)

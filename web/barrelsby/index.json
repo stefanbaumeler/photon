@@ -1,0 +1,16 @@
+{
+    "delete": true,
+    "singleQuotes": true,
+    "noSemicolon": true,
+    "local": true,
+    "directory": [
+        "./src/components",
+        "./src/dialogs",
+        "./src/hooks",
+        "./src/providers"
+    ],
+    "exclude": [
+        "./src/components/controls",
+        "./src/components/control-groups"
+    ]
+}

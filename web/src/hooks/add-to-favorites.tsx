@@ -1,6 +1,6 @@
 import { useMAddToFavorites } from '@photon/schema'
 
-const useAddToFavorites = (mediaIds: string[]) => {
+export const useAddToFavorites = (mediaIds: string[]) => {
     const [, addToFavorites] = useMAddToFavorites()
 
     return () => {
@@ -9,5 +9,3 @@ const useAddToFavorites = (mediaIds: string[]) => {
         })
     }
 }
-
-export default useAddToFavorites

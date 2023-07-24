@@ -8,7 +8,7 @@ import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/prov
 import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
 import { TrashControls } from '@/components/control-groups'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard } from '@/hooks'
 import { FavoriteControl,
     DeleteControl,
     ArchiveControl,

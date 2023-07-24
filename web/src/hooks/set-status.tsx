@@ -7,7 +7,7 @@ type Props = {
     status: EMediumStatus
 }
 
-const useSetMediaStatus = ({
+export const useSetMediaStatus = ({
     media, status
 }: Props) => {
     const ids = asArray(media).map(({ id }) => id)
@@ -20,5 +20,3 @@ const useSetMediaStatus = ({
         })
     }
 }
-
-export default useSetMediaStatus

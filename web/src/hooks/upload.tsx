@@ -3,7 +3,7 @@ import { useMUpload } from '@photon/schema'
 import tauri from '../tauri'
 import { FileUpload } from 'graphql-upload-minimal'
 
-const useUpload = () => {
+export const useUpload = () => {
     const [files, setFiles] = useState<File[]>()
 
     const [, upload] = useMUpload()
@@ -40,5 +40,3 @@ const useUpload = () => {
         setFiles(files)
     }
 }
-
-export default useUpload

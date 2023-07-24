@@ -3,11 +3,10 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { TAlbum, TMedium } from '@photon/schema'
-import { useKeyboard } from '@/hooks/keyboard'
+import { useKeyboard, useDownload } from '@/hooks'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 import { isMedium } from '@/util/is'
-import useDownload from '@/hooks/download'
 
 type Props = {
     elements: (TMedium | TAlbum)[]

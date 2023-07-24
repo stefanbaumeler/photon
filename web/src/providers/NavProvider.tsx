@@ -4,9 +4,8 @@ import { useRouter } from 'next/router'
 import { EMediumStatus, ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useDragContext, useSelectionContext } from '@/providers'
-import useAddToFavorites from '@/hooks/add-to-favorites'
-import useSetMediaStatus from '@/hooks/set-status'
+import { useDragContext, useSelectionContext } from '@/providers/index'
+import { useAddToFavorites, useSetMediaStatus } from '@/hooks'
 
 type Props = {
     children?: ReactNode

@@ -11,8 +11,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import useAddToFavorites from '@/hooks/add-to-favorites'
-import useRemoveFromFavorites from '@/hooks/remove-from-favorites'
+import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
 
 type Props = {
     element: TMedium | TAlbum

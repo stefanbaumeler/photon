@@ -5,7 +5,7 @@ interface Props {
     children: ReactNode
 }
 
-const ProviderProvider = (props: Props) => {
+export const ProviderProvider = (props: Props) => {
     const {
         components = [], children, ...childProps
     } = props
@@ -20,5 +20,3 @@ const ProviderProvider = (props: Props) => {
         </>
     )
 }
-
-export default ProviderProvider

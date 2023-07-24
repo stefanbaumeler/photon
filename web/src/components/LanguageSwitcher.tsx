@@ -1,7 +1,6 @@
-import { Dropdown } from '@/components/Dropdown'
 import { useEffect, useState } from 'react'
 import { TDropdownItem } from '@/types/app'
-import { Button } from '@/components'
+import { Button, Dropdown } from '@/components'
 import * as Icons from '@mdi/js'
 import i18next from '@/translations'
 import { useUserContext } from '@/providers'

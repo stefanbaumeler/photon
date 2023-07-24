@@ -1,6 +1,6 @@
 import { useMUpdateMedium } from '@photon/schema'
 
-const useUpdateMedium = (id: string, description: string) => {
+export const useUpdateMedium = (id: string, description: string) => {
     const [, updateMedium] = useMUpdateMedium()
 
     return () => {
@@ -10,5 +10,3 @@ const useUpdateMedium = (id: string, description: string) => {
         })
     }
 }
-
-export default useUpdateMedium

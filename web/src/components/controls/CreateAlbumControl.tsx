@@ -2,7 +2,7 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import useCreateAlbum from '@/hooks/create-album'
+import { useCreateAlbum } from '@/hooks'
 
 type Props = {
     dropdown?: boolean

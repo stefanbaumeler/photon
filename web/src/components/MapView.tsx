@@ -11,10 +11,9 @@ import { useDetailsContext, useSearchContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { Marker } from 'mapbox-gl'
 import { TMedium } from '@photon/schema'
-import { Button } from '@/components/Button'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
-import { Drawer, FilmStrip, Medium } from '@/components'
+import { Drawer, FilmStrip, Medium, Button } from '@/components'
 
 export const MapView = () => {
     const mapRef = useRef<MapRef>(null)

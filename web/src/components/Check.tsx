@@ -18,7 +18,7 @@ type Props = {
     round?: boolean
 }
 
-const Check = ({
+const CheckEl = ({
     borderColor = '#FFFFFF',
     backgroundColor = '#FFFFFF',
     blankHoverColor = '#FFFFFF',
@@ -79,4 +79,4 @@ const Check = ({
     </button>
 }
 
-export default forwardRef(Check)
+export const Check = forwardRef(CheckEl)

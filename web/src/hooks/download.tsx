@@ -9,7 +9,7 @@ type Props = {
     callback?: () => void
 }
 
-const useDownload = ({
+export const useDownload = ({
     elements, callback
 }: Props) => {
     const router = useRouter()
@@ -44,5 +44,3 @@ const useDownload = ({
         setSkip(false)
     }
 }
-
-export default useDownload

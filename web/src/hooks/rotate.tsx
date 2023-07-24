@@ -1,7 +1,7 @@
 import { useDetailsContext } from '@/providers'
 import { TMedium, useMRotate } from '@photon/schema'
 
-const useRotate = (medium: TMedium) => {
+export const useRotate = (medium: TMedium) => {
     const details = useDetailsContext()
 
     const [, rotate] = useMRotate()
@@ -14,5 +14,3 @@ const useRotate = (medium: TMedium) => {
         })
     }
 }
-
-export default useRotate
