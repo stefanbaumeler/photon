@@ -1,7 +1,7 @@
 import { ETrans } from '@/types/translations'
 import { useDialogContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import useDeleteMedia from '../hooks/delete-media'
+import { useDeleteMedia } from '@/hooks'
 
 export const useDeleteMediaDialog = () => {
     const dialog = useDialogContext()

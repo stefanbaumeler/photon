@@ -1,7 +1,7 @@
 import { ETrans } from '@/types/translations'
 import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import useDeleteAlbum from '../hooks/delete-album'
+import { useDeleteAlbum } from '@/hooks'
 import { asArray } from '@/util/as'
 
 type Props = {

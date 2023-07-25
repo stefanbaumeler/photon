@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import bem from '../util/bem'
-import useUpload from '../hooks/upload'
+import { useUpload } from '@/hooks'
 import tauri from '../tauri'
 
 export const Uploader = () => {

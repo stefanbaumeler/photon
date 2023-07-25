@@ -1,7 +1,7 @@
 import { ETrans } from '@/types/translations'
 import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import useSetMediaStatus from '../hooks/set-status'
+import { useSetMediaStatus } from '@/hooks/'
 import { EMediumStatus } from '@/types/app'
 import { TMedium } from '@photon/schema'
 import { asArray } from '@/util/as'
