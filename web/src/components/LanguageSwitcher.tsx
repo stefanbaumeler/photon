@@ -31,6 +31,7 @@ export const LanguageSwitcher = () => {
                 changeLanguage({
                     language: 'de-DE'
                 })
+                setMoreActive(false)
             }
         },
         {
@@ -41,6 +42,7 @@ export const LanguageSwitcher = () => {
                 changeLanguage({
                     language: 'en-US'
                 })
+                setMoreActive(false)
             }
         }
     ]

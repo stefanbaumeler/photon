@@ -107,20 +107,34 @@ export const Button = ({
         </span>
     }
 
-    const ButtonOrLink = ({ children }: { children: ReactElement }) => href ? <Link
-        href={href}
-        onClick={onClick}
-        className="button__button"
-        data-testid={testId}
-    >
-        {children}
-    </Link> : <button
-        className="button__button"
-        onClick={onClick}
-        data-testid={testId}
-    >
-        {children}
-    </button>
+    const ButtonOrLink = ({ children }: { children: ReactElement }) => {
+        if (href) {
+            return <Link
+                href={href}
+                onClick={onClick}
+                className="button__button"
+                data-testid={testId}
+            >
+                {children}
+            </Link>
+        }
+
+        if (onClick) {
+            return <button
+                className="button__button"
+                onClick={onClick}
+                data-testid={testId}
+            >
+                {children}
+            </button>
+        }
+
+        return <span
+            className="button__button button__button--mock"
+        >
+            {children}
+        </span>
+    }
 
     const ConditionalIcon = () => icon ? <Icon
         path={typeof icon === 'string' ? icon : icon.path}

@@ -1,0 +1,22 @@
+export default {
+    title: 'Title',
+    favored: 'Favored',
+    dateCreated: 'Date Created',
+    dateTaken: 'Date Taken',
+    description: 'Description',
+    location: 'Location',
+    mimetype: 'Mimetype',
+    owner: 'Owner',
+    uploader: 'Uploader',
+    favoredBy: 'Favored By',
+    country: 'Country',
+    tags: 'Tags',
+    cameraMake: 'Camera Make',
+    cameraModel: 'Camera Model',
+    fNumber: 'f',
+    flash: 'Flash',
+    focalLength: 'Focal Length',
+    height: 'Height',
+    width: 'Width',
+    iso: 'ISO'
+}

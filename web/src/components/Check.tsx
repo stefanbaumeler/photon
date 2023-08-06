@@ -9,7 +9,7 @@ type Props = {
     blankHoverColor?: string
     checked: boolean
     ready?: boolean
-    onClick: () => void
+    onClick?: () => void
     boxSize?: number
     iconSize?: number
     hover?: boolean

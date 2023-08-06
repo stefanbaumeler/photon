@@ -24,7 +24,7 @@
         max-width: 100%;
     }
 
-    @at-root .list-view__cell & {
+    @at-root .list-view__cell > & {
         width: 100%;
     }
 

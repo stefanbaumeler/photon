@@ -4,6 +4,8 @@
     "noSemicolon": true,
     "directory": [
         "./src/components/controls",
-        "./src/components/control-groups"
+        "./src/components/control-groups",
+        "./src/components/ListView/cells",
+        "./src/components/ListView/headers"
     ]
 }

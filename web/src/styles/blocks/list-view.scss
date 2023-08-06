@@ -8,6 +8,12 @@
     flex-wrap: wrap;
 }
 
+@mixin list-view-thead {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
 @mixin list-view-tbody {
     display: flex;
     width: 100%;
@@ -28,25 +34,14 @@
 @mixin list-view-cell {
     min-height: 64px;
     text-align: left;
-    padding: 8px 16px;
+    padding: 8px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     cursor: pointer;
 
-    &--select {
-        width: 50px;
-        min-width: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
-
     &--title {
         flex-grow: 1;
-    }
-
-    &--image {
-        width: 100px;
     }
 }
 
@@ -60,6 +55,10 @@
 
         &__table {
             @include list-view-table;
+        }
+
+        &__thead {
+            @include list-view-thead;
         }
 
         &__tbody {

@@ -10,13 +10,15 @@ type Props = {
     children: ReactElement
     onClickOutside: () => void
     smallButton?: boolean
+    compact?: boolean
 }
 
 export const Dropdown = ({
-    items, active, children, onClickOutside, smallButton = false
+    items, active, children, onClickOutside, smallButton, compact
 }: Props) => {
     const classes = bem('dropdown', [
-        ['active', active]
+        ['active', active],
+        ['compact', compact]
     ])
 
     return <div className={classes}>
@@ -38,6 +40,5 @@ export const Dropdown = ({
                 {children}
             </div>
         </Tippy>
-
     </div>
 }

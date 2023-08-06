@@ -30,6 +30,16 @@
     max-height: 100%;
     transition: color .1s;
 
+    &--mock {
+        pointer-events: none;
+        cursor: default;
+
+        &:before,
+        &:after {
+            display: none;
+        }
+    }
+
     &:before,
     &:after {
         content: '';
@@ -54,6 +64,10 @@
 
     &:hover:after {
         opacity: 1;
+    }
+
+    @at-root .list + & {
+
     }
 
     @at-root .button--text-light & {
