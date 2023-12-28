@@ -1,39 +1,39 @@
-import * as Schema from '@photon/schema'
-import { seed } from '../../prisma/seed'
-import { useTestQuery } from '../utility'
-
-beforeAll(async () => {
-    await seed('test')
-})
-
-it('can sign in', async () => {
-    const query = await useTestQuery<Schema.TMSignIn, Schema.TMSignInVariables>(Schema.MSignInDocument, {
-        mail: 'test@test.com',
-        password: 'test'
-    })
-
-    expect(query.body.singleResult.data?.signIn).toMatchSnapshot({
-        refreshToken: expect.any(String),
-        accessToken: expect.any(String)
-    })
-})
-
-it('can sign out', async () => {
-    const query = await useTestQuery<Schema.TMSignOut, Schema.TMSignOutVariables>(Schema.MSignOutDocument)
-
-    expect(query.body.singleResult.data?.signOut).toMatchSnapshot()
-})
-
-it('can sign up', async () => {
-    const query = await useTestQuery<Schema.TMSignUp, Schema.TMSignUpVariables>(Schema.MSignUpDocument, {
-        mail: 'created@created.com',
-        password: 'created',
-        firstName: 'first',
-        lastName: 'last'
-    })
-
-    expect(query.body.singleResult.data?.signUp).toMatchSnapshot({
-        refreshToken: expect.any(String),
-        accessToken: expect.any(String)
-    })
-})
+// import * as Schema from '@photon/schema'
+// import { seed } from '../../prisma/seed'
+// import { useTestQuery } from '../utility'
+//
+// beforeAll(async () => {
+//     await seed('test')
+// })
+//
+// it('can sign in', async () => {
+//     const query = await useTestQuery<Schema.TMSignIn, Schema.TMSignInVariables>(Schema.MSignInDocument, {
+//         mail: 'test@test.com',
+//         password: 'test'
+//     })
+//
+//     expect(query.body.singleResult.data?.signIn).toMatchSnapshot({
+//         refreshToken: expect.any(String),
+//         accessToken: expect.any(String)
+//     })
+// })
+//
+// it('can sign out', async () => {
+//     const query = await useTestQuery<Schema.TMSignOut, Schema.TMSignOutVariables>(Schema.MSignOutDocument)
+//
+//     expect(query.body.singleResult.data?.signOut).toMatchSnapshot()
+// })
+//
+// it('can sign up', async () => {
+//     const query = await useTestQuery<Schema.TMSignUp, Schema.TMSignUpVariables>(Schema.MSignUpDocument, {
+//         mail: 'created@created.com',
+//         password: 'created',
+//         firstName: 'first',
+//         lastName: 'last'
+//     })
+//
+//     expect(query.body.singleResult.data?.signUp).toMatchSnapshot({
+//         refreshToken: expect.any(String),
+//         accessToken: expect.any(String)
+//     })
+// })

@@ -1,4 +1,4 @@
-import { useMRemoveFromFavorites } from '@photon/schema'
+import { useMDeleteFavorites } from '@photon/schema'
 import { useDetailsContext, useSearchContext } from '@/providers'
 import { useRouter } from 'next/router'
 
@@ -7,11 +7,11 @@ export const useRemoveFromFavorites = (mediaIds: string[]) => {
     const router = useRouter()
     const details = useDetailsContext()
 
-    const [, removeFromFavorites] = useMRemoveFromFavorites()
+    const [, removeFromFavorites] = useMDeleteFavorites()
 
     return () => {
         removeFromFavorites({
-            media: mediaIds
+            ids: mediaIds
         }).then(() => {
             const topLevelRoute = router.pathname.split('/')[1]
 

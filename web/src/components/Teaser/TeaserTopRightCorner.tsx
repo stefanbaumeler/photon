@@ -36,13 +36,13 @@ export const TeaserTopRightCorner = () => {
             callback={() => setMoreActive(false)}
             elements={[element]}
             key={0}
-        />,
-        <DownloadControl
-            dropdown={true}
-            callback={() => setMoreActive(false)}
-            elements={element.media.filter((medium) => medium.status === EMediumStatus.ALL)}
-            key={1}
         />
+        // <DownloadControl
+        //     dropdown={true}
+        //     callback={() => setMoreActive(false)}
+        //     elements={element.media.filter((medium) => medium.status === EMediumStatus.ALL)}
+        //     key={1}
+        // />
     ]
 
     return <div className="teaser__nav">

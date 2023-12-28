@@ -1,4 +1,4 @@
-query QAlbumMedia($id: ID!) {
+query QAlbumMedia($id: String!) {
     albumMedia(id: $id) {
         ...FMedia
     }

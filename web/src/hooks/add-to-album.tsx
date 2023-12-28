@@ -14,7 +14,7 @@ export const useAddToAlbum = () => {
     useEffect(() => {
         if (activeAlbum) {
             addToAlbumMutation({
-                idAlbum: `${activeAlbum}`,
+                id: `${activeAlbum}`,
                 media: Array.from(selection.selected).map((s) => s.id)
             }).then(() => {
                 router.push(`/albums/${activeAlbum}`).then(() => {

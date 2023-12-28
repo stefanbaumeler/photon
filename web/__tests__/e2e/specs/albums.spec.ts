@@ -41,6 +41,7 @@ test('can create from media', async ({ page }) => {
     await page.waitForNavigation()
 
     expect(page.url()).toContain('/albums/')
+
     await expect(await page.getByTestId('teaser')).toHaveCount(2)
 
     await page.getByTestId('album-back').click()

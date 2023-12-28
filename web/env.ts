@@ -15,8 +15,7 @@ type TAppEnv = { [key: string]: string | undefined } & {
 
 export const getEnv = () => {
     dotenv.config({
-        path: path.join(__dirname, `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`),
-        override: true
+        path: path.join(__dirname, `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`)
     })
 
     return process.env as TAppEnv

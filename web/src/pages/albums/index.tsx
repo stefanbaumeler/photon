@@ -3,14 +3,14 @@ import { Albums, Uploader, Dialog } from '@/components'
 import { useQAlbums } from '@photon/schema'
 
 const AlbumsPage = () => {
-    const [albums] = useQAlbums()
+    const [{  data: albums }] = useQAlbums()
 
     return <Layout>
         <section>
             <div>
                 <Dialog />
                 <Uploader />
-                <Albums albums={albums.data?.albums || []} />
+                <Albums albums={albums?.albums || []} />
             </div>
         </section>
     </Layout>

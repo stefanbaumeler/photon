@@ -1,5 +1,0 @@
-mutation MRemoveFromFavorites($media: [ID!]!) {
-    removeFromFavorites(media: $media) {
-        id
-    }
-}

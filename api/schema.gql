@@ -1,0 +1,146 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  dateCreated: DateTime!
+  dateModified: DateTime!
+  mail: String!
+  firstName: String!
+  lastName: String!
+  favorites: Medium!
+  language: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Tag {
+  id: String!
+  label: String!
+  source: String!
+  idUser: String!
+}
+
+type Medium {
+  id: String!
+  dateCreated: DateTime!
+  dateModified: DateTime!
+  dateModifiedStatus: DateTime!
+  dateTaken: DateTime!
+  filenameDisk: String!
+  filenameDownload: String!
+  title: String!
+  description: String
+  location: [Float!]!
+  status: String!
+  mimetype: String!
+  meta: Meta!
+  owner: User!
+  uploader: User!
+  hash: String!
+  favoredBy: [User!]
+  tags: [Tag!]!
+  country: String!
+  region: String!
+  place: String!
+  address: String!
+}
+
+union Meta = ImageMeta | VideoMeta
+
+type ImageMeta {
+  width: Float!
+  height: Float!
+  cameraMake: String!
+  cameraModel: String!
+  flash: Float
+  fNumber: Float
+  iso: Float
+  focalLength: String
+}
+
+type VideoMeta {
+  width: Float!
+  height: Float!
+  duration: Float!
+}
+
+type MediumDownloadDto {
+  url: String!
+}
+
+type MediumCountMonth {
+  month: Int!
+  count: Int!
+}
+
+type MediumCountYear {
+  count: Int!
+  year: Int!
+  months: [MediumCountMonth!]!
+}
+
+type MediumCountDto {
+  count: Int!
+  years: [MediumCountYear!]!
+}
+
+type UserTokenDto {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+type Album {
+  id: String!
+  dateCreated: DateTime!
+  dateModified: DateTime!
+  title: String
+  description: String
+  cover: Medium
+  owner: User
+  media: [Medium!]
+}
+
+type Query {
+  profile: User!
+  albums: [Album!]!
+  mediumAlbums(id: String!): [Album!]!
+  album(id: String!): Album!
+  albumMedia(id: String!): [Medium!]!
+  media(status: String, favorites: Boolean, q: String, album: String, sort: String): [Medium!]!
+  medium(id: String!): Medium!
+  archive: [Medium!]!
+  trash: [Medium!]!
+  download(ids: [String!]!): MediumDownloadDto!
+  countMediaByYear: MediumCountDto!
+  favorites: [Medium!]!
+}
+
+type Mutation {
+  signIn(mail: String!, password: String!): UserTokenDto!
+  signOut: Boolean!
+  signUp(mail: String!, password: String!, firstName: String!, lastName: String!, language: String!): UserTokenDto!
+  changeLanguage(language: String!): User!
+  refreshAccessToken(accessToken: String!, refreshToken: String!): UserTokenDto!
+  deleteAlbums(ids: [String!]!): [Album!]!
+  addMediaToAlbum(id: String!, media: [String!]!): Album!
+  removeMediaFromAlbum(id: String!, media: [String!]!): Album!
+  updateAlbum(id: String!, title: String, description: String, cover: String): Album!
+  createAlbum(title: String, description: String, media: [String!]): Album!
+  emptyTrash: [Medium!]!
+  upload(filePromises: Upload!): [Medium!]!
+  deleteMedia(ids: [String!]!): [Medium!]!
+  updateMedium(id: String!, title: String, description: String, meta: String): Medium!
+  updateMedia(ids: [String!]!, status: String): [Medium!]!
+  rotateMedium(id: String!): Medium!
+  insertFavorites(ids: [String!]!): User!
+  deleteFavorites(ids: [String!]!): User!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

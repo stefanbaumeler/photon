@@ -1,5 +1,5 @@
-mutation MAddToAlbum($idAlbum: ID!, $media: [ID!]!) {
-    addToAlbum(idAlbum: $idAlbum, media: $media) {
+mutation MAddToAlbum($id: String!, $media: [String!]!) {
+    addMediaToAlbum(id: $id, media: $media) {
         id
     }
 }

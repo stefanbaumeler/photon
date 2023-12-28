@@ -1,6 +1,11 @@
 fragment FUser on User {
     id
     dateCreated
+    dateModified
+    mail
+    favorites {
+        id
+    }
     firstName
     lastName
     language

@@ -1,8 +1,8 @@
 import { Teaser } from '@/components'
-import { TAlbum, TMedium } from '@photon/schema'
+import { TAlbum, TMedium, TQAlbums, TQMedia } from '@photon/schema'
 
 type Props = {
-    elements: (TMedium | TAlbum)[]
+    elements: TQMedia['media'] | TQAlbums['albums']
 }
 
 export const GridView = ({ elements }: Props) => {

@@ -1,4 +1,4 @@
-import { useMDeleteAlbum } from '@photon/schema'
+import { useMDeleteAlbums } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { asArray } from '@/util/as'
 
@@ -13,7 +13,7 @@ export const useDeleteAlbum = ({
     const router = useRouter()
     const idsToDelete = id ? asArray(id) : router.query.id
 
-    const [, deleteMedia] = useMDeleteAlbum()
+    const [, deleteMedia] = useMDeleteAlbums()
 
     return async () => {
         await deleteMedia({

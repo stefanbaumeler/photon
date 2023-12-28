@@ -15,7 +15,7 @@ export const Thumbnails = () => {
     const thumbnails = albums?.albums.map<TThumbnail>((album) => ({
         type: EThumbnailType.DEFAULT,
         title: album.title,
-        idMedium: album.cover.id,
+        idMedium: album.cover?.id,
         onClick: () => addToAlbum(album.id)
     })) || []
 

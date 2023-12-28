@@ -1,4 +1,4 @@
-import { useMSetMediaStatus } from '@photon/schema'
+import { useMUpdateMedia } from '@photon/schema'
 import { EMediumStatus } from '@/types/app'
 import { asArray } from '@/util/as'
 
@@ -11,11 +11,11 @@ export const useSetMediaStatus = ({
     media, status
 }: Props) => {
     const ids = asArray(media).map(({ id }) => id)
-    const [, setMediaStatus] = useMSetMediaStatus()
+    const [, updateMedia] = useMUpdateMedia()
 
     return async () => {
-        await setMediaStatus({
-            media: ids,
+        await updateMedia({
+            ids,
             status
         })
     }

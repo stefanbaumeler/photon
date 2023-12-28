@@ -33,6 +33,7 @@ const AlbumPage = () => {
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
 
+    console.log(idAlbum)
     const [albumQuery] = useQAlbum({
         variables: {
             id: idAlbum

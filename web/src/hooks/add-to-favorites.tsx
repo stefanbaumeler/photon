@@ -1,11 +1,11 @@
-import { useMAddToFavorites } from '@photon/schema'
+import { useMInsertFavorites } from '@photon/schema'
 
 export const useAddToFavorites = (mediaIds: string[]) => {
-    const [, addToFavorites] = useMAddToFavorites()
+    const [, addToFavorites] = useMInsertFavorites()
 
     return () => {
         addToFavorites({
-            media: mediaIds
+            ids: mediaIds
         })
     }
 }

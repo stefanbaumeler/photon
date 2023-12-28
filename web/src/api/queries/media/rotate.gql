@@ -1,5 +1,5 @@
-mutation MRotate($id: ID!) {
-    rotate(id: $id) {
+mutation MRotate($id: String!) {
+    rotateMedium(id: $id) {
         ...FMedia
     }
 }

@@ -127,7 +127,7 @@ const Teaser = () => {
                     <Medium
                         testId="teaser-image"
                         medium={cover}
-                        width={teaser.width ? teaser.width : teaser.height / cover?.meta.height * cover?.meta.width || 300}
+                        width={teaser.width ? teaser.width : teaser.height / cover?.meta?.height * cover?.meta?.width || 300}
                     />
                 </div>
             </div>

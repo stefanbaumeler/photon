@@ -1,5 +1,5 @@
-mutation MRemoveFromAlbum($idAlbum: ID!, $media: [ID!]!) {
-    removeFromAlbum(idAlbum: $idAlbum, media: $media) {
+mutation MRemoveFromAlbum($idAlbum: String!, $media: [String!]!) {
+    removeMediaFromAlbum(id: $idAlbum, media: $media) {
         id
         media {
             id

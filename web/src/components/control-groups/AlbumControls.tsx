@@ -21,7 +21,7 @@ export const AlbumControls = () => {
         variables: {
             id
         },
-        pause: !router.isReady
+        pause: !id
     })
 
     const album = albumQuery.data?.album

@@ -34,7 +34,7 @@ export const TeaserContent = () => {
             {element.title || t(ETrans.UNTITLED)}
         </span>
         <div className="teaser__misc">
-            <Count />
+            {/*<Count />*/}
         </div>
     </div>
 }

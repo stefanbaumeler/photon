@@ -1,15 +1,15 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { TAlbum, TMedium } from '@photon/schema'
+import { TAlbum, TMedium, TQAlbums, TQMedia } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
-    element: TMedium | TAlbum
+    element: TQMedia['media'][number] | TQAlbums['albums'][number]
     width?: number
     height?: number
 }
 
 interface TeaserContext {
-    element: TMedium | TAlbum
+    element: TQMedia['media'][number] | TQAlbums['albums'][number]
     width?: number
     height?: number
 }

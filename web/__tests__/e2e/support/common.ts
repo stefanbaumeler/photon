@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test'
 import { seed } from '../../../../api/prisma/seed'
-import { useTestQuery } from '../../../../api/__tests__/utility'
+// import { useTestQuery } from '../../../../api/__tests__/utility'
 
 export const globalBeforeEach = () => {
     test.beforeEach(async ({ page }) => {
@@ -12,17 +12,17 @@ export const globalBeforeEach = () => {
 
         await seed('test')
 
-        await page.route('**/graphql', async (route, request) => {
-            const graphqlRequest = request.postDataJSON()
-
-            if (graphqlRequest) {
-                const albumsQuery = await useTestQuery(graphqlRequest.query, graphqlRequest.variables)
-
-                await route.fulfill({
-                    json: albumsQuery.body.singleResult
-                })
-            }
-        })
+        // await page.route('**/graphql', async (route, request) => {
+        //     const graphqlRequest = request.postDataJSON()
+        //
+        //     if (graphqlRequest) {
+        //         const albumsQuery = await useTestQuery(graphqlRequest.query, graphqlRequest.variables)
+        //
+        //         await route.fulfill({
+        //             json: albumsQuery.body.singleResult
+        //         })
+        //     }
+        // })
     })
 }
 

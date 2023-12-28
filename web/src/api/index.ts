@@ -1,4 +1,4 @@
-import { Client, cacheExchange, fetchExchange } from 'urql'
+import { Client, cacheExchange, fetchExchange, Operation } from 'urql'
 import { devtoolsExchange } from '@urql/devtools'
 import { AuthConfig, authExchange } from '@urql/exchange-auth'
 
@@ -9,11 +9,12 @@ const initializeAuthState = async () => {
             refreshToken: ''
         }
     }
+
     const cache = JSON.parse(window.localStorage.getItem('photon'))
 
     if (!cache || !cache.accessToken) {
         if (window.location.pathname !== '/login') {
-            window.location.href = '/login'
+            // window.location.href = '/login'
         }
         return {
             accessToken: '',
@@ -34,7 +35,9 @@ export const initializeUrqlClient = () => new Client({
     },
     exchanges: [devtoolsExchange, cacheExchange, authExchange(async (utils) => {
         if (process.env.NEXT_PUBLIC_API_CREDENTIALS === '0') {
-            return
+            return {
+                addAuthToOperation: (operation) => operation
+            } as AuthConfig
         }
 
         const {
@@ -42,7 +45,9 @@ export const initializeUrqlClient = () => new Client({
         } = await initializeAuthState()
 
         if (!accessToken && !refreshToken) {
-            return
+            return {
+                addAuthToOperation: (operation) => operation
+            } as AuthConfig
         }
 
         return {
@@ -52,7 +57,7 @@ export const initializeUrqlClient = () => new Client({
                 }
 
                 return utils.appendHeaders(operation, {
-                    Authorization: `Bearer ${accessToken}`
+                    authorization: `Bearer ${accessToken}`
                 })
             },
             didAuthError: (error) => {

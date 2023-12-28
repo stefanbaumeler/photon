@@ -1,0 +1,5 @@
+mutation MInsertFavorites($ids: [String!]!) {
+    insertFavorites(ids: $ids) {
+        id
+    }
+}

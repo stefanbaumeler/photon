@@ -1,5 +1,0 @@
-mutation MAddToFavorites($media: [ID!]!) {
-    addToFavorites(media: $media) {
-        id
-    }
-}

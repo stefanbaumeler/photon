@@ -94,4 +94,5 @@ model User {
   favorites     Medium[]
   language      String
   createdTags   Tag[]
+  refreshToken  String?
 }

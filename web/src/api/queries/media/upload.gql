@@ -1,5 +1,5 @@
-mutation MUpload($files: [Upload!]!) {
-    upload(files: $files) {
+mutation MUpload($files: Upload!) {
+    upload(filePromises: $files) {
         id
     }
 }

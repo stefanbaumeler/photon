@@ -1,11 +1,11 @@
-import { TAlbum } from '@photon/schema'
+import { TQAlbums } from '@photon/schema'
 import { ELayout } from '@/types/app'
 import { useDialogContext, useLayoutContext, useSelectionContext } from '@/providers'
 import { GridView, ListView } from '@/components'
 import { useKeyboard } from '@/hooks'
 
 type Props = {
-    albums: TAlbum[]
+    albums: Required<TQAlbums['albums']>
 }
 
 export const Albums = ({ albums }: Props) => {

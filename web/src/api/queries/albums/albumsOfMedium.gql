@@ -1,0 +1,20 @@
+query QAlbumsOfMedium($id: String!) {
+    mediumAlbums(id: $id) {
+        id
+        title
+        description
+        dateCreated
+        dateModified
+        cover {
+            ...FMedia
+        }
+        owner {
+            id
+            firstName
+            lastName
+        },
+        media {
+            ...FMedia
+        }
+    }
+}

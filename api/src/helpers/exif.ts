@@ -132,7 +132,9 @@ const handleImage = async (filePath: string) => {
     }
 
     const sharpMeta = await sharp(filePath).metadata()
-    const rawMeta = (await ExifReader.load(filePath, { expanded: true })).exif
+    const rawMeta = (await ExifReader.load(filePath, {
+        expanded: true
+    })).exif
 
     let fNumber = rawMeta?.FNumber?.value
 
@@ -142,7 +144,7 @@ const handleImage = async (filePath: string) => {
         })
     }
 
-    const date = rawMeta?.DateTime?.value[0].split(' ')[0].split(':').join('-');
+    const date = rawMeta?.DateTime?.value[0].split(' ')[0].split(':').join('-')
     const time = rawMeta?.DateTime?.value[0].split(' ')[1]
     const dateTime = new Date([date, time].join(' '))
 
@@ -252,7 +254,7 @@ export const fileToMedium = async ({
             title: path.parse(originalName).name,
             description: '',
             ...info.data,
-            meta: info.meta,
+            // meta: info.meta,
             owner: {
                 connect: {
                     id: user

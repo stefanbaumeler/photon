@@ -1,12 +1,12 @@
-query QAlbums($idMedium: ID) {
-    albums(idMedium: $idMedium) {
+query QAlbums {
+    albums {
         id
         title
         description
         dateCreated
         dateModified
         cover {
-            ...FMedia
+            id
         }
         owner {
             id

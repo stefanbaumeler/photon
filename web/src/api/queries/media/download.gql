@@ -1,5 +1,5 @@
-query QDownload($media: [ID!]!) {
-    download(media: $media) {
+query QDownload($ids: [String!]!) {
+    download(ids: $ids) {
         url
     }
 }

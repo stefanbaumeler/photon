@@ -1,0 +1,5 @@
+mutation MDeleteAlbums($ids: [String!]!) {
+    deleteAlbums(ids: $ids) {
+        id
+    }
+}

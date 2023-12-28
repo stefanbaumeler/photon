@@ -1,5 +1,5 @@
-mutation MUpdateAlbum($idAlbum: ID!, $fields: AlbumInput!) {
-    updateAlbum(idAlbum: $idAlbum, fields: $fields) {
+mutation MUpdateAlbum($id: String!, $title: String, $description: String, $cover: String) {
+    updateAlbum(id: $id, title: $title, description: $description, cover: $cover) {
         id
     }
 }

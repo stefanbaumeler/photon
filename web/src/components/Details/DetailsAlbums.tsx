@@ -1,5 +1,5 @@
 import { useDetailsContext } from '@/providers'
-import { TAlbum, useQAlbums } from '@photon/schema'
+import { TAlbum } from '@photon/schema'
 import { useEffect, useMemo, useState } from 'react'
 import { Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
@@ -13,17 +13,17 @@ export const DetailsAlbums = () => {
     const [albums, setAlbums] = useState<TAlbum[]>()
     const { t } = useTranslation()
 
-    const [albumsResult] = useQAlbums({
-        variables: {
-            idMedium: details.medium.id
-        }
-    })
-
-    useEffect(() => {
-        if (albumsResult.data) {
-            setAlbums(albumsResult.data.albums)
-        }
-    }, [albumsResult.data])
+    // const [albumsResult] = useQAlbumsOfMedium({
+    //     variables: {
+    //         id: details.medium.id
+    //     }
+    // })
+    //
+    // useEffect(() => {
+    //     if (albumsResult.data) {
+    //         setAlbums(albumsResult.data.albums)
+    //     }
+    // }, [albumsResult.data])
 
     const a = useMemo(() => {
         const DetailsAlbum = ({ album }: { album: TAlbum}) => {

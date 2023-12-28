@@ -14,13 +14,13 @@
     },
     "engineStrict": true,
     "scripts": {
-        "dev": "NODE_ENV=development run-s start:docker watch",
+        "dev": "NODE_ENV=test run-s start:docker watch",
         "prod:api": "run-s start:docker watch:api",
         "watch": "run-p watch:*",
         "watch:api": "nx run @photon/api:watch",
         "watch:web": "nx run @photon/web:watch",
-        "watch:schema": "run-p schema:*",
         "watch:resources": "run-p resources:*",
+        "schema": "run-p schema:*",
         "schema:generate": "graphql-codegen -c graphql.ts -w",
         "schema:compile": "nx run @photon/schema:build",
         "resources:web": "nx run @photon/web:generate && nx watch --projects=@photon/resources -- nx run @photon/web:generate",
@@ -43,16 +43,18 @@
         "seed-and-test": "start-server-and-test test:watch 11011 test:all"
     },
     "dependencies": {
+        "@graphql-codegen/cli": "^5.0.0",
+        "@types/supertest": "^2.0.16",
         "dotenv": "^16.3.1",
-        "graphql": "^16.6.0",
-        "typescript": "^4.7.4"
+        "graphql": "^16.8.1",
+        "typescript": "^5.2.2"
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^12.2.3",
         "@testing-library/jest-dom": "^5.16.5",
         "@types/jest": "^29.2.5",
-        "@typescript-eslint/eslint-plugin": "^5.29.0",
-        "@typescript-eslint/parser": "^5.29.0",
+        "@typescript-eslint/eslint-plugin": "^6.9.0",
+        "@typescript-eslint/parser": "^6.9.0",
         "eslint": "^8.20.0",
         "eslint-plugin-react": "^7.30.1",
         "jest": "^29.3.1",
@@ -60,6 +62,7 @@
         "nx": "16.2.2",
         "nx-cloud": "latest",
         "start-server-and-test": "^1.15.2",
+        "supertest": "^6.3.3",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1"
     }

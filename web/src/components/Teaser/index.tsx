@@ -1,9 +1,9 @@
 import { TeaserProvider } from './TeaserContext'
 import TeaserComponent from './Teaser'
-import { TAlbum, TMedium } from '@photon/schema'
+import { TQAlbums, TQMedia } from '@photon/schema'
 
 type Props = {
-    element: TMedium | TAlbum
+    element: TQMedia['media'][number] | TQAlbums['albums'][number]
     width?: number
     height?: number
 }

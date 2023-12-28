@@ -9,15 +9,21 @@ export const useUpdateAlbum = (id: string, title: string) => {
     const [, updateAlbumTitle] = useMUpdateAlbum()
 
     return () => {
-        Promise.all([removeFromAlbum({
-            idAlbum: `${id}`,
-            media: [...selection.selected].map((s) => s.id)
-        }), updateAlbumTitle({
-            idAlbum: id,
-            fields: {
-                title
-            }
-        })]).then(() => {
+        const promises = []
+
+        if (selection.selected.size) {
+            promises.push(removeFromAlbum({
+                idAlbum: `${id}`,
+                media: [...selection.selected].map((s) => s.id)
+            }))
+        }
+
+        promises.push(updateAlbumTitle({
+            id,
+            title
+        }))
+
+        Promise.all(promises).then(() => {
             selection.clear()
         })
     }

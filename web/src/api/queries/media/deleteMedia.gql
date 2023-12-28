@@ -1,4 +1,4 @@
-mutation MDeleteMedia($ids: [ID!]!) {
+mutation MDeleteMedia($ids: [String!]!) {
     deleteMedia(ids: $ids) {
         id
     }

@@ -1,4 +1,4 @@
-query QAlbum($id: ID!) {
+query QAlbum($id: String!) {
     album(id: $id) {
         id
         title
@@ -10,6 +10,8 @@ query QAlbum($id: ID!) {
         }
         owner {
             id
+            firstName
+            lastName
         }
         media {
             ...FMedia

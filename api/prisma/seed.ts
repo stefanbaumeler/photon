@@ -34,7 +34,7 @@ export async function seedDatabase (setup: string, force = false) {
             fs.unlinkSync(path.join(uploadsDir, file))
         }
 
-        await zip.extractAllTo(uploadsDir)
+        zip.extractAllTo(uploadsDir)
     }
 
     if (fs.existsSync(zipPath) && !force) {
@@ -46,7 +46,7 @@ export async function seedDatabase (setup: string, force = false) {
         https.get(`https://stefan-baumeler.com/photon/${setup}-data.zip`, async (response) => {
             response.pipe(download)
 
-            await download.on('finish', async () => {
+            download.on('finish', async () => {
                 download.close()
                 await unzip()
             })

@@ -1,6 +1,11 @@
 fragment FMedia on Medium {
     dateCreated
     dateModified
+    dateModifiedStatus
+    hash
+    tags {
+        id
+    }
     dateTaken
     id
     filenameDisk

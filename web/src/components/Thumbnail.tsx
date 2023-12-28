@@ -13,8 +13,6 @@ export const Thumbnail = ({
 }: TThumbnail) => {
     const { t } = useTranslation()
 
-    const [medium, setMedium] = useState<TMedium>()
-
     const [mediumQuery] = useQMedium({
         variables: {
             id: `${idMedium}`
@@ -26,11 +24,7 @@ export const Thumbnail = ({
         ['empty', !title?.length]
     ])
 
-    useEffect(() => {
-        if (mediumQuery.data) {
-            setMedium(mediumQuery.data.medium as TMedium)
-        }
-    }, [mediumQuery.data])
+    const medium = mediumQuery.data?.medium
 
     if (type === EThumbnailType.ADD) {
         return <button
@@ -56,19 +50,15 @@ export const Thumbnail = ({
             return <></>
         }
 
-        if (!medium.filenameDisk) {
+        if (!medium?.filenameDisk) {
             return <></>
         }
 
         return <img
             className="thumbnail__image"
-            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=100`}
+            src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium?.filenameDisk}?w=100`}
             alt=""
         />
-    }
-
-    if (!medium) {
-        return <></>
     }
 
     return <button
