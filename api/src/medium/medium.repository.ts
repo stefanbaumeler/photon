@@ -41,12 +41,12 @@ export class MediumRepository {
     }
 
     async findOneByIdOrHash (dto: Pick<Prisma.MediumCreateInput, 'id'|'hash'>, include?: Prisma.MediumInclude) {
-        return await this.prisma.medium.findFirst({
+        return this.prisma.medium.findFirst({
             where: {
-                OR: {
+                OR: [{
                     hash: dto.hash,
                     id: dto.id
-                }
+                }]
             },
             include
         })
