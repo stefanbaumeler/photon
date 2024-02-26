@@ -2,6 +2,7 @@ import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext
 import { useKeyboard } from '@/hooks'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '.'
+import { TMedium } from '@photon/schema'
 
 export const Media = () => {
     const selection = useSelectionContext()
@@ -21,7 +22,7 @@ export const Media = () => {
     }
 
     if (layout.layout === ELayout.LIST) {
-        return <ListView elements={media} />
+        return <ListView elements={media as TMedium[]} />
     }
 
     if (layout.layout === ELayout.MAP) {

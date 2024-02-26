@@ -40,7 +40,7 @@ const DetailsProvider = ({ children }: Props) => {
 
     useEffect(() => {
         if (mediumQuery.data) {
-            setMedium(mediumQuery.data.medium)
+            setMedium(mediumQuery.data.medium as TMedium)
             setActive(!!mediumQuery.data.medium)
         }
     }, [mediumQuery.data])

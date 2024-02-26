@@ -37,7 +37,7 @@ export const ListItemControls = ({ element }: Props) => {
 
         moreItems.push(<ArchiveControl
             dropdown={true}
-            media={[element]}
+            media={[element.id]}
             callback={toggleDropdown}
         />)
     }

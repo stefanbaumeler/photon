@@ -5,6 +5,7 @@ import { GallerySection } from './GallerySection'
 import { useSearchContext, useSelectionContext, useSortContext } from '@/providers'
 import { Scrollbar } from '@/components'
 import { sortMediaByDate } from '@/util/sort'
+import { TMedium } from '@photon/schema'
 
 export const GalleryView = () => {
     const selection = useSelectionContext()
@@ -40,7 +41,7 @@ export const GalleryView = () => {
                     : formatDate(medium.dateTaken) === groupDate || !medium.dateTaken && formatDate(medium.dateCreated) === groupDate
             })
 
-            const sortedMedia = sortMediaByDate(mediaMatchingThisGroup, sort.sort)
+            const sortedMedia = sortMediaByDate(mediaMatchingThisGroup as TMedium[], sort.sort)
 
             if (!sortedMedia.length) {
                 return

@@ -24,14 +24,6 @@ export const ArchiveControl = ({
     const search = useSearchContext()
     const router = useRouter()
 
-    const [two] = useQMedium({
-        variables: {
-            id: '9b004ea9-996f-4c18-92e3-bec2b9051585'
-        },
-        requestPolicy: 'cache-only'
-    })
-    console.log('the one', two)
-
     const [mediaWithStatus] = useQMedia({
         variables: {
             ids: media
@@ -39,17 +31,19 @@ export const ArchiveControl = ({
         requestPolicy: 'cache-first'
     })
 
-    console.log('the data', mediaWithStatus.data)
-
     const shouldArchive = mediaWithStatus.data?.media[0].status !== EMediumStatus.ARCHIVED
 
     const archive = useSetMediaStatus({
-        media,
+        media: media.map((medium) => ({
+            id: medium
+        })),
         status: EMediumStatus.ARCHIVED
     })
 
     const unarchive = useSetMediaStatus({
-        media,
+        media: media.map((medium) => ({
+            id: medium
+        })),
         status: EMediumStatus.ALL
     })
 

@@ -3,7 +3,6 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useAddToFavorites, useRemoveFromFavorites, useKeyboard } from '@/hooks'
-import { TMedium } from '@photon/schema'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 
 type Props = {
@@ -22,9 +21,8 @@ export const FavoriteControl = ({
 
     const hasUnfavorited = !!media.find((selected) => selected.favoredBy?.length === 0)
 
-    const ids = media.map(({ id }) => id)
-    const addToFavorites = useAddToFavorites(ids)
-    const removeFromFavorites = useRemoveFromFavorites(ids)
+    const addToFavorites = useAddToFavorites(media)
+    const removeFromFavorites = useRemoveFromFavorites(media)
 
     const action = () => {
         if (hasUnfavorited) {
