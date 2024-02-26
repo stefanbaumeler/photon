@@ -2,39 +2,18 @@ import * as Icons from '@mdi/js'
 import { useTeaserContext } from './TeaserContext'
 import { Dropdown, Button } from '@/components'
 import { useState } from 'react'
-import { TVideoMeta } from '@photon/schema'
-import { secondsToTime } from '@/util/date'
-import Icon from '@mdi/react'
-import { isMedium } from '@/util/is'
-import { DeleteControl, DownloadControl } from '@/components/controls'
-import { EMediumStatus } from '@/types/app'
+import { DeleteControl } from '@/components/controls'
 
-export const TeaserTopRightCorner = () => {
-    const { element } = useTeaserContext()
+export const TeaserNavControl = () => {
+    const { id } = useTeaserContext()
 
     const [moreActive, setMoreActive] = useState(false)
-
-    if (isMedium(element)) {
-        if (element.mimetype.startsWith('video')) {
-            const meta = element.meta as TVideoMeta
-            const seconds = secondsToTime(meta.duration)
-            return <div className="teaser__nav">
-                {seconds}
-                <Icon
-                    path={Icons.mdiPlayCircleOutline}
-                    size={.75}
-                />
-            </div>
-        }
-
-        return <></>
-    }
 
     const moreItems = [
         <DeleteControl
             dropdown={true}
             callback={() => setMoreActive(false)}
-            elements={[element]}
+            elements={[id]}
             key={0}
         />
         // <DownloadControl

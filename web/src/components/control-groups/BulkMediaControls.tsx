@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { TrashControls } from '@/components/control-groups'
 import { FavoriteControl, ArchiveControl, DeleteControl, DownloadControl, AddToControl } from '@/components/controls'
-import { isMedia } from '@/util/is'
 
 export const BulkMediaControls = () => {
     const { t } = useTranslation()
@@ -24,7 +23,7 @@ export const BulkMediaControls = () => {
         setMoreActive(false)
     }
 
-    if (selection.mode !== ESelectionMode.SELECT || !selected.length || !isMedia(selected)) {
+    if (selection.mode !== ESelectionMode.SELECT) {
         return <></>
     }
 

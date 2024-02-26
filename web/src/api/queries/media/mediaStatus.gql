@@ -1,0 +1,5 @@
+query QMediaStatus($ids: [String!]!) {
+    media(ids: $ids) {
+        ...FMedia
+    }
+}

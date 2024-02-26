@@ -1,7 +1,7 @@
 import { EMediumSort } from '@/types/app'
-import { TMedium } from '@photon/schema'
+import { TQMedia } from '@photon/schema'
 
-export const sortMediaByDate = (media: TMedium[], sortBy: EMediumSort) => {
+export const sortMediaByDate = (media: TQMedia['media'], sortBy: EMediumSort) => {
     return [...media].sort((a, b) => {
         const sortByIndex = sortBy === EMediumSort.RECENT ? 'dateCreated' : 'dateTaken'
 

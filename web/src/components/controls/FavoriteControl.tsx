@@ -7,7 +7,7 @@ import { TMedium } from '@photon/schema'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 
 type Props = {
-    media: TMedium[]
+    media: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void

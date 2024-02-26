@@ -1,30 +1,49 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { TAlbum, TMedium, TQAlbums, TQMedia } from '@photon/schema'
+import { TMedium } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
-    element: TQMedia['media'][number] | TQAlbums['albums'][number]
-    width?: number
-    height?: number
+    id: string
+    href: string
+    displayWidth?: number
+    displayHeight?: number
+    nativeWidth: number
+    nativeHeight: number
+    cover?: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype'>
+    draggable: boolean
+    selectable: boolean
+    onOpen?: () => void
+    topLeftControls?: ReactNode
+    topRightControls?: ReactNode
+    bottomLeftControls?: ReactNode
+    bottomRightControls?: ReactNode
+    content?: ReactNode
 }
 
 interface TeaserContext {
-    element: TQMedia['media'][number] | TQAlbums['albums'][number]
-    width?: number
-    height?: number
+    id: string
+    href: string
+    displayWidth?: number
+    displayHeight?: number
+    nativeWidth: number
+    nativeHeight: number
+    cover?: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype'>
+    draggable: boolean
+    selectable: boolean
+    onOpen?: () => void
+    topLeftControls?: ReactNode
+    topRightControls?: ReactNode
+    bottomLeftControls?: ReactNode
+    bottomRightControls?: ReactNode
+    content?: ReactNode
 }
 
 const TeaserContext = createContext<TeaserContext | null>(null)
 
 const TeaserProvider = ({
-    children, element, width, height
+    children, ...teaser
 }: Props) => {
-    return <TeaserContext.Provider value={{
-        element,
-        width,
-        height
-    }}
-    >
+    return <TeaserContext.Provider value={teaser}>
         {children}
     </TeaserContext.Provider>
 }

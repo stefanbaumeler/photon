@@ -9,7 +9,7 @@ type User {
   mail: String!
   firstName: String!
   lastName: String!
-  favorites: Medium!
+  favorites: [Medium!]!
   language: String!
 }
 
@@ -41,7 +41,7 @@ type Medium {
   meta: Meta!
   owner: User!
   uploader: User!
-  hash: String!
+  hash: String
   favoredBy: [User!]
   tags: [Tag!]!
   country: String!
@@ -112,7 +112,7 @@ type Query {
   mediumAlbums(id: String!): [Album!]!
   album(id: String!): Album!
   albumMedia(id: String!): [Medium!]!
-  media(status: String, favorites: Boolean, q: String, album: String, sort: String): [Medium!]!
+  media(status: String, favorites: Boolean, q: String, album: String, sort: String, ids: [String!]): [Medium!]!
   medium(id: String!): Medium!
   archive: [Medium!]!
   trash: [Medium!]!

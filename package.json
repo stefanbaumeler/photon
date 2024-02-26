@@ -19,7 +19,6 @@
         "watch": "run-p watch:*",
         "watch:api": "nx run @photon/api:watch",
         "watch:web": "nx run @photon/web:watch",
-        "watch:resources": "run-p resources:*",
         "schema": "run-p schema:*",
         "schema:generate": "graphql-codegen -c graphql.ts -w",
         "schema:compile": "nx run @photon/schema:build",
@@ -44,12 +43,14 @@
     },
     "dependencies": {
         "@graphql-codegen/cli": "^5.0.0",
+        "@graphql-codegen/typescript-urql-graphcache": "^3.0.0",
         "@types/supertest": "^2.0.16",
         "dotenv": "^16.3.1",
         "graphql": "^16.8.1",
         "typescript": "^5.2.2"
     },
     "devDependencies": {
+        "@graphql-eslint/eslint-plugin": "^3.20.1",
         "@next/eslint-plugin-next": "^12.2.3",
         "@testing-library/jest-dom": "^5.16.5",
         "@types/jest": "^29.2.5",
@@ -61,7 +62,7 @@
         "npm-run-all": "^4.1.5",
         "nx": "16.2.2",
         "nx-cloud": "latest",
-        "start-server-and-test": "^1.15.2",
+        "start-server-and-test": "^2.0.3",
         "supertest": "^6.3.3",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1"

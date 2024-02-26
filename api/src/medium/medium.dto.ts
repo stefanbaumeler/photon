@@ -121,4 +121,9 @@ export class MediumFilterDto {
         nullable: true
     })
         sort?: string
+
+    @Field(() => [String], {
+        nullable: true
+    })
+        ids?: string[]
 }

@@ -3,14 +3,14 @@ import { EMediumStatus } from '@/types/app'
 import { useSortContext } from '@/providers/SortProvider'
 import { useRouter } from 'next/router'
 import { sortMediaByDate } from '@/util/sort'
-import { TMedium, useQMedia } from '@photon/schema'
+import { TQMedia, useQMedia } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
 }
 
 interface SearchContext {
-    hits: TMedium[]
+    hits: TQMedia['media']
     status: EMediumStatus
     setStatus: Dispatch<SetStateAction<EMediumStatus>>
     favorites: boolean
@@ -31,7 +31,7 @@ const SearchProvider = ({ children }: Props) => {
     const [query, setQuery] = useState('')
     const { sort } = useSortContext()
 
-    const [media] = useQMedia({
+    const [{ data: media }] = useQMedia({
         variables: {
             status,
             sort,
@@ -41,7 +41,7 @@ const SearchProvider = ({ children }: Props) => {
         }
     })
 
-    const sortedMedia = sortMediaByDate(media.data?.media || [], sort)
+    const sortedMedia = sortMediaByDate(media?.media || [], sort)
 
     return <SearchContext.Provider value={{
         hits: sortedMedia,

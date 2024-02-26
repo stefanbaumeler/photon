@@ -7,6 +7,18 @@ query QAlbums {
         dateModified
         cover {
             id
+            mimetype
+            filenameDisk
+            meta {
+                ...on ImageMeta {
+                    width
+                    height
+                }
+                ...on VideoMeta {
+                    width
+                    height
+                }
+            }
         }
         owner {
             id

@@ -1,9 +1,5 @@
 query QMedium($id: String!) {
     medium(id: $id) {
         ...FMedia,
-        owner {
-            firstName
-            lastName
-        }
     }
 }

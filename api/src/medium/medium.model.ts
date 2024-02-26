@@ -5,7 +5,7 @@ import { Meta } from '../meta/meta.model'
 import { Tag } from '../tag/tag.model'
 @ObjectType()
 export class Medium {
-    @Field(() => String)
+    @Field(() => String!)
         id!: TMedium['id']
 
     @Field(() => Date)
@@ -52,8 +52,10 @@ export class Medium {
     @Field(() => User)
         uploader!: TMedium['uploader']
 
-    @Field(() => String)
-        hash!: TMedium['hash']
+    @Field(() => String, {
+        nullable: true
+    })
+        hash?: TMedium['hash']
 
     @Field(() => [User], {
         nullable: true

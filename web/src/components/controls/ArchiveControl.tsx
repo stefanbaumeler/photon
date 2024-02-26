@@ -2,14 +2,14 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema'
+import { TMedium, useQMedia, useQMediaStatus, useQMedium } from '@photon/schema'
 import { useKeyboard, useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
 
 type Props = {
-    media: TMedium[]
+    media: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
@@ -24,7 +24,24 @@ export const ArchiveControl = ({
     const search = useSearchContext()
     const router = useRouter()
 
-    const shouldArchive = Array.from(media)[0]?.status !== EMediumStatus.ARCHIVED
+    const [two] = useQMedium({
+        variables: {
+            id: '9b004ea9-996f-4c18-92e3-bec2b9051585'
+        },
+        requestPolicy: 'cache-only'
+    })
+    console.log('the one', two)
+
+    const [mediaWithStatus] = useQMedia({
+        variables: {
+            ids: media
+        },
+        requestPolicy: 'cache-first'
+    })
+
+    console.log('the data', mediaWithStatus.data)
+
+    const shouldArchive = mediaWithStatus.data?.media[0].status !== EMediumStatus.ARCHIVED
 
     const archive = useSetMediaStatus({
         media,

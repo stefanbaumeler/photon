@@ -33,7 +33,7 @@ const ListItem = ({ element }: Props) => {
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        selection.toggle(element)
+        selection.toggle(element.id)
     }
 
     const open = () => {
@@ -106,7 +106,7 @@ const ListItem = ({ element }: Props) => {
             <Check
                 onClick={select}
                 ready={true}
-                checked={selection.isSelected(element)}
+                checked={selection.isSelected(element.id)}
                 round={false}
                 iconSize={1.125}
                 borderColor="#888899"

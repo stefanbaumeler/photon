@@ -31,7 +31,6 @@ export class UserService {
         const tokens = this.createTokens(user.id, user.mail)
 
         this.setUserCookies(tokens, res)
-
         return {
             ...tokens,
             user

@@ -70,6 +70,12 @@ export class MediumService {
                     id: dto.album
                 }, conditions, this.includeAll())
             }
+
+            if (dto.ids) {
+                conditions.id = {
+                    in: dto.ids
+                }
+            }
         }
 
         return this.repository.findMany(conditions,  this.includeAll())
@@ -79,6 +85,7 @@ export class MediumService {
         return {
             owner: true,
             uploader: true,
+            tags: true,
             favoredBy: {
                 where: {
                     id: this.cls.get('userId')
@@ -87,8 +94,8 @@ export class MediumService {
         }
     }
 
-    async getById (args: IdDto) {
-        return this.repository.findOneById(args, this.includeAll())
+    async getById (dto: IdDto) {
+        return this.repository.findById(dto, this.includeAll())
     }
 
     async getByFilenameDisk (dto: MediumFilenameDiskDto) {
@@ -147,7 +154,7 @@ export class MediumService {
     }
 
     async rotate (dto: IdDto) {
-        const medium = await this.repository.findOneById(dto)
+        const medium = await this.repository.findById(dto)
 
         if (!medium) {
             return
@@ -155,7 +162,7 @@ export class MediumService {
 
         const filePath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
         const filePathOld = path.join(__dirname, '../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
-        await fs.renameSync(filePath, filePathOld)
+        fs.renameSync(filePath, filePathOld)
 
         const row = await sharp(filePathOld).rotate(90).toFile(filePath)
 

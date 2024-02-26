@@ -64,7 +64,8 @@ export enum ESelectionMode {
     SELECT = 'SELECT',
     DELETE = 'DELETE',
     SINGLE = 'SINGLE',
-    OFF = 'OFF'
+    OFF = 'OFF',
+    ALBUMS = 'ALBUMS'
 }
 
 export enum EThumbnailType {

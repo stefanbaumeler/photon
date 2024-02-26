@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { useSelectionContext } from '@/providers'
 import { DeleteControl, DownloadControl } from '@/components/controls'
-import { isAlbums } from '@/util/is'
 
 export const BulkAlbumsControls = () => {
     const { t } = useTranslation()
@@ -13,7 +12,7 @@ export const BulkAlbumsControls = () => {
     const selection = useSelectionContext()
     const selected = [...selection.selected]
 
-    if (selection.mode !== ESelectionMode.SELECT || !selected.length || !isAlbums(selected)) {
+    if (selection.mode !== ESelectionMode.ALBUMS) {
         return <></>
     }
 

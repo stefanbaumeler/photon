@@ -11,14 +11,14 @@ export class MediumRepository {
     }
 
     async findMany (conditions?: Prisma.MediumWhereInput, include?: Prisma.MediumInclude) {
-        return await this.prisma.medium.findMany({
+        return this.prisma.medium.findMany({
             where: conditions,
             include
         })
     }
 
-    async findOneById (dto: IdDto, include?: Prisma.MediumInclude) {
-        return this.prisma.medium.findUnique({
+    async findById (dto: IdDto, include?: Prisma.MediumInclude) {
+        return this.prisma.medium.findFirst({
             where: {
                 id: dto.id
             },
@@ -77,8 +77,8 @@ export class MediumRepository {
         return album?.media
     }
 
-    createOne = async (medium: Prisma.MediumCreateInput, include?: Prisma.MediumInclude) => {
-        return await this.prisma.medium.create({
+    async createOne (medium: Prisma.MediumCreateInput, include?: Prisma.MediumInclude) {
+        return this.prisma.medium.create({
             data: medium,
             include
         })
@@ -125,7 +125,7 @@ export class MediumRepository {
             id, ...data
         } = dto
 
-        return await this.prisma.medium.update({
+        return this.prisma.medium.update({
             where: {
                 id
             },
@@ -138,7 +138,7 @@ export class MediumRepository {
             ids, ...data
         } = dto
 
-        return await this.prisma.medium.updateMany({
+        return this.prisma.medium.updateMany({
             where: {
                 id: {
                     in: ids

@@ -33,6 +33,8 @@ const LoginPage = () => {
                 password
             })
 
+            console.log(res)
+
             data = res.data.signIn
         }
 

@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { UserLanguageDto, UserSignUpDto } from './user.dto'
-import { JwtService } from '@nestjs/jwt'
-import { ConfigService } from '@nestjs/config'
 import { ClsService } from 'nestjs-cls'
 
 @Injectable()
@@ -29,13 +27,29 @@ export class UserRepository {
         return this.prisma.user.findFirst({
             where: {
                 mail
+            },
+            include: {
+                favorites: {
+                    include: {
+                        owner: true,
+                        uploader: true
+                    }
+                }
             }
         })
     }
 
     async signUp (dto: UserSignUpDto) {
         return this.prisma.user.create({
-            data: dto
+            data: dto,
+            include: {
+                favorites: {
+                    include: {
+                        owner: true,
+                        uploader: true
+                    }
+                }
+            }
         })
     }
 

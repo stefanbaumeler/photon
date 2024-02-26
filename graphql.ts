@@ -13,12 +13,19 @@ export default {
         }
     },
     generates: {
+        './packages/schema/introspection.json': {
+            plugins: ['introspection'],
+            config: {
+                minify: true
+            }
+        },
         './packages/schema/index.ts': {
             plugins: [
                 'typescript',
                 'typescript-resolvers',
                 'typescript-operations',
                 'typescript-urql',
+                'typescript-urql-graphcache',
                 {
                     add: {
                         content: 'import { FileUpload } from \'graphql-upload-minimal\''

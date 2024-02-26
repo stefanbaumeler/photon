@@ -1,5 +1,5 @@
 import { Teaser } from '@/components'
-import { TAlbum, TMedium, TQAlbums, TQMedia } from '@photon/schema'
+import { TQAlbums, TQMedia } from '@photon/schema'
 
 type Props = {
     elements: TQMedia['media'] | TQAlbums['albums']

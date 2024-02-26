@@ -1,13 +1,13 @@
-import { TMedium } from '@photon/schema'
 import { forwardRef, Ref, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useDetailsContext, useLayoutContext } from '@/providers'
 import bem from '../util/bem'
 import { ELayout } from '@/types/app'
 import { useRouter } from 'next/router'
+import { TMedium } from '@photon/schema'
 
 type Props = {
-    medium: TMedium
+    medium: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype' | 'meta'>
     width: number
     testId?: string
     priority?: boolean

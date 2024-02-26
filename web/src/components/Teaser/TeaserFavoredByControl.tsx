@@ -1,12 +1,15 @@
-import { useTeaserContext } from './TeaserContext'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import { isMedium } from '@/util/is'
 
-export const TeaserBottomLeftCorner = () => {
-    const { element } = useTeaserContext()
+type Props = {
+    count: number
+    displayCount?: boolean
+}
 
-    if (!isMedium(element) || !element.favoredBy?.length) {
+export const TeaserFavoredByControl = ({
+    count, displayCount = false
+}: Props) => {
+    if (!count) {
         return <></>
     }
 
@@ -17,5 +20,6 @@ export const TeaserBottomLeftCorner = () => {
             className="teaser__favorite"
             size={1}
         />
+        {displayCount ? count : undefined}
     </div>
 }

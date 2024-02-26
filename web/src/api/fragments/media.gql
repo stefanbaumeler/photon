@@ -1,4 +1,7 @@
 fragment FMedia on Medium {
+    ...FMediaStatus
+    id
+    __typename
     dateCreated
     dateModified
     dateModifiedStatus
@@ -7,7 +10,6 @@ fragment FMedia on Medium {
         id
     }
     dateTaken
-    id
     filenameDisk
     filenameDownload
     title
@@ -17,7 +19,6 @@ fragment FMedia on Medium {
     region
     place
     address
-    status
     mimetype
     favoredBy {
         id

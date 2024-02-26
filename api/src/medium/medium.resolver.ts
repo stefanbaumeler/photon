@@ -21,7 +21,7 @@ export class MediumResolver {
 
     @Query(() => Medium)
     async medium (@Args() dto: IdDto) {
-        return this.service.getById(dto)
+        return await this.service.getById(dto)
     }
 
     @Query(() => [Medium])

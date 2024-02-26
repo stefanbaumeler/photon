@@ -3,20 +3,14 @@ import * as Icons from '@mdi/js'
 import { useTeaserContext } from './TeaserContext'
 import bem from '@/util/bem'
 import { ESelectionMode } from '@/types/app'
-import { useDetailsContext, useSelectionContext } from '@/providers'
-import { isMedium } from '@/util/is'
+import { useSelectionContext } from '@/providers'
 
-export const TeaserBottomRightCorner = () => {
-    const { element } = useTeaserContext()
+export const TeaserOpenFallbackControl = () => {
+    const { onOpen } = useTeaserContext()
     const selection = useSelectionContext()
-    const details = useDetailsContext()
-
-    if (!isMedium(element)) {
-        return <></>
-    }
 
     const open = () => {
-        details.open(element.id)
+        onOpen()
     }
 
     const fallbackButtonClasses = bem('teaser__open-fallback', [

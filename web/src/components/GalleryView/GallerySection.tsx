@@ -37,8 +37,8 @@ export const GallerySection = ({
 
         return media.map((medium, k) => <Teaser
             element={medium}
-            width={dimensions[k].width}
-            height={dimensions[k].height}
+            displayWidth={dimensions[k].width}
+            displayHeight={dimensions[k].height}
             key={k}
         />)
     }, [containerWidth, media])
@@ -58,7 +58,7 @@ export const GallerySection = ({
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        selection.toggle(media)
+        selection.toggle(media.map((medium) => medium.id))
     }
 
     const classes = bem('gallery-section', [
@@ -80,7 +80,7 @@ export const GallerySection = ({
                     backgroundColor="#F0F0F0"
                     onClick={select}
                     ready={false}
-                    checked={selection.isSelected(media)}
+                    checked={selection.isSelected(media.map((medium) => medium.id))}
                     remove={selection.mode === ESelectionMode.DELETE}
                 />
             </div>

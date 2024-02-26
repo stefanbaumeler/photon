@@ -8,10 +8,10 @@ export const isMedia = (elements: (TAlbum | TMedium)[]): elements is TMedium[] =
     return !elements.find((element) => !isMedium(element))
 }
 
-export const isMedium = (element: { __typename?: string })  => {
-    return element.__typename === 'Medium'
+export const isMedium = (element: { __typename?: string }): element is TMedium  => {
+    return element?.__typename === 'Medium'
 }
 
-export const isAlbum = (element: TMedium | TAlbum): element is TAlbum  => {
-    return element.__typename === 'Album'
+export const isAlbum = (element: { __typename?: string }): element is TAlbum  => {
+    return element?.__typename === 'Album'
 }

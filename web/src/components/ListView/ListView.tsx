@@ -2,7 +2,7 @@ import { TAlbum, TMedium } from '@photon/schema'
 import ListItem from './ListItem'
 
 type Props = {
-    elements: (TMedium | TAlbum)[]
+    elements: TMedium[] | TAlbum[]
 }
 
 export const ListView = ({ elements }: Props) => {

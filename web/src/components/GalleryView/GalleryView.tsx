@@ -8,13 +8,15 @@ import { sortMediaByDate } from '@/util/sort'
 
 export const GalleryView = () => {
     const selection = useSelectionContext()
-    const { hits: media } = useSearchContext()
+    const { hits: elements } = useSearchContext()
     const sort = useSortContext()
 
     const [sections, setSections] = useState([])
 
     useEffect(() => {
-        const groups = media.filter((medium) => selection.mode === ESelectionMode.DELETE ? !selection.selected.has(medium) : true)
+        const media = elements || []
+
+        const groups = media.filter((medium) => selection.mode === ESelectionMode.DELETE ? !selection.selected.has(medium.id) : true)
             .map((medium) => {
                 const groupByDate = sort.sort === EMediumSort.RECENT ? medium.dateCreated : medium.dateTaken
 
@@ -52,7 +54,7 @@ export const GalleryView = () => {
         })
 
         setSections(newSections)
-    }, [selection.mode, selection.selected, media, sort.sort])
+    }, [selection.mode, selection.selected, elements, sort.sort])
 
     return <div className="gallery">
         <div className="gallery__sections">
