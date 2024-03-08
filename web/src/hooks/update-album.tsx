@@ -14,7 +14,7 @@ export const useUpdateAlbum = (id: string, title: string) => {
         if (selection.selected.size) {
             promises.push(removeFromAlbum({
                 idAlbum: `${id}`,
-                media: [...selection.selected].map((s) => s.id)
+                media: [...selection.selected]
             }))
         }
 

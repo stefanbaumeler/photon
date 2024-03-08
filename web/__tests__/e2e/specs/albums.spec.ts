@@ -37,16 +37,17 @@ test('can create from media', async ({ page }) => {
 
     await page.getByTestId('add-to').click()
 
+    await expect(page.getByTestId('thumbnail')).not.toHaveCount(0)
+
     await page.getByTestId('thumbnail-new').click()
-    await page.waitForNavigation()
 
-    expect(page.url()).toContain('/albums/')
+    await page.waitForURL('**/albums/**')
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(2)
+    await expect(page.getByTestId('teaser')).toHaveCount(2)
 
     await page.getByTestId('album-back').click()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
+    await expect(page.getByTestId('teaser')).toHaveCount(count + 1)
 })
 
 test('can create empty', async ({ page }) => {
@@ -57,7 +58,7 @@ test('can create empty', async ({ page }) => {
     await page.getByTestId('album-create').click()
     await page.getByTestId('album-back').click()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
+    await expect(page.getByTestId('teaser')).toHaveCount(count + 1)
 })
 
 test('can add media and avoids duplicates', async ({ page }) => {
@@ -73,7 +74,7 @@ test('can add media and avoids duplicates', async ({ page }) => {
         await page.getByTestId('add-to').click()
         await page.getByText('Test Album 3').click()
 
-        await page.waitForNavigation()
+        await page.waitForURL('**/albums/**')
 
         await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count + 1)
     }

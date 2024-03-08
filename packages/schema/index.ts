@@ -283,7 +283,6 @@ export type TUser = {
   __typename?: 'User';
   dateCreated: Scalars['DateTime']['output'];
   dateModified: Scalars['DateTime']['output'];
-  favorites: Array<TMedium>;
   firstName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   language: Scalars['String']['output'];
@@ -559,7 +558,6 @@ export interface TUploadScalarConfig extends GraphQLScalarTypeConfig<TResolversT
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
   dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
   dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   firstName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -634,10 +632,6 @@ export type TFMediaStatus = (
 export type TFUser = (
   { __typename?: 'User' }
   & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
-  & { favorites: Array<(
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
-  )> }
 );
 
 export type TMAddToAlbumVariables = Exact<{
@@ -1292,10 +1286,6 @@ export type TMChangeLanguage = (
   & { changeLanguage: (
     { __typename?: 'User' }
     & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
-    & { favorites: Array<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
-    )> }
   ) }
 );
 
@@ -1307,10 +1297,6 @@ export type TQProfile = (
   & { profile: (
     { __typename?: 'User' }
     & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
-    & { favorites: Array<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
-    )> }
   ) }
 );
 
@@ -1328,10 +1314,6 @@ export type TMSignIn = (
     & { user: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
-      & { favorites: Array<(
-        { __typename?: 'Medium' }
-        & Pick<TMedium, 'id'>
-      )> }
     ) }
   ) }
 );
@@ -1360,10 +1342,6 @@ export type TMSignUp = (
     & { user: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
-      & { favorites: Array<(
-        { __typename?: 'Medium' }
-        & Pick<TMedium, 'id'>
-      )> }
     ) }
   ) }
 );
@@ -1435,9 +1413,6 @@ export const FUser = gql`
   dateCreated
   dateModified
   mail
-  favorites {
-    id
-  }
   firstName
   lastName
   language
@@ -1973,7 +1948,6 @@ export type GraphCacheResolvers = {
   User?: {
     dateCreated?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['DateTime'] | string>,
     dateModified?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['DateTime'] | string>,
-    favorites?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Array<WithTypename<TMedium> | string>>,
     firstName?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
     language?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
@@ -2118,7 +2092,6 @@ export type GraphCacheUpdaters = {
   User?: {
     dateCreated?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     dateModified?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
-    favorites?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     firstName?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     language?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,

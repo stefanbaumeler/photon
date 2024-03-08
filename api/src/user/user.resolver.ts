@@ -17,10 +17,7 @@ export class UserResolver {
     @Public()
     @Mutation(() => UserTokenDto)
     async signIn (@Args() dto: UserSignInDto, @Context('res') res: Response) {
-        const r = await this.service.signIn(dto, res)
-        console.log(r.user)
-        return r
-        // return await this.service.signIn(dto, res)
+        return await this.service.signIn(dto, res)
     }
 
     @Mutation(() => Boolean)

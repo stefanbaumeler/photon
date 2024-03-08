@@ -3,10 +3,9 @@ import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useSetMediaStatus } from '@/hooks/'
 import { EMediumStatus } from '@/types/app'
-import { TMedium } from '@photon/schema'
 import { asArray } from '@/util/as'
 
-export const useRestoreMediaDialog = (media: TMedium[] | Set<TMedium> | TMedium) => {
+export const useRestoreMediaDialog = (media: string[]) => {
     const dialog = useDialogContext()
     const { t } = useTranslation()
 

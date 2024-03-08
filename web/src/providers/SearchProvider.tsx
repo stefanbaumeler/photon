@@ -41,7 +41,7 @@ const SearchProvider = ({ children }: Props) => {
         }
     })
 
-    const sortedMedia = sortMediaByDate(media?.media || [], sort)
+    const sortedMedia = sortMediaByDate<TQMedia['media']>(media?.media || [], sort)
 
     return <SearchContext.Provider value={{
         hits: sortedMedia,

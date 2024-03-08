@@ -10,10 +10,17 @@ import { AttributionControl,
 import { useDetailsContext, useSearchContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { Marker } from 'mapbox-gl'
-import { TMedium } from '@photon/schema'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
-import { Drawer, FilmStrip, Medium, Button } from '@/components'
+import { Drawer, FilmStrip, Medium, Button, TCover } from '@/components'
+
+type TMapItem = {
+    id: string
+    cover: TCover | null
+    width: number
+    location?: number[]
+    favoredBy: number
+}
 
 export const MapView = () => {
     const mapRef = useRef<MapRef>(null)
@@ -27,26 +34,36 @@ export const MapView = () => {
             marker: Marker
             feature: MapboxGeoJSONFeature
         }}>({})
-    const [markers, setMarkers] = useState<TMedium[]>([])
-    const [mediaInBounds, setMediaInBounds] = useState<TMedium[]>([])
-    const [unknown, setUnknown] = useState<TMedium[]>([])
+    const [markers, setMarkers] = useState<TMapItem[]>([])
+    const [mediaInBounds, setMediaInBounds] = useState<TMapItem[]>([])
+    const [unknown, setUnknown] = useState<TMapItem[]>([])
     const [unknownVisible, setUnknownVisible] = useState(false)
 
     useEffect(() => {
-        const markers: TMedium[] = []
-        const unknown: TMedium[] = []
+        const markers: TMapItem[] = []
+        const unknowns: TMapItem[] = []
 
         media.forEach((medium) => {
+            const marker = {
+                id: medium.id,
+                cover: medium,
+                width: medium.meta.width,
+                favoredBy: medium.favoredBy.length
+            }
+
             if (medium.location[0] && medium.location[1]) {
-                markers.push(medium)
+                markers.push({
+                    ...marker,
+                    location: medium.location
+                })
             }
             else {
-                unknown.push(medium)
+                unknowns.push(marker)
             }
         })
 
         setMarkers(markers)
-        setUnknown(unknown)
+        setUnknown(unknowns)
     }, [media])
 
     const NoLocationButton = () => {
@@ -191,6 +208,14 @@ export const MapView = () => {
 
             const newMediaInBounds = media.filter((medium) => {
                 return isOnMap(bounds, medium.location)
+            }).map((medium) => {
+                return {
+                    id: medium.id,
+                    cover: medium,
+                    width: medium.meta.width,
+                    location: medium.location,
+                    favoredBy: medium.favoredBy.length
+                }
             })
 
             setMediaInBounds(newMediaInBounds)
@@ -210,7 +235,7 @@ export const MapView = () => {
                 onClick={() => details.open(medium.id)}
             >
                 <Medium
-                    medium={medium}
+                    medium={medium.cover}
                     width={120}
                 />
             </div>

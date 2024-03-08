@@ -1,6 +1,5 @@
-import { TMedium, TUser } from '@photon/schema'
+import { TUser } from '@photon/schema'
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Medium } from '../medium/medium.model'
 @ObjectType()
 export class User {
     @Field(() => String)
@@ -20,9 +19,6 @@ export class User {
 
     @Field(() => String)
         lastName!: TUser['lastName']
-
-    @Field(() => [Medium])
-        favorites!: TUser['favorites']
 
     @Field(() => String)
         language!: TUser['language']

@@ -1,101 +1,60 @@
-import { TAlbum, TMedium } from '@photon/schema'
-import { Check, Medium } from '@/components'
+import { Check, Medium, TMediumListItem } from '@/components'
 import { ListItemControls } from '@/components/control-groups'
 import { formatDate } from '@/util/date'
 import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import Tippy from '@tippyjs/react'
-import { useRouter } from 'next/router'
-import { isMedium } from '@/util/is'
-import { ETrans } from '@/types/translations'
-import { useTranslation } from 'react-i18next'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
 
-type Props = {
-    element: TMedium | TAlbum
-}
-
-const ListItem = ({ element }: Props) => {
-    const router = useRouter()
+const MediumListItem = ({
+    id, title, cover, favoredBy, dateTaken, mimetype, owner
+}: TMediumListItem) => {
     const selection = useSelectionContext()
     const details = useDetailsContext()
-    const { t } = useTranslation()
 
-    const addToFavorites = useAddToFavorites([element.id])
-    const removeFromFavorites = useRemoveFromFavorites([element.id])
-
-    const cover = isMedium(element) ? element : element.cover
+    const addToFavorites = useAddToFavorites([id])
+    const removeFromFavorites = useRemoveFromFavorites([id])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
             selection.setMode(ESelectionMode.SELECT)
         }
 
-        selection.toggle(element.id)
+        selection.toggle(id)
     }
 
     const open = () => {
-        if (isMedium(element)) {
-            details.open(element.id)
-        } else {
-            router.push(`albums/${element.id}`)
-        }
+        details.open(id)
     }
 
     const CategoryCells = () => {
-        if (!isMedium(element)) {
-            return <></>
-        }
-
-        return <td
+        return favoredBy !== undefined ? <td
             className="list-view__cell"
-            onClick={element.favoredBy?.length ? removeFromFavorites : addToFavorites}
+            onClick={favoredBy ? removeFromFavorites : addToFavorites}
         >
             <Icon
-                path={element.favoredBy?.length ? Icons.mdiStar : Icons.mdiStarOutline}
+                path={favoredBy ? Icons.mdiStar : Icons.mdiStarOutline}
                 size={1}
             />
-        </td>
-    }
-
-    const AlbumCells = () => {
-        if (isMedium(element)) {
-            return <></>
-        }
-
-        return <>
-            <td
-                className="list-view__cell"
-                onClick={open}
-            >
-                {`${element.media.length} `}
-                {t(ETrans.ELEMENT, {
-                    count: element.media.length
-                })}
-            </td>
-        </>
+        </td> : undefined
     }
 
     const MediumCells = () => {
-        if (!isMedium(element)) {
-            return <></>
-        }
-
         return <>
-            <td
+            { dateTaken ? <td
                 className="list-view__cell"
                 onClick={open}
             >
-                {formatDate(element.dateTaken)}
-            </td>
-            <td
+                {formatDate(dateTaken)}
+            </td> : undefined}
+            {mimetype ? <td
                 className="list-view__cell"
                 onClick={open}
             >
-                {element.mimetype}
-            </td>
+                {mimetype}
+            </td> : undefined}
         </>
     }
 
@@ -106,7 +65,7 @@ const ListItem = ({ element }: Props) => {
             <Check
                 onClick={select}
                 ready={true}
-                checked={selection.isSelected(element.id)}
+                checked={selection.isSelected(id)}
                 round={false}
                 iconSize={1.125}
                 borderColor="#888899"
@@ -141,22 +100,22 @@ const ListItem = ({ element }: Props) => {
             className="list-view__cell list-view__cell--title"
             onClick={open}
         >
-            {element.title}
+            {title}
         </td>
         <MediumCells />
-        <AlbumCells />
         <td
             className="list-view__cell"
             onClick={open}
         >
-            {`${element.owner.firstName} ${element.owner.lastName}`}
+            {`${owner.firstName} ${owner.lastName}`}
         </td>
         <td className="list-view__cell">
             <ListItemControls
-                element={element}
+                element={id}
+                downloadElements={[id]}
             />
         </td>
     </tr>
 }
 
-export default ListItem
+export default MediumListItem

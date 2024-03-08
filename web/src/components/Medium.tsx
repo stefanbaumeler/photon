@@ -4,10 +4,10 @@ import { useDetailsContext, useLayoutContext } from '@/providers'
 import bem from '../util/bem'
 import { ELayout } from '@/types/app'
 import { useRouter } from 'next/router'
-import { TMedium } from '@photon/schema'
+import { TCover } from '@/components/GridView'
 
 type Props = {
-    medium: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype' | 'meta'>
+    medium: TCover | null
     width: number
     testId?: string
     priority?: boolean

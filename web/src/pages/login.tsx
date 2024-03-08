@@ -4,7 +4,6 @@ import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useUserContext } from '@/providers'
 import { initializeUrqlClient } from '@/api'
 
 enum ELoginFormMode {
@@ -22,7 +21,6 @@ const LoginPage = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const router = useRouter()
-    const user = useUserContext()
 
     const submit = useCallback(async () => {
         let data
@@ -49,7 +47,6 @@ const LoginPage = () => {
             data = res.data.signUp
         }
 
-        user.setUser(data.user)
         localStorage.photon = JSON.stringify({
             accessToken: data.accessToken,
             refreshToken: data.refreshToken
@@ -59,7 +56,7 @@ const LoginPage = () => {
             await router.push('/')
             initializeUrqlClient()
         }
-    }, [loginFormMode, signIn, signUp, firstName, lastName, mail, password, router, user])
+    }, [loginFormMode, signIn, signUp, firstName, lastName, mail, password, router])
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {

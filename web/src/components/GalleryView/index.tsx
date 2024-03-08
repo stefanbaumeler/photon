@@ -1,18 +1,20 @@
 import { GalleryProvider } from './GalleryContext'
 import { GalleryView as GV } from './GalleryView'
+import { TMedium } from '@photon/schema'
 
 type Props = {
     containerWidth?: number
     targetRowHeight?: number
+    elements: TMedium[]
 }
 
 export const GalleryView = ({
-    containerWidth, targetRowHeight
+    containerWidth, targetRowHeight, elements
 }: Props) => {
     return <GalleryProvider
         containerWidth={containerWidth}
         targetRowHeight={targetRowHeight}
     >
-        <GV />
+        <GV elements={elements} />
     </GalleryProvider>
 }

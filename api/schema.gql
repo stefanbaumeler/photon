@@ -9,7 +9,6 @@ type User {
   mail: String!
   firstName: String!
   lastName: String!
-  favorites: [Medium!]!
   language: String!
 }
 

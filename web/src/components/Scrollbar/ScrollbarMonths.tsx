@@ -1,8 +1,8 @@
-import { TYearCountEntry } from '@photon/schema'
+import { TQMediaYearCount } from '@photon/schema'
 import ScrollbarMonth from './ScrollbarMonth'
 
 type Props = {
-    year: TYearCountEntry
+    year: TQMediaYearCount['countMediaByYear']['years'][0]
 }
 
 const ScrollbarMonths = ({ year }: Props) => {

@@ -2,7 +2,6 @@ import { useDetailsContext, useDialogContext, useLayoutContext, useSearchContext
 import { useKeyboard } from '@/hooks'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '.'
-import { TMedium } from '@photon/schema'
 
 export const Media = () => {
     const selection = useSelectionContext()
@@ -18,11 +17,22 @@ export const Media = () => {
     })
 
     if (layout.layout === ELayout.GALLERY) {
-        return <GalleryView />
+        return <GalleryView elements={media} />
     }
 
     if (layout.layout === ELayout.LIST) {
-        return <ListView elements={media as TMedium[]} />
+        return <ListView media={media.map((medium) => {
+            return {
+                id: medium.id,
+                cover: medium,
+                title: medium.title,
+                owner: medium.owner,
+                favoredBy: medium.favoredBy.length,
+                dateTaken: medium.dateTaken,
+                mimetype: medium.mimetype
+            }
+        })}
+        />
     }
 
     if (layout.layout === ELayout.MAP) {

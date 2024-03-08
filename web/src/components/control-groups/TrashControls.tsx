@@ -4,7 +4,6 @@ import * as Icons from '@mdi/js'
 import { useDeleteMediaDialog, useRestoreMediaDialog } from '@/dialogs'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema'
 
 type Props = {
     white?: boolean
@@ -16,7 +15,7 @@ export const TrashControls = ({ white }: Props) => {
     const details = useDetailsContext()
 
     const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(details.active ? [details.medium] : [...selection.selected] as TMedium[])
+    const restoreMediaDialog = useRestoreMediaDialog(details.active ? [details.medium.id] : [...selection.selected])
 
     return <>
         <Button

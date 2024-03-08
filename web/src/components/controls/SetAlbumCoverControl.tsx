@@ -8,8 +8,8 @@ import { useSetAlbumCover, useKeyboard } from '@/hooks'
 import { ESelectionMode } from '@/types/app'
 
 type Props = {
-    album?: TAlbum
-    medium?: TMedium
+    album?: string
+    medium?: string
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
@@ -22,10 +22,10 @@ export const SetAlbumCoverControl = ({
     const details = useDetailsContext()
     const selection = useSelectionContext()
 
-    const setAlbumCover = useSetAlbumCover(album?.id, medium?.id)
+    const setAlbumCover = useSetAlbumCover(album, medium)
 
     const action = () => {
-        if (medium?.id) {
+        if (medium) {
             setAlbumCover()
             callback && callback()
         }

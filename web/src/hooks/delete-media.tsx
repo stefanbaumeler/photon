@@ -10,7 +10,7 @@ export const useDeleteMedia = () => {
 
     return () => {
         deleteMedia({
-            ids: Array.from(selection.selected.size ? selection.selected : [details?.medium]).map((item) => item?.id)
+            ids: selection.selected.size ? [...selection.selected] : [details?.medium.id]
         }).then(() => {
             dialog.close()
             details?.close()

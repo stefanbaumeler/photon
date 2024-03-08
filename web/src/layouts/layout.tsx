@@ -1,9 +1,8 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { SearchBar, Sidebar, FocusOverlay } from '@/components'
-import { useSelectionContext, useUserContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
-import { useQProfile } from '@photon/schema'
 
 type Props = {
     children?: ReactNode
@@ -11,14 +10,6 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
     const selection = useSelectionContext()
-    const user = useUserContext()
-    const [profile] = useQProfile()
-
-    useEffect(() => {
-        if (!user.user && profile.data?.profile) {
-            user.setUser(profile.data?.profile)
-        }
-    }, [profile.data?.profile, user])
 
     const classes = bem('root', [
         ['selecting', selection.mode !== ESelectionMode.OFF]

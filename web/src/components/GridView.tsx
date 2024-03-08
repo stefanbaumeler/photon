@@ -1,15 +1,35 @@
 import { Teaser } from '@/components'
-import { TQAlbums, TQMedia } from '@photon/schema'
+import { TMedium, TMeta } from '@photon/schema'
 
-type Props = {
-    elements: TQMedia['media'] | TQAlbums['albums']
+export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype'> & { meta: Pick<TMeta, 'width' | 'height'> } | null
+
+export type TGridItem = {
+    id: string
+    href: string
+    favoredBy?: number
+    cover: TCover | null
+    title: string
+    stack: string[]
 }
 
-export const GridView = ({ elements }: Props) => {
+type Props = {
+    albums: boolean
+    elements: TGridItem[]
+}
+
+export const GridView = ({
+    elements, albums
+}: Props) => {
     const items = elements.map((element, key) => {
         return <Teaser
+            album={albums}
+            id={element.id}
+            favoredBy={element.favoredBy}
+            href={element.href}
+            cover={element.cover}
+            title={element.title}
             key={key}
-            element={element}
+            stack={element.stack}
         />
     })
     return <div className="grid-view">

@@ -4,7 +4,8 @@ import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { useSelectionContext } from '@/providers'
-import { DeleteControl, DownloadControl } from '@/components/controls'
+import { DeleteControl } from '@/components/controls'
+import { DownloadAlbumsControl } from '@/components/controls/DownloadAlbumsControl'
 
 export const BulkAlbumsControls = () => {
     const { t } = useTranslation()
@@ -29,8 +30,7 @@ export const BulkAlbumsControls = () => {
                 n: selected.length
             })}
         </span>
-        <DownloadControl
-            elements={selected}
+        <DownloadAlbumsControl
             shortcut={true}
         />
         <DeleteControl

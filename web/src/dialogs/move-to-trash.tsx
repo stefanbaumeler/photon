@@ -3,10 +3,9 @@ import { useDialogContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
-import { TMedium } from '@photon/schema'
 
 type Props = {
-    media: TMedium[] | Set<TMedium> | TMedium
+    media: string[]
     callback?: () => void
 }
 

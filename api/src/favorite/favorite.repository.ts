@@ -15,6 +15,16 @@ export class FavoriteRepository {
                         id: dto.id
                     }
                 }
+            },
+            include: {
+                owner: true,
+                uploader: true,
+                tags: true,
+                favoredBy: {
+                    where: {
+                        id: this.cls.get('userId')
+                    }
+                }
             }
         })
     }

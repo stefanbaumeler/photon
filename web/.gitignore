@@ -2,3 +2,4 @@
 /src-tauri/**/target
 /out
 /.next
+/test-results

@@ -27,29 +27,13 @@ export class UserRepository {
         return this.prisma.user.findFirst({
             where: {
                 mail
-            },
-            include: {
-                favorites: {
-                    include: {
-                        owner: true,
-                        uploader: true
-                    }
-                }
             }
         })
     }
 
     async signUp (dto: UserSignUpDto) {
         return this.prisma.user.create({
-            data: dto,
-            include: {
-                favorites: {
-                    include: {
-                        owner: true,
-                        uploader: true
-                    }
-                }
-            }
+            data: dto
         })
     }
 

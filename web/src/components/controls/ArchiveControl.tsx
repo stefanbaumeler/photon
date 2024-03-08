@@ -2,7 +2,7 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TMedium, useQMedia, useQMediaStatus, useQMedium } from '@photon/schema'
+import { useQMedia, useQMedium } from '@photon/schema'
 import { useKeyboard, useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
@@ -24,26 +24,22 @@ export const ArchiveControl = ({
     const search = useSearchContext()
     const router = useRouter()
 
-    const [mediaWithStatus] = useQMedia({
+    const [{ data }] = useQMedium({
         variables: {
-            ids: media
+            id: media[0]
         },
         requestPolicy: 'cache-first'
     })
 
-    const shouldArchive = mediaWithStatus.data?.media[0].status !== EMediumStatus.ARCHIVED
+    const shouldArchive = data?.medium.status !== EMediumStatus.ARCHIVED
 
     const archive = useSetMediaStatus({
-        media: media.map((medium) => ({
-            id: medium
-        })),
+        media,
         status: EMediumStatus.ARCHIVED
     })
 
     const unarchive = useSetMediaStatus({
-        media: media.map((medium) => ({
-            id: medium
-        })),
+        media,
         status: EMediumStatus.ALL
     })
 

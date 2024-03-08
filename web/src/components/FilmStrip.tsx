@@ -1,14 +1,25 @@
-import { TMedium } from '@photon/schema'
-import { Teaser } from '@/components'
+import { TCover, Teaser } from '@/components'
+import { useDetailsContext } from '@/providers'
+
+type TFilmStripItem = {
+    id: string
+    cover: TCover | null
+    favoredBy: number
+}
 
 type Props = {
-    media: TMedium[]
+    media: TFilmStripItem[]
 }
 
 export const FilmStrip = ({ media }: Props) => {
+    const details = useDetailsContext()
+
     const items = media.map((medium, k) => {
         return <Teaser
-            element={medium}
+            id={medium.id}
+            cover={medium.cover}
+            favoredBy={medium.favoredBy}
+            href={details.getUrl(medium.id)}
             key={k}
         />
     })

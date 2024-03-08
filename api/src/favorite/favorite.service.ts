@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { FavoriteRepository } from './favorite.repository'
-import { IdDto, IdsDto } from '../shared/dto'
+import { IdsDto } from '../shared/dto'
+import { ClsService } from 'nestjs-cls'
 @Injectable()
 export class FavoriteService {
-    constructor (private repository: FavoriteRepository) {}
+    constructor (private repository: FavoriteRepository, private cls: ClsService) {}
 
     async own () {
         return this.repository.findByUser({
-            id: ''
+            id: this.cls.get('userId')
         })
     }
 

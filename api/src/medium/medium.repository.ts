@@ -137,14 +137,28 @@ export class MediumRepository {
         const {
             ids, ...data
         } = dto
-
-        return this.prisma.medium.updateMany({
+        await this.prisma.medium.updateMany({
             where: {
                 id: {
                     in: ids
                 }
             },
             data
+        })
+
+        return this.findMany({
+            id: {
+                in: ids
+            }
+        }, {
+            owner: true,
+            uploader: true,
+            tags: true,
+            favoredBy: {
+                where: {
+                    id: this.cls.get('userId')
+                }
+            }
         })
     }
 }

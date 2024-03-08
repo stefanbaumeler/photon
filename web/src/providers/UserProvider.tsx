@@ -1,5 +1,5 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
-import { TUser } from '@photon/schema'
+import { createContext, ReactNode, useContext, useEffect } from 'react'
+import { TQFavorites, TUser, useQFavorites, useQProfile } from '@photon/schema'
 import i18next from '@/translations'
 
 type Props = {
@@ -8,13 +8,18 @@ type Props = {
 
 interface UserContext {
     user: TUser
-    setUser: Dispatch<SetStateAction<TUser>>
+    favorites: TQFavorites['favorites']
+    // setUser: Dispatch<SetStateAction<Omit<TUser, 'favorites'>>>
 }
 
 const UserContext = createContext<UserContext | null>(null)
 
 const UserProvider = ({ children }: Props) => {
-    const [user, setUser] = useState<TUser>()
+    // const [user, setUser] = useState<TUser>()
+    const [{ data: profile }] = useQProfile()
+    const [{  data: favorites }] = useQFavorites()
+
+    const user = profile?.profile
 
     useEffect(() => {
         if (user?.language) {
@@ -24,7 +29,7 @@ const UserProvider = ({ children }: Props) => {
 
     return <UserContext.Provider value={{
         user,
-        setUser
+        favorites: favorites?.favorites
     }}
     >
         {children}

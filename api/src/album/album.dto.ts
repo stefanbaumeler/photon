@@ -29,7 +29,7 @@ export class AlbumUpdateDto {
     @Field(() => String, {
         nullable: true
     })
-        cover?: Prisma.AlbumUpdateInput['cover']
+        cover?: string
 }
 
 @ArgsType()

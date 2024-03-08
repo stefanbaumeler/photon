@@ -2,14 +2,14 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TAlbum, TMedium } from '@photon/schema'
 import { useKeyboard } from '@/hooks'
 import { useDeleteAlbumDialog, useMoveToTrashDialog } from '@/dialogs'
-import { isMedia } from '@/util/is'
 import { useDetailsContext, useSelectionContext } from '@/providers'
+import { ESelectionMode } from '@/types/app'
+import { useRouter } from 'next/router'
 
 type Props = {
-    elements: (TMedium | TAlbum)[]
+    elements: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
@@ -21,6 +21,7 @@ export const DeleteControl = ({
     const { t } = useTranslation()
     const details = useDetailsContext()
     const selection = useSelectionContext()
+    const router = useRouter()
 
     const actionCallback = () => {
         if (selection.selected.size) {
@@ -29,20 +30,21 @@ export const DeleteControl = ({
     }
 
     const deleteAlbumDialog = useDeleteAlbumDialog({
-        id: elements.map(({ id }) => id),
+        id: elements,
         callback: actionCallback
     })
 
     const moveToTrashDialog = useMoveToTrashDialog({
-        media: elements as TMedium[],
+        media: elements,
         callback: actionCallback
     })
 
     const action = () => {
-        if (isMedia(elements)) {
-            moveToTrashDialog()
-        } else {
+        if (selection.mode === ESelectionMode.ALBUMS || router.pathname === '/albums') {
             deleteAlbumDialog()
+        }
+        else {
+            moveToTrashDialog()
         }
 
         callback && callback()
@@ -50,9 +52,9 @@ export const DeleteControl = ({
 
     useKeyboard('keyup', 'Backspace', shortcut && action)
 
-    const label = isMedia(elements) ? t(ETrans.DELETE) : t(ETrans.DELETE_THING, {
+    const label = selection.mode === ESelectionMode.ALBUMS ? t(ETrans.DELETE_THING, {
         thing: t(ETrans.ALBUM)
-    })
+    }) : t(ETrans.DELETE)
 
     if (dropdown) {
         return <DropdownItem item={{

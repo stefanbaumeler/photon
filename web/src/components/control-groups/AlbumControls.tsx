@@ -6,8 +6,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
-import { DeleteControl, DownloadControl, SetAlbumCoverControl, ViewControl, SortControl } from '@/components/controls'
+import { DeleteControl, SetAlbumCoverControl, ViewControl, SortControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const AlbumControls = () => {
     const { t } = useTranslation()
@@ -31,21 +32,20 @@ export const AlbumControls = () => {
             dropdown={true}
             shortcut={true}
             callback={() => setMoreActive(false)}
-            elements={album ? [album] : []}
+            elements={album ? [album.id] : []}
             key={0}
         />,
         <SetAlbumCoverControl
             dropdown={true}
             shortcut={true}
             callback={() => setMoreActive(false)}
-            album={album}
             key={1}
         />,
-        <DownloadControl
+        <DownloadMediaControl
             dropdown={true}
             shortcut={true}
             callback={() => setMoreActive(false)}
-            elements={album ? [album] : []}
+            elements={album ? album.media.map((medium) => medium.id) : []}
             key={2}
         />
     ]

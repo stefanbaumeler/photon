@@ -2,26 +2,23 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TAlbum, TMedium } from '@photon/schema'
-import { useKeyboard, useDownload } from '@/hooks'
+import { useDownload, useKeyboard } from '@/hooks'
 import { useDetailsContext, useSelectionContext } from '@/providers'
-import { useRouter } from 'next/router'
-import { isMedium } from '@/util/is'
 
 type Props = {
-    elements: (TMedium | TAlbum)[]
+    elements?: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
 }
 
-export const DownloadControl = ({
+export const DownloadMediaControl = ({
     elements, dropdown, shortcut, callback
 }: Props) => {
-    const router = useRouter()
     const { t } = useTranslation()
     const details = useDetailsContext()
     const selection = useSelectionContext()
+    const selectedMedia = elements ?? [...selection.selected]
 
     const actionCallback = () => {
         if (selection.selected.size) {
@@ -30,19 +27,12 @@ export const DownloadControl = ({
     }
 
     const download = useDownload({
-        elements,
+        elements: selectedMedia,
         callback: actionCallback
     })
 
     const action = () => {
-        if (elements.length === 1 && isMedium(elements[0])) {
-            const src = elements[0].filenameDisk ? `${process.env.NEXT_PUBLIC_UPLOADS_URL}/${elements[0].filenameDisk}` : '#'
-            router.push(`${src}?download=true`)
-        }
-        else {
-            download()
-        }
-
+        download()
         callback && callback()
     }
 

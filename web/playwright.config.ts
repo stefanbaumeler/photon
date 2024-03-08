@@ -1,14 +1,13 @@
-import type { PlaywrightTestConfig } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
 import { getEnv } from 'web/env'
 
 const env = getEnv()
-const config: PlaywrightTestConfig =
-    {
-        testDir: './__tests__/e2e',
-        globalSetup: './__tests__/e2e/support/setup',
-        use: {
-            baseURL: env.NEXT_PUBLIC_URL
-        },
-        workers: 1
-    }
-export default config
+export default defineConfig({
+    testDir: './__tests__/e2e',
+    globalSetup: './__tests__/e2e/support/setup',
+    use: {
+        baseURL: env.NEXT_PUBLIC_URL,
+        video: 'retain-on-failure'
+    },
+    workers: 1
+})

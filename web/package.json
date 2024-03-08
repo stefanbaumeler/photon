@@ -27,7 +27,6 @@
         "@types/react-datepicker": "^4.4.2",
         "@types/react-dom": "^18.0.5",
         "@urql/exchange-auth": "^2.1.5",
-        "@urql/exchange-graphcache": "^6.4.0",
         "@urql/introspection": "^1.0.2",
         "eslint-config-next": "^13.0.7",
         "graphql-tag": "^2.12.6",

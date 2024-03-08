@@ -14,7 +14,7 @@
     },
     "engineStrict": true,
     "scripts": {
-        "dev": "NODE_ENV=test run-s start:docker watch",
+        "dev": "NODE_ENV=development run-s start:docker watch",
         "prod:api": "run-s start:docker watch:api",
         "watch": "run-p watch:*",
         "watch:api": "nx run @photon/api:watch",
@@ -39,7 +39,7 @@
         "test:all": "run-s test:api test:web",
         "test:web": "nx run @photon/web:test",
         "test:api": "jest -i",
-        "seed-and-test": "start-server-and-test test:watch 11011 test:all"
+        "seed-and-test": "start-server-and-test test:watch 11011 test:web"
     },
     "dependencies": {
         "@graphql-codegen/cli": "^5.0.0",

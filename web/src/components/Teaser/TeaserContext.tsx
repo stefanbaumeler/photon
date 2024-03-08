@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { TMedium } from '@photon/schema'
+import { TCover } from '@/components'
 
 type Props = {
     children?: ReactNode
@@ -9,7 +9,7 @@ type Props = {
     displayHeight?: number
     nativeWidth: number
     nativeHeight: number
-    cover?: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype'>
+    cover?: TCover | null
     draggable: boolean
     selectable: boolean
     onOpen?: () => void
@@ -27,7 +27,7 @@ interface TeaserContext {
     displayHeight?: number
     nativeWidth: number
     nativeHeight: number
-    cover?: Pick<TMedium, 'id' | 'filenameDisk' | 'mimetype'>
+    cover?: TCover | null
     draggable: boolean
     selectable: boolean
     onOpen?: () => void

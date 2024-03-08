@@ -1,9 +1,6 @@
-import { Client, fetchExchange } from 'urql'
-import { cacheExchange } from '@urql/exchange-graphcache'
+import { Client, fetchExchange, cacheExchange } from 'urql'
 import { devtoolsExchange } from '@urql/devtools'
 import { AuthConfig, authExchange } from '@urql/exchange-auth'
-import introspectionSchema from '../../../packages/schema/introspection.json'
-import { getIntrospectedSchema } from '@urql/introspection'
 
 const initializeAuthState = async () => {
     if (typeof window === 'undefined') {
@@ -17,7 +14,7 @@ const initializeAuthState = async () => {
 
     if (!cache || !cache.accessToken) {
         if (window.location.pathname !== '/login') {
-            // window.location.href = '/login'
+            window.location.href = '/login'
         }
         return {
             accessToken: '',
@@ -36,17 +33,7 @@ export const initializeUrqlClient = () => new Client({
     fetchOptions: {
         credentials: process.env.NEXT_PUBLIC_API_CREDENTIALS === '0' ? 'omit' : 'include'
     },
-    exchanges: [devtoolsExchange, cacheExchange({
-        schema: introspectionSchema,
-        logger: (severity, message) => { console.log(message) },
-        keys: {
-            ImageMeta: () => null,
-            VideoMeta: () => null,
-            MediumCountYear: () => null,
-            MediumCountDto: () => null,
-            MediumCountMonth: () => null
-        }
-    }), authExchange(async (utils) => {
+    exchanges: [devtoolsExchange, authExchange(async (utils) => {
         if (process.env.NEXT_PUBLIC_API_CREDENTIALS === '0') {
             return {
                 addAuthToOperation: (operation) => operation
@@ -79,5 +66,5 @@ export const initializeUrqlClient = () => new Client({
             refreshAuth: async () => {
             }
         } as AuthConfig
-    }), fetchExchange]
+    }), cacheExchange, fetchExchange]
 })

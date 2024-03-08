@@ -2,12 +2,11 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema'
 import { useKeyboard, useRotate } from '@/hooks'
 import { useDetailsContext } from '@/providers'
 
 type Props = {
-    media: TMedium[]
+    media: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void

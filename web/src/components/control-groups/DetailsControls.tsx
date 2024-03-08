@@ -13,9 +13,9 @@ import { FavoriteControl,
     DeleteControl,
     ArchiveControl,
     RotateControl,
-    DownloadControl,
     SetAlbumCoverControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const DetailsControls = () => {
     const { t } = useTranslation()
@@ -37,7 +37,7 @@ export const DetailsControls = () => {
     const [moreActive, setMoreActive] = useState(false)
 
     const select = () => {
-        selection.toggle(details.medium)
+        selection.toggle(details.medium.id)
     }
 
     const toggleDropdown = () => {
@@ -54,7 +54,7 @@ export const DetailsControls = () => {
                 testId="details-select"
                 onClick={select}
                 ready={true}
-                checked={selection.isSelected(details.medium)}
+                checked={selection.isSelected(details.medium.id)}
                 boxSize={48}
                 hover={true}
                 round={layout.layout !== ELayout.LIST}
@@ -66,21 +66,21 @@ export const DetailsControls = () => {
         <DeleteControl
             dropdown={true}
             shortcut={true}
-            elements={[details.medium]}
+            elements={[details.medium.id]}
             callback={toggleDropdown}
             key={0}
         />,
         <RotateControl
             dropdown={true}
             shortcut={true}
-            media={[details.medium]}
+            media={[details.medium.id]}
             callback={toggleDropdown}
             key={1}
         />,
         <ArchiveControl
             dropdown={true}
             shortcut={true}
-            media={[details.medium]}
+            media={[details.medium.id]}
             callback={toggleDropdown}
             key={2}
         />
@@ -90,20 +90,20 @@ export const DetailsControls = () => {
         moreItems.push(<SetAlbumCoverControl
             dropdown={true}
             shortcut={true}
-            album={albumQuery.data?.album}
-            medium={details.medium}
+            album={albumQuery.data?.album.id}
+            medium={details.medium.id}
             callback={toggleDropdown}
         />)
     }
 
     const RegularActions = () => {
         return <>
-            <DownloadControl
-                elements={[details.medium]}
+            <DownloadMediaControl
+                elements={[details.medium.id]}
                 shortcut={true}
             />
             <FavoriteControl
-                media={[details.medium]}
+                media={[details.medium.id]}
                 shortcut={true}
             />
             <Dropdown

@@ -36,8 +36,6 @@ const DetailsProvider = ({ children }: Props) => {
         pause: !idMedium
     })
 
-    console.log(mediumQuery)
-
     useEffect(() => {
         if (mediumQuery.data) {
             setMedium(mediumQuery.data.medium as TMedium)

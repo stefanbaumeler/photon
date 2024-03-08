@@ -2,12 +2,10 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema'
 import { useDetailsContext } from '@/providers'
 import { useAddToAlbumDialog } from '@/dialogs'
 
 type Props = {
-    media: TMedium[]
     dropdown?: boolean
     callback?: () => void
 }

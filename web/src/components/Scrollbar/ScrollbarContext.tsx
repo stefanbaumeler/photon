@@ -19,14 +19,14 @@ const ScrollbarProvider = ({ children }: Props) => {
     const [years, setYears] = useState<TMediumCountYear[]>()
     const [total, setTotal] = useState<number>()
 
-    const [count] = useQMediaYearCount()
+    const [{ data: count }] = useQMediaYearCount()
 
     useEffect(() => {
-        if (count.data) {
-            setYears(count.data.countMediaByYear.years)
-            setTotal(count.data.countMediaByYear.count)
+        if (count) {
+            setYears(count.countMediaByYear.years)
+            setTotal(count.countMediaByYear.count)
         }
-    }, [count.data])
+    }, [count])
 
     return <ScrollbarContext.Provider value={{
         mouseOverMonth,

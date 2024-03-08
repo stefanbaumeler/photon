@@ -15,7 +15,7 @@ export const useAddToNewAlbum = () => {
         if (newAlbum) {
             setNewAlbum(false)
             createAlbumMutation({
-                media: Array.from(selection.selected).map((s) => s.id)
+                media: Array.from(selection.selected)
             }).then((result) => {
                 router.push(`/albums/${result.data.createAlbum.id}`).then(() => {
                     dialog.close()

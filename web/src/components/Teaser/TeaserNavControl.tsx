@@ -3,8 +3,13 @@ import { useTeaserContext } from './TeaserContext'
 import { Dropdown, Button } from '@/components'
 import { useState } from 'react'
 import { DeleteControl } from '@/components/controls'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
-export const TeaserNavControl = () => {
+type Props = {
+    stack: string[]
+}
+
+export const TeaserNavControl = ({ stack }: Props) => {
     const { id } = useTeaserContext()
 
     const [moreActive, setMoreActive] = useState(false)
@@ -15,13 +20,13 @@ export const TeaserNavControl = () => {
             callback={() => setMoreActive(false)}
             elements={[id]}
             key={0}
+        />,
+        <DownloadMediaControl
+            dropdown={true}
+            callback={() => setMoreActive(false)}
+            elements={stack ?? [id]}
+            key={1}
         />
-        // <DownloadControl
-        //     dropdown={true}
-        //     callback={() => setMoreActive(false)}
-        //     elements={element.media.filter((medium) => medium.status === EMediumStatus.ALL)}
-        //     key={1}
-        // />
     ]
 
     return <div className="teaser__nav">

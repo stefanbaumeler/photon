@@ -3,7 +3,7 @@ import { ESelectionMode } from '@/types/app'
 import { Check, Teaser } from '@/components'
 import { useEffect, useMemo, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
-import { useSelectionContext } from '@/providers'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 import bem from '@/util/bem'
 import { useGalleryContext } from './GalleryContext'
 
@@ -19,6 +19,7 @@ export const GallerySection = ({
 }: Props) => {
     const gallery = useGalleryContext()
     const [containerWidth, setContainerWidth] = useState(gallery.containerWidth || window.innerWidth - 272)
+    const details = useDetailsContext()
 
     const selection = useSelectionContext()
 
@@ -36,7 +37,10 @@ export const GallerySection = ({
         })
 
         return media.map((medium, k) => <Teaser
-            element={medium}
+            id={medium.id}
+            favoredBy={medium.favoredBy.length}
+            href={details.getUrl(medium.id)}
+            cover={medium}
             displayWidth={dimensions[k].width}
             displayHeight={dimensions[k].height}
             key={k}

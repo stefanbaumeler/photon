@@ -13,7 +13,3 @@ const goToListView = async (page: Page) => {
 test('can select', async ({ page }) => {
     await goToListView(page)
 })
-
-test('can sort', async ({ page }) => {
-    // TODO
-})

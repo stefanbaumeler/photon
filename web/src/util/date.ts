@@ -40,7 +40,7 @@ const asDate = (date: string | number | Date) => {
     let d = date
 
     if (typeof d === 'string') {
-        if (d.includes('Z')) {
+        if (d.includes('Z') || d.includes('-')) {
             d = new Date(d)
         }
         else {

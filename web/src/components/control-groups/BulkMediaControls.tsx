@@ -8,7 +8,8 @@ import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { TrashControls } from '@/components/control-groups'
-import { FavoriteControl, ArchiveControl, DeleteControl, DownloadControl, AddToControl } from '@/components/controls'
+import { FavoriteControl, ArchiveControl, DeleteControl, AddToControl } from '@/components/controls'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const BulkMediaControls = () => {
     const { t } = useTranslation()
@@ -46,9 +47,8 @@ export const BulkMediaControls = () => {
 
     const RegularActions = () => {
         return <>
-            <AddToControl media={selected} />
-            <DownloadControl
-                elements={selected}
+            <AddToControl />
+            <DownloadMediaControl
                 shortcut={true}
             />
             <DeleteControl

@@ -3,9 +3,6 @@ fragment FUser on User {
     dateCreated
     dateModified
     mail
-    favorites {
-        id
-    }
     firstName
     lastName
     language

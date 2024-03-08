@@ -127,7 +127,7 @@ export class MediumService {
         const media = await this.getTrash()
 
         media.forEach((medium) => {
-            fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
+            fs.unlinkSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk))
         })
 
         await this.repository.deleteMany({
@@ -145,7 +145,7 @@ export class MediumService {
         })
 
         media.forEach((medium) => {
-            fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
+            fs.unlinkSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk))
         })
 
         await this.repository.deleteMany(dto)
@@ -160,8 +160,8 @@ export class MediumService {
             return
         }
 
-        const filePath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
-        const filePathOld = path.join(__dirname, '../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
+        const filePath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk)
+        const filePathOld = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
         fs.renameSync(filePath, filePathOld)
 
         const row = await sharp(filePathOld).rotate(90).toFile(filePath)
@@ -199,14 +199,14 @@ export class MediumService {
         const zip = new AdmZip()
 
         media.forEach((medium) => {
-            zip.addLocalFile(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk), '', medium.filenameDownload || medium.filenameDisk)
+            zip.addLocalFile(path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk), '', medium.filenameDownload || medium.filenameDisk)
         })
 
         if (!fs.existsSync('downloads')) {
             fs.mkdirSync('downloads')
         }
 
-        zip.writeZip(path.join(__dirname, '../../', 'downloads', `${downloadId}.zip`))
+        zip.writeZip(path.join(__dirname, '../../../', 'downloads', `${downloadId}.zip`))
 
         return {
             url: `/downloads/${downloadId}.zip`
@@ -237,10 +237,10 @@ export class MediumService {
         const existing = await this.repository.findOneByIdOrHash(medium, include)
 
         if (existing && medium.filenameDisk) {
-            const existingPath = path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk)
+            const existingPath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk)
 
             if (fs.existsSync(existingPath)) {
-                fs.unlinkSync(path.join(__dirname, '../../', env.API_UPLOADS_DIR, medium.filenameDisk))
+                fs.unlinkSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk))
             }
 
             return existing

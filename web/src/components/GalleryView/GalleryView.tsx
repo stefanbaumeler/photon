@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react'
 import { EMediumSort, ESelectionMode } from '@/types/app'
 import { formatDate } from '@/util/date'
 import { GallerySection } from './GallerySection'
-import { useSearchContext, useSelectionContext, useSortContext } from '@/providers'
+import { useSelectionContext, useSortContext } from '@/providers'
 import { Scrollbar } from '@/components'
 import { sortMediaByDate } from '@/util/sort'
 import { TMedium } from '@photon/schema'
 
-export const GalleryView = () => {
+type Props = {
+    elements: TMedium[]
+}
+
+export const GalleryView = ({ elements }: Props) => {
     const selection = useSelectionContext()
-    const { hits: elements } = useSearchContext()
     const sort = useSortContext()
 
     const [sections, setSections] = useState([])

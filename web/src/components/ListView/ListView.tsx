@@ -1,15 +1,42 @@
-import { TAlbum, TMedium } from '@photon/schema'
-import ListItem from './ListItem'
+import { TCover } from '@/components'
+import { TUser } from '@photon/schema'
+import MediumListItem from '@/components/ListView/MediumListItem'
+import AlbumListItem from '@/components/ListView/AlbumListItem'
 
-type Props = {
-    elements: TMedium[] | TAlbum[]
+type TListItem = {
+    id: string
+    cover: TCover | null
+    title: string
+    owner: Pick<TUser, 'firstName' | 'lastName'>
 }
 
-export const ListView = ({ elements }: Props) => {
-    const items = elements.map((element, k) => {
-        return <ListItem
-            element={element}
-            key={k}
+export type TMediumListItem = TListItem & {
+    favoredBy?: number
+    dateTaken: string
+    mimetype: string
+}
+
+export type TAlbumListItem = TListItem & {
+    albumMedia: string[]
+}
+
+type Props = {
+    media?: TMediumListItem[]
+    albums?: TAlbumListItem[]
+}
+
+export const ListView = ({
+    media, albums
+}: Props) => {
+    const items = media ? media.map((medium, key) => {
+        return <MediumListItem
+            {...medium}
+            key={key}
+        />
+    }) : albums.map((album, key) => {
+        return <AlbumListItem
+            {...album}
+            key={key}
         />
     })
 

@@ -10,7 +10,7 @@ export class AlbumRepository {
     constructor (private prisma: PrismaService, private cls: ClsService) {}
 
     async all () {
-        return await this.prisma.album.findMany({
+        return this.prisma.album.findMany({
             where: {
                 owner: {
                     id: this.cls.get('userId')
@@ -26,7 +26,8 @@ export class AlbumRepository {
                             }
                         },
                         owner: true,
-                        uploader: true
+                        uploader: true,
+                        tags: true
                     }
                 },
                 cover: {
@@ -114,7 +115,7 @@ export class AlbumRepository {
     }
 
     async removeMedia (dto: AlbumMediaDto) {
-        return this.prisma.album.update({
+        await this.prisma.album.update({
             where: {
                 id: dto.id
             },
@@ -136,18 +137,28 @@ export class AlbumRepository {
                 }
             }
         })
+
+        return await this.findOneById({
+            id: dto.id
+        })
     }
 
     async update (dto: AlbumUpdateDto) {
         const {
-            id, ...data
+            id, cover, ...data
         } = dto
-
         return this.prisma.album.update({
             where: {
                 id
             },
-            data
+            data: {
+                ...data,
+                cover: cover ? {
+                    connect: {
+                        id: cover
+                    }
+                } : undefined
+            }
         })
     }
 
