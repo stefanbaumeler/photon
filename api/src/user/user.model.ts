@@ -1,25 +1,24 @@
-import { TUser } from '@photon/schema'
 import { Field, ObjectType } from '@nestjs/graphql'
 @ObjectType()
 export class User {
     @Field(() => String)
-        id!: TUser['id']
+        id!: string
 
     @Field(() => Date)
-        dateCreated: TUser['dateCreated']
+        dateCreated!: Date
 
     @Field(() => Date)
-        dateModified: TUser['dateModified']
+        dateModified!: Date
 
     @Field(() => String)
-        mail!: TUser['mail']
+        mail!: string
 
     @Field(() => String)
-        firstName!: TUser['firstName']
+        firstName!: string
 
     @Field(() => String)
-        lastName!: TUser['lastName']
+        lastName!: string
 
     @Field(() => String)
-        language!: TUser['language']
+        language!: string
 }

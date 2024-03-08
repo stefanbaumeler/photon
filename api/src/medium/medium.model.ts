@@ -3,77 +3,80 @@ import { Field, ObjectType, Float } from '@nestjs/graphql'
 import { User } from '../user/user.model'
 import { Meta } from '../meta/meta.model'
 import { Tag } from '../tag/tag.model'
+import { ImageMeta } from '../meta/image.meta.model'
+import { VideoMeta } from '../meta/video.meta.model'
+
 @ObjectType()
 export class Medium {
     @Field(() => String!)
-        id!: TMedium['id']
+        id!: string
 
     @Field(() => Date)
-        dateCreated: TMedium['dateCreated']
+        dateCreated!: Date
 
     @Field(() => Date)
-        dateModified: TMedium['dateModified']
+        dateModified!: Date
 
     @Field(() => Date)
-        dateModifiedStatus: TMedium['dateModifiedStatus']
+        dateModifiedStatus!: Date
 
     @Field(() => Date)
-        dateTaken: TMedium['dateTaken']
+        dateTaken!: Date
 
     @Field(() => String)
-        filenameDisk!: TMedium['filenameDisk']
+        filenameDisk!: string
 
     @Field(() => String)
-        filenameDownload!: TMedium['filenameDownload']
+        filenameDownload!: string
 
     @Field(() => String)
-        title!: TMedium['title']
+        title!: string
 
     @Field(() => String, {
         nullable: true
     })
-        description?: TMedium['description']
+        description?: string
 
     @Field(() => [Float])
-        location!: TMedium['location']
+        location!: number[]
 
     @Field(() => String)
-        status!: TMedium['status']
+        status!: string
 
     @Field(() => String)
-        mimetype!: TMedium['mimetype']
+        mimetype!: string
 
     @Field(() => Meta)
-        meta!: TMedium['meta']
+        meta!: ImageMeta | VideoMeta
 
     @Field(() => User)
-        owner!: TMedium['owner']
+        owner!: User
 
     @Field(() => User)
-        uploader!: TMedium['uploader']
+        uploader!: User
 
     @Field(() => String, {
         nullable: true
     })
-        hash?: TMedium['hash']
+        hash?: string
 
     @Field(() => [User], {
         nullable: true
     })
-        favoredBy?: TMedium['favoredBy']
+        favoredBy?: User[]
 
     @Field(() => [Tag])
-        tags!: TMedium['tags']
+        tags!: Tag[]
 
     @Field(() => String)
-        country!: TMedium['country']
+        country!: string
 
     @Field(() => String)
-        region!: TMedium['region']
+        region!: string
 
     @Field(() => String)
-        place!: TMedium['place']
+        place!: string
 
     @Field(() => String)
-        address!: TMedium['address']
+        address!: string
 }

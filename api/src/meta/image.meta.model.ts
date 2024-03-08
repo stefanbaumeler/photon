@@ -1,36 +1,35 @@
-import { TImageMeta } from '@photon/schema'
 import { Field, ObjectType } from '@nestjs/graphql'
 @ObjectType()
 export class ImageMeta {
     @Field(() => Number)
-        width!: TImageMeta['width']
+        width!: number
 
     @Field(() => Number)
-        height!: TImageMeta['height']
+        height!: number
 
     @Field(() => String)
-        cameraMake!: TImageMeta['cameraMake']
+        cameraMake!: string
 
     @Field(() => String)
-        cameraModel!: TImageMeta['cameraModel']
+        cameraModel!: string
 
     @Field(() => Number, {
         nullable: true
     })
-        flash?: TImageMeta['flash']
+        flash?: number
 
     @Field(() => Number, {
         nullable: true
     })
-        fNumber?: TImageMeta['fNumber']
+        fNumber?: number
 
     @Field(() => Number, {
         nullable: true
     })
-        iso?: TImageMeta['iso']
+        iso?: number
 
     @Field(() => String, {
         nullable: true
     })
-        focalLength?: TImageMeta['focalLength']
+        focalLength?: string
 }

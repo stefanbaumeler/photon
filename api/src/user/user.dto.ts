@@ -1,6 +1,5 @@
 import { ArgsType, Field, InputType, ObjectType } from '@nestjs/graphql'
 import { User } from './user.model'
-import { TUser } from '@photon/schema'
 import { IsEmail } from 'class-validator'
 
 @InputType()
@@ -50,7 +49,7 @@ export class UserTokenDto {
         refreshToken!: string
 
     @Field(() => User)
-        user!: TUser
+        user!: User
 }
 
 @InputType()

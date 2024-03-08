@@ -1,5 +1,4 @@
 import { ArgsType, Field } from '@nestjs/graphql'
-import { IdDto, IdsDto } from '../shared/dto'
 import { Prisma } from '@prisma/client'
 
 @ArgsType()

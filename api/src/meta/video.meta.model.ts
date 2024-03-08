@@ -3,11 +3,11 @@ import { Field, ObjectType } from '@nestjs/graphql'
 @ObjectType()
 export class VideoMeta {
     @Field(() => Number)
-        width!: TVideoMeta['width']
+        width!: number
 
     @Field(() => Number)
-        height!: TVideoMeta['height']
+        height!: number
 
     @Field(() => Number)
-        duration!: TVideoMeta['duration']
+        duration!: number
 }

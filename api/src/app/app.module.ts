@@ -15,6 +15,7 @@ import { UploadModule } from '../upload/upload.module'
 import { ClsModule } from 'nestjs-cls'
 import jwt from 'jsonwebtoken'
 import { predefinedUserUUIDs } from '../database/helpers/ids'
+import { DeviceModule } from '../device/device.module'
 
 const providers: Provider[] = [AppService]
 
@@ -71,7 +72,8 @@ if (process.env.NODE_ENV !== 'test') {
         AlbumModule,
         MediumModule,
         FavoriteModule,
-        UploadModule
+        UploadModule,
+        DeviceModule
     ],
     controllers: [AppController],
     providers

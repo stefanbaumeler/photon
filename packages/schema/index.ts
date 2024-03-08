@@ -37,6 +37,16 @@ export type TAlbum = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
+export type TDevice = {
+  __typename?: 'Device';
+  dateCreated: Scalars['DateTime']['output'];
+  dateModified: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  users: Array<TUser>;
+};
+
 export type TImageMeta = {
   __typename?: 'ImageMeta';
   cameraMake: Scalars['String']['output'];
@@ -227,6 +237,7 @@ export type TQuery = {
   albums: Array<TAlbum>;
   archive: Array<TMedium>;
   countMediaByYear: TMediumCountDto;
+  devices: Array<TDevice>;
   download: TMediumDownloadDto;
   favorites: Array<TMedium>;
   media: Array<TMedium>;
@@ -382,6 +393,7 @@ export type TResolversTypes = {
   Album: ResolverTypeWrapper<TAlbum>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  Device: ResolverTypeWrapper<TDevice>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ImageMeta: ResolverTypeWrapper<TImageMeta>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -406,6 +418,7 @@ export type TResolversParentTypes = {
   Album: TAlbum;
   Boolean: Scalars['Boolean']['output'];
   DateTime: Scalars['DateTime']['output'];
+  Device: TDevice;
   Float: Scalars['Float']['output'];
   ImageMeta: TImageMeta;
   Int: Scalars['Int']['output'];
@@ -440,6 +453,16 @@ export type TAlbumResolvers<ContextType = any, ParentType extends TResolversPare
 export interface TDateTimeScalarConfig extends GraphQLScalarTypeConfig<TResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type TDeviceResolvers<ContextType = any, ParentType extends TResolversParentTypes['Device'] = TResolversParentTypes['Device']> = {
+  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  users?: Resolver<Array<TResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type TImageMetaResolvers<ContextType = any, ParentType extends TResolversParentTypes['ImageMeta'] = TResolversParentTypes['ImageMeta']> = {
   cameraMake?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -534,6 +557,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
   archive?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   countMediaByYear?: Resolver<TResolversTypes['MediumCountDto'], ParentType, ContextType>;
+  devices?: Resolver<Array<TResolversTypes['Device']>, ParentType, ContextType>;
   download?: Resolver<TResolversTypes['MediumDownloadDto'], ParentType, ContextType, RequireFields<TQueryDownloadArgs, 'ids'>>;
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
@@ -583,6 +607,7 @@ export type TVideoMetaResolvers<ContextType = any, ParentType extends TResolvers
 export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  Device?: TDeviceResolvers<ContextType>;
   ImageMeta?: TImageMetaResolvers<ContextType>;
   Medium?: TMediumResolvers<ContextType>;
   MediumCountDto?: TMediumCountDtoResolvers<ContextType>;
@@ -1885,6 +1910,7 @@ export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __type
 
 export type GraphCacheKeysConfig = {
   Album?: (data: WithTypename<TAlbum>) => null | string,
+  Device?: (data: WithTypename<TDevice>) => null | string,
   ImageMeta?: (data: WithTypename<TImageMeta>) => null | string,
   Medium?: (data: WithTypename<TMedium>) => null | string,
   MediumCountDto?: (data: WithTypename<TMediumCountDto>) => null | string,
@@ -1904,6 +1930,7 @@ export type GraphCacheResolvers = {
     albums?: GraphCacheResolver<WithTypename<TQuery>, Record<string, never>, Array<WithTypename<TAlbum> | string>>,
     archive?: GraphCacheResolver<WithTypename<TQuery>, Record<string, never>, Array<WithTypename<TMedium> | string>>,
     countMediaByYear?: GraphCacheResolver<WithTypename<TQuery>, Record<string, never>, WithTypename<TMediumCountDto> | string>,
+    devices?: GraphCacheResolver<WithTypename<TQuery>, Record<string, never>, Array<WithTypename<TDevice> | string>>,
     download?: GraphCacheResolver<WithTypename<TQuery>, TQueryDownloadArgs, WithTypename<TMediumDownloadDto> | string>,
     favorites?: GraphCacheResolver<WithTypename<TQuery>, Record<string, never>, Array<WithTypename<TMedium> | string>>,
     media?: GraphCacheResolver<WithTypename<TQuery>, TQueryMediaArgs, Array<WithTypename<TMedium> | string>>,
@@ -1921,6 +1948,14 @@ export type GraphCacheResolvers = {
     media?: GraphCacheResolver<WithTypename<TAlbum>, Record<string, never>, Array<WithTypename<TMedium> | string>>,
     owner?: GraphCacheResolver<WithTypename<TAlbum>, Record<string, never>, WithTypename<TUser> | string>,
     title?: GraphCacheResolver<WithTypename<TAlbum>, Record<string, never>, Scalars['String'] | string>
+  },
+  Device?: {
+    dateCreated?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Scalars['DateTime'] | string>,
+    dateModified?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Scalars['DateTime'] | string>,
+    id?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Scalars['String'] | string>,
+    name?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Scalars['String'] | string>,
+    title?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Scalars['String'] | string>,
+    users?: GraphCacheResolver<WithTypename<TDevice>, Record<string, never>, Array<WithTypename<TUser> | string>>
   },
   ImageMeta?: {
     cameraMake?: GraphCacheResolver<WithTypename<TImageMeta>, Record<string, never>, Scalars['String'] | string>,
@@ -2027,6 +2062,7 @@ export type GraphCacheUpdaters = {
     albums?: GraphCacheUpdateResolver<{ albums: Array<WithTypename<TAlbum>> }, Record<string, never>>,
     archive?: GraphCacheUpdateResolver<{ archive: Array<WithTypename<TMedium>> }, Record<string, never>>,
     countMediaByYear?: GraphCacheUpdateResolver<{ countMediaByYear: WithTypename<TMediumCountDto> }, Record<string, never>>,
+    devices?: GraphCacheUpdateResolver<{ devices: Array<WithTypename<TDevice>> }, Record<string, never>>,
     download?: GraphCacheUpdateResolver<{ download: WithTypename<TMediumDownloadDto> }, TQueryDownloadArgs>,
     favorites?: GraphCacheUpdateResolver<{ favorites: Array<WithTypename<TMedium>> }, Record<string, never>>,
     media?: GraphCacheUpdateResolver<{ media: Array<WithTypename<TMedium>> }, TQueryMediaArgs>,
@@ -2065,6 +2101,14 @@ export type GraphCacheUpdaters = {
     media?: GraphCacheUpdateResolver<Maybe<WithTypename<TAlbum>>, Record<string, never>>,
     owner?: GraphCacheUpdateResolver<Maybe<WithTypename<TAlbum>>, Record<string, never>>,
     title?: GraphCacheUpdateResolver<Maybe<WithTypename<TAlbum>>, Record<string, never>>
+  },
+  Device?: {
+    dateCreated?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>,
+    dateModified?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>,
+    title?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<TDevice>>, Record<string, never>>
   },
   ImageMeta?: {
     cameraMake?: GraphCacheUpdateResolver<Maybe<WithTypename<TImageMeta>>, Record<string, never>>,

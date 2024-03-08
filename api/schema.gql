@@ -105,6 +105,15 @@ type Album {
   media: [Medium!]
 }
 
+type Device {
+  id: String!
+  dateCreated: DateTime!
+  dateModified: DateTime!
+  users: [User!]!
+  name: String!
+  title: String!
+}
+
 type Query {
   profile: User!
   albums: [Album!]!
@@ -118,6 +127,7 @@ type Query {
   download(ids: [String!]!): MediumDownloadDto!
   countMediaByYear: MediumCountDto!
   favorites: [Medium!]!
+  devices: [Device!]!
 }
 
 type Mutation {

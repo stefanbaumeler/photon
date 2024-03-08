@@ -1,40 +1,39 @@
-import { TAlbum } from '@photon/schema'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { User } from '../user/user.model'
 import { Medium } from '../medium/medium.model'
 @ObjectType()
 export class Album {
     @Field(() => String)
-        id!: TAlbum['id']
+        id!: string
 
     @Field(() => Date)
-        dateCreated: TAlbum['dateCreated']
+        dateCreated!: Date
 
     @Field(() => Date)
-        dateModified: TAlbum['dateModified']
+        dateModified!: Date
 
     @Field(() => String, {
         nullable: true
     })
-        title!: TAlbum['title']
+        title!: string
 
     @Field(() => String, {
         nullable: true
     })
-        description!: TAlbum['description']
+        description?: string
 
     @Field(() => Medium, {
         nullable: true
     })
-        cover?: TAlbum['cover']
+        cover?: Medium
 
     @Field(() => User, {
         nullable: true
     })
-        owner?: TAlbum['owner']
+        owner?: User
 
     @Field(() => [Medium], {
         nullable: true
     })
-        media?: TAlbum['media']
+        media?: Medium
 }

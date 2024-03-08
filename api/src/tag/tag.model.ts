@@ -1,16 +1,15 @@
-import { TTag } from '@photon/schema'
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 @ObjectType()
 export class Tag {
     @Field(() => String)
-        id!: TTag['id']
+        id!: string
 
     @Field(() => String)
-        label!: TTag['label']
+        label!: string
 
     @Field(() => String)
-        source!: TTag['source']
+        source!: string
 
     @Field(() => String)
-        idUser!: TTag['idUser']
+        idUser!: string
 }

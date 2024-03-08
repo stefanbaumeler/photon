@@ -1,20 +1,20 @@
 import { ArgsType, Field, InputType, Int, ObjectType } from '@nestjs/graphql'
-import { TMedium } from '@photon/schema'
 import { Prisma } from '@prisma/client'
 import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
+import { Medium } from './medium.model'
 
 @InputType()
 @ArgsType()
 export class MediumFilenameDiskDto {
     @Field(() => String)
-        filenameDisk!: TMedium['filenameDisk']
+        filenameDisk!: Medium['filenameDisk']
 }
 
 @InputType()
 @ArgsType()
 export class MediumStatusDto {
     @Field(() => String)
-        status!: TMedium['status']
+        status!: Medium['status']
 }
 
 @ObjectType()
