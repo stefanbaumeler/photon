@@ -1,4 +1,4 @@
-import Layout from '@/layouts/layout'
+import Layout from '@/layouts/app-layout'
 import { Albums, Dialog, Uploader } from '@/components'
 import { useQAlbums } from '@photon/schema'
 

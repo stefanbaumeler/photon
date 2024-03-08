@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { TQFavorites, TUser, useQFavorites, useQProfile } from '@photon/schema'
 import i18next from '@/translations'
 
@@ -9,14 +9,17 @@ type Props = {
 interface UserContext {
     user: TUser
     favorites: TQFavorites['favorites']
+    unauthenticated: boolean
     // setUser: Dispatch<SetStateAction<Omit<TUser, 'favorites'>>>
 }
 
 const UserContext = createContext<UserContext | null>(null)
 
 const UserProvider = ({ children }: Props) => {
-    // const [user, setUser] = useState<TUser>()
+    const [unauthenticated, setUnauthenticated] = useState(false)
+
     const [{ data: profile }] = useQProfile()
+
     const [{  data: favorites }] = useQFavorites()
 
     const user = profile?.profile
@@ -27,9 +30,16 @@ const UserProvider = ({ children }: Props) => {
         }
     }, [user?.language])
 
+    useEffect(() => {
+        if (!window.localStorage.photon) {
+            setUnauthenticated(true)
+        }
+    }, [])
+
     return <UserContext.Provider value={{
         user,
-        favorites: favorites?.favorites
+        favorites: favorites?.favorites,
+        unauthenticated
     }}
     >
         {children}

@@ -1,5 +1,5 @@
 import * as Icons from '@mdi/js'
-import Layout from '@/layouts/layout'
+import Layout from '@/layouts/app-layout'
 import { Button, Details, Dialog, Media, Uploader } from '@/components'
 import { useDetailsContext,
     useDialogContext,

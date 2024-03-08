@@ -6,13 +6,14 @@ import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
+import { IdDto } from '../shared/dto'
 
 @Injectable()
 export class UserService {
     constructor (private repository: UserRepository, private jwtService: JwtService, private config: ConfigService) {}
 
-    async profile () {
-        return this.repository.profile()
+    async profile (dto?: IdDto) {
+        return this.repository.profile(dto)
     }
 
     async signIn (dto: UserSignInDto, res: Response) {
@@ -144,7 +145,9 @@ export class UserService {
             sameSite: secure ? 'none' : undefined
         })
 
-        const profile = await this.profile()
+        const profile = await this.profile({
+            id: payload.id
+        })
 
         return {
             accessToken: newAccessToken,

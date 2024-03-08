@@ -1,4 +1,4 @@
-import Layout from '../layouts/layout'
+import Layout from '@/layouts/app-layout'
 import { Details, Dialog, Media, Uploader } from '@/components'
 import { useSearchContext } from '@/providers'
 import { useEffect } from 'react'

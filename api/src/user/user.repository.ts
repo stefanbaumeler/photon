@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { UserLanguageDto, UserSignUpDto } from './user.dto'
 import { ClsService } from 'nestjs-cls'
+import { IdDto } from '../shared/dto'
 
 @Injectable()
 export class UserRepository {
@@ -15,10 +16,10 @@ export class UserRepository {
         })
     }
 
-    async profile () {
+    async profile (dto?: IdDto) {
         return this.prisma.user.findUnique({
             where: {
-                id: this.cls.get('userId')
+                id: dto?.id ?? this.cls.get('userId')
             }
         })
     }

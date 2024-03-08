@@ -126,7 +126,10 @@ const LoginPage = () => {
         />
     </> : <></>
 
-    return <section>
+    return <div
+        id="app-root"
+        data-testid="content-root"
+    >
         <div className="login">
             <div className="login__container">
                 <div className="login__content-container">
@@ -170,7 +173,7 @@ const LoginPage = () => {
                 <div className="login__image"></div>
             </div>
         </div>
-    </section>
+    </div>
 }
 
 export default LoginPage

@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { AlbumRepository } from './album.repository'
 import { IdDto, IdsDto } from '../shared/dto'
-import fs from 'fs'
-import path from 'path'
-import { getEnv } from '../../env'
 import { AlbumCreateDto, AlbumMediaDto, AlbumUpdateDto } from './album.dto'
-
-const env = getEnv()
 
 @Injectable()
 export class AlbumService {

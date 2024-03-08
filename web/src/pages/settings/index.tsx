@@ -1,4 +1,4 @@
-import Layout from '@/layouts/layout'
+import Layout from '@/layouts/app-layout'
 import { Uploader, Setting, LanguageSwitcher, Heading, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'

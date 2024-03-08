@@ -15,9 +15,6 @@ const initializeAuthState = async () => {
     const cache = JSON.parse(window.localStorage.getItem('photon'))
 
     if (!cache || !cache.accessToken) {
-        if (window.location.pathname !== '/login') {
-            window.location.href = '/login'
-        }
         return {
             accessToken: '',
             refreshToken: ''
@@ -75,14 +72,20 @@ export const initializeUrqlClient = () => new Client({
                     accessToken
                 })
 
+                console.log('refreshing')
+
                 if (newAccess.data) {
                     localStorage.photon = JSON.stringify({
                         accessToken: newAccess.data.refreshAccessToken.accessToken,
                         refreshToken: newAccess.data.refreshAccessToken.refreshToken
                     })
                     window.location.reload()
-                } else if (window.location.pathname !== '/login') {
-                    window.location.href = '/login'
+                } else {
+                    delete localStorage.photon
+
+                    if (window.location.pathname !== '/') {
+                        window.location.href = '/'
+                    }
                 }
             }
         } as AuthConfig

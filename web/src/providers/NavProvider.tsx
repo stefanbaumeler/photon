@@ -26,7 +26,7 @@ const NavProvider = ({ children }: Props) => {
         actUpon = drag.dragging ? [drag.dragging] : []
     }
 
-    const addToFavorites = useAddToFavorites(actUpon.map((element) => element?.id))
+    const addToFavorites = useAddToFavorites(actUpon)
 
     const archive = useSetMediaStatus({
         media: actUpon,

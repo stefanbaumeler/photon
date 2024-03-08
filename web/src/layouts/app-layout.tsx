@@ -3,22 +3,23 @@ import { SearchBar, Sidebar, FocusOverlay } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
+import AuthGuard from '@/api/AuthGuard'
 
 type Props = {
     children?: ReactNode
 }
 
-const Layout = ({ children }: Props) => {
+const AppLayout = ({ children }: Props) => {
     const selection = useSelectionContext()
 
     const classes = bem('root', [
         ['selecting', selection.mode !== ESelectionMode.OFF]
     ])
 
-    return <>
+    return <AuthGuard>
         <div id="modal-root"></div>
         <div
-            id="content-root"
+            id="app-root"
             data-testid="content-root"
             className={classes}
         >
@@ -29,7 +30,7 @@ const Layout = ({ children }: Props) => {
                 {children}
             </main>
         </div>
-    </>
+    </AuthGuard>
 }
 
-export default Layout
+export default AppLayout
