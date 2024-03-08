@@ -36,6 +36,7 @@ export class UserResolver {
         return this.service.changeLanguage(dto)
     }
 
+    @Public()
     @Mutation(() => UserTokenDto)
     async refreshAccessToken (@Args() dto: UserRefreshTokenDto, @Context('res') res: Response) {
         return this.service.refreshAccessToken(dto, res)

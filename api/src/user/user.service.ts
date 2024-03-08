@@ -108,14 +108,16 @@ export class UserService {
         }
     }
 
-    refreshAccessToken = (dto: UserRefreshTokenDto, res: Response) => {
+    async refreshAccessToken (dto: UserRefreshTokenDto, res: Response) {
         const JWT_SECRET = this.config.get('JWT_SECRET')
         const JWT_REFRESH_SECRET = this.config.get('JWT_REFRESH_SECRET')
 
         try {
-            this.jwtService.verify(dto.refreshToken, JWT_REFRESH_SECRET)
+            this.jwtService.verify(dto.refreshToken, {
+                secret: JWT_REFRESH_SECRET
+            })
         }
-        catch {
+        catch (e) {
             return false
         }
 
@@ -129,11 +131,11 @@ export class UserService {
         const newAccessToken = this.jwtService.sign(payload,
             {
                 secret: JWT_SECRET,
-                expiresIn: '10min'
+                expiresIn: '10s'
             }
         )
 
-        const secure = !!parseInt(process.env.API_SECURE || '1', 10)
+        const secure = !!parseInt(this.config.get('API_SECURE') || '1', 10)
 
         res.cookie('accessToken', newAccessToken, {
             httpOnly: true,
@@ -142,6 +144,12 @@ export class UserService {
             sameSite: secure ? 'none' : undefined
         })
 
-        return newAccessToken
+        const profile = await this.profile()
+
+        return {
+            accessToken: newAccessToken,
+            refreshToken: dto.refreshToken,
+            user: profile
+        }
     }
 }

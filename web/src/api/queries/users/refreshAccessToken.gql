@@ -1,0 +1,12 @@
+mutation MRefreshAccessToken (
+    $accessToken: String!
+    $refreshToken: String!
+) {
+    refreshAccessToken(accessToken: $accessToken, refreshToken: $refreshToken) {
+        accessToken
+        refreshToken
+        user {
+            ...FUser
+        }
+    }
+}

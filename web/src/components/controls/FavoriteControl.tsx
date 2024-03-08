@@ -22,7 +22,7 @@ export const FavoriteControl = ({
 
     const favoriteIds = favorites?.map((favorite) => favorite.id)
 
-    const hasUnfavorited = !!media.filter((medium) => !favoriteIds.find((favorite) => favorite === medium)).length
+    const hasUnfavorited = !!media.filter((medium) => !favoriteIds?.find((favorite) => favorite === medium)).length
 
     const addToFavorites = useAddToFavorites(media)
     const removeFromFavorites = useRemoveFromFavorites(media)

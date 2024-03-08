@@ -1,6 +1,8 @@
 import { Client, fetchExchange, cacheExchange } from 'urql'
 import { devtoolsExchange } from '@urql/devtools'
 import { AuthConfig, authExchange } from '@urql/exchange-auth'
+import { MRefreshAccessTokenDocument } from '@photon/schema'
+import jwt from 'jsonwebtoken'
 
 const initializeAuthState = async () => {
     if (typeof window === 'undefined') {
@@ -61,9 +63,27 @@ export const initializeUrqlClient = () => new Client({
                 })
             },
             didAuthError: (error) => {
-                return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN')
+                return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN' || e.extensions?.code === 'UNAUTHENTICATED')
+            },
+            willAuthError () {
+                const token = jwt.decode(accessToken) as jwt.JwtPayload
+                return Date.now() >= token.exp * 1000
             },
             refreshAuth: async () => {
+                const newAccess = await utils.mutate(MRefreshAccessTokenDocument, {
+                    refreshToken,
+                    accessToken
+                })
+
+                if (newAccess.data) {
+                    localStorage.photon = JSON.stringify({
+                        accessToken: newAccess.data.refreshAccessToken.accessToken,
+                        refreshToken: newAccess.data.refreshAccessToken.refreshToken
+                    })
+                    window.location.reload()
+                } else if (window.location.pathname !== '/login') {
+                    window.location.href = '/login'
+                }
             }
         } as AuthConfig
     }), cacheExchange, fetchExchange]

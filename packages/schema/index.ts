@@ -1300,6 +1300,24 @@ export type TQProfile = (
   ) }
 );
 
+export type TMRefreshAccessTokenVariables = Exact<{
+  accessToken: Scalars['String']['input'];
+  refreshToken: Scalars['String']['input'];
+}>;
+
+
+export type TMRefreshAccessToken = (
+  { __typename?: 'Mutation' }
+  & { refreshAccessToken: (
+    { __typename?: 'UserTokenDto' }
+    & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+    ) }
+  ) }
+);
+
 export type TMSignInVariables = Exact<{
   mail: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -1802,6 +1820,21 @@ export const QProfileDocument = gql`
 
 export function useQProfile(options?: Omit<Urql.UseQueryArgs<TQProfileVariables>, 'query'>) {
   return Urql.useQuery<TQProfile, TQProfileVariables>({ query: QProfileDocument, ...options });
+};
+export const MRefreshAccessTokenDocument = gql`
+    mutation MRefreshAccessToken($accessToken: String!, $refreshToken: String!) {
+  refreshAccessToken(accessToken: $accessToken, refreshToken: $refreshToken) {
+    accessToken
+    refreshToken
+    user {
+      ...FUser
+    }
+  }
+}
+    ${FUser}`;
+
+export function useMRefreshAccessToken() {
+  return Urql.useMutation<TMRefreshAccessToken, TMRefreshAccessTokenVariables>(MRefreshAccessTokenDocument);
 };
 export const MSignInDocument = gql`
     mutation MSignIn($mail: String!, $password: String!) {
