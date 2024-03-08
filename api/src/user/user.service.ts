@@ -131,7 +131,7 @@ export class UserService {
         const newAccessToken = this.jwtService.sign(payload,
             {
                 secret: JWT_SECRET,
-                expiresIn: '10s'
+                expiresIn: '10min'
             }
         )
 
