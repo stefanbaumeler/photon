@@ -12,28 +12,17 @@ export const Detail = ({
 }: Props) => {
     values = Array.isArray(values) ? values : [values]
 
-    const IconOrThumbnail = () => {
-        if (typeof icon === 'string') {
-            return <Icon
+    return <div className="detail">
+        <div className="detail__icon">
+            {typeof icon === 'string' ? <Icon
                 path={icon}
                 size={1}
-            />
-        }
-        else if (icon === null) {
-            return <></>
-        }
-        else {
-            return <img
+            /> : null}
+            {icon && typeof icon !== 'string' ? <img
                 className="detail__image"
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${icon.filenameDisk}?w=100`}
                 alt=""
-            />
-        }
-    }
-
-    return <div className="detail">
-        <div className="detail__icon">
-            <IconOrThumbnail />
+            /> : null}
         </div>
         <div className="detail__content">
             <span className="detail__title">

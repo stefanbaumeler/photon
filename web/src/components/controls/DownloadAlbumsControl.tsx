@@ -10,11 +10,10 @@ import { useQAlbums } from '@photon/schema'
 type Props = {
     dropdown?: boolean
     shortcut?: boolean
-    callback?: () => void
 }
 
 export const DownloadAlbumsControl = ({
-    dropdown, shortcut, callback
+    dropdown, shortcut
 }: Props) => {
     const { t } = useTranslation()
     const details = useDetailsContext()
@@ -22,8 +21,6 @@ export const DownloadAlbumsControl = ({
     const [{ data: albums }] = useQAlbums({
         pause: selection.mode !== ESelectionMode.ALBUMS
     })
-
-    console.log(albums)
 
     const selectedMedia = [...new Set(albums?.albums.filter((album) => {
         return [...selection.selected].includes(album.id)
@@ -42,29 +39,19 @@ export const DownloadAlbumsControl = ({
         callback: actionCallback
     })
 
-    const action = () => {
-        download()
+    useKeyboard('keyup', 'd', shortcut && download)
 
-        callback && callback()
-    }
-
-    useKeyboard('keyup', 'd', shortcut && action)
-
-    if (dropdown) {
-        return <DropdownItem item={{
-            testId: 'download',
-            label: t(ETrans.DOWNLOAD),
-            callback: action,
-            shortcut: shortcut && 'D'
-        }}
-        />
-    }
-
-    return <Button
+    return dropdown ? <DropdownItem item={{
+        testId: 'download',
+        label: t(ETrans.DOWNLOAD),
+        callback: download,
+        shortcut: shortcut && 'D'
+    }}
+    /> : <Button
         testId="download"
         hint={t(ETrans.DOWNLOAD)}
         shortcut={shortcut && 'D'}
-        onClick={action}
+        onClick={download}
         appearance={details.active && {
             text: 'light'
         }}

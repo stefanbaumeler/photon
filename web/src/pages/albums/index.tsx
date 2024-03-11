@@ -8,7 +8,6 @@ const AlbumsPage = () => {
     return <Layout>
         <section>
             <div>
-                <Dialog />
                 <Uploader />
                 <Albums albums={albums?.albums || []} />
             </div>

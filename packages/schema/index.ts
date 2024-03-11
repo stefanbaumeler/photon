@@ -115,6 +115,7 @@ export type TMutation = {
   __typename?: 'Mutation';
   addMediaToAlbum: TAlbum;
   changeLanguage: TUser;
+  changePassword: Scalars['Boolean']['output'];
   createAlbum: TAlbum;
   deleteAlbums: Array<TAlbum>;
   deleteFavorites: TUser;
@@ -142,6 +143,13 @@ export type TMutationAddMediaToAlbumArgs = {
 
 export type TMutationChangeLanguageArgs = {
   language: Scalars['String']['input'];
+};
+
+
+export type TMutationChangePasswordArgs = {
+  currentPassword: Scalars['String']['input'];
+  mail: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 };
 
 
@@ -533,6 +541,7 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
   addMediaToAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationAddMediaToAlbumArgs, 'id' | 'media'>>;
   changeLanguage?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
+  changePassword?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType, RequireFields<TMutationChangePasswordArgs, 'currentPassword' | 'mail' | 'newPassword'>>;
   createAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
   deleteAlbums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumsArgs, 'ids'>>;
   deleteFavorites?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationDeleteFavoritesArgs, 'ids'>>;
@@ -1314,6 +1323,18 @@ export type TMChangeLanguage = (
   ) }
 );
 
+export type TMChangePasswordVariables = Exact<{
+  currentPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  mail: Scalars['String']['input'];
+}>;
+
+
+export type TMChangePassword = (
+  { __typename?: 'Mutation' }
+  & Pick<TMutation, 'changePassword'>
+);
+
 export type TQProfileVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1835,6 +1856,19 @@ export const MChangeLanguageDocument = gql`
 export function useMChangeLanguage() {
   return Urql.useMutation<TMChangeLanguage, TMChangeLanguageVariables>(MChangeLanguageDocument);
 };
+export const MChangePasswordDocument = gql`
+    mutation MChangePassword($currentPassword: String!, $newPassword: String!, $mail: String!) {
+  changePassword(
+    currentPassword: $currentPassword
+    newPassword: $newPassword
+    mail: $mail
+  )
+}
+    `;
+
+export function useMChangePassword() {
+  return Urql.useMutation<TMChangePassword, TMChangePasswordVariables>(MChangePasswordDocument);
+};
 export const QProfileDocument = gql`
     query QProfile {
   profile {
@@ -2037,6 +2071,7 @@ export type GraphCacheResolvers = {
 export type GraphCacheOptimisticUpdaters = {
   addMediaToAlbum?: GraphCacheOptimisticMutationResolver<TMutationAddMediaToAlbumArgs, WithTypename<TAlbum>>,
   changeLanguage?: GraphCacheOptimisticMutationResolver<TMutationChangeLanguageArgs, WithTypename<TUser>>,
+  changePassword?: GraphCacheOptimisticMutationResolver<TMutationChangePasswordArgs, Scalars['Boolean']>,
   createAlbum?: GraphCacheOptimisticMutationResolver<TMutationCreateAlbumArgs, WithTypename<TAlbum>>,
   deleteAlbums?: GraphCacheOptimisticMutationResolver<TMutationDeleteAlbumsArgs, Array<WithTypename<TAlbum>>>,
   deleteFavorites?: GraphCacheOptimisticMutationResolver<TMutationDeleteFavoritesArgs, WithTypename<TUser>>,
@@ -2074,6 +2109,7 @@ export type GraphCacheUpdaters = {
   Mutation?: {
     addMediaToAlbum?: GraphCacheUpdateResolver<{ addMediaToAlbum: WithTypename<TAlbum> }, TMutationAddMediaToAlbumArgs>,
     changeLanguage?: GraphCacheUpdateResolver<{ changeLanguage: WithTypename<TUser> }, TMutationChangeLanguageArgs>,
+    changePassword?: GraphCacheUpdateResolver<{ changePassword: Scalars['Boolean'] }, TMutationChangePasswordArgs>,
     createAlbum?: GraphCacheUpdateResolver<{ createAlbum: WithTypename<TAlbum> }, TMutationCreateAlbumArgs>,
     deleteAlbums?: GraphCacheUpdateResolver<{ deleteAlbums: Array<WithTypename<TAlbum>> }, TMutationDeleteAlbumsArgs>,
     deleteFavorites?: GraphCacheUpdateResolver<{ deleteFavorites: WithTypename<TUser> }, TMutationDeleteFavoritesArgs>,

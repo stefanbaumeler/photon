@@ -107,5 +107,9 @@ export default {
     language: 'Sprache',
     language_description: 'Wähle eine Sprache, ',
     billing: 'Bezahlung',
-    library: 'Bibliothek'
+    library: 'Bibliothek',
+    current_password: 'Aktuelles Passwort',
+    new_password: 'Neues Passwort',
+    repeat_new_password: 'Neues Passwort wiederholen',
+    close: 'Schliessen'
 }

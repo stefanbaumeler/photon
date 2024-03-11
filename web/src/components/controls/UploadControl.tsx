@@ -25,36 +25,27 @@ export const UploadControl = ({
 
     useKeyboard('keyup', 'c', shortcut && action)
 
-    const Input = () => <input
-        data-testid="upload"
-        type="file"
-        className="actions__uploader"
-        ref={uploadRef}
-        onChange={upload}
-        multiple={true}
-    />
-
-    if (dropdown) {
-        return <>
-            <Input />
-            <DropdownItem item={{
-                testId: 'upload',
-                label: t(ETrans.UPLOAD),
-                callback: action,
-                shortcut: shortcut && 'C'
-            }}
-            />
-        </>
-    }
-
     return <>
-        <Input />
-        <Button
+        <input
+            data-testid="upload"
+            type="file"
+            className="actions__uploader"
+            ref={uploadRef}
+            onChange={upload}
+            multiple={true}
+        />
+        {dropdown ? <DropdownItem item={{
+            testId: 'upload',
+            label: t(ETrans.UPLOAD),
+            callback: action,
+            shortcut: shortcut && 'C'
+        }}
+        /> : <Button
             testId="upload"
             hint={t(ETrans.UPLOAD)}
             shortcut={shortcut && 'C'}
             icon={Icons.mdiTrayArrowUp}
             onClick={action}
-        />
+        />}
     </>
 }

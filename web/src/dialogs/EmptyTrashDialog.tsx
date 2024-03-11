@@ -1,29 +1,36 @@
 import { ETrans } from '@/types/translations'
-import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useEmptyTrash } from '@/hooks'
+import { Dialog } from '@/components'
 
-export const useEmptyTrashDialog = () => {
-    const dialog = useDialogContext()
-    const { t } = useTranslation()
+type Props = {
+    closeCallback: () => void
+    active: boolean
+}
 
+export const EmptyTrashDialog = ({
+    closeCallback, active
+}: Props) => {
     const emptyTrash = useEmptyTrash()
+    const { t } = useTranslation()
 
     const confirm = async () => {
         await emptyTrash()
-        dialog.close()
+        closeCallback()
     }
 
-    return () => dialog.open({
-        id: 'delete-media',
-        title: `${t(ETrans.EMPTY_TRASH)}?`,
-        text: t(ETrans.PERMANENTLY_DELETE_THING, {
+    return <Dialog
+        id="delete-media"
+        closeCallback={closeCallback}
+        active={active}
+        title={`${t(ETrans.EMPTY_TRASH)}?`}
+        text={t(ETrans.PERMANENTLY_DELETE_THING, {
             thing: t(ETrans.ALL_ELEMENTS)
-        }),
-        buttons: [
+        })}
+        buttons={[
             {
                 label: t(ETrans.CANCEL),
-                onClick: dialog.close,
+                onClick: closeCallback,
                 appearance: {
                     type: 'secondary'
                 }
@@ -33,6 +40,6 @@ export const useEmptyTrashDialog = () => {
                 label: t(ETrans.PERMANENTLY_DELETE),
                 onClick: confirm
             }
-        ]
-    })
+        ]}
+    />
 }

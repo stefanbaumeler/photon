@@ -27,17 +27,13 @@ export const RotateControl = ({
 
     useKeyboard('keyup', 'r', shortcut && action)
 
-    if (dropdown) {
-        return <DropdownItem item={{
-            testId: 'rotate',
-            label: t(ETrans.ROTATE_CLOCKWISE),
-            callback: action,
-            shortcut: shortcut && 'R'
-        }}
-        />
-    }
-
-    return <Button
+    return dropdown ? <DropdownItem item={{
+        testId: 'rotate',
+        label: t(ETrans.ROTATE_CLOCKWISE),
+        callback: action,
+        shortcut: shortcut && 'R'
+    }}
+    /> : <Button
         testId="rotate"
         hint={t(ETrans.ROTATE_CLOCKWISE)}
         shortcut={shortcut && 'R'}

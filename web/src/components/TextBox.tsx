@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, forwardRef, Ref } from 'react'
 
 type Props = {
     id: string
@@ -9,20 +9,18 @@ type Props = {
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void
     testId?: string
 }
-
-export const TextBox = ({
+const TextBoxEl = ({
     id, label, placeholder = '', type = 'text', value, onChange, testId
-}: Props) => {
-    const Label = () => label ? <label
-        htmlFor={id}
-        className="input__label"
-    >
-        {label}
-    </label> : <></>
-
+}: Props, ref: Ref<null>) => {
     return <div className="input">
-        <Label />
+        {label ? <label
+            htmlFor={id}
+            className="input__label"
+        >
+            {label}
+        </label> : null}
         <input
+            ref={ref}
             data-testid={testId}
             id={id}
             type={type}
@@ -33,3 +31,5 @@ export const TextBox = ({
         />
     </div>
 }
+
+export const TextBox = forwardRef(TextBoxEl)

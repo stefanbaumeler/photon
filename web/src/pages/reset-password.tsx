@@ -29,79 +29,22 @@ const ResetPasswordPage = () => {
         setResetFormMode(resetFormMode === EResetFormMode.DEFAULT ? EResetFormMode.SENT : EResetFormMode.DONE)
     }
 
-    const DefaultFields = () => resetFormMode === EResetFormMode.DEFAULT ? <>
-        <TextBox
-            id="mail"
-            label={t(ETrans.MAIL)}
-        />
-    </> : <></>
+    let label = t(ETrans.REQUEST_RESET_LINK)
+    let hint = t(ETrans.RESET_PASSWORD_HINT)
 
-    const SetFields = () => resetFormMode === EResetFormMode.SET ? <>
-        <TextBox
-            type="password"
-            id="password"
-            label={t(ETrans.PASSWORD)}
-        />
-        <TextBox
-            type="password"
-            id="repeat-password"
-            label={t(ETrans.REPEAT_PASSWORD)}
-        />
-    </> : <></>
-
-    const Footer = () => {
-        if (resetFormMode === EResetFormMode.SENT) {
-            return <></>
-        }
-
-        let label = t(ETrans.REQUEST_RESET_LINK)
-
-        if (resetFormMode === EResetFormMode.SET) {
-            label = t(ETrans.SAVE)
-        }
-
-        if (resetFormMode === EResetFormMode.DONE) {
-            label = t(ETrans.BACK_TO_LOGIN)
-        }
-
-        const BackLink = () => resetFormMode === EResetFormMode.DONE ? <></> : <LinkButton
-            href={'/login'}
-            label={t(ETrans.CANCEL)}
-        />
-
-        const SubmitButton = () => resetFormMode === EResetFormMode.DONE ? <Button
-            href={'/login'}
-            label={label}
-        /> : <Button
-            onClick={submit}
-            label={label}
-        />
-
-        return <div className="login__footer">
-            <BackLink />
-            <SubmitButton />
-        </div>
+    if (resetFormMode === EResetFormMode.SET) {
+        label = t(ETrans.SAVE)
+        hint = t(ETrans.RESET_PASSWORD_SET)
     }
 
-    const Hint = () => {
-        let hint = t(ETrans.RESET_PASSWORD_HINT)
-
-        if (resetFormMode === EResetFormMode.SENT) {
-            hint = t(ETrans.RESET_PASSWORD_SENT)
-        }
-
-        if (resetFormMode === EResetFormMode.SET) {
-            hint = t(ETrans.RESET_PASSWORD_SET)
-        }
-
-        if (resetFormMode === EResetFormMode.DONE) {
-            hint = t(ETrans.RESET_PASSWORD_CONFIRMED)
-        }
-        return <div className="login__hint">
-            {hint}
-        </div>
+    if (resetFormMode === EResetFormMode.DONE) {
+        label = t(ETrans.BACK_TO_LOGIN)
+        hint = t(ETrans.RESET_PASSWORD_CONFIRMED)
     }
 
+    if (resetFormMode === EResetFormMode.SENT) {
+        hint = t(ETrans.RESET_PASSWORD_SENT)
+    }
     return <section>
         <div className="login login--reset">
             <div className="login__container">
@@ -112,13 +55,45 @@ const ResetPasswordPage = () => {
                             <h1 className="login__title">
                                 {t(ETrans.RESET_PASSWORD)}
                             </h1>
-                            <Hint />
+                            <div className="login__hint">
+                                {hint}
+                            </div>
                         </div>
                         <div className="login__content">
-                            <DefaultFields />
-                            <SetFields />
+                            {resetFormMode === EResetFormMode.DEFAULT ? <>
+                                <TextBox
+                                    id="mail"
+                                    label={t(ETrans.MAIL)}
+                                />
+                            </> : null}
+                            {resetFormMode === EResetFormMode.SET ? <>
+                                <TextBox
+                                    type="password"
+                                    id="password"
+                                    label={t(ETrans.PASSWORD)}
+                                />
+                                <TextBox
+                                    type="password"
+                                    id="repeat-password"
+                                    label={t(ETrans.REPEAT_PASSWORD)}
+                                />
+                            </> : null}
                         </div>
-                        <Footer />
+                        {resetFormMode === EResetFormMode.SENT ? null : <div className="login__footer">
+                            {resetFormMode === EResetFormMode.DONE ? <Button
+                                href={'/login'}
+                                label={label}
+                            /> : <>
+                                <LinkButton
+                                    href={'/login'}
+                                    label={t(ETrans.CANCEL)}
+                                />
+                                <Button
+                                    onClick={submit}
+                                    label={label}
+                                />
+                            </>}
+                        </div>}
                     </div>
                 </div>
             </div>

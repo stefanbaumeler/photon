@@ -38,17 +38,13 @@ export const DownloadMediaControl = ({
 
     useKeyboard('keyup', 'd', shortcut && action)
 
-    if (dropdown) {
-        return <DropdownItem item={{
-            testId: 'download',
-            label: t(ETrans.DOWNLOAD),
-            callback: action,
-            shortcut: shortcut && 'D'
-        }}
-        />
-    }
-
-    return <Button
+    return dropdown ? <DropdownItem item={{
+        testId: 'download',
+        label: t(ETrans.DOWNLOAD),
+        callback: action,
+        shortcut: shortcut && 'D'
+    }}
+    /> : <Button
         testId="download"
         hint={t(ETrans.DOWNLOAD)}
         shortcut={shortcut && 'D'}

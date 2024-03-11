@@ -15,7 +15,6 @@ const ArchivePage = () => {
     return <Layout>
         <section>
             <div>
-                <Dialog />
                 <Uploader />
                 <Details />
                 <Media />

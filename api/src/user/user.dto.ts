@@ -61,3 +61,16 @@ export class UserRefreshTokenDto {
     @Field(() => String)
         refreshToken!: string
 }
+
+@InputType()
+@ArgsType()
+export class UserChangePasswordDto {
+    @Field(() => String)
+        mail!: string
+
+    @Field(() => String)
+        currentPassword!: string
+
+    @Field(() => String)
+        newPassword!: string
+}

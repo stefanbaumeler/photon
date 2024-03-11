@@ -97,34 +97,7 @@ const LoginPage = () => {
             value={lastName}
             onChange={(event) => setLastName(event.target.value)}
         />
-    </> : <></>, [loginFormMode, firstName, lastName])
-
-    const SignInLinks = () => loginFormMode === ELoginFormMode.DEFAULT ? <>
-        <LinkButton
-            onClick={() => setLoginFormMode(ELoginFormMode.SIGNUP)}
-            prefix={t(ETrans.NEW_HERE)}
-            label={`${t(ETrans.SIGN_UP)}!`}
-        />
-        <LinkButton
-            href={'/reset-password'}
-            label={`${t(ETrans.FORGOT_PASSWORD)}?`}
-        />
-    </> : <></>
-
-    const SignUpLinks = () => loginFormMode === ELoginFormMode.SIGNUP ? <>
-        <LinkButton
-            onClick={() => setLoginFormMode(ELoginFormMode.DEFAULT)}
-            prefix={t(ETrans.HAVE_ACCOUNT)}
-            label={`${t(ETrans.SIGN_IN)}`}
-        />
-    </> : <></>
-
-    const RememberMe = () => loginFormMode === ELoginFormMode.DEFAULT ? <>
-        <Checkbox
-            id={'remember'}
-            label={t(ETrans.REMEMBER_ME)}
-        />
-    </> : <></>
+    </> : null, [t, loginFormMode, firstName, lastName])
 
     return <div
         id="app-root"
@@ -156,11 +129,30 @@ const LoginPage = () => {
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
                         />
-                        <RememberMe />
+                        {loginFormMode === ELoginFormMode.DEFAULT ? <>
+                            <Checkbox
+                                id={'remember'}
+                                label={t(ETrans.REMEMBER_ME)}
+                            />
+                        </> : null}
                         <div className="login__footer">
                             <div className="login__links">
-                                <SignInLinks />
-                                <SignUpLinks />
+                                {loginFormMode === ELoginFormMode.DEFAULT ? <>
+                                    <LinkButton
+                                        onClick={() => setLoginFormMode(ELoginFormMode.SIGNUP)}
+                                        prefix={t(ETrans.NEW_HERE)}
+                                        label={`${t(ETrans.SIGN_UP)}!`}
+                                    />
+                                    <LinkButton
+                                        href={'/reset-password'}
+                                        label={`${t(ETrans.FORGOT_PASSWORD)}?`}
+                                    />
+                                </> : null}
+                                {loginFormMode === ELoginFormMode.SIGNUP ? <LinkButton
+                                    onClick={() => setLoginFormMode(ELoginFormMode.DEFAULT)}
+                                    prefix={t(ETrans.HAVE_ACCOUNT)}
+                                    label={`${t(ETrans.SIGN_IN)}`}
+                                /> : null}
                             </div>
                             <Button
                                 testId="signin-confirm"

@@ -106,5 +106,9 @@ export default {
     shared_with: 'Shared with',
     language: 'Language',
     billing: 'Billing',
-    library: 'Library'
+    library: 'Library',
+    current_password: 'Current password',
+    new_password: 'New password',
+    repeat_new_password: 'Repeat new Password',
+    close: 'Close'
 }

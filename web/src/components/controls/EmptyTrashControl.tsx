@@ -2,7 +2,8 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useEmptyTrashDialog } from '@/dialogs'
+import { EmptyTrashDialog } from '@/dialogs/EmptyTrashDialog'
+import { useState } from 'react'
 
 type Props = {
     dropdown?: boolean
@@ -14,29 +15,31 @@ export const EmptyTrashControl = ({
 }: Props) => {
     const { t } = useTranslation()
 
-    const emptyTrashDialog = useEmptyTrashDialog()
+    const [dialogActive, setDialogActive] = useState(false)
 
     const action = () => {
-        emptyTrashDialog()
+        setDialogActive(true)
         callback && callback()
     }
 
-    if (dropdown) {
-        return <DropdownItem item={{
+    return <>
+        <EmptyTrashDialog
+            closeCallback={() => setDialogActive(false)}
+            active={dialogActive}
+        />
+        {dropdown ? <DropdownItem item={{
             testId: 'trash-empty',
             label: t(ETrans.EMPTY_TRASH),
             callback: action
         }}
-        />
-    }
-
-    return <Button
-        label={t(ETrans.EMPTY_TRASH)}
-        icon={Icons.mdiDeleteForever}
-        onClick={action}
-        testId="trash-empty"
-        appearance={{
-            type: 'tertiary'
-        }}
-    />
+        /> : <Button
+            label={t(ETrans.EMPTY_TRASH)}
+            icon={Icons.mdiDeleteForever}
+            onClick={action}
+            testId="trash-empty"
+            appearance={{
+                type: 'tertiary'
+            }}
+        />}
+    </>
 }

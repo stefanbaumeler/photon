@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common'
 import { UserRepository } from './user.repository'
-import { UserLanguageDto, UserRefreshTokenDto, UserSignInDto, UserSignUpDto } from './user.dto'
+import { UserChangePasswordDto, UserLanguageDto, UserRefreshTokenDto, UserSignInDto, UserSignUpDto } from './user.dto'
 import argon2 from 'argon2'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
@@ -16,18 +16,26 @@ export class UserService {
         return this.repository.profile(dto)
     }
 
-    async signIn (dto: UserSignInDto, res: Response) {
-        const user = await this.repository.findOneByMail(dto.mail)
+    async verfiyCredentials ({
+        mail, password
+    }: { mail: string, password: string }) {
+        const user = await this.repository.findOneByMail(mail)
 
         if (!user) {
             throw new ForbiddenException('Invalid credentials')
         }
 
-        const match = await argon2.verify(user.password, dto.password)
+        const match = await argon2.verify(user.password, password)
 
         if (!match) {
             throw new ForbiddenException('Invalid credentials')
         }
+
+        return user
+    }
+
+    async signIn (dto: UserSignInDto, res: Response) {
+        const user = await this.verfiyCredentials(dto)
 
         const tokens = this.createTokens(user.id, user.mail)
 
@@ -65,6 +73,17 @@ export class UserService {
 
     async changeLanguage (dto: UserLanguageDto) {
         return this.repository.changeLanguage(dto)
+    }
+
+    async changePassword (dto: UserChangePasswordDto) {
+        await this.verfiyCredentials({
+            mail: dto.mail,
+            password: dto.currentPassword
+        })
+
+        const hashedPassword = await argon2.hash(dto.newPassword)
+
+        return this.repository.changePassword(hashedPassword)
     }
 
     setUserCookies (tokens: { accessToken: string, refreshToken: string }, res: Response) {

@@ -26,16 +26,12 @@ export const CreateAlbumControl = ({
         thing: t(ETrans.ALBUM)
     })
 
-    if (dropdown) {
-        return <DropdownItem item={{
-            testId: 'album-create',
-            label,
-            callback: action
-        }}
-        />
-    }
-
-    return <Button
+    return dropdown ? <DropdownItem item={{
+        testId: 'album-create',
+        label,
+        callback: action
+    }}
+    /> : <Button
         testId="album-create"
         hint={label}
         shortcut={shortcut && 'C'}

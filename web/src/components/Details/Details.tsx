@@ -1,4 +1,4 @@
-import { useDetailsContext, useDialogContext, useSearchContext } from '@/providers'
+import { useDetailsContext, useSearchContext } from '@/providers'
 import * as Icons from '@mdi/js'
 import { Button, Detail, Medium } from '@/components'
 import { DetailsControls } from '@/components/control-groups'
@@ -22,7 +22,6 @@ import { useMemo } from 'react'
 export const Details = () => {
     const { t } = useTranslation()
     const details = useDetailsContext()
-    const dialog = useDialogContext()
     const { hits: media } = useSearchContext()
     const index = media.map(({ id }) => id).indexOf(details.medium?.id)
 
@@ -41,32 +40,10 @@ export const Details = () => {
     })
 
     useKeyboard('keydown', 'Escape', () => {
-        if (!dialog.active && details.active) {
+        if (details.active) {
             details.close()
         }
     })
-
-    const OpenInfosButton = () => {
-        return !details.infos && <Button
-            testId="show-infos"
-            hint={t(ETrans.SHOW_THING, {
-                thing: t(ETrans.INFO_PLURAL)
-            })}
-            appearance={{
-                text: 'light'
-            }}
-            onClick={details.openInfos}
-            icon={Icons.mdiInformation}
-        />
-    }
-
-    const ConditionalDateDetail = () => {
-        return details.medium.dateTaken && <Detail
-            icon={Icons.mdiCalendar}
-            title={formatDate(details.medium.dateTaken, EDateFormat.LONG)}
-            values={getRelativeTime(details.medium.dateTaken)}
-        />
-    }
 
     const classes = bem('details', [
         ['active', details.active],
@@ -99,7 +76,7 @@ export const Details = () => {
     }, [details.medium])
 
     if (!details.medium || !Object.keys(details.medium).length) {
-        return <></>
+        return null
     }
 
     const previewClasses = bem('details__preview', [
@@ -151,7 +128,17 @@ export const Details = () => {
                 </div>
                 <div className="toolbar__section toolbar__section--right">
                     <DetailsControls />
-                    <OpenInfosButton />
+                    {details.infos ? null : <Button
+                        testId="show-infos"
+                        hint={t(ETrans.SHOW_THING, {
+                            thing: t(ETrans.INFO_PLURAL)
+                        })}
+                        appearance={{
+                            text: 'light'
+                        }}
+                        onClick={details.openInfos}
+                        icon={Icons.mdiInformation}
+                    />}
                 </div>
             </div>
             <div
@@ -183,9 +170,12 @@ export const Details = () => {
                 <DetailsDescription />
                 <DetailsAlbums />
                 <DetailsSection title={t(ETrans.DETAILS)}>
-                    <ConditionalDateDetail />
-                    <DetailsImageMeta />
-                    <DetailsVideoMeta />
+                    {details.medium.dateTaken ? <Detail
+                        icon={Icons.mdiCalendar}
+                        title={formatDate(details.medium.dateTaken, EDateFormat.LONG)}
+                        values={getRelativeTime(details.medium.dateTaken)}
+                    /> : null}
+                    {details.medium.mimetype?.startsWith('image') ? <DetailsImageMeta /> : <DetailsVideoMeta />}
                 </DetailsSection>
                 <DetailsOwner />
                 <DetailsShares />

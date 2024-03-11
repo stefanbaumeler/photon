@@ -6,11 +6,7 @@ type Props = {
 export const ScrollbarCursor = ({ mouseY }: Props) => {
     const scrollbar = useScrollbarContext()
 
-    if (!scrollbar?.mouseOverMonth) {
-        return <></>
-    }
-
-    return <span
+    return scrollbar?.mouseOverMonth ? null : <span
         className="scrollbar__cursor"
         style={{
             translate: `0 calc(${mouseY}px - 200%)`

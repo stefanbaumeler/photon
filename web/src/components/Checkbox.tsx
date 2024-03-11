@@ -1,6 +1,6 @@
-import Tippy from '@tippyjs/react'
 import { forwardRef, ReactElement, Ref } from 'react'
 import { Placement } from 'tippy.js'
+import { Tooltip } from '@/components/Tooltip'
 
 type Props = {
     id: string
@@ -15,31 +15,14 @@ type Props = {
 export const Checkbox = ({
     id, onClick, hint, hintPlacement, label, testId
 }: Props) => {
-    const ConditionalTip = ({ children }: { children: ReactElement }) => {
-        if (hint) {
-            return <Tippy
-                content={hint}
-                placement={hintPlacement}
-            >
-                {children}
-            </Tippy>
-        }
-
-        return <>
-            {children}
-        </>
-    }
-
     const Box = (_: { children: ReactElement }, ref: Ref<unknown>) => {
-        const Label = () => label ? <label
-            htmlFor={id}
-            className="checkbox__label"
-        >
-            {label}
-        </label> : <></>
-
         return <div className="checkbox">
-            <Label />
+            {label ? <label
+                htmlFor={id}
+                className="checkbox__label"
+            >
+                {label}
+            </label> : null}
             <input
                 id={id}
                 type="checkbox"
@@ -54,11 +37,14 @@ export const Checkbox = ({
 
     const CheckboxWithRef = forwardRef(Box)
 
-    return <ConditionalTip>
+    return <Tooltip
+        hint={hint}
+        placement={hintPlacement}
+    >
         <CheckboxWithRef>
             <>
                 {label}
             </>
         </CheckboxWithRef>
-    </ConditionalTip>
+    </Tooltip>
 }

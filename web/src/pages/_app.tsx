@@ -1,6 +1,5 @@
 import { NavProvider,
     ProviderProvider,
-    DialogProvider,
     SelectionProvider,
     EditProvider,
     LayoutProvider,
@@ -39,7 +38,6 @@ const Photon = ({
             <ProviderProvider components={[
                 UserProvider,
                 KeyboardProvider,
-                DialogProvider,
                 SelectionProvider,
                 DragProvider,
                 NavProvider,

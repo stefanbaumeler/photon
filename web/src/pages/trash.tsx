@@ -15,7 +15,6 @@ const TrashPage = () => {
     return <Layout>
         <section>
             <div>
-                <Dialog />
                 <Uploader />
                 <Details />
                 <Media />

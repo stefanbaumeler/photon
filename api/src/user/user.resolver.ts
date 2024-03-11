@@ -1,7 +1,12 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UserService } from './user.service'
 import { User } from './user.model'
-import { UserLanguageDto, UserRefreshTokenDto, UserSignInDto, UserSignUpDto, UserTokenDto } from './user.dto'
+import { UserChangePasswordDto,
+    UserLanguageDto,
+    UserRefreshTokenDto,
+    UserSignInDto,
+    UserSignUpDto,
+    UserTokenDto } from './user.dto'
 import { Public } from '../auth/public.decorator'
 import { Response } from 'express'
 
@@ -40,5 +45,10 @@ export class UserResolver {
     @Mutation(() => UserTokenDto)
     async refreshAccessToken (@Args() dto: UserRefreshTokenDto, @Context('res') res: Response) {
         return this.service.refreshAccessToken(dto, res)
+    }
+
+    @Mutation(() => Boolean)
+    async changePassword (@Args() dto: UserChangePasswordDto) {
+        return this.service.changePassword(dto)
     }
 }

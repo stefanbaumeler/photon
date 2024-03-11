@@ -106,5 +106,8 @@
     "shared_with": "Shared with",
     "language": "Language",
     "billing": "Billing",
-    "library": "Library"
+    "library": "Library",
+    "current_password": "Current password",
+    "new_password": "new password",
+    "repeat_new_password": "Repeat new Password"
 }

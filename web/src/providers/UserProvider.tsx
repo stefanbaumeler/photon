@@ -10,7 +10,7 @@ interface UserContext {
     user: TUser
     favorites: TQFavorites['favorites']
     unauthenticated: boolean
-    // setUser: Dispatch<SetStateAction<Omit<TUser, 'favorites'>>>
+    fetching: boolean
 }
 
 const UserContext = createContext<UserContext | null>(null)
@@ -18,7 +18,9 @@ const UserContext = createContext<UserContext | null>(null)
 const UserProvider = ({ children }: Props) => {
     const [unauthenticated, setUnauthenticated] = useState(false)
 
-    const [{ data: profile }] = useQProfile()
+    const [{
+        fetching, data: profile
+    }] = useQProfile()
 
     const [{  data: favorites }] = useQFavorites()
 
@@ -38,6 +40,7 @@ const UserProvider = ({ children }: Props) => {
 
     return <UserContext.Provider value={{
         user,
+        fetching,
         favorites: favorites?.favorites,
         unauthenticated
     }}

@@ -3,10 +3,12 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useKeyboard } from '@/hooks'
-import { useDeleteAlbumDialog, useMoveToTrashDialog } from '@/dialogs'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { DeleteAlbumDialog } from '@/dialogs/DeleteAlbumDialog'
+import { MoveToTrashDialog } from '@/dialogs/MoveToTrashDialog'
 
 type Props = {
     elements: string[]
@@ -29,22 +31,15 @@ export const DeleteControl = ({
         }
     }
 
-    const deleteAlbumDialog = useDeleteAlbumDialog({
-        id: elements,
-        callback: actionCallback
-    })
-
-    const moveToTrashDialog = useMoveToTrashDialog({
-        media: elements,
-        callback: actionCallback
-    })
+    const [deleteAlbumDialogActive, setDeleteAlbumDialogActive] = useState(false)
+    const [moveToTrashDialogActive, setMoveToTrashDialogActive] = useState(false)
 
     const action = () => {
         if (selection.mode === ESelectionMode.ALBUMS || router.pathname === '/albums') {
-            deleteAlbumDialog()
+            setDeleteAlbumDialogActive(true)
         }
         else {
-            moveToTrashDialog()
+            setMoveToTrashDialogActive(true)
         }
 
         callback && callback()
@@ -56,24 +51,34 @@ export const DeleteControl = ({
         thing: t(ETrans.ALBUM)
     }) : t(ETrans.DELETE)
 
-    if (dropdown) {
-        return <DropdownItem item={{
+    return <>
+        <DeleteAlbumDialog
+            closeCallback={() => setDeleteAlbumDialogActive(false)}
+            callback={actionCallback}
+            active={deleteAlbumDialogActive}
+            id={elements}
+        />
+        <MoveToTrashDialog
+            media={elements}
+            closeCallback={() => setMoveToTrashDialogActive(false)}
+            active={ moveToTrashDialogActive}
+            callback={actionCallback}
+        />
+        {dropdown ? <DropdownItem item={{
             testId: 'move-to-trash',
             label,
             callback: action,
             shortcut: shortcut && 'Backspace'
         }}
-        />
-    }
-
-    return <Button
-        testId="move-to-trash"
-        hint={label}
-        shortcut={shortcut && 'Backspace'}
-        onClick={action}
-        icon={Icons.mdiTrashCanOutline}
-        appearance={details.active && {
-            text: 'light'
-        }}
-    />
+        /> : <Button
+            testId="move-to-trash"
+            hint={label}
+            shortcut={shortcut && 'Backspace'}
+            onClick={action}
+            icon={Icons.mdiTrashCanOutline}
+            appearance={details.active && {
+                text: 'light'
+            }}
+        />}
+    </>
 }

@@ -21,11 +21,7 @@ export const DetailsMap = () => {
         })
     }, [latitude, longitude, details.medium.location])
 
-    if (!hasLocation) {
-        return <></>
-    }
-
-    return <div className="details__map">
+    return hasLocation ? <div className="details__map">
         <Link
             href={`https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`}
             target="_blank"
@@ -50,5 +46,5 @@ export const DetailsMap = () => {
                 />
             </Map>
         </Link>
-    </div>
+    </div> : null
 }

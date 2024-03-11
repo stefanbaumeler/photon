@@ -3,7 +3,6 @@
  */
 
 export * from './DetailsProvider'
-export * from './DialogProvider'
 export * from './DragProvider'
 export * from './EditProvider'
 export * from './KeyboardProvider'

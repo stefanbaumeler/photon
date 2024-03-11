@@ -1,18 +1,20 @@
 import { ETrans } from '@/types/translations'
-import { useDialogContext, useSelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
+import { Dialog } from '@/components'
 
 type Props = {
     media: string[]
     callback?: () => void
+    closeCallback: () => void
+    active: boolean
 }
 
-export const useMoveToTrashDialog = ({
-    media, callback
+export const MoveToTrashDialog = ({
+    closeCallback, callback, media, active
 }: Props) => {
-    const dialog = useDialogContext()
     const selection = useSelectionContext()
     const { t } = useTranslation()
 
@@ -23,23 +25,25 @@ export const useMoveToTrashDialog = ({
 
     const confirm = async () => {
         await trash()
-        dialog.close()
+        closeCallback()
         callback()
     }
 
-    return () => dialog.open({
-        id: 'delete-media',
-        title: t(ETrans.MOVE_TO_TRASH),
-        text: t(ETrans.MOVE_ITEMS_TO_TRASH, {
+    return <Dialog
+        id="delete-media"
+        active={active}
+        closeCallback={closeCallback}
+        title={t(ETrans.MOVE_TO_TRASH)}
+        text={t(ETrans.MOVE_ITEMS_TO_TRASH, {
             count: selection.selected.size || 1,
             thing: t(ETrans.ELEMENT, {
                 count: selection.selected.size || 1
             })
-        }),
-        buttons: [
+        })}
+        buttons={[
             {
                 label: t(ETrans.CANCEL),
-                onClick: dialog.close,
+                onClick: closeCallback,
                 appearance: {
                     type: 'secondary'
                 }
@@ -49,6 +53,6 @@ export const useMoveToTrashDialog = ({
                 label: t(ETrans.MOVE_TO_TRASH),
                 onClick: confirm
             }
-        ]
-    })
+        ]}
+    />
 }

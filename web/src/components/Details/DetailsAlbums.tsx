@@ -1,6 +1,6 @@
 import { useDetailsContext } from '@/providers'
 import { TAlbum } from '@photon/schema'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -48,11 +48,7 @@ export const DetailsAlbums = () => {
         </>
     }, [albums, t])
 
-    if (!albums?.length) {
-        return <></>
-    }
-
-    return <DetailsSection title={t(ETrans.ALBUM_PLURAL)}>
+    return albums?.length ? <DetailsSection title={t(ETrans.ALBUM_PLURAL)}>
         {a}
-    </DetailsSection>
+    </DetailsSection> : null
 }

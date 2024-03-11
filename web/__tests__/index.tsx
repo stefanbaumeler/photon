@@ -6,7 +6,6 @@ import { Provider } from 'urql'
 import { initializeUrqlClient } from '@/api'
 
 import { DetailsProvider,
-    DialogProvider,
     EditProvider,
     LayoutProvider,
     SortProvider,
@@ -30,7 +29,6 @@ const TestProvider = (props: Props) => {
                 <ProviderProvider components={[
                     UserProvider,
                     KeyboardProvider,
-                    DialogProvider,
                     SelectionProvider,
                     DragProvider,
                     NavProvider,

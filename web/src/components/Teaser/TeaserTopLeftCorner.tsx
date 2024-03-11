@@ -9,23 +9,15 @@ export const TeaserTopLeftCorner = () => {
         id, selectable
     } = useTeaserContext()
 
-    if (!selectable) {
-        return <></>
-    }
-
-    const select = () => {
-        selection.toggle(id)
-    }
-
-    return <div
+    return selectable ? <div
         className="teaser__check"
     >
         <Check
-            onClick={select}
+            onClick={() => selection.toggle(id)}
             ready={selection.mode !== ESelectionMode.OFF}
             checked={selection.isSelected(id)}
             remove={selection.mode === ESelectionMode.DELETE}
             testId="teaser-check"
         />
-    </div>
+    </div> : null
 }

@@ -32,14 +32,8 @@ const MediumEl = ({
     ])
 
     const ImageOrVideo = useMemo(() => {
-        let el
-
-        if (!width || !medium) {
-            return <></>
-        }
-
-        if (medium.mimetype?.startsWith('image')) {
-            el = <Image
+        return width && !!medium ? <>
+            {medium.mimetype?.startsWith('image') ? <Image
                 alt=""
                 unoptimized={true}
                 priority={priority}
@@ -50,19 +44,13 @@ const MediumEl = ({
                 onLoad={() => {
                     setLoaded(true)
                 }}
-            />
-        } else if (medium.mimetype?.startsWith('video')) {
-            el = <video
+            /> : null}
+            {medium.mimetype?.startsWith('video') ? <video
                 controls={details.active}
                 className="medium__video"
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}`}
-            ></video>
-        }
-        else {
-            el = <></>
-        }
-
-        return el
+            ></video> : null}
+        </> : null
     }, [medium, width, loaded])
 
     if (!medium) {

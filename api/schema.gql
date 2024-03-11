@@ -136,6 +136,7 @@ type Mutation {
   signUp(mail: String!, password: String!, firstName: String!, lastName: String!, language: String!): UserTokenDto!
   changeLanguage(language: String!): User!
   refreshAccessToken(accessToken: String!, refreshToken: String!): UserTokenDto!
+  changePassword(mail: String!, currentPassword: String!, newPassword: String!): Boolean!
   deleteAlbums(ids: [String!]!): [Album!]!
   addMediaToAlbum(id: String!, media: [String!]!): Album!
   removeMediaFromAlbum(id: String!, media: [String!]!): Album!

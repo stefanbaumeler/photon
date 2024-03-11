@@ -1,17 +1,19 @@
 import { ETrans } from '@/types/translations'
-import { useDialogContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useDeleteAlbum } from '@/hooks'
 import { asArray } from '@/util/as'
+import { Dialog } from '@/components'
 
 type Props = {
     id?: string | string[]
-    callback?: () => void
+    closeCallback: () => void
+    callback: () => void
+    active: boolean
 }
-export const useDeleteAlbumDialog = ({
-    id, callback
+
+export const DeleteAlbumDialog = ({
+    closeCallback, callback, id, active
 }: Props) => {
-    const dialog = useDialogContext()
     const { t } = useTranslation()
 
     const deleteAlbum = useDeleteAlbum({
@@ -22,23 +24,25 @@ export const useDeleteAlbumDialog = ({
     const confirm = async () => {
         await deleteAlbum()
 
-        dialog.close()
+        closeCallback()
         callback()
     }
 
-    return () => dialog.open({
-        id: 'delete-album',
-        title: t(ETrans.PERMANENTLY_DELETE),
-        text: t(ETrans.PERMANENTLY_DELETE_THING, {
+    return <Dialog
+        id="delete-album"
+        active={active}
+        title={t(ETrans.PERMANENTLY_DELETE)}
+        text={t(ETrans.PERMANENTLY_DELETE_THING, {
             count: asArray(id).length || 1,
             thing: t(ETrans.ALBUM_COUNT, {
                 count: asArray(id).length || 1
             })
-        }),
-        buttons: [
+        })}
+        closeCallback={closeCallback}
+        buttons={[
             {
                 label: t(ETrans.CANCEL),
-                onClick: dialog.close,
+                onClick: closeCallback,
                 appearance: {
                     type: 'secondary'
                 }
@@ -48,6 +52,6 @@ export const useDeleteAlbumDialog = ({
                 label: t(ETrans.PERMANENTLY_DELETE),
                 onClick: confirm
             }
-        ]
-    })
+        ]}
+    />
 }

@@ -60,7 +60,7 @@ export const initializeUrqlClient = () => new Client({
                 })
             },
             didAuthError: (error) => {
-                return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN' || e.extensions?.code === 'UNAUTHENTICATED')
+                return error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHENTICATED')
             },
             willAuthError () {
                 const token = jwt.decode(accessToken) as jwt.JwtPayload

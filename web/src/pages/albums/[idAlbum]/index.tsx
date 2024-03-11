@@ -1,8 +1,7 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/app-layout'
-import { Button, Details, Dialog, Media, Uploader } from '@/components'
+import { Button, Details, Media, Uploader } from '@/components'
 import { useDetailsContext,
-    useDialogContext,
     useEditContext,
     useSearchContext,
     useSelectionContext } from '@/providers'
@@ -19,7 +18,6 @@ const AlbumPage = () => {
     const router = useRouter()
     const { t } = useTranslation()
     const details = useDetailsContext()
-    const dialog = useDialogContext()
     const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     const selection = useSelectionContext()
@@ -29,7 +27,6 @@ const AlbumPage = () => {
     const titleEl = useRef(null)
 
     const [title, setTitle] = useState('')
-    const [album, setAlbum] = useState<TAlbum>()
     const [earliest, setEarliest] = useState('')
     const [latest, setLatest] = useState('')
 
@@ -49,14 +46,13 @@ const AlbumPage = () => {
 
     useKeyboard('keyup', 'e', editAlbum)
     useKeyboard('keydown', 'Escape', () => {
-        if (!dialog.active && !selection.selected.size && !details?.active && edit.state === EEditState.OFF) {
+        if (!selection.selected.size && !details?.active && edit.state === EEditState.OFF) {
             back()
         }
     })
 
     useEffect(() => {
         if (albumQuery.data) {
-            setAlbum(albumQuery.data.album as TAlbum)
             setTitle(albumQuery.data.album.title || '')
         }
     }, [albumQuery.data])
@@ -82,10 +78,10 @@ const AlbumPage = () => {
 
         if (edit.state === EEditState.DISCARDED) {
             selection.clear()
-            setTitle(album?.title || '')
+            setTitle(title || '')
             edit.setState(EEditState.OFF)
         }
-    }, [album?.title, edit, selection, setAlbumCover, updateAlbum, idAlbum, title])
+    }, [title, edit, selection, setAlbumCover, updateAlbum, idAlbum])
 
     useEffect(() => {
         const mediaSortedByDateTaken = [...media]
@@ -95,38 +91,9 @@ const AlbumPage = () => {
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
     }, [media])
 
-    const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.target.value)
-    }
-
-    if (albumQuery.fetching) {
-        return <></>
-    }
-
     const back = () => {
         selection.clear()
         router.push('/albums')
-    }
-
-    const AlbumDetailsDates = () => {
-        if (earliest === latest) {
-            return <div className="album-details__dates">
-                <span className="album-details__date">
-                    {earliest}
-                </span>
-            </div>
-        }
-        return <div className="album-details__dates">
-            <span className="album-details__date">
-                {earliest}
-            </span>
-            <span className="album-details__date-separator">
-                {' - '}
-            </span>
-            <span className="album-details__date">
-                {latest}
-            </span>
-        </div>
     }
 
     return <Layout>
@@ -144,18 +111,31 @@ const AlbumPage = () => {
                             onClick={back}
                         />
                     </div>
-                    <input
+                    {title ? <input
                         data-testid="album-title"
                         ref={titleEl}
                         type="text"
                         className="album-details__title"
                         value={title}
                         onClick={editAlbum}
-                        onChange={changeTitle}
-                    />
-                    <AlbumDetailsDates />
+                        onChange={(event) => setTitle(event.target.value)}
+                    /> : null}
+                    {earliest === latest ? <div className="album-details__dates">
+                        <span className="album-details__date">
+                            {earliest}
+                        </span>
+                    </div> : <div className="album-details__dates">
+                        <span className="album-details__date">
+                            {earliest}
+                        </span>
+                        <span className="album-details__date-separator">
+                            {' - '}
+                        </span>
+                        <span className="album-details__date">
+                            {latest}
+                        </span>
+                    </div>}
                 </div>
-                <Dialog />
                 <Uploader />
                 <Details />
                 <Media />

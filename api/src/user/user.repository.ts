@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { UserLanguageDto, UserSignUpDto } from './user.dto'
+import { UserChangePasswordDto, UserLanguageDto, UserSignUpDto } from './user.dto'
 import { ClsService } from 'nestjs-cls'
 import { IdDto } from '../shared/dto'
 
@@ -47,5 +47,18 @@ export class UserRepository {
                 language: dto.language
             }
         })
+    }
+
+    async changePassword (newPassword: string) {
+        await this.prisma.user.update({
+            where: {
+                id: this.cls.get('userId')
+            },
+            data: {
+                password: newPassword
+            }
+        })
+
+        return true
     }
 }

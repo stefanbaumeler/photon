@@ -15,7 +15,6 @@ const FavoritesPage = () => {
     return <Layout>
         <section>
             <div>
-                <Dialog />
                 <Uploader />
                 <Details />
                 <Media />

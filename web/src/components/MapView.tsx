@@ -66,26 +66,6 @@ export const MapView = () => {
         setUnknown(unknowns)
     }, [media])
 
-    const NoLocationButton = () => {
-        if (unknown.length === 0) {
-            return <></>
-        }
-
-        return <Button
-            hint={{
-                label: t(ETrans.LOCATION_UNKNOWN),
-                placement: 'right'
-            }}
-            className="map__button"
-            onClick={() => setUnknownVisible(!unknownVisible)}
-            icon={Icons.mdiMapMarkerQuestionOutline}
-            badge={{
-                label: unknown.length.toString(),
-                placement: unknown.length >= 10 ? 'below' : 'bottom-right'
-            }}
-        />
-    }
-
     const layers = [
         {
             id: 'clusters',
@@ -229,19 +209,15 @@ export const MapView = () => {
     const HTMLMarker = ({ k }: { k: string }) => {
         const medium = markers.find((marker) => marker.id === k)
 
-        if (medium) {
-            return <div
-                className="map__marker"
-                onClick={() => details.open(medium.id)}
-            >
-                <Medium
-                    medium={medium.cover}
-                    width={120}
-                />
-            </div>
-        }
-
-        return <div className="map__cluster">
+        return medium ? <div
+            className="map__marker"
+            onClick={() => details.open(medium.id)}
+        >
+            <Medium
+                medium={medium.cover}
+                width={120}
+            />
+        </div> : <div className="map__cluster">
             <div className="map__cluster-label">
                 {markersOnScreen[k].feature.properties.point_count_abbreviated}
             </div>
@@ -321,6 +297,18 @@ export const MapView = () => {
                 media={mediaInBounds}
             />
         </Drawer>
-        <NoLocationButton />
+        {unknown.length === 0 ? null : <Button
+            hint={{
+                label: t(ETrans.LOCATION_UNKNOWN),
+                placement: 'right'
+            }}
+            className="map__button"
+            onClick={() => setUnknownVisible(!unknownVisible)}
+            icon={Icons.mdiMapMarkerQuestionOutline}
+            badge={{
+                label: unknown.length.toString(),
+                placement: unknown.length >= 10 ? 'below' : 'bottom-right'
+            }}
+        />}
     </div>
 }

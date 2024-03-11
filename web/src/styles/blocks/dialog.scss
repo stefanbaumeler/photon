@@ -90,6 +90,11 @@
     }
 }
 
+@mixin dialog-success {
+    color: $color-primary;
+    width: 300px;
+}
+
 @mixin dialog {
     .dialog {
         @include dialog-root;
@@ -120,6 +125,10 @@
 
         &__button {
             @include dialog-button;
+        }
+
+        &__success {
+            @include dialog-success;
         }
     }
 }

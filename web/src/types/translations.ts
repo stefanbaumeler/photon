@@ -103,5 +103,9 @@ export enum ETrans {
     ADD_DESCRIPTION = 'add_description',
     OWNED_BY = 'owned_by',
     SHARED_WITH = 'shared_with',
-    LANGUAGE = 'language'
+    LANGUAGE = 'language',
+    CURRENT_PASSWORD = 'current_password',
+    NEW_PASSWORD = 'new_password',
+    REPEAT_NEW_PASSWORD = 'repeat_new_password',
+    CLOSE = 'close'
 }

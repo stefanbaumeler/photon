@@ -1,7 +1,7 @@
-import Tippy from '@tippyjs/react'
 import { forwardRef, ReactElement, Ref } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
+import { Tooltip } from '@/components/Tooltip'
 
 type Props = {
     onClick?: () => void
@@ -17,37 +17,18 @@ type Props = {
 export const LinkButton = ({
     onClick, hint, hintPlacement, label, prefix, suffix, href, testId
 }: Props) => {
-    const ConditionalTip = ({ children }: { children: ReactElement }) => {
-        if (hint) {
-            return <Tippy
-                content={hint}
-                placement={hintPlacement}
-            >
-                {children}
-            </Tippy>
-        }
-
-        return <>
-            {children}
-        </>
-    }
-
     const linkClasses = 'link-button__link'
 
     const ButtonOrLink = ({ children }: { children: ReactElement }, ref: Ref<unknown>) => {
-        if (href) {
-            return <Link
-                href={href}
-                onClick={onClick}
-                className={linkClasses}
-                ref={ref as Ref<HTMLAnchorElement>}
-                data-testid={testId}
-            >
-                {children}
-            </Link>
-        }
-
-        return <button
+        return href ? <Link
+            href={href}
+            onClick={onClick}
+            className={linkClasses}
+            ref={ref as Ref<HTMLAnchorElement>}
+            data-testid={testId}
+        >
+            {children}
+        </Link> : <button
             ref={ref as Ref<HTMLButtonElement>}
             className={linkClasses}
             onClick={onClick}
@@ -59,23 +40,22 @@ export const LinkButton = ({
 
     const ButtonOrLinkWithRef = forwardRef(ButtonOrLink)
 
-    const Prefix = () => prefix ? <span>
-        {`${prefix} `}
-    </span> : <></>
-
-    const Suffix = () => suffix ? <span>
-        {`${suffix} `}
-    </span> : <></>
-
-    return <ConditionalTip>
+    return <Tooltip
+        hint={hint}
+        placement={hintPlacement}
+    >
         <div className="link-button">
-            <Prefix />
+            {prefix ? <span>
+                {`${prefix} `}
+            </span> : null}
             <ButtonOrLinkWithRef>
                 <>
                     {label}
                 </>
             </ButtonOrLinkWithRef>
-            <Suffix />
+            {suffix ? <span>
+                {`${suffix} `}
+            </span> : null}
         </div>
-    </ConditionalTip>
+    </Tooltip>
 }

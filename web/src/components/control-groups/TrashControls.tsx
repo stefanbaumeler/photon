@@ -1,9 +1,11 @@
 import { Button } from '../'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
-import { useDeleteMediaDialog, useRestoreMediaDialog } from '@/dialogs'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
+import { RestoreMediaDialog } from '@/dialogs/RestoreMediaDialog'
+import { useState } from 'react'
+import { DeleteMediaDialog } from '@/dialogs/DeleteMediaDialog'
 
 type Props = {
     white?: boolean
@@ -14,13 +16,22 @@ export const TrashControls = ({ white }: Props) => {
     const { t } = useTranslation()
     const details = useDetailsContext()
 
-    const deleteMediaDialog = useDeleteMediaDialog()
-    const restoreMediaDialog = useRestoreMediaDialog(details.active ? [details.medium.id] : [...selection.selected])
+    const [restoreMediaDialogActive, setRestoreMediaDialogActive] = useState(false)
+    const [deleteMediaDialogActive, setDeleteMediaDialogActive] = useState(false)
 
     return <>
+        <RestoreMediaDialog
+            active={restoreMediaDialogActive}
+            media={details.active ? [details.medium.id] : [...selection.selected]}
+            closeCallback={() => setRestoreMediaDialogActive(false)}
+        />
+        <DeleteMediaDialog
+            closeCallback={() => setDeleteMediaDialogActive(false)}
+            active={deleteMediaDialogActive}
+        />
         <Button
             label={t(ETrans.DELETE)}
-            onClick={deleteMediaDialog}
+            onClick={() => setDeleteMediaDialogActive(true)}
             icon={Icons.mdiDeleteForever}
             testId="trash-delete"
             appearance={{
@@ -30,7 +41,7 @@ export const TrashControls = ({ white }: Props) => {
         />
         <Button
             label={t(ETrans.RESTORE)}
-            onClick={restoreMediaDialog}
+            onClick={() => setRestoreMediaDialogActive(true)}
             icon={Icons.mdiDeleteRestore}
             testId="trash-restore"
             appearance={{

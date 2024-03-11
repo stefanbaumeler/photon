@@ -3,42 +3,40 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useDetailsContext } from '@/providers'
-import { useAddToAlbumDialog } from '@/dialogs'
+import { useState } from 'react'
+import { AddToAlbumDialog } from '@/dialogs/AddToAlbumDialog'
 
 type Props = {
     dropdown?: boolean
-    callback?: () => void
 }
 
-export const AddToControl = ({
-    dropdown, callback
-}: Props) => {
+export const AddToControl = ({ dropdown }: Props) => {
     const { t } = useTranslation()
     const details = useDetailsContext()
-
-    const addToAlbumDialog = useAddToAlbumDialog()
+    const [dialogActive, setDialogActive] = useState(false)
 
     const action = () => {
-        addToAlbumDialog()
-        callback && callback()
+        setDialogActive(true)
     }
 
-    if (dropdown) {
-        return <DropdownItem item={{
+    return <>
+        <AddToAlbumDialog
+            closeCallback={() => setDialogActive(false)}
+            active={dialogActive}
+        />
+        {dropdown ? <DropdownItem item={{
             testId: 'add-to',
             label: t(ETrans.ADD_TO),
             callback: action
         }}
-        />
-    }
-
-    return <Button
-        testId="add-to"
-        hint={t(ETrans.ADD_TO)}
-        onClick={action}
-        appearance={details.active && {
-            text: 'light'
-        }}
-        icon={Icons.mdiPlus}
-    />
+        /> : <Button
+            testId="add-to"
+            hint={t(ETrans.ADD_TO)}
+            onClick={action}
+            appearance={details.active && {
+                text: 'light'
+            }}
+            icon={Icons.mdiPlus}
+        />}
+    </>
 }

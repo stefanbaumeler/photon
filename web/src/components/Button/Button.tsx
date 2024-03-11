@@ -1,9 +1,10 @@
 import Icon from '@mdi/react'
-import Tippy from '@tippyjs/react'
 import { ReactElement } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
 import bem from '@/util/bem'
+import { ButtonTip } from '@/components/Button/ButtonTip'
+import { ButtonBadge } from '@/components/Button/ButtonBadge'
 
 type Props = {
     onClick?: () => void
@@ -48,36 +49,6 @@ export const Button = ({
     suffix,
     shortcut
 }: Props) => {
-    const ConditionalTip = ({ children }: { children: ReactElement }) => {
-        if (!hint) {
-            if (shortcut) {
-                return <Tippy content={`(${shortcut})`}>
-                    {children}
-                </Tippy>
-            }
-            return <>
-                {children}
-            </>
-        }
-
-        if (typeof hint === 'string') {
-            const hintWithShortcut = shortcut ? `${hint} (${shortcut})` : hint
-
-            return <Tippy
-                content={hintWithShortcut}
-            >
-                {children}
-            </Tippy>
-        }
-
-        return <Tippy
-            content={shortcut ? `${hint.label} (${shortcut})` : hint.label}
-            placement={hint.placement}
-        >
-            {children}
-        </Tippy>
-    }
-
     const localClasses = appearance ? bem('button', [
         [`text-${appearance.text}`, !!appearance.text],
         [appearance.size, !!appearance.size],
@@ -86,26 +57,6 @@ export const Button = ({
     ]) : 'button'
 
     const classes = className ? `${localClasses} ${className}` : localClasses
-
-    const Badge = () => {
-        if (!badge) {
-            return <></>
-        }
-
-        if (typeof badge === 'string') {
-            return <span className="button__badge">
-                {badge}
-            </span>
-        }
-
-        const badgeClasses = bem('button__badge', [
-            [badge.placement, !!badge.placement]
-        ])
-
-        return <span className={badgeClasses}>
-            {badge.label}
-        </span>
-    }
 
     const ButtonOrLink = ({ children }: { children: ReactElement }) => href ? <Link
         href={href}
@@ -122,35 +73,30 @@ export const Button = ({
         {children}
     </button>
 
-    const ConditionalIcon = () => icon ? <Icon
-        path={typeof icon === 'string' ? icon : icon.path}
-        size={appearance?.size === 'small' ? .75 : 1}
-        className="button__icon"
-    /> : <></>
-
-    const Prefix = () => prefix ? <span className="button__prefix">
-        {`${prefix} `}
-    </span> : <></>
-
-    const Suffix = () => suffix ? <span className="button__suffix">
-        {`${suffix} `}
-    </span> : <></>
-
-    const Label = () => label ? <span className="button__label">
-        {label}
-    </span> : <></>
-
-    return <ConditionalTip>
+    return <ButtonTip
+        hint={hint}
+        shortcut={shortcut}
+    >
         <div className={classes}>
-            <Prefix />
+            {prefix ? <span className="button__prefix">
+                {`${prefix} `}
+            </span> : null}
             <ButtonOrLink>
                 <>
-                    <ConditionalIcon />
-                    <Badge />
-                    <Label />
+                    {icon ? <Icon
+                        path={typeof icon === 'string' ? icon : icon.path}
+                        size={appearance?.size === 'small' ? .75 : 1}
+                        className="button__icon"
+                    /> : null}
+                    {badge ? <ButtonBadge badge={badge} /> : null}
+                    {label ? <span className="button__label">
+                        {label}
+                    </span> : null}
                 </>
             </ButtonOrLink>
-            <Suffix />
+            {suffix ? <span className="button__suffix">
+                {`${suffix} `}
+            </span> : null}
         </div>
-    </ConditionalTip>
+    </ButtonTip>
 }

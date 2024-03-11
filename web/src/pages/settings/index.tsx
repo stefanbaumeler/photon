@@ -2,11 +2,20 @@ import Layout from '@/layouts/app-layout'
 import { Uploader, Setting, LanguageSwitcher, Heading, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
+import { ChangePasswordDialog } from '@/dialogs/ChangePasswordDialog'
+import { useState } from 'react'
 
 const SettingsPage = () => {
     const { t } = useTranslation()
-
+    const [dialogActive, setDialogActive] = useState(false)
     return <Layout>
+        <ChangePasswordDialog
+            active={dialogActive}
+            closeCallback={() => {
+                setDialogActive(false)
+            }}
+        />
+
         <Uploader />
         <div className="page">
             <Heading
@@ -31,6 +40,7 @@ const SettingsPage = () => {
                         size: 'small'
                     }}
                     label={t(ETrans.CHANGE_PASSWORD)}
+                    onClick={() => setDialogActive(true)}
                 />
             </Setting>
             <Setting title={'2FA'}>
@@ -46,16 +56,7 @@ const SettingsPage = () => {
             </Setting>
             <ul>
                 <li>
-                            Trash deletion offset
-                </li>
-                <li>
-                            Language
-                </li>
-                <li>
                             Default view
-                </li>
-                <li>
-                            Delete account
                 </li>
             </ul>
         </div>

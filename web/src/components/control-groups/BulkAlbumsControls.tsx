@@ -1,6 +1,5 @@
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { useSelectionContext } from '@/providers'
@@ -12,10 +11,6 @@ export const BulkAlbumsControls = () => {
     const router = useRouter()
     const selection = useSelectionContext()
     const selected = [...selection.selected]
-
-    if (selection.mode !== ESelectionMode.ALBUMS) {
-        return <></>
-    }
 
     const classes = bem('actions', [
         ['labeled', router.pathname === '/trash']

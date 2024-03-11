@@ -28,20 +28,7 @@ export const Teaser = ({
     const router = useRouter()
     const details = useDetailsContext()
 
-    if (!id) {
-        return <></>
-    }
-
-    let topRightControls
-
-    if (cover?.mimetype === 'video') {
-        topRightControls = <TeaserDurationControl duration={(cover.meta as TVideoMeta).duration} />
-    }
-    else {
-        topRightControls = <TeaserNavControl stack={stack} />
-    }
-
-    return <TeaserProvider
+    return id ? <TeaserProvider
         id={id}
         draggable={!album}
         selectable={true}
@@ -59,13 +46,13 @@ export const Teaser = ({
         displayHeight={displayHeight}
         nativeWidth={cover ? cover.meta.width : undefined}
         nativeHeight={cover ? cover.meta.height : undefined}
-        bottomLeftControls={favoredBy !== undefined ? <TeaserFavoredByControl count={favoredBy} /> : undefined}
+        bottomLeftControls={favoredBy > 0 ? <TeaserFavoredByControl count={favoredBy} /> : null}
         bottomRightControls={!album ? <TeaserOpenFallbackControl /> : undefined}
-        topRightControls={topRightControls}
+        topRightControls={cover?.mimetype === 'video' ? <TeaserDurationControl duration={(cover.meta as TVideoMeta).duration} /> : <TeaserNavControl stack={stack} />}
         content={title ? <TeaserContent
             title={title}
         /> : undefined}
     >
         <TeaserComponent />
-    </TeaserProvider>
+    </TeaserProvider> : null
 }

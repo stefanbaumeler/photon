@@ -4,17 +4,13 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useSelectionContext } from '@/providers'
-import { ESelectionMode } from '@/types/app'
 import { DeleteControl, SetAlbumCoverControl, ViewControl, SortControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
 import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const AlbumControls = () => {
     const { t } = useTranslation()
-    const selection = useSelectionContext()
     const router = useRouter()
-    const inactive = router.pathname !== '/albums/[idAlbum]' || selection.mode !== ESelectionMode.OFF
     const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
     const [moreActive, setMoreActive] = useState(false)
 
@@ -49,10 +45,6 @@ export const AlbumControls = () => {
             key={2}
         />
     ]
-
-    if (inactive) {
-        return <></>
-    }
 
     return <div className="actions">
         <ViewControl />

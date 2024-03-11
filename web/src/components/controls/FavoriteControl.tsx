@@ -48,28 +48,20 @@ export const FavoriteControl = ({
     const label = t(hasUnfavorited ? ETrans.FAVORITE : ETrans.UNFAVORITE)
     const icon = hasUnfavorited ? Icons.mdiStarOutline : Icons.mdiStar
 
-    const ConditionalButton = () => {
-        if (dropdown) {
-            return <DropdownItem item={{
-                testId,
-                label,
-                callback: action,
-                shortcut: shortcut && 'F'
-            }}
-            />
-        }
-
-        return <Button
-            testId={testId}
-            onClick={action}
-            hint={label}
-            shortcut={shortcut && 'F'}
-            appearance={details.active && {
-                text: 'light'
-            }}
-            icon={icon}
-        />
-    }
-
-    return <ConditionalButton />
+    return dropdown ? <DropdownItem item={{
+        testId,
+        label,
+        callback: action,
+        shortcut: shortcut && 'F'
+    }}
+    /> : <Button
+        testId={testId}
+        onClick={action}
+        hint={label}
+        shortcut={shortcut && 'F'}
+        appearance={details.active && {
+            text: 'light'
+        }}
+        icon={icon}
+    />
 }

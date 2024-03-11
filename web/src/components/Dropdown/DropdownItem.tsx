@@ -7,18 +7,6 @@ type Props = {
 }
 
 export const DropdownItem = ({ item }: Props) => {
-    const ConditionalIcon = ({ item }: { item: TDropdownItem }) => item.icon && <Icon
-        className="dropdown__icon"
-        path={item.icon}
-        size={1}
-    />
-
-    const ConditionalShortcut = ({ item }: { item: TDropdownItem }) => item.shortcut && <span
-        className="dropdown__shortcut"
-    >
-        {item.shortcut}
-    </span>
-
     const isDropdownItem = (element: TDropdownItem | ReactNode): element is TDropdownItem  => {
         const asDropdownItem = element as TDropdownItem
 
@@ -37,11 +25,19 @@ export const DropdownItem = ({ item }: Props) => {
             className="dropdown__button"
             onClick={item.callback}
         >
-            <ConditionalIcon item={item} />
+            {item.icon ? <Icon
+                className="dropdown__icon"
+                path={item.icon}
+                size={1}
+            /> : null}
             <span className="dropdown__label">
                 {item.label}
             </span>
-            <ConditionalShortcut item={item} />
+            {item.shortcut ? <span
+                className="dropdown__shortcut"
+            >
+                {item.shortcut}
+            </span> : null}
         </button>
     </li>
 }

@@ -9,10 +9,6 @@ type Props = {
 export const TeaserFavoredByControl = ({
     count, displayCount = false
 }: Props) => {
-    if (!count) {
-        return <></>
-    }
-
     return <div className="teaser__categories">
         <Icon
             data-testid={'favorite-mark'}

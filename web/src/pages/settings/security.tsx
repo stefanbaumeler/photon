@@ -1,14 +1,8 @@
 import Layout from '@/layouts/app-layout'
-import { Uploader, Details } from '@/components'
+import { useTranslation } from 'react-i18next'
 
 const SecurityPage = () => {
     return <Layout>
-        <section>
-            <div>
-                <Uploader />
-                <Details />
-            </div>
-        </section>
     </Layout>
 }
 

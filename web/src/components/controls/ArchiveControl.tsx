@@ -2,7 +2,7 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useQMedia, useQMedium } from '@photon/schema'
+import { useQMedium } from '@photon/schema'
 import { useKeyboard, useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
@@ -70,28 +70,20 @@ export const ArchiveControl = ({
     const label = t(shouldArchive ? ETrans.MOVE_TO_ARCHIVE : ETrans.UNARCHIVE)
     const icon = shouldArchive ? Icons.mdiArchiveOutline : Icons.mdiArchiveArrowUpOutline
 
-    const ButtonOrDropdownItem = () => {
-        if (dropdown) {
-            return <DropdownItem item={{
-                testId,
-                label,
-                callback: action,
-                shortcut: shortcut && 'A'
-            }}
-            />
-        }
-
-        return <Button
-            testId={testId}
-            onClick={action}
-            hint={label}
-            shortcut={shortcut && 'A'}
-            icon={icon}
-            appearance={details.active && {
-                text: 'light'
-            }}
-        />
-    }
-
-    return <ButtonOrDropdownItem />
+    return dropdown ? <DropdownItem item={{
+        testId,
+        label,
+        callback: action,
+        shortcut: shortcut && 'A'
+    }}
+    /> : <Button
+        testId={testId}
+        onClick={action}
+        hint={label}
+        shortcut={shortcut && 'A'}
+        icon={icon}
+        appearance={details.active && {
+            text: 'light'
+        }}
+    />
 }

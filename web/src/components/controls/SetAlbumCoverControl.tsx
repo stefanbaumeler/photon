@@ -36,17 +36,13 @@ export const SetAlbumCoverControl = ({
 
     useKeyboard('keyup', 'c', shortcut && action)
 
-    if (dropdown) {
-        return <DropdownItem item={{
-            testId: 'album-set-cover',
-            label: t(ETrans.SET_ALBUM_COVER),
-            callback: action,
-            shortcut: shortcut && 'C'
-        }}
-        />
-    }
-
-    return <Button
+    return dropdown ? <DropdownItem item={{
+        testId: 'album-set-cover',
+        label: t(ETrans.SET_ALBUM_COVER),
+        callback: action,
+        shortcut: shortcut && 'C'
+    }}
+    /> : <Button
         testId="album-set-cover"
         hint={t(ETrans.SET_ALBUM_COVER)}
         shortcut={shortcut && 'C'}

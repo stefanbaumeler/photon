@@ -18,16 +18,13 @@ export const LanguageSwitcher = () => {
         }
     }, [user?.language])
 
-    if (!language) {
-        return <></>
-    }
-
     const moreItems: TDropdownItem[] = [
         {
             label: 'Deutsch',
             callback: () => {
-                i18next.changeLanguage('de-DE')
                 setLanguage('Deutsch')
+                i18next.changeLanguage('de-DE')
+                setMoreActive(false)
                 changeLanguage({
                     language: 'de-DE'
                 })
@@ -36,6 +33,7 @@ export const LanguageSwitcher = () => {
         {
             label: 'English',
             callback: () => {
+                setMoreActive(false)
                 i18next.changeLanguage('en-US')
                 setLanguage('English')
                 changeLanguage({
@@ -45,7 +43,7 @@ export const LanguageSwitcher = () => {
         }
     ]
 
-    return <Dropdown
+    return language ? <Dropdown
         items={moreItems}
         active={moreActive}
         onClickOutside={() => setMoreActive(false)}
@@ -59,5 +57,5 @@ export const LanguageSwitcher = () => {
             label={language}
             onClick={() => setMoreActive(!moreActive)}
         />
-    </Dropdown>
+    </Dropdown> : null
 }
