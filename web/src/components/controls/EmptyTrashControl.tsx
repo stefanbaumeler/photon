@@ -1,8 +1,8 @@
 import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
+import { EmptyTrashDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { EmptyTrashDialog } from '@/dialogs/EmptyTrashDialog'
 import { useState } from 'react'
 
 type Props = {

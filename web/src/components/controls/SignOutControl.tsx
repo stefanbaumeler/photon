@@ -2,7 +2,7 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useSignOut } from '@/hooks/sign-out'
+import { useSignOut } from '@/hooks'
 
 type Props = {
     dropdown?: boolean

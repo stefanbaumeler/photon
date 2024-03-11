@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@/providers'
-import { useSignOut } from '@/hooks/sign-out'
+import { useSignOut } from '@/hooks'
 
 type Props = {
     children: ReactNode

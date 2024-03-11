@@ -2,8 +2,10 @@
     "delete": true,
     "singleQuotes": true,
     "noSemicolon": true,
+    "local": true,
     "directory": [
         "./src/components/controls",
-        "./src/components/control-groups"
+        "./src/components/control-groups",
+        "./src/components/dialogs"
     ]
 }

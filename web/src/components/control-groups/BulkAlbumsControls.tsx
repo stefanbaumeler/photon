@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { useSelectionContext } from '@/providers'
-import { DeleteControl } from '@/components/controls'
-import { DownloadAlbumsControl } from '@/components/controls/DownloadAlbumsControl'
+import { DeleteControl, DownloadAlbumsControl } from '@/components/controls'
 
 export const BulkAlbumsControls = () => {
     const { t } = useTranslation()

@@ -1,8 +1,8 @@
 import Layout from '@/layouts/app-layout'
 import { Uploader, Setting, LanguageSwitcher, Heading, Button } from '@/components'
+import { ChangePasswordDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ChangePasswordDialog } from '@/dialogs/ChangePasswordDialog'
 import { useState } from 'react'
 
 const SettingsPage = () => {

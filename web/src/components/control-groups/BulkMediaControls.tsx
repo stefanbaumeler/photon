@@ -7,8 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import bem from '@/util/bem'
 import { TrashControls } from '@/components/control-groups'
-import { FavoriteControl, ArchiveControl, DeleteControl, AddToControl } from '@/components/controls'
-import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { FavoriteControl, ArchiveControl, DeleteControl, AddToControl, DownloadMediaControl } from '@/components/controls'
 
 export const BulkMediaControls = () => {
     const { t } = useTranslation()

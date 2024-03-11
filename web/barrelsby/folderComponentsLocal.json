@@ -1,0 +1,10 @@
+{
+    "delete": true,
+    "singleQuotes": true,
+    "noSemicolon": true,
+    "location": "below",
+    "directory": [
+        "./src/components/shared"
+    ],
+    "exclude": ["./src/components/shared/[^/]+/[^/]+.tsx"]
+}

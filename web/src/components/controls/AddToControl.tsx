@@ -1,10 +1,10 @@
 import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
+import { AddToAlbumDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useDetailsContext } from '@/providers'
 import { useState } from 'react'
-import { AddToAlbumDialog } from '@/dialogs/AddToAlbumDialog'
 
 type Props = {
     dropdown?: boolean

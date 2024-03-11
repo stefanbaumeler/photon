@@ -2,15 +2,15 @@
     "delete": true,
     "singleQuotes": true,
     "noSemicolon": true,
-    "local": true,
     "directory": [
         "./src/components",
-        "./src/dialogs",
         "./src/hooks",
         "./src/providers"
     ],
     "exclude": [
         "./src/components/controls",
-        "./src/components/control-groups"
+        "./src/components/dialogs",
+        "./src/components/control-groups",
+        "./src/components/shared/[^/]+/"
     ]
 }

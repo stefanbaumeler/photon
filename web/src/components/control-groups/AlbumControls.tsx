@@ -4,9 +4,8 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { DeleteControl, SetAlbumCoverControl, ViewControl, SortControl } from '@/components/controls'
+import { DeleteControl, SetAlbumCoverControl, ViewControl, SortControl, DownloadMediaControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
-import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const AlbumControls = () => {
     const { t } = useTranslation()

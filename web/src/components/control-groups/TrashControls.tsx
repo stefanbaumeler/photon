@@ -3,9 +3,8 @@ import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import { RestoreMediaDialog } from '@/dialogs/RestoreMediaDialog'
+import { RestoreMediaDialog, DeleteMediaDialog } from '@/components/dialogs'
 import { useState } from 'react'
-import { DeleteMediaDialog } from '@/dialogs/DeleteMediaDialog'
 
 type Props = {
     white?: boolean

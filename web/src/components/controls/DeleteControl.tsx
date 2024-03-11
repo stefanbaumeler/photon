@@ -1,5 +1,6 @@
 import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
+import { DeleteAlbumDialog, MoveToTrashDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useKeyboard } from '@/hooks'
@@ -7,8 +8,6 @@ import { useDetailsContext, useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { DeleteAlbumDialog } from '@/dialogs/DeleteAlbumDialog'
-import { MoveToTrashDialog } from '@/dialogs/MoveToTrashDialog'
 
 type Props = {
     elements: string[]

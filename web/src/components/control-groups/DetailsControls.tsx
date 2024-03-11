@@ -13,9 +13,9 @@ import { FavoriteControl,
     DeleteControl,
     ArchiveControl,
     RotateControl,
-    SetAlbumCoverControl } from '@/components/controls'
+    SetAlbumCoverControl,
+    DownloadMediaControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
-import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
 
 export const DetailsControls = () => {
     const { t } = useTranslation()

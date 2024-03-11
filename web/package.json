@@ -14,7 +14,7 @@
         "playwright:install": "playwright install && playwright install-deps",
         "playwright:test": "playwright test",
         "generate": "ts-node codegen.ts",
-        "barrel": "barrelsby -c barrelsby/index.json && barrelsby -c barrelsby/subdirectories.json && barrelsby -c barrelsby/folderComponents.json"
+        "barrel": "barrelsby -c barrelsby/index.json && barrelsby -c barrelsby/subdirectories.json && barrelsby -c barrelsby/folderComponents.json && barrelsby -c barrelsby/folderComponentsLocal.json"
     },
     "dependencies": {
         "@heroicons/react": "^1.0.6",

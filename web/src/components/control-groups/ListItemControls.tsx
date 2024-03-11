@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { ETrans } from '@/types/translations'
 import { Button, Dropdown } from '@/components'
-import { DeleteControl, ArchiveControl, RotateControl } from '@/components/controls'
-import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { DeleteControl, ArchiveControl, RotateControl, DownloadMediaControl } from '@/components/controls'
 
 type Props = {
     element: string

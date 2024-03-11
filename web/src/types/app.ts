@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TMedium } from '@photon/schema'
+import { TMedium, TMeta, TUser } from '@photon/schema'
 
 export type TNavItem = {
     label: string
@@ -46,6 +46,48 @@ export type TDropdownItem = {
     icon?: string
     testId?: string
     shortcut?: string
+}
+
+export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype'> & { meta: Pick<TMeta, 'width' | 'height'> } | null
+
+export type TGridItem = {
+    id: string
+    href: string
+    favoredBy?: number
+    cover: TCover | null
+    title: string
+    stack: string[]
+}
+
+export type TMapItem = {
+    id: string
+    cover: TCover | null
+    width: number
+    location?: number[]
+    favoredBy: number
+}
+
+type TListItem = {
+    id: string
+    cover: TCover | null
+    title: string
+    owner: Pick<TUser, 'firstName' | 'lastName'>
+}
+
+export type TMediumListItem = TListItem & {
+    favoredBy?: number
+    dateTaken: string
+    mimetype: string
+}
+
+export type TAlbumListItem = TListItem & {
+    albumMedia: string[]
+}
+
+export type TFilmStripItem = {
+    id: string
+    cover: TCover | null
+    favoredBy: number
 }
 
 export enum ENavs {
