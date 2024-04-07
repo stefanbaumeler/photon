@@ -3,11 +3,12 @@ import { Button, DropdownItem } from '@/components'
 import { DeleteAlbumDialog, MoveToTrashDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useKeyboard } from '@/hooks'
 import { useDetailsContext, useSelectionContext } from '@/providers'
-import { ESelectionMode } from '@/types/app'
+import { EKeyboardScope, ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     elements: string[]
@@ -44,25 +45,28 @@ export const DeleteControl = ({
         callback && callback()
     }
 
-    useKeyboard('keyup', 'Backspace', shortcut && action)
+    useHotkey('Backspace', action, EKeyboardScope.select, !!shortcut)
 
     const label = selection.mode === ESelectionMode.ALBUMS ? t(ETrans.DELETE_THING, {
         thing: t(ETrans.ALBUM)
     }) : t(ETrans.DELETE)
 
+    const { disableScope } = useHotkeysContext()
+
     return <>
-        <DeleteAlbumDialog
+        {deleteAlbumDialogActive ? <DeleteAlbumDialog
             closeCallback={() => setDeleteAlbumDialogActive(false)}
             callback={actionCallback}
-            active={deleteAlbumDialogActive}
             id={elements}
-        />
-        <MoveToTrashDialog
+        /> : null}
+        {moveToTrashDialogActive ? <MoveToTrashDialog
             media={elements}
             closeCallback={() => setMoveToTrashDialogActive(false)}
-            active={ moveToTrashDialogActive}
-            callback={actionCallback}
-        />
+            callback={() => {
+                disableScope(EKeyboardScope.dialog)
+                actionCallback()
+            }}
+        /> : null}
         {dropdown ? <DropdownItem item={{
             testId: 'move-to-trash',
             label,

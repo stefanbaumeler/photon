@@ -25,11 +25,11 @@ export const BulkAlbumsControls = () => {
             })}
         </span>
         <DownloadAlbumsControl
-            shortcut={true}
+            shortcut
         />
         <DeleteControl
             elements={selected}
-            shortcut={true}
+            shortcut
         />
     </div>
 }

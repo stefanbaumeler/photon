@@ -2,8 +2,9 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useAddToFavorites, useRemoveFromFavorites, useKeyboard } from '@/hooks'
+import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
 import { useDetailsContext, useSelectionContext, useUserContext } from '@/providers'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     media: string[]
@@ -42,7 +43,7 @@ export const FavoriteControl = ({
         callback && callback()
     }
 
-    useKeyboard('keyup', 'f', shortcut && action)
+    useHotkey('f', action, undefined, !!shortcut)
 
     const testId = hasUnfavorited ? 'favorite' : 'unfavorite'
     const label = t(hasUnfavorited ? ETrans.FAVORITE : ETrans.UNFAVORITE)

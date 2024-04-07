@@ -8,7 +8,7 @@ type Props = {
     displayWidth?: number
     displayHeight?: number
     id: string
-    cover?: TCover | null
+    cover: TCover | null
     favoredBy?: number
     title?: string
     href: string
@@ -25,13 +25,16 @@ export const Teaser = ({
     return id ? <TeaserProvider
         id={id}
         draggable={!album}
-        selectable={true}
+        selectable
         onOpen={() => {
             if (album) {
                 router.push(`albums/${id}`)
             }
             else {
-                details.open(id)
+                details.open({
+                    id,
+                    ...cover
+                })
             }
         }}
         href={href}

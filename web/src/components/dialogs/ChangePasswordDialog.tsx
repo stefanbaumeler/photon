@@ -8,13 +8,10 @@ import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 
 type Props = {
-    active: boolean
     closeCallback: () => void
 }
 
-export const ChangePasswordDialog = ({
-    active, closeCallback
-}: Props) => {
+export const ChangePasswordDialog = ({ closeCallback }: Props) => {
     const [changedPassword, setChangedPassword] = useState(false)
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -43,7 +40,6 @@ export const ChangePasswordDialog = ({
 
     return changedPassword ? <Dialog
         closeCallback={close}
-        active={active}
         id={'change-password-complete'}
         title="Password reset complete"
         buttons={[
@@ -61,7 +57,6 @@ export const ChangePasswordDialog = ({
             path={Icons.mdiCheckboxMarkedCircleOutline}
         />
     </Dialog> : <Dialog
-        active={active}
         id={'change-password'}
         title={t(ETrans.CHANGE_PASSWORD)}
         closeCallback={close}

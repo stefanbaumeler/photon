@@ -1,5 +1,5 @@
 import Layout from '@/layouts/app-layout'
-import { Details, Dialog, Media, Uploader } from '@/components'
+import { Media, Uploader } from '@/components'
 import { useSearchContext } from '@/providers'
 import { useEffect } from 'react'
 import { EMediumStatus } from '@/types/app'
@@ -16,7 +16,6 @@ const TrashPage = () => {
         <section>
             <div>
                 <Uploader />
-                <Details />
                 <Media />
             </div>
         </section>

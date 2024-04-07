@@ -5,12 +5,9 @@ import { Dialog } from '@/components'
 
 type Props = {
     closeCallback: () => void
-    active: boolean
 }
 
-export const EmptyTrashDialog = ({
-    closeCallback, active
-}: Props) => {
+export const EmptyTrashDialog = ({ closeCallback }: Props) => {
     const emptyTrash = useEmptyTrash()
     const { t } = useTranslation()
 
@@ -22,7 +19,6 @@ export const EmptyTrashDialog = ({
     return <Dialog
         id="delete-media"
         closeCallback={closeCallback}
-        active={active}
         title={`${t(ETrans.EMPTY_TRASH)}?`}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {
             thing: t(ETrans.ALL_ELEMENTS)

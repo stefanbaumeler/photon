@@ -6,7 +6,7 @@ import { MediumDownloadDto,
     MediumUpdateDto,
     MediumUpdateManyDto,
     MediumUploadDto,
-    MediumFilterDto } from './medium.dto'
+    MediumFilterDto, MediumRotateDto } from './medium.dto'
 import { IdDto, IdsDto } from '../shared/dto'
 import { UploadService } from '../upload/upload.service'
 
@@ -74,7 +74,7 @@ export class MediumResolver {
     }
 
     @Mutation(() => Medium)
-    async rotateMedium (@Args() dto: IdDto) {
+    async rotateMedium (@Args() dto: MediumRotateDto) {
         return this.service.rotate(dto)
     }
 }

@@ -10,7 +10,7 @@ export const DefaultControls = () => {
     ])
 
     return <div className={classes}>
-        {router.pathname === '/trash' ? <EmptyTrashControl /> : <UploadControl shortcut={true} />}
+        {router.pathname === '/trash' ? <EmptyTrashControl /> : <UploadControl shortcut />}
         <SortControl />
         <ViewControl />
         <SignOutControl />

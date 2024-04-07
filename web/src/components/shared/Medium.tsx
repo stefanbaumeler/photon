@@ -1,4 +1,4 @@
-import { forwardRef, Ref, useMemo, useState } from 'react'
+import { forwardRef, Ref, useState } from 'react'
 import Image from 'next/image'
 import { useDetailsContext, useLayoutContext } from '@/providers'
 import bem from '../../util/bem'
@@ -12,10 +12,11 @@ type Props = {
     priority?: boolean
     position?: string
     placeholder?: boolean
+    updateHash?: number
 }
 
 const MediumEl = ({
-    medium, width, testId, priority = false, position, placeholder
+    medium, width, testId, priority = false, position, placeholder, updateHash = 0
 }: Props, ref?: Ref<unknown>) => {
     const details = useDetailsContext()
     const layout = useLayoutContext()
@@ -29,17 +30,30 @@ const MediumEl = ({
         ['loading', !loaded && !!medium],
         ['none', !medium]
     ])
+    if (!medium) {
+        return <div className={classes}>
+            <div className="medium__image"></div>
+        </div>
+    }
 
-    const ImageOrVideo = useMemo(() => {
-        return width && !!medium ? <>
+    const naturalAspectRatio = medium.meta.width / medium.meta.height
+
+    return <div
+        className={classes}
+        style={{
+            aspectRatio: router.pathname === '/albums' && layout.albumsLayout === ELayout.GRID ? 1.5 : naturalAspectRatio
+        }}
+        ref={ref as Ref<HTMLDivElement>}
+    >
+        {width && !!medium ? <>
             {medium.mimetype?.startsWith('image') ? <Image
                 alt=""
-                unoptimized={true}
+                unoptimized
                 priority={priority}
                 data-testid={testId}
                 className="medium__image"
-                fill={true}
-                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}`}
+                fill
+                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}&update=${updateHash}`}
                 onLoad={() => {
                     setLoaded(true)
                 }}
@@ -49,23 +63,7 @@ const MediumEl = ({
                 className="medium__video"
                 src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}`}
             ></video> : null}
-        </> : null
-    }, [medium, width, loaded])
-
-    if (!medium) {
-        return <div className={classes}>
-            <div className="medium__image"></div>
-        </div>
-    }
-
-    return <div
-        className={classes}
-        style={{
-            aspectRatio: router.pathname === '/albums' && layout.albumsLayout === ELayout.GRID ? 1.5 : medium.meta.width / medium.meta.height
-        }}
-        ref={ref as Ref<HTMLDivElement>}
-    >
-        {ImageOrVideo}
+        </> : null}
     </div>
 }
 

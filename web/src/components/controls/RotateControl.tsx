@@ -2,30 +2,27 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useKeyboard, useRotate } from '@/hooks'
 import { useDetailsContext } from '@/providers'
+import { EKeyboardScope } from '@/types/app'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
-    media: string[]
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
 }
 
 export const RotateControl = ({
-    media, dropdown, shortcut, callback
+    dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
     const details = useDetailsContext()
-
-    const rotate = useRotate(media[0])
-
     const action = () => {
-        rotate()
+        details.rotate()
         callback && callback()
     }
 
-    useKeyboard('keyup', 'r', shortcut && action)
+    useHotkey('r', action, EKeyboardScope.details, !!shortcut)
 
     return dropdown ? <DropdownItem item={{
         testId: 'rotate',

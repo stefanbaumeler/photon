@@ -23,10 +23,9 @@ export const EmptyTrashControl = ({
     }
 
     return <>
-        <EmptyTrashDialog
+        {dialogActive ? <EmptyTrashDialog
             closeCallback={() => setDialogActive(false)}
-            active={dialogActive}
-        />
+        /> : null}
         {dropdown ? <DropdownItem item={{
             testId: 'trash-empty',
             label: t(ETrans.EMPTY_TRASH),

@@ -1,8 +1,7 @@
 import { TQAlbums } from '@photon/schema'
 import { ELayout } from '@/types/app'
-import { useLayoutContext, useSelectionContext } from '@/providers'
+import { useLayoutContext } from '@/providers'
 import { GridView, ListView } from '@/components'
-import { useKeyboard } from '@/hooks'
 
 type Props = {
     albums: Required<TQAlbums['albums']>
@@ -10,13 +9,6 @@ type Props = {
 
 export const Albums = ({ albums }: Props) => {
     const layout = useLayoutContext()
-    const selection = useSelectionContext()
-
-    useKeyboard('keydown', 'Escape', () => {
-        if (selection.selected.size) {
-            selection.clear()
-        }
-    })
 
     if (layout.albumsLayout === ELayout.GRID) {
         return <GridView

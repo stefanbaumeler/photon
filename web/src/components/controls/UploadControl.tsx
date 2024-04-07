@@ -2,8 +2,9 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useKeyboard, useUpload } from '@/hooks'
+import { useUpload } from '@/hooks'
 import { useRef } from 'react'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     dropdown?: boolean
@@ -23,7 +24,7 @@ export const UploadControl = ({
         callback && callback()
     }
 
-    useKeyboard('keyup', 'c', shortcut && action)
+    useHotkey('c', action, undefined, !!shortcut)
 
     return <>
         <input
@@ -32,7 +33,7 @@ export const UploadControl = ({
             className="actions__uploader"
             ref={uploadRef}
             onChange={upload}
-            multiple={true}
+            multiple
         />
         {dropdown ? <DropdownItem item={{
             testId: 'upload',

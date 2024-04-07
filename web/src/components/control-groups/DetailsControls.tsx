@@ -2,13 +2,12 @@ import * as Icons from '@mdi/js'
 import { Button, Check, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { ELayout, ESelectionMode } from '@/types/app'
+import { EKeyboardScope, ELayout, ESelectionMode } from '@/types/app'
 import { useState } from 'react'
 import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
 import { TrashControls } from '@/components/control-groups'
-import { useKeyboard } from '@/hooks'
 import { FavoriteControl,
     DeleteControl,
     ArchiveControl,
@@ -16,6 +15,7 @@ import { FavoriteControl,
     SetAlbumCoverControl,
     DownloadMediaControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
+import { useHotkey } from '@/hooks/hotkey'
 
 export const DetailsControls = () => {
     const { t } = useTranslation()
@@ -27,12 +27,14 @@ export const DetailsControls = () => {
         variables: {
             id: idAlbum
         },
-        pause: !router.isReady
+        pause: !router.isReady || !idAlbum
     })
 
     const details = useDetailsContext()
     const selection = useSelectionContext()
     const layout = useLayoutContext()
+
+    const medium = details.medium ?? details.placeholder
 
     const [moreActive, setMoreActive] = useState(false)
 
@@ -40,11 +42,7 @@ export const DetailsControls = () => {
         selection.toggle(details.medium.id)
     }
 
-    const toggleDropdown = () => {
-        setMoreActive(!moreActive)
-    }
-
-    useKeyboard('keyup', ' ', selection.selected.size > 0 ? select : undefined)
+    useHotkey(' ', select, EKeyboardScope.details, selection.selected.size > 0)
 
     if (selection.mode === ESelectionMode.SELECT) {
         return <Tippy
@@ -53,10 +51,10 @@ export const DetailsControls = () => {
             <Check
                 testId="details-select"
                 onClick={select}
-                ready={true}
-                checked={selection.isSelected(details.medium.id)}
+                ready
+                checked={selection.isSelected(medium.id)}
                 boxSize={48}
-                hover={true}
+                hover
                 round={layout.layout !== ELayout.LIST}
             />
         </Tippy>
@@ -64,76 +62,60 @@ export const DetailsControls = () => {
 
     const moreItems = [
         <DeleteControl
-            dropdown={true}
-            shortcut={true}
-            elements={[details.medium.id]}
-            callback={toggleDropdown}
+            dropdown
+            shortcut
+            elements={[medium.id]}
+            callback={() => setMoreActive(false)}
             key={0}
         />,
         <RotateControl
-            dropdown={true}
-            shortcut={true}
-            media={[details.medium.id]}
-            callback={toggleDropdown}
+            dropdown
+            shortcut
+            callback={() => setMoreActive(false)}
             key={1}
         />,
         <ArchiveControl
-            dropdown={true}
-            shortcut={true}
-            media={[details.medium.id]}
-            callback={toggleDropdown}
+            dropdown
+            shortcut
+            media={[medium.id]}
+            callback={() => setMoreActive(false)}
             key={2}
         />
     ]
 
     if (idAlbum) {
         moreItems.push(<SetAlbumCoverControl
-            dropdown={true}
-            shortcut={true}
+            dropdown
+            shortcut
             album={albumQuery.data?.album.id}
-            medium={details.medium.id}
-            callback={toggleDropdown}
+            medium={medium.id}
+            callback={() => setMoreActive(false)}
         />)
     }
 
-    const RegularActions = () => {
-        return <>
-            <DownloadMediaControl
-                elements={[details.medium.id]}
-                shortcut={true}
+    return router.pathname === '/trash' ? <TrashControls white /> : <>
+        <DownloadMediaControl
+            elements={[medium.id]}
+            shortcut
+        />
+        <FavoriteControl
+            media={[medium.id]}
+            shortcut
+        />
+        <Dropdown
+            items={moreItems}
+            active={moreActive}
+            onClickOutside={() => setMoreActive(false)}
+        >
+            <Button
+                testId={'details-more'}
+                hint={t(ETrans.MORE_OPTIONS)}
+                icon={Icons.mdiDotsVertical}
+                appearance={{
+                    text: 'light'
+                }}
+                onClick={() => setMoreActive(true)}
             />
-            <FavoriteControl
-                media={[details.medium.id]}
-                shortcut={true}
-            />
-            <Dropdown
-                items={moreItems}
-                active={moreActive}
-                onClickOutside={() => setMoreActive(false)}
-            >
-                <Button
-                    testId={'details-more'}
-                    hint={t(ETrans.MORE_OPTIONS)}
-                    icon={Icons.mdiDotsVertical}
-                    appearance={{
-                        text: 'light'
-                    }}
-                    onClick={toggleDropdown}
-                />
-            </Dropdown>
-        </>
-    }
-
-    const Actions = () => {
-        if (router.pathname === '/trash') {
-            return <TrashControls white={true} />
-        }
-        else {
-            return <RegularActions />
-        }
-    }
-
-    return <>
-        <Actions />
+        </Dropdown>
     </>
 }

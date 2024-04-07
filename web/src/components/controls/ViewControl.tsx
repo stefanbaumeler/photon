@@ -1,11 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '@/components'
+import { Button, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout, TDropdownItem } from '@/types/app'
-import { useKeyboard } from '@/hooks'
+import { useHotkey } from '@/hooks/hotkey'
 
 export const ViewControl = () => {
     const { t } = useTranslation()
@@ -27,9 +27,11 @@ export const ViewControl = () => {
         setViewDropdownActive(false)
     }
 
-    useKeyboard('keyup', 'g', galleryView)
-    useKeyboard('keyup', 'm', mapView)
-    useKeyboard('keyup', 'l', listView)
+    useHotkey('g', galleryView)
+
+    useHotkey('m', mapView)
+
+    useHotkey('l', listView)
 
     const viewItems: TDropdownItem[] = [
         {

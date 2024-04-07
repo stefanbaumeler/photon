@@ -8,11 +8,10 @@ type Props = {
     id?: string | string[]
     closeCallback: () => void
     callback: () => void
-    active: boolean
 }
 
 export const DeleteAlbumDialog = ({
-    closeCallback, callback, id, active
+    closeCallback, callback, id
 }: Props) => {
     const { t } = useTranslation()
 
@@ -30,7 +29,6 @@ export const DeleteAlbumDialog = ({
 
     return <Dialog
         id="delete-album"
-        active={active}
         title={t(ETrans.PERMANENTLY_DELETE)}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {
             count: asArray(id).length || 1,

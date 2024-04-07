@@ -9,11 +9,10 @@ type Props = {
     media: string[]
     callback?: () => void
     closeCallback: () => void
-    active: boolean
 }
 
 export const MoveToTrashDialog = ({
-    closeCallback, callback, media, active
+    closeCallback, callback, media
 }: Props) => {
     const selection = useSelectionContext()
     const { t } = useTranslation()
@@ -31,7 +30,6 @@ export const MoveToTrashDialog = ({
 
     return <Dialog
         id="delete-media"
-        active={active}
         closeCallback={closeCallback}
         title={t(ETrans.MOVE_TO_TRASH)}
         text={t(ETrans.MOVE_ITEMS_TO_TRASH, {

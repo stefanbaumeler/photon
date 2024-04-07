@@ -27,7 +27,7 @@ export const DetailsMap = () => {
             target="_blank"
         >
             <Map
-                reuseMaps={true}
+                reuseMaps
                 interactive={false}
                 {...mapState}
                 style={{

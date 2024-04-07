@@ -147,7 +147,7 @@ type Mutation {
   deleteMedia(ids: [String!]!): [Medium!]!
   updateMedium(id: String!, title: String, description: String, meta: String): Medium!
   updateMedia(ids: [String!]!, status: String): [Medium!]!
-  rotateMedium(id: String!): Medium!
+  rotateMedium(id: String!, deg: Int!): Medium!
   insertFavorites(ids: [String!]!): User!
   deleteFavorites(ids: [String!]!): User!
 }

@@ -204,7 +204,10 @@ export const MapView = () => {
 
         return medium ? <div
             className="map__marker"
-            onClick={() => details.open(medium.id)}
+            onClick={() => details.open({
+                id: medium.id,
+                ...medium.cover
+            })}
         >
             <Medium
                 medium={medium.cover}
@@ -244,7 +247,7 @@ export const MapView = () => {
                 <Source
                     id="mediaMarkers"
                     type="geojson"
-                    cluster={true}
+                    cluster
                     clusterRadius={50}
                     data={{
                         type: 'FeatureCollection',

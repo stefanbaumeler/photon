@@ -9,13 +9,11 @@ const SettingsPage = () => {
     const { t } = useTranslation()
     const [dialogActive, setDialogActive] = useState(false)
     return <Layout>
-        <ChangePasswordDialog
-            active={dialogActive}
+        {dialogActive ? <ChangePasswordDialog
             closeCallback={() => {
                 setDialogActive(false)
             }}
-        />
-
+        /> : null}
         <Uploader />
         <div className="page">
             <Heading

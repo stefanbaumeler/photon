@@ -20,16 +20,16 @@ export const BulkMediaControls = () => {
 
     const moreItems = [
         <ArchiveControl
-            dropdown={true}
+            dropdown
             media={selected}
-            shortcut={true}
+            shortcut
             callback={() => setMoreActive(false)}
             key={0}
         />,
         <FavoriteControl
-            dropdown={true}
+            dropdown
             media={selected}
-            shortcut={true}
+            shortcut
             callback={() => setMoreActive(false)}
             key={1}
         />
@@ -51,11 +51,11 @@ export const BulkMediaControls = () => {
         {router.pathname === '/trash' ? <TrashControls /> : <>
             <AddToControl />
             <DownloadMediaControl
-                shortcut={true}
+                shortcut
             />
             <DeleteControl
                 elements={selected}
-                shortcut={true}
+                shortcut
             />
             <Dropdown
                 items={moreItems}

@@ -193,6 +193,7 @@ export type TMutationRemoveMediaFromAlbumArgs = {
 
 
 export type TMutationRotateMediumArgs = {
+  deg: Scalars['Int']['input'];
   id: Scalars['String']['input'];
 };
 
@@ -550,7 +551,7 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   insertFavorites?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationInsertFavoritesArgs, 'ids'>>;
   refreshAccessToken?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationRefreshAccessTokenArgs, 'accessToken' | 'refreshToken'>>;
   removeMediaFromAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationRemoveMediaFromAlbumArgs, 'id' | 'media'>>;
-  rotateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateMediumArgs, 'id'>>;
+  rotateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateMediumArgs, 'deg' | 'id'>>;
   signIn?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
   signOut?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType>;
   signUp?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'language' | 'lastName' | 'mail' | 'password'>>;
@@ -1171,6 +1172,7 @@ export type TQMedium = (
 
 export type TMRotateVariables = Exact<{
   id: Scalars['String']['input'];
+  deg: Scalars['Int']['input'];
 }>;
 
 
@@ -1787,8 +1789,8 @@ export function useQMedium(options: Omit<Urql.UseQueryArgs<TQMediumVariables>, '
   return Urql.useQuery<TQMedium, TQMediumVariables>({ query: QMediumDocument, ...options });
 };
 export const MRotateDocument = gql`
-    mutation MRotate($id: String!) {
-  rotateMedium(id: $id) {
+    mutation MRotate($id: String!, $deg: Int!) {
+  rotateMedium(id: $id, deg: $deg) {
     ...FMedia
   }
 }

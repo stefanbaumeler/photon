@@ -127,3 +127,13 @@ export class MediumFilterDto {
     })
         ids?: string[]
 }
+
+@InputType()
+@ArgsType()
+export class MediumRotateDto {
+    @Field(() => String)
+        id!: string
+
+    @Field(() => Int)
+        deg!: number
+}

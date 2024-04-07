@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { MediumRepository } from './medium.repository'
-import { MediumFilenameDiskDto, MediumFilterDto, MediumUpdateDto, MediumUpdateManyDto } from './medium.dto'
+import { MediumFilenameDiskDto,
+    MediumFilterDto,
+    MediumRotateDto,
+    MediumUpdateDto,
+    MediumUpdateManyDto } from './medium.dto'
 import fs from 'fs'
 import path from 'path'
 import { getEnv } from '../../env'
@@ -116,7 +120,7 @@ export class MediumService {
     }
 
     async update (dto: MediumUpdateDto) {
-        return this.repository.update(dto)
+        return this.repository.update(dto, this.includeAll())
     }
 
     async updateMany (dto: MediumUpdateManyDto) {
@@ -153,7 +157,7 @@ export class MediumService {
         return media
     }
 
-    async rotate (dto: IdDto) {
+    async rotate (dto: MediumRotateDto) {
         const medium = await this.repository.findById(dto)
 
         if (!medium) {
@@ -163,8 +167,7 @@ export class MediumService {
         const filePath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk)
         const filePathOld = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
         fs.renameSync(filePath, filePathOld)
-
-        const row = await sharp(filePathOld).rotate(90).toFile(filePath)
+        const row = await sharp(filePathOld).rotate(dto.deg).toFile(filePath)
 
         const meta = {
             ...medium.meta as TMeta,
@@ -173,8 +176,8 @@ export class MediumService {
         }
 
         const update = await this.update({
-            id: medium.id
-            // meta
+            id: medium.id,
+            meta
         })
 
         fs.unlinkSync(filePathOld)

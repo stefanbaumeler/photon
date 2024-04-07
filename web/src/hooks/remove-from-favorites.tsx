@@ -28,7 +28,7 @@ export const useRemoveFromFavorites = (mediaIds: string[]) => {
                     }
 
                     if (newSelected) {
-                        details.open(newSelected.id)
+                        details.open(newSelected)
                     }
                 }
             }

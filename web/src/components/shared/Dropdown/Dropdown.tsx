@@ -30,7 +30,7 @@ export const Dropdown = ({
             theme="light"
             placement={'left'}
             zIndex={102}
-            interactive={true}
+            interactive
             onClickOutside={onClickOutside}
             offset={[smallButton ? 43.5 : 51.5, smallButton ? -32 : -48]}
         >

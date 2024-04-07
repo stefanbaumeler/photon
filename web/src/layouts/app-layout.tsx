@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { SearchBar, Sidebar, FocusOverlay } from '@/components'
+import { SearchBar, Sidebar, FocusOverlay, Details } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
@@ -26,6 +26,7 @@ const AppLayout = ({ children }: Props) => {
             <FocusOverlay />
             <SearchBar />
             <Sidebar />
+            <Details />
             <main className="main">
                 {children}
             </main>

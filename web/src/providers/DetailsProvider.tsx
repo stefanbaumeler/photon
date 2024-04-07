@@ -1,6 +1,8 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { TMedium, useQMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
+import { TCover } from '@/types/app'
+import { useRotate } from '@/hooks'
 
 type Props = {
     children?: ReactNode
@@ -8,26 +10,25 @@ type Props = {
 
 interface DetailsContext {
     active: boolean
-    infos: boolean
-    medium: TMedium
-    setMedium: Dispatch<SetStateAction<TMedium>>
+    medium?: TMedium
+    placeholder?: TCover
     getUrl: (medium: string) => string
-    open: (medium: string) => void
+    open: (medium: TCover) => void
     close: () => void
-    openInfos: () => void
-    closeInfos: () => void
+    rotationRequest: number
+    resolveRotationRequest: () => void
+    rotate: () => void
 }
 
 const DetailsContext = createContext<DetailsContext | null>(null)
 
 const DetailsProvider = ({ children }: Props) => {
-    const [infos, setInfos] = useState(true)
     const router = useRouter()
-
-    const [medium, setMedium] = useState<TMedium>()
     const [active, setActive] = useState(false)
-
+    const [medium, setMedium] = useState<TMedium>()
+    const [placeholder, setPlaceholder] = useState<TCover>()
     const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
+    const [rotationRequest, setRotationRequest] = useState(0)
 
     const [mediumQuery] = useQMedium({
         variables: {
@@ -37,11 +38,11 @@ const DetailsProvider = ({ children }: Props) => {
     })
 
     useEffect(() => {
-        if (mediumQuery.data) {
-            setMedium(mediumQuery.data.medium as TMedium)
-            setActive(!!mediumQuery.data.medium)
+        if (mediumQuery.data?.medium) {
+            setActive(true)
+            setMedium(mediumQuery.data?.medium as TMedium)
         }
-    }, [mediumQuery.data])
+    }, [mediumQuery.data?.medium])
 
     const getUrl = (mediumId: string) => {
         const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
@@ -58,15 +59,13 @@ const DetailsProvider = ({ children }: Props) => {
         return newUrl
     }
 
-    const open = (newMedium: string) => {
-        if (!newMedium) {
-            return
-        }
-
+    const open = (newMedium: TCover) => {
         setActive(true)
+        setMedium(undefined)
+        setPlaceholder(newMedium)
 
-        if (router.query.idMedium !== newMedium) {
-            router.push(getUrl(newMedium), null, {
+        if (router.query.idMedium !== newMedium.id) {
+            router.push(getUrl(newMedium.id), null, {
                 shallow: true
             })
         }
@@ -74,9 +73,8 @@ const DetailsProvider = ({ children }: Props) => {
 
     return <DetailsContext.Provider value={{
         active,
-        infos,
         medium,
-        setMedium,
+        placeholder,
         getUrl,
         open,
         close: () => {
@@ -86,18 +84,21 @@ const DetailsProvider = ({ children }: Props) => {
                 newUrl = `/albums/${router.query.idAlbum}/`
             }
 
+            setRotationRequest(0)
+            setActive(false)
+            setMedium(null)
+            setPlaceholder(null)
+
             router.push(newUrl, null, {
                 shallow: true
-            }).then(() => {
-                setActive(false)
-                setMedium(undefined)
             })
         },
-        openInfos: () => {
-            setInfos(true)
+        rotationRequest,
+        resolveRotationRequest: () => {
+            setRotationRequest(0)
         },
-        closeInfos: () => {
-            setInfos(false)
+        rotate: () => {
+            setRotationRequest(rotationRequest + 90)
         }
     }}
     >

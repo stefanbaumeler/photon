@@ -19,15 +19,13 @@ export const TrashControls = ({ white }: Props) => {
     const [deleteMediaDialogActive, setDeleteMediaDialogActive] = useState(false)
 
     return <>
-        <RestoreMediaDialog
-            active={restoreMediaDialogActive}
+        {restoreMediaDialogActive ? <RestoreMediaDialog
             media={details.active ? [details.medium.id] : [...selection.selected]}
             closeCallback={() => setRestoreMediaDialogActive(false)}
-        />
-        <DeleteMediaDialog
+        /> : null}
+        {deleteMediaDialogActive ? <DeleteMediaDialog
             closeCallback={() => setDeleteMediaDialogActive(false)}
-            active={deleteMediaDialogActive}
-        />
+        /> : null}
         <Button
             label={t(ETrans.DELETE)}
             onClick={() => setDeleteMediaDialogActive(true)}

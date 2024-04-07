@@ -25,20 +25,19 @@ export const ListItemControls = ({
     }
 
     moreItems.push(<DeleteControl
-        dropdown={true}
+        dropdown
         elements={[element]}
         callback={toggleDropdown}
     />)
 
     if (!album) {
         moreItems.push(<RotateControl
-            dropdown={true}
-            media={[element]}
+            dropdown
             callback={toggleDropdown}
         />)
 
         moreItems.push(<ArchiveControl
-            dropdown={true}
+            dropdown
             media={[element]}
             callback={toggleDropdown}
         />)

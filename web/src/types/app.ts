@@ -48,7 +48,7 @@ export type TDropdownItem = {
     shortcut?: string
 }
 
-export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype'> & { meta: Pick<TMeta, 'width' | 'height'> } | null
+export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype' | 'id'> & { meta: Pick<TMeta, 'width' | 'height'> } | null
 
 export type TGridItem = {
     id: string
@@ -152,4 +152,18 @@ export enum ELayout {
     LIST = 'LIST',
     GALLERY = 'GALLERY',
     GRID = 'GRID'
+}
+
+export enum EKeyboardScope {
+    default = 'DEFAULT',
+    disabled = 'DISABLED',
+    dialog = 'DIALOG',
+    dropdown = 'DROPDOWN',
+    details = 'DETAILS',
+    select = 'SELECT',
+    gallery = 'GALLERY',
+    map = 'MAP',
+    list = 'LIST',
+    album = 'ALBUM',
+    edit = 'EDIT',
 }

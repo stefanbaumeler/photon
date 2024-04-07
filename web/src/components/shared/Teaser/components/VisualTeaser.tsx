@@ -1,16 +1,26 @@
-import { useDragContext, useSearchContext, useSelectionContext } from '@/providers'
+import { useDetailsContext, useDragContext, useSearchContext, useSelectionContext } from '@/providers'
 import { Medium } from '@/components'
 import { ESelectionMode } from '@/types/app'
 import bem from '@/util/bem'
 import { useTeaserContext, TeaserTopLeftCorner } from '../index'
 import Link from 'next/link'
-import { MouseEvent } from 'react'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 
 export const VisualTeaser = () => {
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
     const drag = useDragContext()
     const { hits: media } = useSearchContext()
+    const details = useDetailsContext()
+    const [updatedSource, setUpdatedSource] = useState(0)
+
+    const src = useRef(updatedSource)
+
+    useEffect(() => {
+        if (teaser.id === details.medium?.id) {
+            setUpdatedSource(src.current + 1)
+        }
+    }, [teaser.id, details.medium?.id, src, details.rotationRequest])
 
     const open = (event: MouseEvent) => {
         if (!teaser.selectable) {
@@ -98,6 +108,7 @@ export const VisualTeaser = () => {
                         testId="teaser-image"
                         medium={teaser.cover}
                         width={teaser.displayWidth ? teaser.displayWidth : teaser.displayHeight / teaser.nativeHeight * teaser.nativeWidth || 300}
+                        updateHash={updatedSource}
                     />
                 </div>
             </div>

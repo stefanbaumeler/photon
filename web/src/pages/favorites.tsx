@@ -1,5 +1,5 @@
 import Layout from '@/layouts/app-layout'
-import { Uploader, Details, Dialog, Media } from '@/components'
+import { Uploader, Media } from '@/components'
 import { useSearchContext } from '@/providers'
 import { useEffect } from 'react'
 import { EMediumStatus } from '@/types/app'
@@ -16,7 +16,6 @@ const FavoritesPage = () => {
         <section>
             <div>
                 <Uploader />
-                <Details />
                 <Media />
             </div>
         </section>

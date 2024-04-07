@@ -2,10 +2,10 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { TAlbum, TMedium } from '@photon/schema'
 import { useDetailsContext, useSelectionContext } from '@/providers'
-import { useSetAlbumCover, useKeyboard } from '@/hooks'
-import { ESelectionMode } from '@/types/app'
+import { useSetAlbumCover } from '@/hooks'
+import { EKeyboardScope, ESelectionMode } from '@/types/app'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     album?: string
@@ -34,7 +34,7 @@ export const SetAlbumCoverControl = ({
         }
     }
 
-    useKeyboard('keyup', 'c', shortcut && action)
+    useHotkey('c', action, EKeyboardScope.album, !!shortcut)
 
     return dropdown ? <DropdownItem item={{
         testId: 'album-set-cover',

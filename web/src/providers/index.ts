@@ -5,7 +5,6 @@
 export * from './DetailsProvider'
 export * from './DragProvider'
 export * from './EditProvider'
-export * from './KeyboardProvider'
 export * from './LayoutProvider'
 export * from './NavProvider'
 export * from './ProviderProvider'

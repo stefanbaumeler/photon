@@ -13,7 +13,6 @@ import { DetailsProvider,
     ProviderProvider,
     SelectionProvider,
     DragProvider,
-    KeyboardProvider,
     UserProvider } from '@/providers'
 
 interface Props {
@@ -28,7 +27,6 @@ const TestProvider = (props: Props) => {
             <I18nextProvider i18n={i18next}>
                 <ProviderProvider components={[
                     UserProvider,
-                    KeyboardProvider,
                     SelectionProvider,
                     DragProvider,
                     NavProvider,

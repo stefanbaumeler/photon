@@ -1,9 +1,9 @@
-import { useKeyboard } from '@/hooks'
-import bem from '@/util/bem'
 import { Button } from '@/components'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useKeyboardContext } from '@/providers'
+import { EKeyboardScope } from '@/types/app'
+import { useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     id: string
@@ -11,40 +11,27 @@ type Props = {
     text?: string
     buttons?: (Parameters<typeof Button>[0])[]
     children?: ReactNode
-    active?: boolean
     closeCallback: () => void
 }
 export const Dialog = ({
-    id, active, title, children, buttons = [], text, closeCallback
+    id, title, children, buttons = [], text, closeCallback
 }: Props) => {
-    const [isSSR, setIsSSR] = useState(true)
+    const {
+        enableScope, disableScope
+    } = useHotkeysContext()
 
     useEffect(() => {
-        setIsSSR(false)
-    }, [])
+        enableScope(EKeyboardScope.dialog)
+    }, [enableScope])
 
-    const { setIsTyping } = useKeyboardContext()
-    useKeyboard('keydown', 'Escape', () => {
-        if (active) {
-            closeCallback()
-        }
-    })
+    useHotkey('Escape', () => {
+        disableScope(EKeyboardScope.dialog)
+        closeCallback()
+    }, EKeyboardScope.dialog)
 
-    useEffect(() => {
-        setIsTyping(active)
-    }, [active, setIsTyping])
-
-    const classes = bem('dialog', [
-        ['active', active]
-    ])
-
-    if (isSSR) {
-        return null
-    }
-
-    return active ? createPortal(<div
+    return createPortal(<div
         data-testid={id}
-        className={classes}
+        className="dialog dialog--active"
     >
         <div className="dialog__container">
             <div className="dialog__header">
@@ -67,5 +54,5 @@ export const Dialog = ({
                 />)}
             </div>
         </div>
-    </div>, document.body) : null
+    </div>, document.body)
 }

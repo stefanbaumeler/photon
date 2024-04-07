@@ -1,23 +1,24 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/app-layout'
-import { Button, Details, Media, Uploader } from '@/components'
+import { Button, Media, Uploader } from '@/components'
 import { useDetailsContext,
     useEditContext,
     useSearchContext,
     useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { EDateFormat, EEditState, ESelectionMode } from '@/types/app'
-import { TAlbum, useQAlbum } from '@photon/schema'
+import { useEffect, useRef, useState } from 'react'
+import { EDateFormat, EEditState, EKeyboardScope, ESelectionMode } from '@/types/app'
+import { useQAlbum } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
-import { useSetAlbumCover, useUpdateAlbum, useKeyboard } from '@/hooks'
+import { useSetAlbumCover, useUpdateAlbum } from '@/hooks'
+import { useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkey } from '@/hooks/hotkey'
 
 const AlbumPage = () => {
     const router = useRouter()
     const { t } = useTranslation()
-    const details = useDetailsContext()
     const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
 
     const selection = useSelectionContext()
@@ -44,12 +45,19 @@ const AlbumPage = () => {
         selection.setMode(ESelectionMode.DELETE)
     }
 
-    useKeyboard('keyup', 'e', editAlbum)
-    useKeyboard('keydown', 'Escape', () => {
-        if (!selection.selected.size && !details?.active && edit.state === EEditState.OFF) {
-            back()
-        }
-    })
+    const { enableScope } = useHotkeysContext()
+
+    const back = () => {
+        selection.clear()
+        router.push('/albums')
+    }
+
+    useEffect(() => {
+        enableScope(EKeyboardScope.album)
+    }, [enableScope])
+
+    useHotkey('e', editAlbum, EKeyboardScope.album)
+    useHotkey('Escape', back, EKeyboardScope.album)
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -90,11 +98,6 @@ const AlbumPage = () => {
         setEarliest(formatDate(mediaSortedByDateTaken[0]?.dateTaken, EDateFormat.LONG))
         setLatest(formatDate(mediaSortedByDateTaken[mediaSortedByDateTaken.length - 1]?.dateTaken, EDateFormat.LONG))
     }, [media])
-
-    const back = () => {
-        selection.clear()
-        router.push('/albums')
-    }
 
     return <Layout>
         <section>
@@ -137,7 +140,6 @@ const AlbumPage = () => {
                     </div>}
                 </div>
                 <Uploader />
-                <Details />
                 <Media />
             </div>
         </section>

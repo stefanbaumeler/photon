@@ -20,10 +20,9 @@ export const AddToControl = ({ dropdown }: Props) => {
     }
 
     return <>
-        <AddToAlbumDialog
+        {dialogActive ? <AddToAlbumDialog
             closeCallback={() => setDialogActive(false)}
-            active={dialogActive}
-        />
+        /> : null}
         {dropdown ? <DropdownItem item={{
             testId: 'add-to',
             label: t(ETrans.ADD_TO),

@@ -46,7 +46,7 @@ export const AlbumListItem = ({
         <td className="list-view__cell list-view__cell--select">
             <Check
                 onClick={select}
-                ready={true}
+                ready
                 checked={selection.isSelected(id)}
                 round={false}
                 iconSize={1.125}
@@ -62,7 +62,7 @@ export const AlbumListItem = ({
         >
             <Tippy
                 className="list-view__tip"
-                followCursor={true}
+                followCursor
                 content={<Medium
                     medium={cover}
                     width={500}

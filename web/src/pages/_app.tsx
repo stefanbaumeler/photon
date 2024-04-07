@@ -6,7 +6,6 @@ import { NavProvider,
     SortProvider,
     SearchProvider,
     DragProvider,
-    KeyboardProvider,
     UserProvider,
     DetailsProvider } from '@/providers'
 import { AppProps } from 'next/app'
@@ -20,6 +19,7 @@ import { I18nextProvider } from 'react-i18next'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'tippy.js/themes/light.css'
 import { Provider } from 'urql'
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 tippy.setDefaultProps({
     zIndex: 101,
@@ -36,8 +36,8 @@ const Photon = ({
     return <Provider value={initializeUrqlClient()}>
         <I18nextProvider i18n={i18next}>
             <ProviderProvider components={[
+                HotkeysProvider,
                 UserProvider,
-                KeyboardProvider,
                 SelectionProvider,
                 DragProvider,
                 NavProvider,

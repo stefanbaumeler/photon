@@ -7,6 +7,7 @@ import Tippy from '@tippyjs/react'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
+import { useEffect, useRef, useState } from 'react'
 export const MediumListItem = ({
     id, title, cover, favoredBy, dateTaken, mimetype, owner
 }: TMediumListItem) => {
@@ -15,6 +16,16 @@ export const MediumListItem = ({
 
     const addToFavorites = useAddToFavorites([id])
     const removeFromFavorites = useRemoveFromFavorites([id])
+
+    // const [updatedSource, setUpdatedSource] = useState(0)
+
+    const src = useRef(0)
+
+    useEffect(() => {
+        if (id === details.medium?.id) {
+            src.current = src.current + 1
+        }
+    }, [id, details.medium?.id, src, details.rotationRequest])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
@@ -25,36 +36,10 @@ export const MediumListItem = ({
     }
 
     const open = () => {
-        details.open(id)
-    }
-
-    const CategoryCells = () => {
-        return favoredBy !== undefined ? <td
-            className="list-view__cell"
-            onClick={favoredBy ? removeFromFavorites : addToFavorites}
-        >
-            <Icon
-                path={favoredBy ? Icons.mdiStar : Icons.mdiStarOutline}
-                size={1}
-            />
-        </td> : undefined
-    }
-
-    const MediumCells = () => {
-        return <>
-            { dateTaken ? <td
-                className="list-view__cell"
-                onClick={open}
-            >
-                {formatDate(dateTaken)}
-            </td> : undefined}
-            {mimetype ? <td
-                className="list-view__cell"
-                onClick={open}
-            >
-                {mimetype}
-            </td> : undefined}
-        </>
+        details.open({
+            id,
+            ...cover
+        })
     }
 
     return <tr
@@ -63,7 +48,7 @@ export const MediumListItem = ({
         <td className="list-view__cell list-view__cell--select">
             <Check
                 onClick={select}
-                ready={true}
+                ready
                 checked={selection.isSelected(id)}
                 round={false}
                 iconSize={1.125}
@@ -73,15 +58,24 @@ export const MediumListItem = ({
                 testId="list-check"
             />
         </td>
-        <CategoryCells />
+        {favoredBy === undefined ? null : <td
+            className="list-view__cell"
+            onClick={favoredBy ? removeFromFavorites : addToFavorites}
+        >
+            <Icon
+                path={favoredBy ? Icons.mdiStar : Icons.mdiStarOutline}
+                size={1}
+            />
+        </td>}
         <td
             className="list-view__cell list-view__cell--image"
             onClick={open}
         >
             <Tippy
                 className="list-view__tip"
-                followCursor={true}
+                followCursor
                 content={<Medium
+                    updateHash={src.current}
                     medium={cover}
                     width={500}
                     position={'top'}
@@ -90,6 +84,7 @@ export const MediumListItem = ({
                 zIndex={102}
             >
                 <Medium
+                    updateHash={src.current}
                     medium={cover}
                     width={50}
                 />
@@ -101,7 +96,18 @@ export const MediumListItem = ({
         >
             {title}
         </td>
-        <MediumCells />
+        { dateTaken ? <td
+            className="list-view__cell"
+            onClick={open}
+        >
+            {formatDate(dateTaken)}
+        </td> : null}
+        {mimetype ? <td
+            className="list-view__cell"
+            onClick={open}
+        >
+            {mimetype}
+        </td> : null}
         <td
             className="list-view__cell"
             onClick={open}

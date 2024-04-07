@@ -1,19 +1,10 @@
-import { useDetailsContext, useLayoutContext, useSearchContext, useSelectionContext } from '@/providers'
-import { useKeyboard } from '@/hooks'
+import { useLayoutContext, useSearchContext } from '@/providers'
 import { ELayout } from '@/types/app'
 import { GalleryView, ListView, MapView } from '../index'
 
 export const Media = () => {
-    const selection = useSelectionContext()
-    const details = useDetailsContext()
     const layout = useLayoutContext()
     const { hits: media } = useSearchContext()
-
-    useKeyboard('keydown', 'Escape', () => {
-        if (!details.active && selection.selected.size) {
-            selection.clear()
-        }
-    })
 
     return <>
         {layout.layout === ELayout.GALLERY ? <GalleryView elements={media} /> : null}

@@ -6,19 +6,15 @@ import { Dialog } from '@/components'
 
 type Props = {
     closeCallback: () => void
-    active: boolean
 }
 
-export const DeleteMediaDialog = ({
-    closeCallback, active
-}: Props) => {
+export const DeleteMediaDialog = ({ closeCallback }: Props) => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
     const confirm = useDeleteMedia()
 
     return <Dialog
         id="delete-media"
-        active={active}
         closeCallback={closeCallback}
         title={t(ETrans.PERMANENTLY_DELETE)}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {

@@ -15,13 +15,13 @@ export const TeaserNavControl = ({ stack }: Props) => {
 
     const moreItems = [
         <DeleteControl
-            dropdown={true}
+            dropdown
             callback={() => setMoreActive(false)}
             elements={[id]}
             key={0}
         />,
         <DownloadMediaControl
-            dropdown={true}
+            dropdown
             callback={() => setMoreActive(false)}
             elements={stack ?? [id]}
             key={1}
@@ -33,7 +33,7 @@ export const TeaserNavControl = ({ stack }: Props) => {
             items={moreItems}
             active={moreActive}
             onClickOutside={() => setMoreActive(false)}
-            smallButton={true}
+            smallButton
         >
             <Button
                 testId="album-controls"

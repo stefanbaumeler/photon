@@ -9,24 +9,19 @@ type Props = {
 export const ListView = ({
     media, albums
 }: Props) => {
-    const items = media ? media.map((medium, key) => {
-        return <MediumListItem
-            {...medium}
-            key={key}
-        />
-    }) : albums.map((album, key) => {
-        return <AlbumListItem
-            {...album}
-            key={key}
-        />
-    })
-
     return <div className="list-view">
         <div className="list-view__header">
         </div>
         <table className="list-view__table">
             <tbody className="list-view__tbody">
-                {items}
+                {media ? media.map((medium, key) => <MediumListItem
+                    {...medium}
+                    key={key}
+                />) : null}
+                {albums ? albums.map((album, key) => <AlbumListItem
+                    {...album}
+                    key={key}
+                />) : null}
             </tbody>
         </table>
     </div>

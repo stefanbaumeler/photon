@@ -54,7 +54,7 @@ export const Uploader = () => {
             data-testid="uploader-input"
             className="uploader__input"
             type="file"
-            multiple={true}
+            multiple
             onChange={upload}
         />
     </div>

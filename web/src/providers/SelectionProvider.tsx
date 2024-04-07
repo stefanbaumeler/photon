@@ -1,7 +1,8 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { ESelectionMode } from '@/types/app'
-import { useKeyboard } from '@/hooks'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { EKeyboardScope, ESelectionMode } from '@/types/app'
 import { useRouter } from 'next/router'
+import { useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     children?: ReactNode
@@ -31,13 +32,38 @@ const SelectionProvider = ({ children }: Props) => {
     const [shift, setShift] = useState(false)
     const router = useRouter()
 
-    useKeyboard('keydown', 'Shift', () => {
-        setShift(true)
-    })
+    const clear = () => {
+        if (selected.size || mode === ESelectionMode.DELETE) {
+            setSelected(new Set())
+            setMode(ESelectionMode.OFF)
+            setShiftTargets([])
+            setLastAdded(undefined)
+            setMode(ESelectionMode.OFF)
+        }
+    }
 
-    useKeyboard('keyup', 'Shift', () => {
-        setShift(false)
-    })
+    const {
+        enableScope, disableScope
+    } = useHotkeysContext()
+
+    useEffect(() => {
+        if (mode === ESelectionMode.OFF) {
+            disableScope(EKeyboardScope.select)
+        }
+        else {
+            enableScope(EKeyboardScope.select)
+        }
+    }, [mode, disableScope, enableScope])
+
+    useHotkey('Escape', clear, EKeyboardScope.select)
+
+    // useKeyboard('keydown', 'Shift', () => {
+    //     setShift(true)
+    // })
+    //
+    // useKeyboard('keyup', 'Shift', () => {
+    //     setShift(false)
+    // })
 
     return <SelectionContext.Provider value={{
         shift,

@@ -2,10 +2,11 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDownload, useKeyboard } from '@/hooks'
+import { useDownload } from '@/hooks'
 import { useDetailsContext, useSelectionContext } from '@/providers'
-import { EMediumStatus, ESelectionMode } from '@/types/app'
+import { EKeyboardScope, EMediumStatus, ESelectionMode } from '@/types/app'
 import { useQAlbums } from '@photon/schema'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     dropdown?: boolean
@@ -39,7 +40,7 @@ export const DownloadAlbumsControl = ({
         callback: actionCallback
     })
 
-    useKeyboard('keyup', 'd', shortcut && download)
+    useHotkey('d', download, EKeyboardScope.select, !!shortcut)
 
     return dropdown ? <DropdownItem item={{
         testId: 'download',

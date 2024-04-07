@@ -6,74 +6,91 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
-import { useKeyboard } from '@/hooks'
 import bem from '@/util/bem'
-import { EDateFormat } from '@/types/app'
+import { EDateFormat, EKeyboardScope } from '@/types/app'
 import { DetailsImageMeta, DetailsVideoMeta, DetailsDescription, DetailsAlbums, DetailsMap, DetailsSection, DetailsOwner, DetailsShares } from '.'
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
+import { useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkey } from '@/hooks/hotkey'
+import { useRotate } from '@/hooks'
 
 export const Details = () => {
     const { t } = useTranslation()
     const details = useDetailsContext()
     const { hits: media } = useSearchContext()
     const index = media.map(({ id }) => id).indexOf(details.medium?.id)
+    const [showInfos, setShowInfos] = useState(true)
+    const medium = details.medium ?? details.placeholder
+    const [loading, setLoading] = useState(false)
+    const [rotation, setRotation] = useState(0)
+    const rotate = useRotate(details.medium?.id)
+    const [updatedSource, setUpdatedSource] = useState(0)
+
+    const {
+        enableScope, disableScope
+    } = useHotkeysContext()
 
     const slide = (direction: number) => {
         if (media[index + direction] && details.active) {
-            details.open(media[index + direction].id)
+            details.open(media[index + direction])
         }
     }
 
-    useKeyboard('keydown', 'ArrowLeft', () => {
-        slide(-1)
-    })
-
-    useKeyboard('keydown', 'ArrowRight', () => {
-        slide(1)
-    })
-
-    useKeyboard('keydown', 'Escape', () => {
+    useEffect(() => {
         if (details.active) {
-            details.close()
+            enableScope(EKeyboardScope.details)
         }
-    })
+    }, [details.active, enableScope])
+
+    useEffect(() => {
+        setRotation(details.rotationRequest)
+        const timer = setTimeout(() => {
+            if (rotation !== 0) {
+                rotate(details.rotationRequest).then(() => {
+                    details.resolveRotationRequest()
+                    setUpdatedSource(updatedSource + 1)
+                    setLoading(true)
+                })
+            }
+        }, 250)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [updatedSource, rotation, details, rotate])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false)
+        }, 500)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [loading])
+
+    useHotkey('Escape', () => {
+        disableScope(EKeyboardScope.details)
+        details.close()
+    }, EKeyboardScope.details)
+
+    useHotkey('ArrowLeft', () => {
+        slide(-1)
+    }, EKeyboardScope.details)
+
+    useHotkey('ArrowRight', () => {
+        slide(1)
+    }, EKeyboardScope.details)
 
     const classes = bem('details', [
         ['active', details.active],
-        ['infos', details.infos]
+        ['infos', showInfos]
     ])
 
-    const containerClasses = bem('details__container', [
-        // ['rotated', rotated]
-    ])
-
-    const DetailsMedium = useMemo(() => {
-        if (!details.medium) {
-            return <div></div>
-        }
-
-        return <>
-            <Medium
-                placeholder={true}
-                priority={true}
-                medium={details.medium}
-                width={details.medium.meta.width / 20}
-            />
-            <Medium
-                priority={true}
-                testId="details-image"
-                medium={details.medium}
-                width={details.medium.meta.width / 2}
-            />
-        </>
-    }, [details.medium])
-
-    if (!details.medium || !Object.keys(details.medium).length) {
+    if (!medium || !Object.keys(medium).length) {
         return null
     }
 
     const previewClasses = bem('details__preview', [
-        ['video', details.medium.mimetype?.startsWith('video')],
+        ['video', medium.mimetype?.startsWith('video')],
         ['first', index === 0],
         ['last', index === media.length - 1]
     ])
@@ -121,7 +138,7 @@ export const Details = () => {
                 </div>
                 <div className="toolbar__section toolbar__section--right">
                     <DetailsControls />
-                    {details.infos ? null : <Button
+                    {showInfos ? null : <Button
                         testId="show-infos"
                         hint={t(ETrans.SHOW_THING, {
                             thing: t(ETrans.INFO_PLURAL)
@@ -129,18 +146,39 @@ export const Details = () => {
                         appearance={{
                             text: 'light'
                         }}
-                        onClick={details.openInfos}
+                        onClick={() => setShowInfos(true)}
                         icon={Icons.mdiInformation}
                     />}
                 </div>
             </div>
             <div
-                className={containerClasses}
+                className="details__container"
                 style={{
-                    aspectRatio: `${details.medium.meta.width} / ${details.medium.meta.height}`
+                    aspectRatio: `${medium.meta.width} / ${medium.meta.height}`
                 }}
             >
-                {DetailsMedium}
+                <div style={{
+                    rotate: `${rotation}deg`,
+                    scale: `${rotation % 180 ? medium.meta.height / medium.meta.width : 1}`,
+                    opacity: loading ? 0 : 1,
+                    transition: 'scale .25s, rotate .25s'
+                }}
+                >
+                    <Medium
+                        placeholder
+                        priority
+                        medium={medium}
+                        width={medium.meta.width / 20}
+                        updateHash={updatedSource}
+                    />
+                    <Medium
+                        priority
+                        testId="details-image"
+                        medium={medium}
+                        width={medium.meta.width / 2}
+                        updateHash={updatedSource}
+                    />
+                </div>
             </div>
         </div>
         <aside
@@ -154,12 +192,12 @@ export const Details = () => {
                         hint={t(ETrans.HIDE_THING, {
                             thing: t(ETrans.INFO_PLURAL)
                         })}
-                        onClick={details.closeInfos}
+                        onClick={() => setShowInfos(false)}
                         icon={Icons.mdiArrowRight}
                     />
                 </div>
             </div>
-            <div className="details__sidebar-content">
+            {details.medium ? <div className="details__sidebar-content">
                 <DetailsDescription />
                 <DetailsAlbums />
                 <DetailsSection title={t(ETrans.DETAILS)}>
@@ -173,7 +211,7 @@ export const Details = () => {
                 <DetailsOwner />
                 <DetailsShares />
                 <DetailsMap />
-            </div>
+            </div> : null}
         </aside>
     </div>
 }

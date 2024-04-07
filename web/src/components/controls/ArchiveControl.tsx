@@ -3,10 +3,11 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useQMedium } from '@photon/schema'
-import { useKeyboard, useSetMediaStatus } from '@/hooks'
+import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
+import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
     media: string[]
@@ -64,7 +65,8 @@ export const ArchiveControl = ({
 
         callback && callback()
     }
-    useKeyboard('keyup', 'a', shortcut && action)
+
+    useHotkey('a', action, undefined, !!shortcut)
 
     const testId = shouldArchive ? 'archive' : 'unarchive'
     const label = t(shouldArchive ? ETrans.MOVE_TO_ARCHIVE : ETrans.UNARCHIVE)

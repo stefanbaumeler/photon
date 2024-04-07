@@ -1,12 +1,11 @@
 import Layout from '@/layouts/app-layout'
-import { Uploader, Details } from '@/components'
+import { Uploader } from '@/components'
 
 const ExportPage = () => {
     return <Layout>
         <section>
             <div>
                 <Uploader />
-                <Details />
             </div>
         </section>
     </Layout>

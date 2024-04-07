@@ -120,7 +120,7 @@ export class MediumRepository {
         }
     }
 
-    async update (dto: MediumUpdateDto) {
+    async update (dto: MediumUpdateDto, include?: Prisma.MediumInclude) {
         const {
             id, ...data
         } = dto
@@ -129,7 +129,8 @@ export class MediumRepository {
             where: {
                 id
             },
-            data
+            data,
+            include
         })
     }
 

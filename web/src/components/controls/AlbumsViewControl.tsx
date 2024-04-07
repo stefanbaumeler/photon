@@ -1,11 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '@/components'
+import { Button, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useLayoutContext } from '@/providers'
 import { ELayout } from '@/types/app'
-import { useKeyboard } from '@/hooks'
+import { useHotkey } from '@/hooks/hotkey'
 
 export const AlbumsViewControl = () => {
     const { t } = useTranslation()
@@ -22,8 +22,8 @@ export const AlbumsViewControl = () => {
         setViewDropdownActive(false)
     }
 
-    useKeyboard('keyup', 'g', gridView)
-    useKeyboard('keyup', 'l', listView)
+    useHotkey('g', gridView)
+    useHotkey('l', listView)
 
     const viewItems = [
         {

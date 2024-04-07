@@ -8,11 +8,10 @@ import { Dialog } from '@/components'
 type Props = {
     media: string[]
     closeCallback: () => void
-    active: boolean
 }
 
 export const RestoreMediaDialog = ({
-    media, closeCallback, active
+    media, closeCallback
 }: Props) => {
     const { t } = useTranslation()
     const restore = useSetMediaStatus({
@@ -27,7 +26,6 @@ export const RestoreMediaDialog = ({
 
     return <Dialog
         id={'delete-media'}
-        active={active}
         closeCallback={closeCallback}
         title={t(ETrans.RESTORE)}
         text={t(ETrans.RESTORE_THING, {

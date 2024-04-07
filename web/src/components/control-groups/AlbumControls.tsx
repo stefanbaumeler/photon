@@ -24,21 +24,21 @@ export const AlbumControls = () => {
 
     const moreItems = [
         <DeleteControl
-            dropdown={true}
-            shortcut={true}
+            dropdown
+            shortcut
             callback={() => setMoreActive(false)}
             elements={album ? [album.id] : []}
             key={0}
         />,
         <SetAlbumCoverControl
-            dropdown={true}
-            shortcut={true}
+            dropdown
+            shortcut
             callback={() => setMoreActive(false)}
             key={1}
         />,
         <DownloadMediaControl
-            dropdown={true}
-            shortcut={true}
+            dropdown
+            shortcut
             callback={() => setMoreActive(false)}
             elements={album ? album.media.map((medium) => medium.id) : []}
             key={2}

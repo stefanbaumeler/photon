@@ -1,4 +1,4 @@
-import { useDetailsContext, useKeyboardContext } from '@/providers'
+import { useDetailsContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { ETrans } from '@/types/translations'
@@ -7,7 +7,6 @@ import { useUpdateMedium } from '@/hooks'
 export const DetailsDescription = () => {
     const details = useDetailsContext()
     const { t } = useTranslation()
-    const keyboard = useKeyboardContext()
 
     const descriptionEl = useRef(null)
 
@@ -23,12 +22,7 @@ export const DetailsDescription = () => {
         setDescription(descriptionEl.current.value)
     }
 
-    const onFocus = () => {
-        keyboard.setIsTyping(true)
-    }
-
     const onBlur = () => {
-        keyboard.setIsTyping(false)
         updateMedium()
     }
 
@@ -39,7 +33,6 @@ export const DetailsDescription = () => {
             placeholder={t(ETrans.ADD_DESCRIPTION)}
             value={description}
             onChange={onChange}
-            onFocus={onFocus}
             onBlur={onBlur}
         />
     </div>
