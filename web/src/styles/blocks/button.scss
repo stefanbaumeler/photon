@@ -3,6 +3,7 @@
     z-index: 1;
     display: flex;
     align-items: center;
+    pointer-events: all;
 }
 
 @mixin button-prefix {

@@ -5,6 +5,7 @@
     display: flex;
     justify-content: center;
     grid-area: toolbar;
+    pointer-events: none;
 }
 
 @mixin toolbar-section {
@@ -36,35 +37,12 @@
     }
 }
 
-@mixin toolbar-button {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-family: 'Material Design Icons', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color .25s;
-
-    &:hover {
-        background-color: rgba($color-gray, .25);
-    }
-    @at-root .toolbar--light & {
-        color: $color-white;
-    }
-}
-
 @mixin toolbar {
     .toolbar {
         @include toolbar-root;
 
         &__section {
             @include toolbar-section;
-        }
-
-        &__button {
-            @include toolbar-button;
         }
     }
 }

@@ -58,9 +58,13 @@ export const ArchiveControl = ({
         if (shouldArchive) {
             search.setStatus(EMediumStatus.ARCHIVED)
 
-            router.push('/archive', null, {
+            await router.push('/archive', null, {
                 shallow: true
             })
+
+            if (details.active) {
+                details.close(false)
+            }
         }
 
         callback && callback()

@@ -1,8 +1,7 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { TMedium, useQMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { TCover } from '@/types/app'
-import { useRotate } from '@/hooks'
 
 type Props = {
     children?: ReactNode
@@ -14,7 +13,7 @@ interface DetailsContext {
     placeholder?: TCover
     getUrl: (medium: string) => string
     open: (medium: TCover) => void
-    close: () => void
+    close: (redirect?: boolean) => void
     rotationRequest: number
     resolveRotationRequest: () => void
     rotate: () => void
@@ -77,21 +76,23 @@ const DetailsProvider = ({ children }: Props) => {
         placeholder,
         getUrl,
         open,
-        close: () => {
-            let newUrl = router.pathname
-
-            if (router.query.idAlbum) {
-                newUrl = `/albums/${router.query.idAlbum}/`
-            }
-
+        close: (redirect = true) => {
             setRotationRequest(0)
             setActive(false)
             setMedium(null)
             setPlaceholder(null)
 
-            router.push(newUrl, null, {
-                shallow: true
-            })
+            if (redirect) {
+                let newUrl = router.pathname
+
+                if (router.query.idAlbum) {
+                    newUrl = `/albums/${router.query.idAlbum}/`
+                }
+
+                router.push(newUrl, null, {
+                    shallow: true
+                })
+            }
         },
         rotationRequest,
         resolveRotationRequest: () => {

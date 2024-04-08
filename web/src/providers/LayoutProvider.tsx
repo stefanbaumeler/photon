@@ -29,18 +29,6 @@ const LayoutProvider = ({ children }: Props) => {
 
     const [layout, setLayout] = useState(ELayout.GALLERY)
     const [albumsLayout, setAlbumsLayout] = useState(ELayout.GRID)
-    const {
-        enableScope, disableScope
-    } = useHotkeysContext()
-
-    useEffect(() => {
-        // enableScope(layout)
-        Object.keys(ELayout).forEach((possibleLayout) => {
-            if (possibleLayout !== layout) {
-                disableScope(possibleLayout)
-            }
-        })
-    }, [layout, enableScope, disableScope])
 
     const getLayoutProps = (id: string) => {
         switch (id) {

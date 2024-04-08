@@ -21,6 +21,7 @@
     translate: 100%;
     flex-shrink: 0;
     overflow: auto;
+    z-index: 1;
 
     @at-root .details--active & {
         translate: none;
@@ -109,11 +110,28 @@
     left: 50%;
     top: 50%;
     translate: -50% -50%;
-    width: 100%;
-    height: 100%;
     object-fit: contain;
     display: flex;
     justify-content: center;
+}
+
+@mixin details-zoom {
+    transition: scale .25s, translate .25s;
+    height: 100%;
+    width: 100%;
+    //width: 100%;
+    //display: flex;
+    //align-self: center;
+}
+
+@mixin details-rotate {
+    transition: scale .25s, rotate .25s;
+    height: 100%;
+    width: 100%;
+    //width: 100%;
+    //height: 100%;
+    //display: flex;
+    //justify-content: center;
 }
 
 @mixin details-placeholder-container {
@@ -216,6 +234,14 @@
 
         &__container {
             @include details-container;
+        }
+
+        &__zoom {
+            @include details-zoom;
+        }
+
+        &__rotate {
+            @include details-rotate;
         }
 
         &__placeholder-container {

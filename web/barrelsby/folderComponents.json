@@ -10,6 +10,7 @@
         "./src/components/shared/[^/]+/"
     ],
     "exclude": [
-        "./src/components/shared/[^/]+/components"
+        "./src/components/shared/[^/]+/components",
+        "./src/components/shared/[^/]+/hooks"
     ]
 }

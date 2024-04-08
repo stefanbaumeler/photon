@@ -7,12 +7,9 @@ import { ETrans } from '@/types/translations'
 import { formatDate, getRelativeTime } from '@/util/date'
 import Icon from '@mdi/react'
 import bem from '@/util/bem'
-import { EDateFormat, EKeyboardScope } from '@/types/app'
-import { DetailsImageMeta, DetailsVideoMeta, DetailsDescription, DetailsAlbums, DetailsMap, DetailsSection, DetailsOwner, DetailsShares } from '.'
-import { useEffect, useState } from 'react'
-import { useHotkeysContext } from 'react-hotkeys-hook'
-import { useHotkey } from '@/hooks/hotkey'
-import { useRotate } from '@/hooks'
+import { EDateFormat } from '@/types/app'
+import { DetailsImageMeta, DetailsVideoMeta, DetailsDescription, DetailsAlbums, DetailsMap, DetailsSection, DetailsOwner, DetailsShares, useDetailsHotkeys, useRotate, useZoom } from '.'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const Details = () => {
     const { t } = useTranslation()
@@ -21,69 +18,55 @@ export const Details = () => {
     const index = media.map(({ id }) => id).indexOf(details.medium?.id)
     const [showInfos, setShowInfos] = useState(true)
     const medium = details.medium ?? details.placeholder
-    const [loading, setLoading] = useState(false)
-    const [rotation, setRotation] = useState(0)
-    const rotate = useRotate(details.medium?.id)
-    const [updatedSource, setUpdatedSource] = useState(0)
+    const [borderPosition, setBorderPosition] = useState<'horizontal' | 'vertical'>()
 
     const {
-        enableScope, disableScope
-    } = useHotkeysContext()
+        updatedSource, rotation, loading
+    } = useRotate()
+
+    const previewRef = useRef(null)
+
+    const {
+        zoom, zoomRef, reset, zoomLevel, zoomCenter
+    } = useZoom()
 
     const slide = (direction: number) => {
         if (media[index + direction] && details.active) {
+            reset()
             details.open(media[index + direction])
         }
     }
 
-    useEffect(() => {
-        if (details.active) {
-            enableScope(EKeyboardScope.details)
-        }
-    }, [details.active, enableScope])
-
-    useEffect(() => {
-        setRotation(details.rotationRequest)
-        const timer = setTimeout(() => {
-            if (rotation !== 0) {
-                rotate(details.rotationRequest).then(() => {
-                    details.resolveRotationRequest()
-                    setUpdatedSource(updatedSource + 1)
-                    setLoading(true)
-                })
-            }
-        }, 250)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [updatedSource, rotation, details, rotate])
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 500)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [loading])
-
-    useHotkey('Escape', () => {
-        disableScope(EKeyboardScope.details)
-        details.close()
-    }, EKeyboardScope.details)
-
-    useHotkey('ArrowLeft', () => {
-        slide(-1)
-    }, EKeyboardScope.details)
-
-    useHotkey('ArrowRight', () => {
-        slide(1)
-    }, EKeyboardScope.details)
+    useDetailsHotkeys(slide)
 
     const classes = bem('details', [
         ['active', details.active],
         ['infos', showInfos]
     ])
+
+    const resize = useCallback(() => {
+        const imageAspectRatio = medium.meta.width / medium.meta.height
+        const containerAspectRatio = previewRef.current?.clientWidth / previewRef.current?.clientHeight
+
+        if (imageAspectRatio > containerAspectRatio) {
+            setBorderPosition('horizontal')
+        }
+        else {
+            setBorderPosition('vertical')
+        }
+    }, [medium?.meta.width, medium?.meta.height])
+
+    useEffect(() => {
+        window.addEventListener('resize', resize)
+
+        return () => window.removeEventListener('resize', resize)
+    })
+
+    useEffect(() => {
+        if (medium) {
+            resize()
+        }
+    }, [medium, resize])
 
     if (!medium || !Object.keys(medium).length) {
         return null
@@ -99,8 +82,12 @@ export const Details = () => {
         className={classes}
         data-testid="details"
     >
-        <div className={previewClasses}>
+        <div
+            className={previewClasses}
+            ref={previewRef}
+        >
             <button
+                onWheel={zoom}
                 data-testid="prev-medium"
                 className="details__button details__button--prev"
                 onClick={() => slide(-1)}
@@ -113,6 +100,7 @@ export const Details = () => {
                 </div>
             </button>
             <button
+                onWheel={zoom}
                 data-testid="next-medium"
                 className="details__button details__button--next"
                 onClick={() => slide(1)}
@@ -132,7 +120,9 @@ export const Details = () => {
                         appearance={{
                             text: 'light'
                         }}
-                        onClick={details.close}
+                        onClick={() => {
+                            details.close()
+                        }}
                         icon={Icons.mdiArrowLeft}
                     />
                 </div>
@@ -153,31 +143,46 @@ export const Details = () => {
             </div>
             <div
                 className="details__container"
+                onWheel={zoom}
                 style={{
-                    aspectRatio: `${medium.meta.width} / ${medium.meta.height}`
+                    aspectRatio: `${medium.meta.width} / ${medium.meta.height}`,
+                    width: borderPosition === 'horizontal' ? '100%' : null,
+                    height: borderPosition === 'vertical' ? '100%' : null,
+                    opacity: borderPosition ? 1 : 0
                 }}
             >
-                <div style={{
-                    rotate: `${rotation}deg`,
-                    scale: `${rotation % 180 ? medium.meta.height / medium.meta.width : 1}`,
-                    opacity: loading ? 0 : 1,
-                    transition: 'scale .25s, rotate .25s'
-                }}
+                <div
+                    className="details__zoom"
+                    ref={zoomRef}
+                    style={{
+                        scale: `${zoomLevel + 1}`,
+                        translate: `${zoomCenter[0]}px ${zoomCenter[1]}px`,
+                        aspectRatio: `${medium.meta.width} / ${medium.meta.height}`
+                    }}
                 >
-                    <Medium
-                        placeholder
-                        priority
-                        medium={medium}
-                        width={medium.meta.width / 20}
-                        updateHash={updatedSource}
-                    />
-                    <Medium
-                        priority
-                        testId="details-image"
-                        medium={medium}
-                        width={medium.meta.width / 2}
-                        updateHash={updatedSource}
-                    />
+                    <div
+                        className="details__rotate"
+                        style={{
+                            rotate: `${rotation}deg`,
+                            scale: `${rotation % 180 ? medium.meta.height / medium.meta.width : 1}`,
+                            opacity: loading ? 0 : 1
+                        }}
+                    >
+                        <Medium
+                            placeholder
+                            priority
+                            medium={medium}
+                            width={medium.meta.width / 20}
+                            updateHash={updatedSource}
+                        />
+                        <Medium
+                            priority
+                            testId="details-image"
+                            medium={medium}
+                            width={medium.meta.width / 2}
+                            updateHash={updatedSource}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
