@@ -5,7 +5,6 @@ import { MediumDownloadDto,
     MediumCountDto,
     MediumUpdateDto,
     MediumUpdateManyDto,
-    MediumUploadDto,
     MediumFilterDto, MediumRotateDto } from './medium.dto'
 import { IdDto, IdsDto } from '../shared/dto'
 import { UploadService } from '../upload/upload.service'
@@ -47,15 +46,6 @@ export class MediumResolver {
     @Mutation(() => [Medium])
     async emptyTrash () {
         return this.service.emptyTrash()
-    }
-
-    @Mutation(() => [Medium])
-    async upload (@Args() dto: MediumUploadDto) {
-        const media = await this.uploadService.writeToDisk({
-            filePromises: dto.filePromises
-        })
-
-        return this.service.createMany(media)
     }
 
     @Mutation(() => [Medium])

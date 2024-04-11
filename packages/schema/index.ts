@@ -236,7 +236,7 @@ export type TMutationUpdateMediumArgs = {
 
 
 export type TMutationUploadArgs = {
-  filePromises: Scalars['Upload']['input'];
+  filePromises: Array<Scalars['Upload']['input']>;
 };
 
 export type TQuery = {
@@ -1300,7 +1300,7 @@ export type TMUpdateMedium = (
 );
 
 export type TMUploadVariables = Exact<{
-  files: Scalars['Upload']['input'];
+  files: Array<Scalars['Upload']['input']> | Scalars['Upload']['input'];
 }>;
 
 
@@ -1837,7 +1837,7 @@ export function useMUpdateMedium() {
   return Urql.useMutation<TMUpdateMedium, TMUpdateMediumVariables>(MUpdateMediumDocument);
 };
 export const MUploadDocument = gql`
-    mutation MUpload($files: Upload!) {
+    mutation MUpload($files: [Upload!]!) {
   upload(filePromises: $files) {
     id
   }

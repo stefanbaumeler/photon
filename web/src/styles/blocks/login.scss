@@ -38,7 +38,7 @@
 @mixin login-content {
     display: flex;
     flex-direction: column;
-    max-width: 640px;
+    width: 350px;
 }
 
 @mixin login-image {

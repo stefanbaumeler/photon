@@ -4,7 +4,7 @@ import path from 'path'
 import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
-import { TVideoMeta, TImageMeta } from '@photon/schema'
+import { TVideoMeta, TImageMeta, TMeta } from '@photon/schema'
 import { Prisma } from '@prisma/client'
 import mime from 'mime-types'
 
@@ -216,6 +216,8 @@ const handleVideo = async (filePath: string) => {
         const dimensions = getDimensions(result)
         const duration = getDuration(result)
 
+        console.log(result, dateTaken)
+
         const meta: TVideoMeta = {
             duration,
             height: dimensions.height || 0,
@@ -245,7 +247,6 @@ export const fileToMedium = async ({
 }: { filePath: string, fileName: string, originalName: string, type?: string, user: string }): Promise<Prisma.MediumCreateInput> => {
     const mimetype = type || mime.lookup(originalName) || ''
     const mediumType = mimetype.split('/')[0]
-
     const combine = (info: { data?: Partial<Prisma.MediumCreateInput>, meta?: Partial<TImageMeta | TVideoMeta> }): Prisma.MediumCreateInput => {
         return {
             mimetype,
@@ -254,7 +255,7 @@ export const fileToMedium = async ({
             title: path.parse(originalName).name,
             description: '',
             ...info.data,
-            // meta: info.meta,
+            meta: info.meta as TMeta,
             owner: {
                 connect: {
                     id: user

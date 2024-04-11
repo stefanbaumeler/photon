@@ -6,6 +6,10 @@
     + .input {
         padding-top: 16px;
     }
+
+    @at-root .message + & {
+        padding-top: 16px;
+    }
 }
 
 @mixin input-label {

@@ -107,5 +107,6 @@ export enum ETrans {
     CURRENT_PASSWORD = 'current_password',
     NEW_PASSWORD = 'new_password',
     REPEAT_NEW_PASSWORD = 'repeat_new_password',
-    CLOSE = 'close'
+    CLOSE = 'close',
+    SIGN_IN_WRONG_CREDENTIALS = 'sign_in_wrong_credentials'
 }

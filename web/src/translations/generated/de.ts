@@ -111,5 +111,6 @@ export default {
     current_password: 'Aktuelles Passwort',
     new_password: 'Neues Passwort',
     repeat_new_password: 'Neues Passwort wiederholen',
-    close: 'Schliessen'
+    close: 'Schliessen',
+    sign_in_wrong_credentials: 'Deine Anmeldedaten sind nicht korrekt. Versuche es nochmals.'
 }

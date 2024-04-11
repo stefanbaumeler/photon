@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import bem from '../../util/bem'
 import { useUpload } from '@/hooks'
 import tauri from '../../tauri'
@@ -8,7 +8,7 @@ export const Uploader = () => {
 
     let dragTimeout = 0
 
-    const drag = (event: DragEvent) => {
+    const drag = useCallback((event: DragEvent) => {
         if (event.dataTransfer.types.indexOf('Files') !== -1) {
             setVisible(true)
 
@@ -18,7 +18,7 @@ export const Uploader = () => {
                 setVisible(false)
             }, 250)
         }
-    }
+    }, [])
 
     useEffect(() => {
         window.addEventListener('dragover', drag)

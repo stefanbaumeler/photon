@@ -110,5 +110,6 @@ export default {
     current_password: 'Current password',
     new_password: 'New password',
     repeat_new_password: 'Repeat new Password',
-    close: 'Close'
+    close: 'Close',
+    sign_in_wrong_credentials: 'Your credentials are invalid. Please try again.'
 }

@@ -1,27 +1,40 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useMUpload } from '@photon/schema'
 import tauri from '../tauri'
-import { FileUpload } from 'graphql-upload-minimal'
+import { initializeAuthState } from '@/api'
+import { useSearchContext } from '@/providers'
 
 export const useUpload = () => {
-    const [files, setFiles] = useState<File[]>()
-
-    const [, upload] = useMUpload()
+    const [files, setFiles] = useState<File[] | FileList>()
+    const { refresh } = useSearchContext()
 
     useEffect(() => {
         if (files) {
-            tauri.upload(files)
+            // tauri.upload(files)
 
-            upload({
-                files: files as unknown as Promise<FileUpload>
-            }).then(() => {
+            const { accessToken } = initializeAuthState()
+
+            const formData = new FormData()
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i])
+            }
+
+            fetch(`${process.env.NEXT_PUBLIC_UPLOADS_URL}/uploads`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include',
+                headers: {
+                    authorization: `Bearer ${accessToken}`
+                }
+            }).then((res) => {
                 setFiles(undefined)
+                refresh()
             })
         }
-    }, [upload, files])
+    }, [files, refresh])
 
     return async (event: ChangeEvent<HTMLInputElement> | string[]) => {
-        let files: File[]
+        let files
 
         const asChangeEvent = event as ChangeEvent<HTMLInputElement>
         const asFileDropEvent = event as string[]

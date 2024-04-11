@@ -4,7 +4,7 @@ import { AuthConfig, authExchange } from '@urql/exchange-auth'
 import { MRefreshAccessTokenDocument } from '@photon/schema'
 import jwt from 'jsonwebtoken'
 
-const initializeAuthState = async () => {
+export const initializeAuthState = () => {
     if (typeof window === 'undefined') {
         return {
             accessToken: '',
@@ -30,7 +30,10 @@ const initializeAuthState = async () => {
 export const initializeUrqlClient = () => new Client({
     url: process.env.NEXT_PUBLIC_API_URL,
     fetchOptions: {
-        credentials: process.env.NEXT_PUBLIC_API_CREDENTIALS === '0' ? 'omit' : 'include'
+        credentials: process.env.NEXT_PUBLIC_API_CREDENTIALS === '0' ? 'omit' : 'include',
+        headers: {
+            'Apollo-Require-Preflight': 'true'
+        }
     },
     exchanges: [devtoolsExchange, authExchange(async (utils) => {
         if (process.env.NEXT_PUBLIC_API_CREDENTIALS === '0') {
@@ -41,7 +44,7 @@ export const initializeUrqlClient = () => new Client({
 
         const {
             accessToken, refreshToken
-        } = await initializeAuthState()
+        } = initializeAuthState()
 
         if (!accessToken && !refreshToken) {
             return {

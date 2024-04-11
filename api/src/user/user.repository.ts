@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { UserChangePasswordDto, UserLanguageDto, UserSignUpDto } from './user.dto'
+import { UserLanguageDto, UserSignUpDto } from './user.dto'
 import { ClsService } from 'nestjs-cls'
 import { IdDto } from '../shared/dto'
 

@@ -45,6 +45,10 @@ export const Details = () => {
     ])
 
     const resize = useCallback(() => {
+        if (!medium) {
+            return
+        }
+
         const imageAspectRatio = medium.meta.width / medium.meta.height
         const containerAspectRatio = previewRef.current?.clientWidth / previewRef.current?.clientHeight
 
@@ -54,7 +58,7 @@ export const Details = () => {
         else {
             setBorderPosition('vertical')
         }
-    }, [medium?.meta.width, medium?.meta.height])
+    }, [medium])
 
     useEffect(() => {
         window.addEventListener('resize', resize)
@@ -63,10 +67,8 @@ export const Details = () => {
     })
 
     useEffect(() => {
-        if (medium) {
-            resize()
-        }
-    }, [medium, resize])
+        resize()
+    }, [resize])
 
     if (!medium || !Object.keys(medium).length) {
         return null

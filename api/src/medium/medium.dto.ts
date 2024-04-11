@@ -1,6 +1,6 @@
 import { ArgsType, Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
-import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
+import { FileUpload, GraphQLUpload, Upload } from 'graphql-upload-minimal'
 import { Medium } from './medium.model'
 
 @InputType()
@@ -73,6 +73,11 @@ export class MediumUpdateDto {
         nullable: true
     })
         meta?: Prisma.MediumUpdateInput['meta']
+
+    @Field(() => [String], {
+        nullable: true
+    })
+        tags?: Prisma.MediumUpdateInput['tags']
 }
 
 @InputType()
@@ -90,8 +95,8 @@ export class MediumUpdateManyDto {
 @InputType()
 @ArgsType()
 export class MediumUploadDto {
-    @Field(() => GraphQLUpload)
-        filePromises!: Promise<FileUpload>[]
+    @Field(() => [GraphQLUpload])
+        filePromises!: FileUpload[]
 }
 
 @InputType()

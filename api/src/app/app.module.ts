@@ -56,6 +56,7 @@ if (process.env.NODE_ENV !== 'test') {
                     res
                 }
             },
+
             // cors: {
             //     origin: true,
             //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

@@ -20,6 +20,8 @@ const LoginPage = () => {
     const [password, setPassword] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+    const [error, setError] = useState(false)
+
     const router = useRouter()
 
     const submit = useCallback(async () => {
@@ -33,7 +35,9 @@ const LoginPage = () => {
 
             console.log(res)
 
-            data = res.data.signIn
+            if (res.data) {
+                data = res.data.signIn
+            }
         }
 
         if (loginFormMode === ELoginFormMode.SIGNUP) {
@@ -47,14 +51,17 @@ const LoginPage = () => {
             data = res.data.signUp
         }
 
-        localStorage.photon = JSON.stringify({
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken
-        })
+        if (data) {
+            localStorage.photon = JSON.stringify({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken
+            })
 
-        if (data.accessToken.length) {
             await router.push('/')
             initializeUrqlClient()
+        }
+        else {
+            setError(true)
         }
     }, [loginFormMode, signIn, signUp, firstName, lastName, mail, password, router])
 
@@ -84,21 +91,6 @@ const LoginPage = () => {
 
     const title = loginFormMode === ELoginFormMode.SIGNUP ? t(ETrans.SIGN_UP) : t(ETrans.SIGN_IN)
 
-    const SignUpFields = useMemo(() => loginFormMode === ELoginFormMode.SIGNUP ? <>
-        <TextBox
-            id={'firstName'}
-            label={t(ETrans.FIRST_NAME)}
-            value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
-        />
-        <TextBox
-            id={'lastName'}
-            label={t(ETrans.LAST_NAME)}
-            value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
-        />
-    </> : null, [t, loginFormMode, firstName, lastName])
-
     return <div
         id="app-root"
         data-testid="content-root"
@@ -113,7 +105,23 @@ const LoginPage = () => {
                                 {title}
                             </h1>
                         </div>
-                        {SignUpFields}
+                        {error ? <span className="message message--danger">
+                            {t(ETrans.SIGN_IN_WRONG_CREDENTIALS)}
+                        </span> : null}
+                        {loginFormMode === ELoginFormMode.SIGNUP ? <>
+                            <TextBox
+                                id={'firstName'}
+                                label={t(ETrans.FIRST_NAME)}
+                                value={firstName}
+                                onChange={(event) => setFirstName(event.target.value)}
+                            />
+                            <TextBox
+                                id={'lastName'}
+                                label={t(ETrans.LAST_NAME)}
+                                value={lastName}
+                                onChange={(event) => setLastName(event.target.value)}
+                            />
+                        </> : null}
                         <TextBox
                             testId="signin-mail"
                             id={'mail'}

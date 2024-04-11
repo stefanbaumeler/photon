@@ -4,6 +4,7 @@ import { useSortContext } from '@/providers/SortProvider'
 import { useRouter } from 'next/router'
 import { sortMediaByDate } from '@/util/sort'
 import { TQMedia, useQMedia } from '@photon/schema'
+import { UseQueryExecute } from 'urql'
 
 type Props = {
     children?: ReactNode
@@ -17,6 +18,7 @@ interface SearchContext {
     setFavorites: Dispatch<SetStateAction<boolean>>
     query: string
     setQuery: Dispatch<SetStateAction<string>>
+    refresh: () => void
 }
 
 const SearchContext = createContext<SearchContext | null>(null)
@@ -31,7 +33,7 @@ const SearchProvider = ({ children }: Props) => {
     const [query, setQuery] = useState('')
     const { sort } = useSortContext()
 
-    const [{ data: media }] = useQMedia({
+    const [{ data: media }, refresh] = useQMedia({
         variables: {
             status,
             sort,
@@ -50,7 +52,12 @@ const SearchProvider = ({ children }: Props) => {
         favorites,
         setFavorites,
         query,
-        setQuery
+        setQuery,
+        refresh: () => {
+            refresh({
+                requestPolicy: 'network-only'
+            })
+        }
     }}
     >
         {children}

@@ -1,4 +1,4 @@
-import { DragEvent, useRef, useState, WheelEvent } from 'react'
+import { useRef, useState, WheelEvent } from 'react'
 
 export const useZoom = () => {
     const zoomRef = useRef<HTMLDivElement>(null)
