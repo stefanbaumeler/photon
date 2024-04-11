@@ -1,0 +1,15 @@
+fragment FCover on Medium {
+    id
+    mimetype
+    filenameDisk
+    meta {
+        ... on ImageMeta {
+            width
+            height
+        }
+        ... on VideoMeta {
+            width
+            height
+        }
+    }
+}

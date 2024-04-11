@@ -3,7 +3,7 @@ import { Detail } from '@/components'
 import * as Icons from '@mdi/js'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { DetailsSection } from '../index'
+import { DetailsSection } from '..'
 
 export const DetailsOwner = () => {
     const details = useDetailsContext()

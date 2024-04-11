@@ -1,4 +1,4 @@
-import { Thumbnail } from '../index'
+import { Thumbnail } from '..'
 import { EThumbnailType, TThumbnail } from '@/types/app'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'

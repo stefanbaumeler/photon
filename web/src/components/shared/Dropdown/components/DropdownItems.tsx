@@ -1,5 +1,5 @@
 import { TDropdownItem } from '@/types/app'
-import { DropdownItem } from '../index'
+import { DropdownItem } from '..'
 import { JSX } from 'react'
 
 type Props = {

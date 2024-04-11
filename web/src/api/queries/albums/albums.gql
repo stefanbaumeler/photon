@@ -6,19 +6,7 @@ query QAlbums {
         dateCreated
         dateModified
         cover {
-            id
-            mimetype
-            filenameDisk
-            meta {
-                ...on ImageMeta {
-                    width
-                    height
-                }
-                ...on VideoMeta {
-                    width
-                    height
-                }
-            }
+            ...FCover
         }
         owner {
             id

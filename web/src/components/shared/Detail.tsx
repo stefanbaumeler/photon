@@ -1,8 +1,8 @@
 import Icon from '@mdi/react'
-import { TMedium } from '@photon/schema'
+import { TCover } from '@/types/app'
 
 type Props = {
-    icon: string | TMedium
+    icon: string | TCover
     title: string
     values?: string | string[]
 }

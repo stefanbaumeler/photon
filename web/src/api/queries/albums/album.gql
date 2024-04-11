@@ -6,7 +6,7 @@ query QAlbum($id: String!) {
         dateCreated
         dateModified
         cover {
-            id
+            ...FCover
         }
         owner {
             id

@@ -621,6 +621,18 @@ export type TResolvers<ContextType = any> = {
 };
 
 
+export type TFCover = (
+  { __typename?: 'Medium' }
+  & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+  & { meta: (
+    { __typename?: 'ImageMeta' }
+    & Pick<TImageMeta, 'width' | 'height'>
+  ) | (
+    { __typename?: 'VideoMeta' }
+    & Pick<TVideoMeta, 'width' | 'height'>
+  ) }
+);
+
 export type TFMedia = (
   { __typename: 'Medium' }
   & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
@@ -681,7 +693,14 @@ export type TQAlbum = (
     & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
       { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
+      & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+      & { meta: (
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height'>
+      ) }
     )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
@@ -802,7 +821,14 @@ export type TQAlbumsOfMedium = (
     & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
       { __typename?: 'Medium' }
-      & Pick<TMedium, 'id' | 'filenameDisk'>
+      & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+      & { meta: (
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height'>
+      ) }
     )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
@@ -1347,6 +1373,23 @@ export type TMSignUp = (
   ) }
 );
 
+export const FCover = gql`
+    fragment FCover on Medium {
+  id
+  mimetype
+  filenameDisk
+  meta {
+    ... on ImageMeta {
+      width
+      height
+    }
+    ... on VideoMeta {
+      width
+      height
+    }
+  }
+}
+    `;
 export const FMediaStatus = gql`
     fragment FMediaStatus on Medium {
   id
@@ -1439,7 +1482,7 @@ export const QAlbumDocument = gql`
     dateCreated
     dateModified
     cover {
-      id
+      ...FCover
     }
     owner {
       id
@@ -1451,7 +1494,8 @@ export const QAlbumDocument = gql`
     }
   }
 }
-    ${FMedia}
+    ${FCover}
+${FMedia}
 ${FMediaStatus}`;
 
 export function useQAlbum(options: Omit<Urql.UseQueryArgs<TQAlbumVariables>, 'query'>) {
@@ -1478,19 +1522,7 @@ export const QAlbumsDocument = gql`
     dateCreated
     dateModified
     cover {
-      id
-      mimetype
-      filenameDisk
-      meta {
-        ... on ImageMeta {
-          width
-          height
-        }
-        ... on VideoMeta {
-          width
-          height
-        }
-      }
+      ...FCover
     }
     owner {
       id
@@ -1502,7 +1534,8 @@ export const QAlbumsDocument = gql`
     }
   }
 }
-    ${FMedia}
+    ${FCover}
+${FMedia}
 ${FMediaStatus}`;
 
 export function useQAlbums(options?: Omit<Urql.UseQueryArgs<TQAlbumsVariables>, 'query'>) {
@@ -1517,8 +1550,7 @@ export const QAlbumsOfMediumDocument = gql`
     dateCreated
     dateModified
     cover {
-      id
-      filenameDisk
+      ...FCover
     }
     owner {
       id
@@ -1530,7 +1562,7 @@ export const QAlbumsOfMediumDocument = gql`
     }
   }
 }
-    `;
+    ${FCover}`;
 
 export function useQAlbumsOfMedium(options: Omit<Urql.UseQueryArgs<TQAlbumsOfMediumVariables>, 'query'>) {
   return Urql.useQuery<TQAlbumsOfMedium, TQAlbumsOfMediumVariables>({ query: QAlbumsOfMediumDocument, ...options });

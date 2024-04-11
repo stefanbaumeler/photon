@@ -1,6 +1,6 @@
 import { useLayoutContext, useSearchContext } from '@/providers'
 import { ELayout } from '@/types/app'
-import { GalleryView, ListView, MapView } from '../index'
+import { GalleryView, ListView, MapView } from '..'
 
 export const Media = () => {
     const layout = useLayoutContext()

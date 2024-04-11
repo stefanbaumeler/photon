@@ -1,4 +1,4 @@
-import { FocusOverlay, MainNav } from '../index'
+import { FocusOverlay, MainNav } from '..'
 import { useNavContext } from '@/providers'
 
 export const Sidebar = () => {

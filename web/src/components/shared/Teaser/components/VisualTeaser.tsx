@@ -2,7 +2,7 @@ import { useDetailsContext, useDragContext, useSearchContext, useSelectionContex
 import { Medium } from '@/components'
 import { ESelectionMode } from '@/types/app'
 import bem from '@/util/bem'
-import { useTeaserContext, TeaserTopLeftCorner } from '../index'
+import { useTeaserContext, TeaserTopLeftCorner } from '..'
 import Link from 'next/link'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 
