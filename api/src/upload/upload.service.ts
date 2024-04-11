@@ -164,7 +164,6 @@ export class UploadService {
     }
 
     async generateTags (pathName: string, filenameDisk: string) {
-        return false
         if (!env.CV_REKOGNITION_ACCESS_KEY_ID || !env.CV_REKOGNITION_SECRET_ACCESS_KEY || !env.CV_REKOGNITION_REGION) {
             return false
         }
