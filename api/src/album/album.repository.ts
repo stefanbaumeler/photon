@@ -59,10 +59,14 @@ export class AlbumRepository {
         return this.prisma.album.findMany({
             where: {
                 media: {
-                    every: {
+                    some: {
                         id: dto.id
                     }
                 }
+            },
+            include: {
+                cover: true,
+                media: true
             }
         })
     }

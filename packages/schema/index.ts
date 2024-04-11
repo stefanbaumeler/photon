@@ -22,7 +22,6 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
-  Upload: { input: Promise<FileUpload>; output: Promise<FileUpload>; }
 };
 
 export type TAlbum = {
@@ -131,7 +130,6 @@ export type TMutation = {
   updateAlbum: TAlbum;
   updateMedia: Array<TMedium>;
   updateMedium: TMedium;
-  upload: Array<TMedium>;
 };
 
 
@@ -231,12 +229,8 @@ export type TMutationUpdateMediumArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   meta?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type TMutationUploadArgs = {
-  filePromises: Array<Scalars['Upload']['input']>;
 };
 
 export type TQuery = {
@@ -416,7 +410,6 @@ export type TResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Tag: ResolverTypeWrapper<TTag>;
-  Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<TUser>;
   UserTokenDto: ResolverTypeWrapper<TUserTokenDto>;
   VideoMeta: ResolverTypeWrapper<TVideoMeta>;
@@ -441,7 +434,6 @@ export type TResolversParentTypes = {
   Query: {};
   String: Scalars['String']['output'];
   Tag: TTag;
-  Upload: Scalars['Upload']['output'];
   User: TUser;
   UserTokenDto: TUserTokenDto;
   VideoMeta: TVideoMeta;
@@ -558,7 +550,6 @@ export type TMutationResolvers<ContextType = any, ParentType extends TResolversP
   updateAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'id'>>;
   updateMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUpdateMediaArgs, 'ids'>>;
   updateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationUpdateMediumArgs, 'id'>>;
-  upload?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUploadArgs, 'filePromises'>>;
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
@@ -584,10 +575,6 @@ export type TTagResolvers<ContextType = any, ParentType extends TResolversParent
   source?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-
-export interface TUploadScalarConfig extends GraphQLScalarTypeConfig<TResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
   dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
@@ -628,7 +615,6 @@ export type TResolvers<ContextType = any> = {
   Mutation?: TMutationResolvers<ContextType>;
   Query?: TQueryResolvers<ContextType>;
   Tag?: TTagResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
   User?: TUserResolvers<ContextType>;
   UserTokenDto?: TUserTokenDtoResolvers<ContextType>;
   VideoMeta?: TVideoMetaResolvers<ContextType>;
@@ -815,52 +801,14 @@ export type TQAlbumsOfMedium = (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
-      { __typename: 'Medium' }
-      & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-      & { tags: Array<(
-        { __typename?: 'Tag' }
-        & Pick<TTag, 'id'>
-      )>, favoredBy?: Maybe<Array<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>>, owner: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), uploader: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), meta: (
-        { __typename?: 'ImageMeta' }
-        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-      ) | (
-        { __typename?: 'VideoMeta' }
-        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
-      ) }
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id' | 'filenameDisk'>
     )>, owner?: Maybe<(
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     )>, media?: Maybe<Array<(
-      { __typename: 'Medium' }
-      & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-      & { tags: Array<(
-        { __typename?: 'Tag' }
-        & Pick<TTag, 'id'>
-      )>, favoredBy?: Maybe<Array<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>>, owner: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), uploader: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), meta: (
-        { __typename?: 'ImageMeta' }
-        & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-      ) | (
-        { __typename?: 'VideoMeta' }
-        & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
-      ) }
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id'>
     )>> }
   )> }
 );
@@ -1299,19 +1247,6 @@ export type TMUpdateMedium = (
   ) }
 );
 
-export type TMUploadVariables = Exact<{
-  files: Array<Scalars['Upload']['input']> | Scalars['Upload']['input'];
-}>;
-
-
-export type TMUpload = (
-  { __typename?: 'Mutation' }
-  & { upload: Array<(
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
-  )> }
-);
-
 export type TMChangeLanguageVariables = Exact<{
   language: Scalars['String']['input'];
 }>;
@@ -1582,7 +1517,8 @@ export const QAlbumsOfMediumDocument = gql`
     dateCreated
     dateModified
     cover {
-      ...FMedia
+      id
+      filenameDisk
     }
     owner {
       id
@@ -1590,12 +1526,11 @@ export const QAlbumsOfMediumDocument = gql`
       lastName
     }
     media {
-      ...FMedia
+      id
     }
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    `;
 
 export function useQAlbumsOfMedium(options: Omit<Urql.UseQueryArgs<TQAlbumsOfMediumVariables>, 'query'>) {
   return Urql.useQuery<TQAlbumsOfMedium, TQAlbumsOfMediumVariables>({ query: QAlbumsOfMediumDocument, ...options });
@@ -1835,17 +1770,6 @@ ${FMediaStatus}`;
 
 export function useMUpdateMedium() {
   return Urql.useMutation<TMUpdateMedium, TMUpdateMediumVariables>(MUpdateMediumDocument);
-};
-export const MUploadDocument = gql`
-    mutation MUpload($files: [Upload!]!) {
-  upload(filePromises: $files) {
-    id
-  }
-}
-    `;
-
-export function useMUpload() {
-  return Urql.useMutation<TMUpload, TMUploadVariables>(MUploadDocument);
 };
 export const MChangeLanguageDocument = gql`
     mutation MChangeLanguage($language: String!) {
@@ -2088,8 +2012,7 @@ export type GraphCacheOptimisticUpdaters = {
   signUp?: GraphCacheOptimisticMutationResolver<TMutationSignUpArgs, WithTypename<TUserTokenDto>>,
   updateAlbum?: GraphCacheOptimisticMutationResolver<TMutationUpdateAlbumArgs, WithTypename<TAlbum>>,
   updateMedia?: GraphCacheOptimisticMutationResolver<TMutationUpdateMediaArgs, Array<WithTypename<TMedium>>>,
-  updateMedium?: GraphCacheOptimisticMutationResolver<TMutationUpdateMediumArgs, WithTypename<TMedium>>,
-  upload?: GraphCacheOptimisticMutationResolver<TMutationUploadArgs, Array<WithTypename<TMedium>>>
+  updateMedium?: GraphCacheOptimisticMutationResolver<TMutationUpdateMediumArgs, WithTypename<TMedium>>
 };
 
 export type GraphCacheUpdaters = {
@@ -2126,8 +2049,7 @@ export type GraphCacheUpdaters = {
     signUp?: GraphCacheUpdateResolver<{ signUp: WithTypename<TUserTokenDto> }, TMutationSignUpArgs>,
     updateAlbum?: GraphCacheUpdateResolver<{ updateAlbum: WithTypename<TAlbum> }, TMutationUpdateAlbumArgs>,
     updateMedia?: GraphCacheUpdateResolver<{ updateMedia: Array<WithTypename<TMedium>> }, TMutationUpdateMediaArgs>,
-    updateMedium?: GraphCacheUpdateResolver<{ updateMedium: WithTypename<TMedium> }, TMutationUpdateMediumArgs>,
-    upload?: GraphCacheUpdateResolver<{ upload: Array<WithTypename<TMedium>> }, TMutationUploadArgs>
+    updateMedium?: GraphCacheUpdateResolver<{ updateMedium: WithTypename<TMedium> }, TMutationUpdateMediumArgs>
   },
   Subscription?: {},
   Album?: {

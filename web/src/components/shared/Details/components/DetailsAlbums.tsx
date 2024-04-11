@@ -1,6 +1,6 @@
 import { useDetailsContext } from '@/providers'
-import { TAlbum } from '@photon/schema'
-import { useMemo, useState } from 'react'
+import { TAlbum, useQAlbumsOfMedium } from '@photon/schema'
+import { useMemo } from 'react'
 import { Detail } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
@@ -10,25 +10,20 @@ import { DetailsSection } from '../index'
 
 export const DetailsAlbums = () => {
     const details = useDetailsContext()
-    const [albums, setAlbums] = useState<TAlbum[]>()
     const { t } = useTranslation()
 
-    // const [albumsResult] = useQAlbumsOfMedium({
-    //     variables: {
-    //         id: details.medium.id
-    //     }
-    // })
-    //
-    // useEffect(() => {
-    //     if (albumsResult.data) {
-    //         setAlbums(albumsResult.data.albums)
-    //     }
-    // }, [albumsResult.data])
+    const [{ data: result }] = useQAlbumsOfMedium({
+        variables: {
+            id: details.medium.id
+        }
+    })
+
+    const albums  = result?.mediumAlbums
 
     const a = useMemo(() => {
         const DetailsAlbum = ({ album }: { album: TAlbum}) => {
-            const count = t(ETrans.ELEMENT_COUNT, {
-                count: album.media.length
+            const count = t(ETrans.ELEMENT_COUNT_NUMBER, {
+                count: album.media?.length
             })
 
             const date = formatDate(album.dateCreated, EDateFormat.SHORT)

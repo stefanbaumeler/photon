@@ -46,6 +46,8 @@ export default {
     newalbum: 'Neues Album',
     element_count_one: 'Dieses Element',
     element_count_other: '{{count}} Elemente',
+    element_count_number_one: '{{count}} Element',
+    element_count_number_other: '{{count}} Elemente',
     element_one: 'Element',
     element_other: 'Elemente',
     all_elements: 'Alle Elemente',

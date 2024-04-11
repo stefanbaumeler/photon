@@ -6,7 +6,8 @@ query QAlbumsOfMedium($id: String!) {
         dateCreated
         dateModified
         cover {
-            ...FMedia
+            id
+            filenameDisk
         }
         owner {
             id
@@ -14,7 +15,7 @@ query QAlbumsOfMedium($id: String!) {
             lastName
         },
         media {
-            ...FMedia
+            id
         }
     }
 }
