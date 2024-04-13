@@ -24,5 +24,6 @@ export const DetailsAlbum = ({ album }: { album: TAlbumDetail}) => {
         icon={album.cover}
         title={album.title}
         values={[count, date]}
+        testId="album-detail"
     />
 }

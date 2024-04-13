@@ -6,7 +6,6 @@ import { useHotkeysContext } from 'react-hotkeys-hook'
 import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
-    id: string
     title?: string
     text?: string
     buttons?: (Parameters<typeof Button>[0])[]
@@ -14,7 +13,7 @@ type Props = {
     closeCallback: () => void
 }
 export const Dialog = ({
-    id, title, children, buttons = [], text, closeCallback
+    title, children, buttons = [], text, closeCallback
 }: Props) => {
     const {
         enableScope, disableScope
@@ -24,13 +23,17 @@ export const Dialog = ({
         enableScope(EKeyboardScope.dialog)
     }, [enableScope])
 
-    useHotkey('Escape', () => {
-        disableScope(EKeyboardScope.dialog)
-        closeCallback()
-    }, EKeyboardScope.dialog)
+    useHotkey({
+        key: 'Escape',
+        callback: () => {
+            disableScope(EKeyboardScope.dialog)
+            closeCallback()
+        },
+        scopes: EKeyboardScope.dialog
+    })
 
     return createPortal(<div
-        data-testid={id}
+        data-testid="dialog"
         className="dialog dialog--active"
     >
         <div className="dialog__container">

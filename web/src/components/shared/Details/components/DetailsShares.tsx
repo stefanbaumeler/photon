@@ -13,6 +13,7 @@ export const DetailsShares = () => {
         <Detail
             icon={Icons.mdiAccountOutline}
             title={`${details.medium.owner.firstName} ${details.medium.owner.lastName}`}
+            testId="shares-detail"
         />
     </DetailsSection>
 }

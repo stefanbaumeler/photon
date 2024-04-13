@@ -7,18 +7,30 @@ import { useHotkey } from '@/hooks/hotkey'
 export const useDetailsHotkeys = (slide: (direction: number) => void) => {
     const details = useDetailsContext()
 
-    useHotkey('Escape', () => {
-        disableScope(EKeyboardScope.details)
-        details.close()
-    }, EKeyboardScope.details)
+    useHotkey({
+        key: 'Escape',
+        callback: () => {
+            disableScope(EKeyboardScope.details)
+            details.close()
+        },
+        scopes: EKeyboardScope.details
+    })
 
-    useHotkey('ArrowLeft', () => {
-        slide(-1)
-    }, EKeyboardScope.details)
+    useHotkey({
+        key: 'ArrowLeft',
+        callback: () => {
+            slide(-1)
+        },
+        scopes: EKeyboardScope.details
+    })
 
-    useHotkey('ArrowRight', () => {
-        slide(1)
-    }, EKeyboardScope.details)
+    useHotkey({
+        key: 'ArrowRight',
+        callback: () => {
+            slide(1)
+        },
+        scopes: EKeyboardScope.details
+    })
 
     const {
         enableScope, disableScope

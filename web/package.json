@@ -13,6 +13,7 @@
         "test": "NODE_ENV=test run-s playwright:*",
         "playwright:install": "playwright install && playwright install-deps",
         "playwright:test": "playwright test",
+        "playwright:ui": "NODE_ENV=test playwright test --ui",
         "generate": "ts-node codegen.ts",
         "barrel": "barrelsby -c barrelsby/index.json && barrelsby -c barrelsby/subdirectories.json && barrelsby -c barrelsby/folderComponents.json && barrelsby -c barrelsby/folderComponentsLocal.json"
     },

@@ -22,7 +22,12 @@ export const RotateControl = ({
         callback && callback()
     }
 
-    useHotkey('r', action, EKeyboardScope.details, !!shortcut)
+    useHotkey({
+        key: 'r',
+        callback: action,
+        scopes: EKeyboardScope.details,
+        condition: !!shortcut
+    })
 
     return dropdown ? <DropdownItem item={{
         testId: 'rotate',

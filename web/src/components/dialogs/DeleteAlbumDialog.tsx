@@ -28,7 +28,6 @@ export const DeleteAlbumDialog = ({
     }
 
     return <Dialog
-        id="delete-album"
         title={t(ETrans.PERMANENTLY_DELETE)}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {
             count: asArray(id).length || 1,
@@ -46,7 +45,7 @@ export const DeleteAlbumDialog = ({
                 }
             },
             {
-                testId: 'album-confirm-delete',
+                testId: 'confirm',
                 label: t(ETrans.PERMANENTLY_DELETE),
                 onClick: confirm
             }

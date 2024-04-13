@@ -22,8 +22,15 @@ export const AlbumsViewControl = () => {
         setViewDropdownActive(false)
     }
 
-    useHotkey('g', gridView)
-    useHotkey('l', listView)
+    useHotkey({
+        key: 'g',
+        callback: gridView
+    })
+
+    useHotkey({
+        key: 'l',
+        callback: listView
+    })
 
     const viewItems = [
         {

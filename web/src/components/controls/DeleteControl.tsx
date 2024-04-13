@@ -45,7 +45,12 @@ export const DeleteControl = ({
         callback && callback()
     }
 
-    useHotkey('Backspace', action, EKeyboardScope.select, !!shortcut)
+    useHotkey({
+        key: 'Backspace',
+        callback: action,
+        scopes: EKeyboardScope.select,
+        condition: !!shortcut
+    })
 
     const label = selection.mode === ESelectionMode.ALBUMS ? t(ETrans.DELETE_THING, {
         thing: t(ETrans.ALBUM)

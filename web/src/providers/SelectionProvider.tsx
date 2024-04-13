@@ -55,15 +55,28 @@ const SelectionProvider = ({ children }: Props) => {
         }
     }, [mode, disableScope, enableScope])
 
-    useHotkey('Escape', clear, EKeyboardScope.select)
+    useHotkey({
+        key: 'Escape',
+        callback: clear,
+        scopes: EKeyboardScope.select
+    })
 
-    // useKeyboard('keydown', 'Shift', () => {
-    //     setShift(true)
-    // })
-    //
-    // useKeyboard('keyup', 'Shift', () => {
-    //     setShift(false)
-    // })
+    useHotkey({
+        key: 'Shift',
+        callback: () => {
+            setShift(true)
+        },
+        scopes: EKeyboardScope.select
+    })
+
+    useHotkey({
+        key: 'Shift',
+        callback: () => {
+            setShift(false)
+        },
+        keyup: true,
+        scopes: EKeyboardScope.select
+    })
 
     return <SelectionContext.Provider value={{
         shift,

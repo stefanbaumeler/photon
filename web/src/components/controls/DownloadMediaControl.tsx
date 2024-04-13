@@ -38,7 +38,12 @@ export const DownloadMediaControl = ({
         callback && callback()
     }
 
-    useHotkey('d', action, EKeyboardScope.select, !!shortcut)
+    useHotkey({
+        key: 'd',
+        callback: action,
+        scopes: EKeyboardScope.select,
+        condition: !!shortcut
+    })
 
     return dropdown ? <DropdownItem item={{
         testId: 'download',

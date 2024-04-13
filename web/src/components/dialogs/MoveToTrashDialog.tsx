@@ -29,7 +29,6 @@ export const MoveToTrashDialog = ({
     }
 
     return <Dialog
-        id="delete-media"
         closeCallback={closeCallback}
         title={t(ETrans.MOVE_TO_TRASH)}
         text={t(ETrans.MOVE_ITEMS_TO_TRASH, {
@@ -47,7 +46,7 @@ export const MoveToTrashDialog = ({
                 }
             },
             {
-                testId: 'move-to-trash-confirm',
+                testId: 'confirm',
                 label: t(ETrans.MOVE_TO_TRASH),
                 onClick: confirm
             }

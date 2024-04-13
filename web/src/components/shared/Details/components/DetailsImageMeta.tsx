@@ -17,16 +17,19 @@ export const DetailsImageMeta = () => {
             icon={Icons.mdiCameraIris}
             title={`${meta.cameraMake} ${meta.cameraModel}`}
             values={[f, meta.focalLength, iso]}
+            testId="camera-detail"
         />
         <Detail
             icon={Icons.mdiImageOutline}
             title={`${details.medium.filenameDownload}`}
             values={[`${(meta.width * meta.height / 1000000).toFixed(1)}MP`, `${meta.width}×${meta.height}`]}
+            testId="image-detail"
         />
         {!details.medium.region && !details.medium.country ? null : <Detail
             icon={Icons.mdiMapMarkerOutline}
             title={`${details.medium.region}, ${details.medium.country}`}
             values={subtitle.length ? subtitle : undefined}
+            testId="location-detail"
         />}
     </>
 }

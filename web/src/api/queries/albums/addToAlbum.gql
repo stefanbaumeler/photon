@@ -1,5 +1,8 @@
 mutation MAddToAlbum($id: String!, $media: [String!]!) {
     addMediaToAlbum(id: $id, media: $media) {
         id
+        media {
+            id
+        }
     }
 }

@@ -61,7 +61,9 @@ export const MainNav = ({ nav }: Props) => {
         </li>
     }
 
-    return <nav className={nav.type}>
+    return <nav
+        className={nav.type}
+    >
         <ul className={`${nav.type}__list`} >
             {nav.items.map((item, key) => <NavItem
                 item={item}

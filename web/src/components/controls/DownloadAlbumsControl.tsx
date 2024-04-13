@@ -40,7 +40,12 @@ export const DownloadAlbumsControl = ({
         callback: actionCallback
     })
 
-    useHotkey('d', download, EKeyboardScope.select, !!shortcut)
+    useHotkey({
+        key: 'd',
+        callback: download,
+        scopes: EKeyboardScope.select,
+        condition: !!shortcut
+    })
 
     return dropdown ? <DropdownItem item={{
         testId: 'download',

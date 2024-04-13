@@ -39,7 +39,10 @@ export const BulkMediaControls = () => {
         ['labeled', router.pathname === '/trash']
     ])
 
-    return <div className={classes}>
+    return <div
+        className={classes}
+        data-testid="selection"
+    >
         <span
             className="actions__count"
             data-testid="select-count"

@@ -4,7 +4,8 @@
     "noSemicolon": true,
     "location": "below",
     "directory": [
-        "./src/components/shared"
+        "./src/components/shared",
+        "./__tests__/e2e"
     ],
     "exclude": ["./src/components/shared/[^/]+/[^/]+.tsx"]
 }

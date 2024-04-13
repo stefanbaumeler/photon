@@ -1,21 +1,26 @@
-import { test, expect } from '@playwright/test'
 import { globalBeforeEach } from '../support/common'
+import { User } from '../actors/user'
+import { test } from '@playwright/test'
 
 globalBeforeEach()
 
 test('can archive and unarchive', async ({ page }) => {
-    await page.goto('/')
-    await page.getByTestId('teaser-check').first().click()
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    await page.getByTestId('bulk-more').click()
-    await page.getByTestId('archive').click()
+    await overview.visit()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(1)
+    await overview.selectTeaser(0)
+    const archive = await overview.selection.archive()
 
-    await page.getByTestId('teaser-check').first().click()
+    await archive.shouldHaveTeasers(1)
 
-    await page.getByTestId('bulk-more').click()
-    await page.getByTestId('unarchive').click()
+    await archive.selectTeaser(0)
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(0)
+    await overview.selection.unarchive()
+    await archive.shouldHaveTeasers(0)
+})
+
+test('can archive and unarchive by dragging', async ({ page }) => {
+
 })

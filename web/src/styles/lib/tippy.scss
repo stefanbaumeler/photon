@@ -2,6 +2,7 @@
     font-size: 12px;
     overflow: hidden;
     display: flex;
+    pointer-events: all;
 
     &[data-theme='light'] {
 

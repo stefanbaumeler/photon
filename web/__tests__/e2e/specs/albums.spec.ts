@@ -1,119 +1,122 @@
-import { test, expect, Page } from '@playwright/test'
+import { test } from '@playwright/test'
 import { predefinedAlbumUUIDs } from '../../../../api/src/database/helpers/ids'
 import { globalBeforeEach } from '../support/common'
+import { User } from '../actors/user'
 
 globalBeforeEach()
 
-const getAlbumTeaserCount = async (page: Page) => {
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
-
-    return await page.getByTestId('teaser').count()
-}
-
 test('can delete', async ({ page }) => {
-    await page.goto('/albums')
+    const user = new User(page)
+    const albums = user.albumsView()
 
-    const count = await getAlbumTeaserCount(page)
+    await albums.visit()
 
-    await page.getByTestId('teaser').first().hover()
-    await page.getByTestId('album-controls').first().click()
-    await page.getByTestId('move-to-trash').first().click()
-    await page.getByTestId('album-confirm-delete').click()
+    const count = await albums.getTeaserCount()
 
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBe(count - 1)
+    const teaser = albums.getTeaser(0)
+
+    const dialog = await teaser.moveToTrash()
+
+    await dialog.confirm()
+    await albums.shouldHaveTeasers(count - 1)
 })
 
 test('can create from media', async ({ page }) => {
-    await page.goto('/albums')
+    const user = new User(page)
+    const albums = user.albumsView()
 
-    const count = await getAlbumTeaserCount(page)
+    await albums.visit()
 
-    await page.goto('/')
+    const count = await albums.getTeaserCount()
+    const overview = await albums.nav.visitOverview()
 
-    await page.waitForTimeout(4000)
+    await overview.selectTeaser(0)
+    await overview.selectTeaser(1)
 
-    await page.getByTestId('teaser-check').first().click()
-    await page.getByTestId('teaser-check').last().click()
+    const album = await overview.selection.addTo('new')
 
-    await page.getByTestId('add-to').click()
+    await album.shouldHaveTeasers(2)
 
-    await expect(page.getByTestId('thumbnail')).not.toHaveCount(0)
-
-    await page.getByTestId('thumbnail-new').click()
-
-    await page.waitForURL('**/albums/**')
-
-    await expect(page.getByTestId('teaser')).toHaveCount(2)
-
-    await page.getByTestId('album-back').click()
-
-    await expect(page.getByTestId('teaser')).toHaveCount(count + 1)
+    const albumsAfterCreation = await album.back()
+    await albumsAfterCreation.shouldHaveTeasers(count + 1)
 })
 
 test('can create empty', async ({ page }) => {
-    await page.goto('/albums')
+    const user = new User(page)
+    const albums = user.albumsView()
 
-    const count = await getAlbumTeaserCount(page)
+    await albums.visit()
 
-    await page.getByTestId('album-create').click()
-    await page.getByTestId('album-back').click()
+    const count = await albums.getTeaserCount()
+    const album = await albums.create()
 
-    await expect(page.getByTestId('teaser')).toHaveCount(count + 1)
+    await album.back()
+
+    await albums.shouldHaveTeasers(count + 1)
 })
 
-test('can add media and avoids duplicates', async ({ page }) => {
-    await page.goto(`/albums/${predefinedAlbumUUIDs[3]}`)
+test('can add media and avoid duplicates', async ({ page }) => {
+    const user = new User(page)
+    const album = user.albumView(predefinedAlbumUUIDs[3])
 
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
-    const count = await page.getByTestId('teaser').count()
+    await album.visit()
+
+    const count = await album.getTeaserCount()
 
     for (let i = 0; i < 2; i++) {
-        await page.goto('/')
-        await page.getByTestId('teaser-check').nth(3).click()
+        const overview = await album.nav.visitOverview()
+        await overview.selectTeaser(3)
 
-        await page.getByTestId('add-to').click()
-        await page.getByText('Test Album 3').click()
+        const albumAfterAdding = await overview.selection.addTo(3)
 
-        await page.waitForURL('**/albums/**')
-
-        await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count + 1)
+        await albumAfterAdding.shouldHaveTeasers(count + 1)
     }
 })
 
 test('can remove media and change title', async ({ page }) => {
-    await page.goto(`/albums/${predefinedAlbumUUIDs[0]}`)
+    const title = 'Changed Title'
 
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
-    const count = await page.getByTestId('teaser').count()
+    const user = new User(page)
+    const album = user.albumView(predefinedAlbumUUIDs[0])
 
-    await page.getByTestId('album-title').click()
-    await page.getByTestId('album-title').clear()
-    await page.getByTestId('album-title').type('Changed Title')
-    await page.getByTestId('teaser').first().click()
+    await album.visit()
 
-    await page.getByTestId('save-changes').click()
+    const count = await album.getTeaserCount()
 
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toEqual(count - 1)
+    await album.setTitleTo(title)
 
-    await page.getByTestId('album-back').click()
+    const teaser = album.getTeaser(0)
 
-    expect(await page.getByTestId('Changed Title')).toBeDefined()
+    await teaser.click()
+    await album.save()
+
+    await album.shouldHaveTeasers(count - 1)
+
+    const albums = await album.back()
+
+    await albums.shouldHaveAlbum(-1, title)
 })
 
 test('can set cover', async ({ page }) => {
-    await page.goto(`/albums/${predefinedAlbumUUIDs[0]}`)
-    await page.getByTestId('album-more').click()
-    await page.getByTestId('album-set-cover').click()
-    await page.getByTestId('teaser').last().click()
+    const user = new User(page)
+    const album = user.albumView(predefinedAlbumUUIDs[0])
 
-    const src = await page.getByTestId('teaser-image').last().getAttribute('src')
+    await album.visit()
+
+    await album.setCover()
+    const teaser = album.getTeaser(-1)
+
+    await teaser.click()
+
+    const src = await teaser.getSrc()
     const split = src.split(/[/?]/g)
     const id = split[split.length - 2]
 
-    await page.getByTestId('save-changes').click()
+    const albums = await album.save(true)
 
-    const link = await page.locator(`[href="/albums/${predefinedAlbumUUIDs[0]}"]`)
-    const imageSrc = await link.getByTestId('teaser-image').getAttribute('src')
+    const albumTeaser = albums.getTeaser(-1)
 
-    expect(imageSrc).toContain(id)
+    await page.waitForURL('**/albums')
+
+    await albumTeaser.shouldHaveSrc(id)
 })

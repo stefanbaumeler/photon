@@ -26,7 +26,7 @@ export const useUpload = () => {
                 headers: {
                     authorization: `Bearer ${accessToken}`
                 }
-            }).then((res) => {
+            }).then(() => {
                 setFiles(undefined)
                 refresh()
             })

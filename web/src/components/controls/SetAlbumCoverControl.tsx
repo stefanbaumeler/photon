@@ -34,7 +34,12 @@ export const SetAlbumCoverControl = ({
         }
     }
 
-    useHotkey('c', action, EKeyboardScope.album, !!shortcut)
+    useHotkey({
+        key: 'c',
+        callback: action,
+        scopes: EKeyboardScope.album,
+        condition: !!shortcut
+    })
 
     return dropdown ? <DropdownItem item={{
         testId: 'album-set-cover',

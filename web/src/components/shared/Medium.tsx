@@ -1,4 +1,4 @@
-import { forwardRef, Ref, useState } from 'react'
+import { forwardRef, Ref, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useDetailsContext, useLayoutContext } from '@/providers'
 import bem from '../../util/bem'
@@ -30,6 +30,11 @@ const MediumEl = ({
         ['loading', !loaded && !!medium],
         ['none', !medium]
     ])
+
+    useEffect(() => {
+        setLoaded(false)
+    }, [medium?.filenameDisk])
+
     if (!medium) {
         return <div className={classes}>
             <div className="medium__image"></div>
@@ -47,6 +52,9 @@ const MediumEl = ({
     >
         {width && !!medium ? <>
             {medium.mimetype?.startsWith('image') ? <Image
+                style={{
+                    opacity: loaded ? 1 : 0
+                }}
                 alt=""
                 unoptimized
                 priority={priority}

@@ -27,7 +27,7 @@ export const initializeAuthState = () => {
     }
 }
 
-export const initializeUrqlClient = () => new Client({
+export const urqlClient = new Client({
     url: process.env.NEXT_PUBLIC_API_URL,
     fetchOptions: {
         credentials: process.env.NEXT_PUBLIC_API_CREDENTIALS === '0' ? 'omit' : 'include',
@@ -35,7 +35,7 @@ export const initializeUrqlClient = () => new Client({
             'Apollo-Require-Preflight': 'true'
         }
     },
-    exchanges: [devtoolsExchange, authExchange(async (utils) => {
+    exchanges: [authExchange(async (utils) => {
         if (process.env.NEXT_PUBLIC_API_CREDENTIALS === '0') {
             return {
                 addAuthToOperation: (operation) => operation
@@ -75,8 +75,6 @@ export const initializeUrqlClient = () => new Client({
                     accessToken
                 })
 
-                console.log('refreshing')
-
                 if (newAccess.data) {
                     localStorage.photon = JSON.stringify({
                         accessToken: newAccess.data.refreshAccessToken.accessToken,
@@ -92,5 +90,5 @@ export const initializeUrqlClient = () => new Client({
                 }
             }
         } as AuthConfig
-    }), cacheExchange, fetchExchange]
+    }), cacheExchange, devtoolsExchange, fetchExchange]
 })

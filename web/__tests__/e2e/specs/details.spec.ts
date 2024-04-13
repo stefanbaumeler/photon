@@ -1,59 +1,86 @@
-import { test, expect } from '@playwright/test'
-import { globalBeforeEach, openDetails } from '../support/common'
+import { test } from '@playwright/test'
+import { globalBeforeEach } from '../support/common'
+import { User } from '../actors/user'
+import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '@photon/api/dist/src/database/helpers/ids'
 
 globalBeforeEach()
 
+test.describe.configure({
+    mode: 'parallel'
+})
+
 test('can navigate using keyboard', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    const ids = await openDetails(page, true)
+    await overview.visit()
 
+    const ids = await overview.getDetailIds()
+
+    const teaser = overview.getTeaser(0)
+    const details = await teaser.click()
+
+    await details.shouldBeVisible()
     await page.keyboard.press('ArrowRight')
-
-    const image = await page.getByTestId('details-image')
-
-    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
-    await expect(page.url()).toContain(ids[1])
-
+    await details.shouldBeMedium(ids[1])
     await page.keyboard.press('ArrowLeft')
-
-    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[0])
-    await expect(page.url()).toContain(ids[0])
-
+    await details.shouldBeMedium(ids[0])
     await page.keyboard.press('Escape')
-
-    await expect(await page.getByTestId('details')).toBeHidden()
+    await details.shouldBeHidden()
 })
 
 test('can navigate using buttons', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    const ids = await openDetails(page, true)
+    await overview.visit()
 
-    await page.getByTestId('next-medium').click()
+    const ids = await overview.getDetailIds()
 
-    const image = await page.getByTestId('details-image')
+    const teaser = overview.getTeaser(0)
+    const details = await teaser.click()
 
-    await expect(page.url()).toContain(ids[1])
-    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
+    await details.next()
+    await details.shouldBeMedium(ids[1])
+    await details.prev()
+    await details.shouldBeMedium(ids[0])
+})
 
-    await page.getByTestId('prev-medium').click()
+test('can open on album page', async ({ page }) => {
+    const user = new User(page)
+    const album = user.albumView(predefinedAlbumUUIDs[0])
 
-    await expect(page.url()).toContain(ids[0])
-    await expect.poll(async () => await image.getAttribute('src')).toContain(ids[1])
+    await album.visit()
+
+    const teaser = album.getTeaser(0)
+    const details = await teaser.click()
+
+    await details.shouldBeMedium(predefinedMediumUUIDs[0])
 })
 
 test('can open and close infos', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const details = user.detailView(predefinedMediumUUIDs[0])
 
-    await openDetails(page)
+    await details.visit()
 
-    await page.getByTestId('hide-infos').click()
+    await details.hideInfos()
+    await details.showInfos()
+})
 
-    const details = await page.getByTestId('details')
+test('can show details correctly', async ({ page }) => {
+    const user = new User(page)
+    const details = user.detailView(predefinedMediumUUIDs[0])
 
-    await expect(details).not.toHaveClass(/details--infos/)
-    await page.getByTestId('show-infos').click()
+    await details.visit()
 
-    await expect(details).toHaveClass(/details--infos/)
+    await details.shouldShowAlbum('Test Album 0')
+    await details.shouldShowCameraDetail('Google Pixel 6')
+    await details.shouldShowCameraDetail('f/1.85')
+    await details.shouldShowCameraDetail('ISO40')
+    await details.shouldShowImageDetail('Test Image 0')
+    await details.shouldShowImageDetail('12.5MP')
+    await details.shouldShowImageDetail('4080×3072')
+    await details.shouldBeOwnedBy('Test McTestFace')
+    await details.shouldBeSharedWith('Test McTestFace')
 })

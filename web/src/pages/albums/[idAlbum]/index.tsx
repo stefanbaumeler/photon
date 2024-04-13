@@ -56,8 +56,17 @@ const AlbumPage = () => {
         enableScope(EKeyboardScope.album)
     }, [enableScope])
 
-    useHotkey('e', editAlbum, EKeyboardScope.album)
-    useHotkey('Escape', back, EKeyboardScope.album)
+    useHotkey({
+        key: 'e',
+        callback: editAlbum,
+        scopes: EKeyboardScope.album
+    })
+
+    useHotkey({
+        key: 'Escape',
+        callback: back,
+        scopes: EKeyboardScope.album
+    })
 
     useEffect(() => {
         if (albumQuery.data) {
@@ -114,15 +123,15 @@ const AlbumPage = () => {
                             onClick={back}
                         />
                     </div>
-                    {title ? <input
+                    <input
                         data-testid="album-title"
                         ref={titleEl}
                         type="text"
                         className="album-details__title"
-                        value={title}
+                        value={title ?? ''}
                         onClick={editAlbum}
                         onChange={(event) => setTitle(event.target.value)}
-                    /> : null}
+                    />
                     {earliest === latest ? <div className="album-details__dates">
                         <span className="album-details__date">
                             {earliest}

@@ -2,9 +2,9 @@ import { useMSignIn, useMSignUp } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { initializeUrqlClient } from '@/api'
+import { urqlClient } from '@/api'
 
 enum ELoginFormMode {
     DEFAULT,
@@ -58,7 +58,6 @@ const LoginPage = () => {
             })
 
             await router.push('/')
-            initializeUrqlClient()
         }
         else {
             setError(true)

@@ -28,8 +28,7 @@ export const ArchiveControl = ({
     const [{ data }] = useQMedium({
         variables: {
             id: media[0]
-        },
-        requestPolicy: 'cache-first'
+        }
     })
 
     const shouldArchive = data?.medium.status !== EMediumStatus.ARCHIVED
@@ -70,7 +69,11 @@ export const ArchiveControl = ({
         callback && callback()
     }
 
-    useHotkey('a', action, undefined, !!shortcut)
+    useHotkey({
+        key: 'a',
+        callback: action,
+        condition: !!shortcut
+    })
 
     const testId = shouldArchive ? 'archive' : 'unarchive'
     const label = t(shouldArchive ? ETrans.MOVE_TO_ARCHIVE : ETrans.UNARCHIVE)

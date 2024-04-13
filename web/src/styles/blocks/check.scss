@@ -3,6 +3,7 @@
     transition: background-color .25s;
     cursor: pointer;
     border-radius: 2px;
+    pointer-events: all;
 
     &:before {
         content: '';

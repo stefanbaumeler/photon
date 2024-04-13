@@ -678,6 +678,10 @@ export type TMAddToAlbum = (
   & { addMediaToAlbum: (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id'>
+    & { media?: Maybe<Array<(
+      { __typename?: 'Medium' }
+      & Pick<TMedium, 'id'>
+    )>> }
   ) }
 );
 
@@ -1466,6 +1470,9 @@ export const MAddToAlbumDocument = gql`
     mutation MAddToAlbum($id: String!, $media: [String!]!) {
   addMediaToAlbum(id: $id, media: $media) {
     id
+    media {
+      id
+    }
   }
 }
     `;

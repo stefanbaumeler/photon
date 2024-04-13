@@ -25,7 +25,6 @@ export const RestoreMediaDialog = ({
     }
 
     return <Dialog
-        id={'delete-media'}
         closeCallback={closeCallback}
         title={t(ETrans.RESTORE)}
         text={t(ETrans.RESTORE_THING, {
@@ -43,7 +42,7 @@ export const RestoreMediaDialog = ({
                 }
             },
             {
-                testId: 'trash-restore-confirm',
+                testId: 'confirm',
                 label: t(ETrans.RESTORE),
                 onClick: submit
             }

@@ -32,7 +32,12 @@ export class AlbumResolver {
 
     @Mutation(() => [Album])
     async deleteAlbums (@Args() dto: IdsDto) {
-        return this.service.delete(dto)
+        await this.service.delete(dto)
+        return dto.ids.map((id) => {
+            return {
+                id
+            }
+        })
     }
 
     @Mutation(() => Album)

@@ -13,6 +13,7 @@ export const SortControl = () => {
 
     const sortItems = [
         {
+            testId: 'sort-newest',
             label: t(ETrans.NEWEST_FIRST),
             callback: () => {
                 sort.setSort(EMediumSort.NEWEST)
@@ -20,6 +21,7 @@ export const SortControl = () => {
             }
         },
         {
+            testId: 'sort-oldest',
             label: t(ETrans.OLDEST_FIRST),
             callback: () => {
                 sort.setSort(EMediumSort.OLDEST)
@@ -27,6 +29,7 @@ export const SortControl = () => {
             }
         },
         {
+            testId: 'sort-recent',
             label: t(ETrans.MOST_RECENT),
             callback: () => {
                 sort.setSort(EMediumSort.RECENT)
@@ -41,6 +44,7 @@ export const SortControl = () => {
         onClickOutside={() => setSortDropdownActive(false)}
     >
         <Button
+            testId="sort"
             hint={t(ETrans.SORT)}
             icon={Icons.mdiSwapVertical}
             onClick={() => setSortDropdownActive(!sortDropdownActive)}

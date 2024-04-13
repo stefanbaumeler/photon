@@ -114,6 +114,18 @@ export class AlbumRepository {
                         }
                     })
                 }
+            },
+            include: {
+                media: {
+                    include: {
+                        tags: true,
+                        favoredBy: true,
+                        owner: true,
+                        uploader: true
+                    }
+                },
+                owner: true,
+                cover: true
             }
         })
     }

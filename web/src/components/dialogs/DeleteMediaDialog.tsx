@@ -14,7 +14,6 @@ export const DeleteMediaDialog = ({ closeCallback }: Props) => {
     const confirm = useDeleteMedia()
 
     return <Dialog
-        id="delete-media"
         closeCallback={closeCallback}
         title={t(ETrans.PERMANENTLY_DELETE)}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {
@@ -32,7 +31,7 @@ export const DeleteMediaDialog = ({ closeCallback }: Props) => {
                 }
             },
             {
-                testId: 'trash-delete-confirm',
+                testId: 'confirm',
                 label: t(ETrans.PERMANENTLY_DELETE),
                 onClick: confirm
             }

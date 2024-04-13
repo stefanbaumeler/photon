@@ -40,7 +40,6 @@ export const ChangePasswordDialog = ({ closeCallback }: Props) => {
 
     return changedPassword ? <Dialog
         closeCallback={close}
-        id={'change-password-complete'}
         title="Password reset complete"
         buttons={[
             {
@@ -57,7 +56,6 @@ export const ChangePasswordDialog = ({ closeCallback }: Props) => {
             path={Icons.mdiCheckboxMarkedCircleOutline}
         />
     </Dialog> : <Dialog
-        id={'change-password'}
         title={t(ETrans.CHANGE_PASSWORD)}
         closeCallback={close}
         buttons={[

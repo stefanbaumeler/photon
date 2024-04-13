@@ -1,48 +1,47 @@
 import { test, expect } from '@playwright/test'
 import { globalBeforeEach, openDetails } from '../support/common'
+import { User } from '../actors/user'
 
 globalBeforeEach()
 
 test('can favorite and unfavorite', async ({ page }) => {
-    await page.goto('/favorites')
+    const user = new User(page)
+    const favorites = user.favoritesView()
 
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
-    const count = await page.getByTestId('teaser').count()
+    await favorites.visit()
 
-    await page.goto('/')
+    const count = await favorites.getTeaserCount()
+    const overview = await favorites.nav.visitOverview()
+    const teaserToFavorite = await overview.selectTeaser(3)
 
-    await page.getByTestId('teaser-check').nth(3).click()
-    await page.getByTestId('bulk-more').click()
-    await page.getByTestId('favorite').click()
+    await overview.selection.favorite()
+    await teaserToFavorite.shouldBeFavorite()
+    await overview.nav.visitFavorites()
+    await favorites.shouldHaveTeasers(count + 1)
+    await favorites.nav.visitOverview()
 
-    await expect(await page.getByTestId('teaser').nth(3).getByTestId('favorite-mark')).toHaveCount(1)
+    const teaserToUnfavorite = await overview.selectTeaser(3)
 
-    await page.getByTestId('nav-favorites').click()
-
-    await expect(await page.getByTestId('teaser')).toHaveCount(count + 1)
-
-    await page.goto('/')
-    await page.getByTestId('teaser-check').nth(3).click()
-    await page.getByTestId('bulk-more').click()
-
-    await page.getByTestId('unfavorite').click()
-
-    await expect.poll(async () => await page.getByTestId('favorite-mark').count()).toBeGreaterThan(0)
-
-    await page.getByTestId('nav-favorites').click()
-
-    await expect(await page.getByTestId('teaser')).toHaveCount(count)
+    await overview.selection.unfavorite()
+    await teaserToUnfavorite.shouldNotBeFavorite()
+    await overview.nav.visitFavorites()
+    await favorites.shouldHaveTeasers(count)
 })
 
 test('can unfavorite on favorites details page', async ({ page }) => {
-    await page.goto('/favorites')
-    await expect.poll(async () => await page.getByTestId('teaser').count()).toBeGreaterThan(0)
-    const count = await page.getByTestId('teaser').count()
+    const user = new User(page)
+    const favorites = user.favoritesView()
 
-    await openDetails(page)
+    await favorites.visit()
 
-    await page.getByTestId('unfavorite').click()
+    const count = await favorites.getTeaserCount()
+
+    const teaser = favorites.getTeaser(0)
+    const details = await teaser.click()
+
+    await details.unfavorite()
+
     await page.keyboard.press('Escape')
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(count - 1)
+    await favorites.shouldHaveTeasers(count - 1)
 })

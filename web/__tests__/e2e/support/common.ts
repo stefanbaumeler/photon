@@ -62,7 +62,7 @@ export const openDetails = async (page: Page, provideIds = false) => {
 
     await page.getByTestId('teaser').first().click()
 
-    await expect(await page.getByTestId('details')).toBeVisible()
+    await expect(page.getByTestId('details')).toBeVisible()
 
     return ids
 }

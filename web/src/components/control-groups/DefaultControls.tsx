@@ -9,7 +9,10 @@ export const DefaultControls = () => {
         ['labeled', router.pathname === '/trash']
     ])
 
-    return <div className={classes}>
+    return <div
+        className={classes}
+        data-testid="actions"
+    >
         {router.pathname === '/trash' ? <EmptyTrashControl /> : <UploadControl shortcut />}
         <SortControl />
         <ViewControl />

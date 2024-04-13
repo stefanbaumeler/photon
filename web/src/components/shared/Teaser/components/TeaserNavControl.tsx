@@ -36,7 +36,7 @@ export const TeaserNavControl = ({ stack }: Props) => {
             smallButton
         >
             <Button
-                testId="album-controls"
+                testId="teaser-nav"
                 icon={Icons.mdiDotsVertical}
                 onClick={() => setMoreActive(!moreActive)}
                 appearance={{

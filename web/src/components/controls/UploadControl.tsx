@@ -24,7 +24,11 @@ export const UploadControl = ({
         callback && callback()
     }
 
-    useHotkey('c', action, undefined, !!shortcut)
+    useHotkey({
+        key: 'c',
+        callback: action,
+        condition: !!shortcut
+    })
 
     return <>
         <input

@@ -41,9 +41,13 @@ export const Search = () => {
         ['active', !!query.length]
     ])
 
-    return <div className="search">
+    return <div
+        className="search"
+        data-testid="search"
+    >
         <div className="search__input-container">
             <input
+                data-testid="search-input"
                 type="text"
                 className="search__input"
                 placeholder={t(ETrans.SEARCH_YOUR_PHOTOS)}

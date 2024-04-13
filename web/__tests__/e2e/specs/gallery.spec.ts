@@ -1,73 +1,88 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { globalBeforeEach } from '../support/common'
+import { User } from '../actors/user'
+import { predefinedMediumUUIDs } from '@photon/api/dist/src/database/helpers/ids'
 
 globalBeforeEach()
 
+test.describe.configure({
+    mode: 'parallel'
+})
+
 test('can shift select', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    await page.getByTestId('teaser-check').first().click()
-
-    const teasers = await page.getByTestId('teaser')
+    await overview.visit()
+    await overview.selectTeaser(0)
 
     await page.keyboard.down('Shift')
-    await teasers.nth(3).hover()
-    await teasers.nth(3).click()
+    await overview.getTeaser(2).click()
     await page.keyboard.up('Shift')
 
-    await expect(teasers.nth(2)).toHaveClass(/teaser--selected/)
+    await overview.getTeaser(0).shouldBeSelected()
+    await overview.getTeaser(1).shouldBeSelected()
+    await overview.getTeaser(2).shouldBeSelected()
 
     await page.keyboard.press('Escape')
 
-    await expect(await page.getByTestId('content-root')).not.toHaveClass(/root--selecting/)
+    await overview.getTeaser(0).shouldNotBeSelected()
+    await overview.getTeaser(1).shouldNotBeSelected()
+    await overview.getTeaser(2).shouldNotBeSelected()
 })
 
 test('can select section', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    await page.getByTestId('gallery-section').first().hover()
-
-    await page.getByTestId('gallery-section-check').first().click()
-    const teasers = await page.getByTestId('gallery-section-check').getByTestId('teaser').elementHandles()
-
-    for (const teaser of teasers) {
-        expect(teaser.getAttribute('class')).toContain('teaser--selected')
-    }
+    await overview.visit()
+    await overview.selectSection(0)
 })
 
 test('can select on details page', async ({ page }) => {
-    await page.goto('/')
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    await page.getByTestId('teaser-check').first().click()
-    await page.getByTestId('teaser-details-fallback').first().click()
+    await overview.visit()
 
-    await expect(await page.getByTestId('details')).toBeVisible()
+    const teaser = await overview.selectTeaser(0)
+    const details = await teaser.openSelected()
 
-    await page.getByTestId('details-select').first().click()
-
+    await details.select()
     await page.keyboard.press('Escape')
 
-    await expect(await page.getByTestId('teaser').first()).not.toHaveClass(/teaser--selected/)
+    await details.shouldBeHidden()
+
+    const unselectedTeaser = overview.getTeaser(0)
+
+    await unselectedTeaser.shouldNotBeSelected()
 })
 
 test('can sort', async ({ page }) => {
-    // TODO
+    const user = new User(page)
+    const overview = user.overviewView()
+
+    await overview.visit()
+
+    const src = await overview.getTeaser(0).getSrc()
+
+    await overview.actions.sortBy('oldest')
+    await overview.getTeaser(-1).shouldHaveSrc(src)
+    await overview.actions.sortBy('newest')
+    await overview.getTeaser(0).shouldHaveSrc(src)
 })
 
 test('can rotate', async ({ page }) => {
-    // TODO
-    // await page.goto('/')
-    //
-    // await openDetails(page)
-    //
-    // const beforeSrc = await page.getByTestId('details-image').getAttribute('src')
-    //
-    // await page.getByTestId('details-more').click()
-    // await page.getByTestId('rotate').click()
-    //
-    // const afterSrc = await page.getByTestId('details-image').getAttribute('src')
-    //
-    // console.log(beforeSrc, afterSrc)
-    //
-    // await expect(beforeSrc).not.toBe(afterSrc)
+    const user = new User(page)
+    const details = user.detailView(predefinedMediumUUIDs[0])
+
+    await details.visit()
+
+    const image = await details.getMedium()
+
+    const width = await image.getAttribute('naturalWidth')
+    const height = await image.getAttribute('naturalHeight')
+
+    await details.rotate()
+    await details.shouldHaveRotated(width, height)
 })

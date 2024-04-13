@@ -20,6 +20,8 @@ export const useDeleteAlbum = ({
             ids: idsToDelete
         })
 
+        console.log('after')
+
         callback && callback()
         router.push('/albums')
     }

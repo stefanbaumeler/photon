@@ -10,7 +10,6 @@ export const AddToAlbumDialog = ({ closeCallback }: Props) => {
     const { t } = useTranslation()
 
     return <Dialog
-        id="add-to-album"
         title={t(ETrans.ADD_TO)}
         closeCallback={closeCallback}
         buttons={[

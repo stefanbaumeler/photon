@@ -43,7 +43,11 @@ export const FavoriteControl = ({
         callback && callback()
     }
 
-    useHotkey('f', action, undefined, !!shortcut)
+    useHotkey({
+        key: 'f',
+        callback: action,
+        condition: !!shortcut
+    })
 
     const testId = hasUnfavorited ? 'favorite' : 'unfavorite'
     const label = t(hasUnfavorited ? ETrans.FAVORITE : ETrans.UNFAVORITE)

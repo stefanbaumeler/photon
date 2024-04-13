@@ -42,7 +42,12 @@ export const DetailsControls = () => {
         selection.toggle(details.medium.id)
     }
 
-    useHotkey(' ', select, EKeyboardScope.details, selection.selected.size > 0)
+    useHotkey({
+        key: ' ',
+        callback: select,
+        scopes: EKeyboardScope.details,
+        condition: selection.selected.size > 0
+    })
 
     if (selection.mode === ESelectionMode.SELECT) {
         return <Tippy
@@ -108,7 +113,7 @@ export const DetailsControls = () => {
             onClickOutside={() => setMoreActive(false)}
         >
             <Button
-                testId={'details-more'}
+                testId="details-more"
                 hint={t(ETrans.MORE_OPTIONS)}
                 icon={Icons.mdiDotsVertical}
                 appearance={{

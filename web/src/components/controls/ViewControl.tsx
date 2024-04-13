@@ -27,11 +27,20 @@ export const ViewControl = () => {
         setViewDropdownActive(false)
     }
 
-    useHotkey('g', galleryView)
+    useHotkey({
+        key: 'g',
+        callback: galleryView
+    })
 
-    useHotkey('m', mapView)
+    useHotkey({
+        key: 'm',
+        callback: mapView
+    })
 
-    useHotkey('l', listView)
+    useHotkey({
+        key: 'l',
+        callback: listView
+    })
 
     const viewItems: TDropdownItem[] = [
         {

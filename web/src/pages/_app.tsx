@@ -9,7 +9,7 @@ import { NavProvider,
     UserProvider,
     DetailsProvider } from '@/providers'
 import { AppProps } from 'next/app'
-import { initializeUrqlClient } from '@/api'
+import { urqlClient } from '@/api'
 import { setDefaultLocale } from  'react-datepicker'
 import i18next from '@/translations'
 import tauri from '@/tauri'
@@ -33,7 +33,7 @@ setDefaultLocale('en-US')
 const Photon = ({
     Component, pageProps
 }: AppProps) => {
-    return <Provider value={initializeUrqlClient()}>
+    return <Provider value={urqlClient}>
         <I18nextProvider i18n={i18next}>
             <ProviderProvider components={[
                 HotkeysProvider,

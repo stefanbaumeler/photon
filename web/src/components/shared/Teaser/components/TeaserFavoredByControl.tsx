@@ -11,7 +11,7 @@ export const TeaserFavoredByControl = ({
 }: Props) => {
     return <div className="teaser__categories">
         <Icon
-            data-testid={'favorite-mark'}
+            data-testid="favorite-mark"
             path={Icons.mdiStar}
             className="teaser__favorite"
             size={1}

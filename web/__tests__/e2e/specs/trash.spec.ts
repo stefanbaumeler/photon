@@ -1,38 +1,50 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { globalBeforeEach } from '../support/common'
+import { User } from '../actors/user'
 
 globalBeforeEach()
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('/')
-    await page.getByTestId('teaser-check').first().click()
-    await page.getByTestId('teaser-check').nth(2).click()
-    await page.getByTestId('teaser-check').nth(3).click()
-    await page.getByTestId('move-to-trash').click()
-    await page.getByTestId('move-to-trash-confirm').click()
-    await page.getByTestId('nav-trash').click()
+    const user = new User(page)
+    const overview = user.overviewView()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(3)
+    await overview.visit()
+
+    await overview.selectTeaser(0)
+    await overview.selectTeaser(1)
+    await overview.selectTeaser(2)
+
+    await overview.selection.moveToTrash()
+    const trash = await overview.nav.visitTrash()
+
+    await trash.shouldHaveTeasers(3)
 })
 
 test('can restore items', async ({ page }) => {
-    await page.getByTestId('teaser-check').first().click()
-    await page.getByTestId('trash-restore').click()
-    await page.getByTestId('trash-restore-confirm').click()
+    const user = new User(page)
+    const trash = user.trashView()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(2)
+    await trash.selectTeaser(0)
+    await trash.restoreSelected()
+    await trash.shouldHaveTeasers(2)
+
+    const overview = await trash.nav.visitOverview()
+    await overview.shouldHaveTeasers(5)
 })
 
 test('can delete selected', async ({ page }) => {
-    await page.getByTestId('teaser-check').first().click()
-    await page.getByTestId('trash-delete').click()
-    await page.getByTestId('trash-delete-confirm').click()
+    const user = new User(page)
+    const trash = user.trashView()
 
-    await expect(await page.getByTestId('teaser')).toHaveCount(2)
+    await trash.selectTeaser(0)
+    await trash.deleteSelected()
+    await trash.shouldHaveTeasers(2)
 })
 
 test('can empty trash', async ({ page }) => {
-    await page.getByTestId('trash-empty').click()
-    await page.getByTestId('trash-empty-confirm').click()
-    await expect(await page.getByTestId('teaser')).toHaveCount(0)
+    const user = new User(page)
+    const trash = user.trashView()
+
+    await trash.empty()
+    await trash.shouldHaveTeasers(0)
 })
