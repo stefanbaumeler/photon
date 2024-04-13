@@ -1,4 +1,4 @@
-FROM node:18.12.1-slim as base
+FROM node:20.11.1-slim as base
 
 RUN apt-get update && apt-get -y install g++ make python3
 
@@ -6,7 +6,7 @@ WORKDIR /photon
 
 COPY package.json .
 
-COPY package-lock.json .
+#COPY package-lock.json .
 
 COPY nx.json .
 
@@ -59,7 +59,7 @@ COPY api/package.json api/
 RUN npm i --prod --network-timeout 300000
 
 
-FROM node:18.12.1-slim as api
+FROM node:20.11.1-slim as api
 
 RUN apt-get update && apt-get -y install g++ make python3
 
@@ -69,7 +69,7 @@ COPY api/package.json api/
 
 COPY package.json .
 
-COPY package-lock.json .
+#COPY package-lock.json .
 
 COPY --from=api-prod photon/node_modules/ node_modules/
 
@@ -100,13 +100,13 @@ COPY web/package.json web/
 RUN npm i --prod --network-timeout 300000
 
 
-FROM node:18.12.1-slim as web
+FROM node:20.11.1-slim as web
 
 WORKDIR /photon
 
 COPY package.json .
 
-COPY package-lock.json .
+#COPY package-lock.json .
 
 COPY web/package.json web/
 
