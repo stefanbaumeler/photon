@@ -8,7 +8,7 @@ COPY package.json .
 
 COPY package-lock.json .
 
-COPY lerna.json .
+COPY nx.json .
 
 COPY tsconfig.json .
 
@@ -21,7 +21,7 @@ WORKDIR /photon
 
 RUN npm i --network-timeout 300000
 
-RUN npm run build:lerna
+RUN npm run build:packages
 
 
 FROM packages as install
