@@ -4,7 +4,6 @@ import { useSortContext } from '@/providers/SortProvider'
 import { useRouter } from 'next/router'
 import { sortMediaByDate } from '@/util/sort'
 import { TQMedia, useQMedia } from '@photon/schema'
-import { UseQueryExecute } from 'urql'
 
 type Props = {
     children?: ReactNode

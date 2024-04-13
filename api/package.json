@@ -61,10 +61,7 @@
         "prisma": "^5.10.2",
         "reflect-metadata": "^0.1.13",
         "sharp": "^0.33.2",
-        "ts-node": "^10.9.1",
-        "typesense": "^1.7.2",
-        "yauzl": "^2.10.0",
-        "yazl": "^2.5.1"
+        "ts-node": "^10.9.1"
     },
     "prisma": {
         "seed": "ts-node ./prisma/index.ts"

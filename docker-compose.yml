@@ -55,20 +55,6 @@ services:
             - '5555:5432'
         expose:
             - 5555
-    search:
-        container_name: search_c
-        image: typesense/typesense:0.23.1
-        restart: unless-stopped
-        entrypoint: sh -c '/opt/typesense-server --data-dir /data --api-key=asdf --enable-cors'
-        ports:
-            - '8108:8108'
-        volumes:
-            - search-data:/data
-        healthcheck:
-            test: ['CMD-SHELL', 'apt-get update && apt-get install -y curl && curl -f http://0.0.0.0:8108/health']
-            interval: 10s
-            timeout: 5s
-            retries: 20
     translate:
         container_name: translate_c
         image: libretranslate/libretranslate:latest
