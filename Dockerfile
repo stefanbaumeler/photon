@@ -6,7 +6,7 @@ WORKDIR /photon
 
 COPY package.json .
 
-COPY yarn.lock .
+COPY package-lock.json .
 
 COPY lerna.json .
 
@@ -19,9 +19,9 @@ FROM base as packages
 
 WORKDIR /photon
 
-RUN yarn install --network-timeout 300000
+RUN npm i --network-timeout 300000
 
-RUN yarn build:lerna
+RUN npm run build:lerna
 
 
 FROM packages as install
@@ -34,7 +34,7 @@ COPY web/package.json web/
 
 COPY api/prisma/schema.prisma api/prisma/
 
-RUN yarn install --network-timeout 300000
+RUN npm i --network-timeout 300000
 
 
 FROM install as api-build
@@ -45,7 +45,7 @@ COPY api api
 
 COPY api/.env.ci api/.env
 
-RUN yarn workspace @photon/api build
+RUN npm run workspace @photon/api build
 
 
 FROM base as api-prod
@@ -56,7 +56,7 @@ COPY api/prisma/schema.prisma api/prisma/
 
 COPY api/package.json api/
 
-RUN yarn install --prod --network-timeout 300000
+RUN npm i --prod --network-timeout 300000
 
 
 FROM node:18.12.1-slim as api
@@ -69,7 +69,7 @@ COPY api/package.json api/
 
 COPY package.json .
 
-COPY yarn.lock .
+COPY package-lock.json .
 
 COPY --from=api-prod photon/node_modules/ node_modules/
 
@@ -88,7 +88,7 @@ COPY web/.env.ci web/.env
 
 WORKDIR /photon/web
 
-RUN yarn build
+RUN npm run build
 
 
 FROM base as web-prod
@@ -97,7 +97,7 @@ WORKDIR /photon
 
 COPY web/package.json web/
 
-RUN yarn install --prod --network-timeout 300000
+RUN npm i --prod --network-timeout 300000
 
 
 FROM node:18.12.1-slim as web
@@ -106,7 +106,7 @@ WORKDIR /photon
 
 COPY package.json .
 
-COPY yarn.lock .
+COPY package-lock.json .
 
 COPY web/package.json web/
 
