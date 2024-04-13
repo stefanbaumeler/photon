@@ -1,15 +1,15 @@
-#name: Tests
-#
-#on: [ push ]
-#
-#env:
-#    NODE_ENV: ci
-#
-#jobs:
-#    tests-run:
-#        runs-on: ubuntu-latest
-#        steps:
-#            - name: Checkout
-#              uses: actions/checkout@v2
-#            - name: Setup Docker Containers
-#              run: docker-compose up --build
+name: Tests
+
+on: [ push ]
+
+env:
+    NODE_ENV: ci
+
+jobs:
+    tests-run:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Docker Containers
+              run: docker-compose up --build
