@@ -7,10 +7,6 @@ networks:
             config:
                 - subnet: 10.5.0.0/16
 
-volumes:
-    search-data:
-        driver: local
-
 services:
     api:
         container_name: api_c
@@ -23,7 +19,6 @@ services:
         entrypoint: ['node', 'api/dist']
         depends_on:
             - db
-            - search
         environment:
             PORT: 11011
         ports:
@@ -69,7 +64,4 @@ services:
         build:
             context: .
             target: test
-        depends_on:
-            search:
-                condition: service_healthy
         entrypoint: ['yarn', 'seed-and-test']
