@@ -6,8 +6,6 @@ WORKDIR /photon
 
 COPY package.json .
 
-#COPY package-lock.json .
-
 COPY nx.json .
 
 COPY tsconfig.json .
@@ -19,7 +17,7 @@ FROM base as packages
 
 WORKDIR /photon
 
-RUN npm i --network-timeout 300000
+RUN npm i --network-timeout=300000
 
 RUN npm run build:packages
 
@@ -34,7 +32,7 @@ COPY web/package.json web/
 
 COPY api/prisma/schema.prisma api/prisma/
 
-RUN npm i --network-timeout 300000
+RUN npm i --network-timeout=300000
 
 
 FROM install as api-build
@@ -56,7 +54,7 @@ COPY api/prisma/schema.prisma api/prisma/
 
 COPY api/package.json api/
 
-RUN npm i --prod --network-timeout 300000
+RUN npm i --prod --network-timeout=300000
 
 
 FROM node:20.11.1-slim as api
@@ -68,8 +66,6 @@ WORKDIR /photon
 COPY api/package.json api/
 
 COPY package.json .
-
-#COPY package-lock.json .
 
 COPY --from=api-prod photon/node_modules/ node_modules/
 
@@ -97,7 +93,7 @@ WORKDIR /photon
 
 COPY web/package.json web/
 
-RUN npm i --prod --network-timeout 300000
+RUN npm i --prod --network-timeout=300000
 
 
 FROM node:20.11.1-slim as web
@@ -105,8 +101,6 @@ FROM node:20.11.1-slim as web
 WORKDIR /photon
 
 COPY package.json .
-
-#COPY package-lock.json .
 
 COPY web/package.json web/
 
