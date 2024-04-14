@@ -25,7 +25,6 @@ export const RotateControl = ({
     useHotkey({
         key: 'r',
         callback: action,
-        scopes: EKeyboardScope.details,
         condition: !!shortcut
     })
 

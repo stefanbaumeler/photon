@@ -2,10 +2,10 @@ import { VisitableView } from './VisitableView'
 import { expect } from '@playwright/test'
 import { TeaserComponent } from '../components/TeaserComponent'
 import { SelectionComponent } from '../components/SelectionComponent'
+import { ActionsComponent } from '../components/ActionsComponent'
 import type { User } from '../actors/user'
-import { ActionsComponent } from '@/__tests__/e2e/components/ActionsComponent'
 
-export class GalleryView extends VisitableView {
+export class MediaView extends VisitableView {
     selection
     actions
     constructor (public user: User, public path: string, public isAlbum = false) {
@@ -18,7 +18,7 @@ export class GalleryView extends VisitableView {
         const teaser = this.getTeaser(index)
         await teaser.select()
 
-        return new TeaserComponent(this.user, index, this.isAlbum)
+        return teaser
     }
     selectSection = async (index: number) => {
         await this.user.page.getByTestId('gallery-section').nth(index).hover()
@@ -33,7 +33,6 @@ export class GalleryView extends VisitableView {
     shouldHaveTeasers = async (n: number) => {
         await expect(this.user.page.getByTestId('teaser')).toHaveCount(n)
     }
-
     getTeaserCount = async () => {
         await expect.poll(async () => await this.user.page.getByTestId('teaser').count()).toBeGreaterThan(0)
 

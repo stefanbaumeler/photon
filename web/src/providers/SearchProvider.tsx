@@ -31,7 +31,6 @@ const SearchProvider = ({ children }: Props) => {
     const [favorites, setFavorites] = useState(false)
     const [query, setQuery] = useState('')
     const { sort } = useSortContext()
-
     const [{ data: media }, refresh] = useQMedia({
         variables: {
             status,
@@ -39,7 +38,8 @@ const SearchProvider = ({ children }: Props) => {
             album,
             favorites,
             q: query
-        }
+        },
+        pause: !router.isReady
     })
 
     const sortedMedia = sortMediaByDate<TQMedia['media']>(media?.media || [], sort)

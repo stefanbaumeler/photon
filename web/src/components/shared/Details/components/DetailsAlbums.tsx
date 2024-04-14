@@ -20,6 +20,9 @@ export const DetailsAlbums = () => {
         {albums?.map((album, key) => <DetailsAlbum
             album={album}
             key={key}
+            onClick={async () => {
+                await details.close()
+            }}
         />)}
     </DetailsSection> : null
 }

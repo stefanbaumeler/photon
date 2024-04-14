@@ -1,7 +1,7 @@
 import { TMedium } from '@photon/schema'
 import { ESelectionMode } from '@/types/app'
 import { Check, Teaser } from '@/components'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import bem from '@/util/bem'
@@ -23,29 +23,17 @@ export const GallerySection = ({
 
     const selection = useSelectionContext()
 
-    const teasers = useMemo(() => {
-        // const trh = gallery.targetRowHeight || (window.innerWidth < 1024 ? 225 : 200)
-        const trh = window.innerWidth < 1024 ? 225 : 200
-        const maxHeight = window.innerWidth < 1024 ? 355 : 250
+    // const trh = gallery.targetRowHeight || (window.innerWidth < 1024 ? 225 : 200)
+    const trh = window.innerWidth < 1024 ? 225 : 200
+    const maxHeight = window.innerWidth < 1024 ? 355 : 250
 
-        const dimensions = generateGallery({
-            containerWidth,
-            images: media,
-            targetRowHeight: trh,
-            margin: 2,
-            maxHeight
-        })
-
-        return media.map((medium, k) => <Teaser
-            id={medium.id}
-            favoredBy={medium.favoredBy.length}
-            href={details.getUrl(medium.id)}
-            cover={medium}
-            displayWidth={dimensions[k].width}
-            displayHeight={dimensions[k].height}
-            key={k}
-        />)
-    }, [containerWidth, media])
+    const dimensions = generateGallery({
+        containerWidth,
+        images: media,
+        targetRowHeight: trh,
+        margin: 2,
+        maxHeight
+    })
 
     const resize = () => {
         setContainerWidth(gallery.containerWidth || window.innerWidth - 272)
@@ -93,7 +81,15 @@ export const GallerySection = ({
             </span>
         </div>
         <div className="gallery-section__container">
-            {teasers}
+            {media.map((medium, k) => <Teaser
+                id={medium.id}
+                favoredBy={medium.favoredBy.length}
+                href={details.getUrl(medium.id)}
+                cover={medium}
+                displayWidth={dimensions[k].width}
+                displayHeight={dimensions[k].height}
+                key={k}
+            />)}
         </div>
     </div>
 }

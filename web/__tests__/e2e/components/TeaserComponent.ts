@@ -1,7 +1,8 @@
-import { expect, Locator } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { DeleteAlbumDialog } from '../dialogs/DeleteAlbumDialog'
 import { MoveToTrashDialog } from '../dialogs/MoveToTrashDialog'
 import type { User } from '../actors/user'
+import fs from 'fs'
 
 export class TeaserComponent {
     locator
@@ -12,10 +13,11 @@ export class TeaserComponent {
         const selector = this.locator.getByTestId('teaser-check')
         await selector.hover()
         await selector.click()
+        await this.shouldBeSelected()
     }
     moveToTrash = async () => {
-        await this.locator.getByTestId('teaser-nav').first().click()
-        await this.locator.getByTestId('move-to-trash').first().click()
+        await this.locator.getByTestId('teaser-nav').click()
+        await this.locator.getByTestId('move-to-trash').click()
 
         if (this.isAlbum) {
             return new DeleteAlbumDialog(this.locator.page())
@@ -24,10 +26,54 @@ export class TeaserComponent {
         return new MoveToTrashDialog(this.locator.page())
     }
 
+    archive = async () => {
+        await this.locator.getByTestId('teaser-nav').click()
+        await this.locator.getByTestId('archive').click()
+
+        return this.user.archiveView()
+    }
+
+    unarchive = async () => {
+        await this.locator.getByTestId('teaser-nav').click()
+        await this.locator.getByTestId('unarchive').click()
+    }
+
+    favorite = async (view: string) => {
+        if (view === 'gallery') {
+            await this.locator.getByTestId('teaser-nav').click()
+        }
+
+        await this.locator.getByTestId('favorite').click()
+        await this.shouldBeFavorite(view)
+    }
+
+    unfavorite = async (view: string) => {
+        if (view === 'gallery') {
+            await this.locator.getByTestId('teaser-nav').click()
+        }
+
+        await this.locator.getByTestId('unfavorite').click()
+        await this.shouldNotBeFavorite(view)
+    }
+
     click = async () => {
         await this.locator.hover()
         await this.locator.click()
         return this.user.detailView()
+    }
+
+    download = async (view: string) => {
+        const downloadPromise = this.user.page.waitForEvent('download')
+
+        if (view === 'gallery') {
+            await this.locator.getByTestId('teaser-nav').click()
+        }
+
+        await this.locator.getByTestId('download').click()
+
+        const download = await downloadPromise
+
+        expect((await fs.promises.stat(await download.path())).size).toBeGreaterThan(1000000)
     }
 
     openSelected = async () => {
@@ -46,16 +92,28 @@ export class TeaserComponent {
         expect(imageSrc).toContain(src)
     }
 
-    shouldBeFavorite = async () => {
-        await expect(this.locator.getByTestId('favorite-mark')).toHaveCount(1)
+    shouldBeFavorite = async (view: string) => {
+        if (view === 'gallery') {
+            await expect(this.locator.getByTestId('favorite-mark')).toHaveCount(1)
+        }
+
+        if (view === 'list') {
+            await expect(this.locator.getByTestId('unfavorite')).toHaveCount(1)
+        }
     }
 
-    shouldNotBeFavorite = async () => {
-        await expect(this.locator.getByTestId('favorite-mark')).toHaveCount(0)
+    shouldNotBeFavorite = async (view: string) => {
+        if (view === 'gallery') {
+            await expect(this.locator.getByTestId('favorite-mark')).toHaveCount(0)
+        }
+
+        if (view === 'list') {
+            await expect(this.locator.getByTestId('favorite')).toHaveCount(1)
+        }
     }
 
     shouldBeSelected = async () => {
-        await expect(this.locator).toHaveClass(/teaser--selected/)
+        await expect(this.locator.getByTestId('teaser-check')).toHaveClass(/check--checked/)
     }
 
     shouldNotBeSelected = async () => {

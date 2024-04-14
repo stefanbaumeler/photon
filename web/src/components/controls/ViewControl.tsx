@@ -75,7 +75,7 @@ export const ViewControl = () => {
             hint={t(ETrans.VIEW)}
             icon={Icons.mdiEye}
             onClick={() => setViewDropdownActive(!viewDropdownActive)}
-            testId="view-control"
+            testId="view"
         />
     </Dropdown>
 }

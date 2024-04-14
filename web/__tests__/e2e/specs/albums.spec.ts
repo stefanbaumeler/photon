@@ -12,10 +12,7 @@ test('can delete', async ({ page }) => {
     await albums.visit()
 
     const count = await albums.getTeaserCount()
-
-    const teaser = albums.getTeaser(0)
-
-    const dialog = await teaser.moveToTrash()
+    const dialog = await albums.getTeaser(0).moveToTrash()
 
     await dialog.confirm()
     await albums.shouldHaveTeasers(count - 1)
@@ -84,17 +81,11 @@ test('can remove media and change title', async ({ page }) => {
     const count = await album.getTeaserCount()
 
     await album.setTitleTo(title)
-
-    const teaser = album.getTeaser(0)
-
-    await teaser.click()
+    await album.getTeaser(0).click()
     await album.save()
-
     await album.shouldHaveTeasers(count - 1)
-
     const albums = await album.back()
-
-    await albums.shouldHaveAlbum(-1, title)
+    await albums.shouldHaveAlbum(title)
 })
 
 test('can set cover', async ({ page }) => {
@@ -102,8 +93,8 @@ test('can set cover', async ({ page }) => {
     const album = user.albumView(predefinedAlbumUUIDs[0])
 
     await album.visit()
-
     await album.setCover()
+
     const teaser = album.getTeaser(-1)
 
     await teaser.click()

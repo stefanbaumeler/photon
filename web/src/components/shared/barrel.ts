@@ -3,6 +3,7 @@
  */
 
 export * from './Button/Button'
+export * from './Detail/Detail'
 export * from './Details/Details'
 export * from './Dropdown/Dropdown'
 export * from './GalleryView/GalleryView'

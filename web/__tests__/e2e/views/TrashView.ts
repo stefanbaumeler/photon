@@ -1,10 +1,10 @@
-import { GalleryView } from './GalleryView'
+import { MediaView } from './MediaView'
 import type { User } from '../actors/user'
 import { TrashRestoreDialog } from '../dialogs/TrashRestoreDialog'
 import { TrashDeleteDialog } from '../dialogs/TrashDeleteDialog'
 import { TrashEmptyDialog } from '../dialogs/TrashEmptyDialog'
 
-export class TrashView extends GalleryView {
+export class TrashView extends MediaView {
     constructor (public user: User) {
         super(user, '/trash')
     }

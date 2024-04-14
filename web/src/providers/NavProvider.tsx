@@ -94,6 +94,7 @@ const NavProvider = ({ children }: Props) => {
                     label: t(ETrans.ARCHIVE),
                     icon: Icons.mdiArchiveOutline,
                     href: 'archive',
+                    testId: 'nav-archive',
                     onDrop: archive
                 },
                 {

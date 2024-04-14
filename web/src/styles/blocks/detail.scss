@@ -1,5 +1,6 @@
 @mixin detail-root {
     display: flex;
+    color: $color-black;
 }
 
 @mixin detail-image {

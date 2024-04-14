@@ -1,12 +1,12 @@
-import { GalleryView } from './GalleryView'
+import { MediaView } from './MediaView'
 import type { User } from '../actors/user'
 import { expect } from '@playwright/test'
-export class AlbumsView extends GalleryView {
+export class AlbumsView extends MediaView {
     constructor (public user: User) {
         super(user, '/albums', true)
     }
 
-    shouldHaveAlbum = async (index: number, title: string) => {
-        await expect(this.user.page.getByTestId('teaser').nth(index)).toContainText(title)
+    shouldHaveAlbum = async (title: string) => {
+        await expect(this.user.page.getByText(title)).toHaveCount(1)
     }
 }

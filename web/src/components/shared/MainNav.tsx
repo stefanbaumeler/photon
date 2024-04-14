@@ -40,7 +40,7 @@ export const MainNav = ({ nav }: Props) => {
         >
             <Link
                 data-testid={item.testId}
-                href={`/${item.href || '#'}`}
+                href={`/${item.href || ''}`}
                 className={`${nav.type}__link${item.active ? ` ${nav.type}__link--active` : ''}`}
                 onClick={() => click(item)}
             >

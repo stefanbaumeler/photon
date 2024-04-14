@@ -45,7 +45,10 @@ export const Teaser = ({
         nativeHeight={cover ? cover.meta.height : undefined}
         bottomLeftControls={favoredBy > 0 ? <TeaserFavoredByControl count={favoredBy} /> : null}
         bottomRightControls={!album ? <TeaserOpenFallbackControl /> : undefined}
-        topRightControls={cover?.mimetype === 'video' ? <TeaserDurationControl duration={(cover.meta as TVideoMeta).duration} /> : <TeaserNavControl stack={stack} />}
+        topRightControls={cover?.mimetype === 'video' ? <TeaserDurationControl duration={(cover.meta as TVideoMeta).duration} /> : <TeaserNavControl
+            stack={stack}
+            album={album}
+        />}
         content={title ? <TeaserContent
             title={title}
         /> : undefined}

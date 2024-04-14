@@ -6,13 +6,21 @@ import { useTranslation } from 'react-i18next'
 import { TMedium } from '@photon/schema'
 
 type TAlbumDetail = {
+    id: string
     media?: Partial<TMedium>[]
     cover?: TCover
     dateCreated: string
     title?: string
 }
 
-export const DetailsAlbum = ({ album }: { album: TAlbumDetail}) => {
+type Props = {
+    album: TAlbumDetail
+    onClick: () => void
+}
+
+export const DetailsAlbum = ({
+    album, onClick
+}: Props) => {
     const { t } = useTranslation()
     const count = t(ETrans.ELEMENT_COUNT_NUMBER, {
         count: album.media?.length
@@ -25,5 +33,7 @@ export const DetailsAlbum = ({ album }: { album: TAlbumDetail}) => {
         title={album.title}
         values={[count, date]}
         testId="album-detail"
+        href={`/albums/${album.id}`}
+        onClick={onClick}
     />
 }

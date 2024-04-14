@@ -18,17 +18,18 @@ export const ListItemControls = ({
 
     const [moreActive, setMoreActive] = useState(false)
 
-    const moreItems = []
-
     const toggleDropdown = () => {
         setMoreActive(!moreActive)
     }
 
-    moreItems.push(<DeleteControl
-        dropdown
-        elements={[element]}
-        callback={toggleDropdown}
-    />)
+    const moreItems = [
+        <DeleteControl
+            key={0}
+            dropdown
+            elements={[element]}
+            callback={toggleDropdown}
+        />
+    ]
 
     if (!album) {
         moreItems.push(<RotateControl
@@ -54,6 +55,7 @@ export const ListItemControls = ({
                 hint={t(ETrans.MORE_OPTIONS)}
                 icon={Icons.mdiDotsVertical}
                 onClick={toggleDropdown}
+                testId="teaser-nav"
             />
         </Dropdown>
     </div>

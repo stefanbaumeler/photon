@@ -8,6 +8,7 @@ import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
 import { useEffect, useRef, useState } from 'react'
+import { FavoriteControl } from '@/components/controls'
 export const MediumListItem = ({
     id, title, cover, favoredBy, dateTaken, mimetype, owner
 }: TMediumListItem) => {
@@ -44,6 +45,7 @@ export const MediumListItem = ({
 
     return <tr
         className="list-view__row"
+        data-testid="teaser"
     >
         <td className="list-view__cell list-view__cell--select">
             <Check
@@ -55,18 +57,14 @@ export const MediumListItem = ({
                 borderColor="#888899"
                 boxSize={40}
                 blankHoverColor="#546119"
-                testId="list-check"
+                testId="teaser-check"
             />
         </td>
-        {favoredBy === undefined ? null : <td
+        <td
             className="list-view__cell"
-            onClick={favoredBy ? removeFromFavorites : addToFavorites}
         >
-            <Icon
-                path={favoredBy ? Icons.mdiStar : Icons.mdiStarOutline}
-                size={1}
-            />
-        </td>}
+            <FavoriteControl media={[id]} />
+        </td>
         <td
             className="list-view__cell list-view__cell--image"
             onClick={open}
@@ -84,6 +82,7 @@ export const MediumListItem = ({
                 zIndex={102}
             >
                 <Medium
+                    testId="teaser-image"
                     updateHash={src.current}
                     medium={cover}
                     width={50}

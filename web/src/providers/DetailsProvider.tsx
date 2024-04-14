@@ -13,7 +13,7 @@ interface DetailsContext {
     placeholder?: TCover
     getUrl: (medium: string) => string
     open: (medium: TCover) => void
-    close: (redirect?: boolean) => void
+    close: () => Promise<void>
     rotationRequest: number
     resolveRotationRequest: () => void
     rotate: () => void
@@ -76,23 +76,21 @@ const DetailsProvider = ({ children }: Props) => {
         placeholder,
         getUrl,
         open,
-        close: (redirect = true) => {
+        close: async () => {
             setRotationRequest(0)
             setActive(false)
             setMedium(null)
             setPlaceholder(null)
 
-            if (redirect) {
-                let newUrl = router.pathname
+            let newUrl = router.pathname
 
-                if (router.query.idAlbum) {
-                    newUrl = `/albums/${router.query.idAlbum}/`
-                }
-
-                router.push(newUrl, null, {
-                    shallow: true
-                })
+            if (router.query.idAlbum) {
+                newUrl = `/albums/${router.query.idAlbum}/`
             }
+
+            await router.push(newUrl, null, {
+                shallow: true
+            })
         },
         rotationRequest,
         resolveRotationRequest: () => {

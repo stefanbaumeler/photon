@@ -5,18 +5,14 @@ type Props = {
     icon: string | TCover
     title: string
     values?: string | string[]
-    testId?: string
 }
 
-export const Detail = ({
-    icon, title, values, testId
+export const DetailContents = ({
+    icon, title, values
 }: Props) => {
     values = Array.isArray(values) ? values : [values]
 
-    return <div
-        className="detail"
-        data-testid={testId}
-    >
+    return <>
         <div className="detail__icon">
             {typeof icon === 'string' ? <Icon
                 path={icon}
@@ -41,5 +37,5 @@ export const Detail = ({
                 </span>)}
             </div>
         </div>
-    </div>
+    </>
 }

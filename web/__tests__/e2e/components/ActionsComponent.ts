@@ -10,4 +10,9 @@ export class ActionsComponent {
         await this.locator.getByTestId('sort').click()
         await this.locator.getByTestId(`sort-${sort}`).click()
     }
+
+    setView = async (view: string) => {
+        await this.locator.getByTestId('view').click()
+        await this.locator.getByTestId(`${view}-view`).click()
+    }
 }
