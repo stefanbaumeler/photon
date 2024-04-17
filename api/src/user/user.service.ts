@@ -1,16 +1,23 @@
 import { ForbiddenException, Injectable } from '@nestjs/common'
 import { UserRepository } from './user.repository'
-import { UserChangePasswordDto, UserLanguageDto, UserRefreshTokenDto, UserSignInDto, UserSignUpDto } from './user.dto'
+import { UserChangePasswordDto,
+    UserLanguageDto,
+    UserRefreshTokenDto,
+    UserSignInDto,
+    UserSignUpDto,
+    UserVerifyAccountDto } from './user.dto'
 import argon2 from 'argon2'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
 import { IdDto } from '../shared/dto'
+import { MailService } from '../mail/mail.service'
+import { randomUUID } from 'crypto'
 
 @Injectable()
 export class UserService {
-    constructor (private repository: UserRepository, private jwtService: JwtService, private config: ConfigService) {}
+    constructor (private repository: UserRepository, private jwtService: JwtService, private config: ConfigService, private mail: MailService) {}
 
     async profile (dto?: IdDto) {
         return this.repository.profile(dto)
@@ -56,9 +63,17 @@ export class UserService {
     async signUp (dto: UserSignUpDto, res: Response) {
         const hashedPassword = await argon2.hash(dto.password)
 
+        const signUpToken = randomUUID()
+
         const user = await this.repository.signUp({
             ...dto,
-            password: hashedPassword
+            password: hashedPassword,
+            signUpToken
+        })
+
+        await this.mail.sendSignUpMail({
+            to: user.mail,
+            token: await argon2.hash(signUpToken)
         })
 
         const tokens = this.createTokens(user.id, user.mail)
@@ -69,6 +84,17 @@ export class UserService {
             ...tokens,
             user
         }
+    }
+
+    async verifyAccount (dto: UserVerifyAccountDto) {
+        const user = await this.repository.profile(dto)
+        const valid = await argon2.verify(dto.token, user?.signUpToken ?? '')
+
+        if (valid) {
+            await this.repository.resetSignUpToken(dto)
+        }
+
+        return valid
     }
 
     async changeLanguage (dto: UserLanguageDto) {

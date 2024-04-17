@@ -4,7 +4,6 @@ import { ETrans } from '@/types/translations'
 import { Brand, Button, LinkButton, TextBox, Checkbox } from '@/components'
 import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { urqlClient } from '@/api'
 
 enum ELoginFormMode {
     DEFAULT,

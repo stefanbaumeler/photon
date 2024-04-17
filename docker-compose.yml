@@ -50,6 +50,26 @@ services:
             - '5555:5432'
         expose:
             - 5555
+    queue:
+        container_name: queue_c
+        image: redis
+        restart: unless-stopped
+        ports:
+            - '6379:6379'
+        expose:
+            - 6379
+    mailhog:
+        container_name: mailhog_c
+        image: mailhog/mailhog
+        restart: unless-stopped
+        ports:
+            - '1025:1025'
+            - '8025:8025'
+        expose:
+            - 1025
+            - 8025
+        volumes:
+            - ./mailhog.auth:/mailhog.auth:ro
     translate:
         container_name: translate_c
         image: libretranslate/libretranslate:latest

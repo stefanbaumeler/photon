@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { UserLanguageDto, UserSignUpDto } from './user.dto'
+import { UserLanguageDto, UserSignUpDto, UserVerifyAccountDto } from './user.dto'
 import { ClsService } from 'nestjs-cls'
 import { IdDto } from '../shared/dto'
 
@@ -32,7 +32,7 @@ export class UserRepository {
         })
     }
 
-    async signUp (dto: UserSignUpDto) {
+    async signUp (dto: UserSignUpDto & { signUpToken: string }) {
         return this.prisma.user.create({
             data: dto
         })
@@ -60,5 +60,16 @@ export class UserRepository {
         })
 
         return true
+    }
+
+    async resetSignUpToken (dto: IdDto) {
+        await this.prisma.user.update({
+            where: {
+                id: dto.id
+            },
+            data: {
+                signUpToken: null
+            }
+        })
     }
 }

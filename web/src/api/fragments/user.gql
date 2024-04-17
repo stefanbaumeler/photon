@@ -6,4 +6,5 @@ fragment FUser on User {
     firstName
     lastName
     language
+    signUpToken
 }

@@ -21,4 +21,7 @@ export class User {
 
     @Field(() => String)
         language!: string
+
+    @Field(() => String)
+        signUpToken!: string
 }

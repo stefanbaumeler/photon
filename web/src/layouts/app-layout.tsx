@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { SearchBar, Sidebar, FocusOverlay, Details } from '@/components'
+import { SearchBar, Sidebar, FocusOverlay, Details, VerifyAccountMessage } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
@@ -17,19 +17,24 @@ const AppLayout = ({ children }: Props) => {
     ])
 
     return <AuthGuard>
-        <div id="modal-root"></div>
         <div
-            id="app-root"
-            data-testid="content-root"
-            className={classes}
+            id="root"
         >
-            <FocusOverlay />
-            <SearchBar />
-            <Sidebar />
-            <Details />
-            <main className="main">
-                {children}
-            </main>
+            <div id="modal-root"></div>
+            <VerifyAccountMessage />
+            <div
+                id="app-root"
+                data-testid="content-root"
+                className={classes}
+            >
+                <FocusOverlay />
+                <SearchBar />
+                <Sidebar />
+                <Details />
+                <main className="main">
+                    {children}
+                </main>
+            </div>
         </div>
     </AuthGuard>
 }

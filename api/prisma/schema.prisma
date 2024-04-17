@@ -80,19 +80,21 @@ model Device {
 }
 
 model User {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dateCreated   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
-  dateModified  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
-  mail          String   @db.VarChar(255)
-  password      String   @db.VarChar(255)
-  firstName     String   @map("first_name") @db.VarChar(255)
-  lastName      String   @map("last_name") @db.VarChar(255)
-  albums        Album[]
-  media         Medium[] @relation("medium_owner")
-  uploadedMedia Medium[] @relation("medium_uploader")
-  devices       Device[]
-  favorites     Medium[]
-  language      String
-  createdTags   Tag[]
-  refreshToken  String?
+  id                               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dateCreated                      DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @map("date_created") @db.Timestamptz(6)
+  dateModified                     DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @map("date_modified") @db.Timestamptz(6)
+  mail                             String    @db.VarChar(255)
+  password                         String    @db.VarChar(255)
+  firstName                        String    @map("first_name") @db.VarChar(255)
+  lastName                         String    @map("last_name") @db.VarChar(255)
+  albums                           Album[]
+  media                            Medium[]  @relation("medium_owner")
+  uploadedMedia                    Medium[]  @relation("medium_uploader")
+  devices                          Device[]
+  favorites                        Medium[]
+  language                         String
+  createdTags                      Tag[]
+  passwordResetToken               String?   @default("") @map("password_reset_token")
+  datePasswordResetTokenExpiration DateTime? @map("date_password_reset_token_expiration")
+  signUpToken                      String?   @default("") @map("sign_up_token")
 }

@@ -114,5 +114,7 @@ export default {
     new_password: 'Neues Passwort',
     repeat_new_password: 'Neues Passwort wiederholen',
     close: 'Schliessen',
-    sign_in_wrong_credentials: 'Deine Anmeldedaten sind nicht korrekt. Versuche es nochmals.'
+    sign_in_wrong_credentials: 'Deine Anmeldedaten sind nicht korrekt. Versuche es nochmals.',
+    verify_account: 'Your email is not yet verified. Please complete the email verification process.',
+    resend_verification: 'Resend verification email'
 }

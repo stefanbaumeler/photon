@@ -7,9 +7,10 @@ import { PrismaModule } from '../prisma/prisma.module'
 import { AccessTokenStrategy } from '../auth/strategies/accessToken.strategy'
 import { JwtService } from '@nestjs/jwt'
 import { ClsModule } from 'nestjs-cls'
+import { MailModule } from '../mail/mail.module'
 
 @Module({
-    imports: [PrismaModule, ClsModule],
+    imports: [PrismaModule, ClsModule, MailModule],
     controllers: [UserController],
     providers: [UserRepository, UserResolver, UserService, JwtService, AccessTokenStrategy]
 })

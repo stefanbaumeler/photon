@@ -74,3 +74,13 @@ export class UserChangePasswordDto {
     @Field(() => String)
         newPassword!: string
 }
+
+@InputType()
+@ArgsType()
+export class UserVerifyAccountDto {
+    @Field(() => String)
+        id!: string
+
+    @Field(() => String)
+        token!: string
+}

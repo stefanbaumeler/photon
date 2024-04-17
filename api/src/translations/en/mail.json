@@ -1,0 +1,8 @@
+{
+    "SIGNUP_SUBJECT": "Confirm your Photon account",
+    "SIGNUP_TITLE": "Almost done!",
+    "SIGNUP_TEXT": "Click below to verify your Photon account.\nOr, if this wasn't you, simply ignore this email.",
+    "SIGNUP_BUTTON": "Verify my account",
+    "RESET_PASSWORD_SUBJECT": "Reset your Photon password",
+    "RESET_PASSWORD_BUTTON": "Reset password"
+}

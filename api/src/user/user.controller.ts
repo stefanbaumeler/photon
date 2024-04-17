@@ -9,4 +9,12 @@ export class UserController {
     one (@Param('id') id: string) {
         return id
     }
+
+    @Get(':id/verify/:token')
+    verify (@Param('id') id: string, @Param('token') token: string) {
+        return this.service.verifyAccount({
+            id,
+            token
+        })
+    }
 }

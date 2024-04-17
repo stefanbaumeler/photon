@@ -17,6 +17,11 @@ import jwt from 'jsonwebtoken'
 import { predefinedUserUUIDs } from '../database/helpers/ids'
 import { DeviceModule } from '../device/device.module'
 import { DownloadsModule } from '../downloads/downloads.module'
+import { MailModule } from '../mail/mail.module'
+import { BullModule } from '@nestjs/bull'
+import { getEnv } from '../../env'
+import { CookieResolver, I18nModule, QueryResolver } from 'nestjs-i18n'
+import path from 'path'
 
 const providers: Provider[] = [AppService]
 
@@ -27,15 +32,13 @@ if (process.env.NODE_ENV !== 'test') {
     })
 }
 
+const env = getEnv()
+
 @Module({
     imports: [
         ClsModule.forRoot({
             middleware: {
-                // automatically mount the
-                // ClsMiddleware for all routes
                 mount: true,
-                // and use the setup method to
-                // provide default store values.
                 setup: (cls, req) => {
                     const user = process.env.NODE_ENV === 'test' ? {
                         id: predefinedUserUUIDs[0]
@@ -56,12 +59,6 @@ if (process.env.NODE_ENV !== 'test') {
                     res
                 }
             },
-
-            // cors: {
-            //     origin: true,
-            //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-            //     credentials: true
-            // },
             driver: ApolloDriver,
             autoSchemaFile: './schema.gql',
             playground: {
@@ -70,13 +67,35 @@ if (process.env.NODE_ENV !== 'test') {
                 }
             }
         }),
+        MailModule,
         UserModule,
         AlbumModule,
         MediumModule,
         FavoriteModule,
         UploadModule,
         DownloadsModule,
-        DeviceModule
+        DeviceModule,
+        BullModule.forRoot({
+            redis: {
+                host: env.REDIS_HOST,
+                port: parseInt(env.REDIS_PORT ?? '')
+            }
+        }),
+        I18nModule.forRoot({
+            fallbackLanguage: 'en',
+            loaderOptions: {
+                path: path.join(__dirname, '../../../src/translations/'),
+                watch: true
+            },
+            typesOutputPath: path.join(__dirname, '../../../src/types/generated/i18n.ts'),
+            resolvers: [
+                {
+                    use: QueryResolver,
+                    options: ['lang']
+                },
+                CookieResolver
+            ]
+        })
     ],
     controllers: [AppController],
     providers

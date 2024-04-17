@@ -6,7 +6,7 @@ import { UserChangePasswordDto,
     UserRefreshTokenDto,
     UserSignInDto,
     UserSignUpDto,
-    UserTokenDto } from './user.dto'
+    UserTokenDto, UserVerifyAccountDto } from './user.dto'
 import { Public } from '../auth/public.decorator'
 import { Response } from 'express'
 

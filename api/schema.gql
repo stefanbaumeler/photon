@@ -10,6 +10,7 @@ type User {
   firstName: String!
   lastName: String!
   language: String!
+  signUpToken: String!
 }
 
 """

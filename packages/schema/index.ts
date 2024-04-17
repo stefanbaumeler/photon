@@ -302,6 +302,7 @@ export type TUser = {
   language: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   mail: Scalars['String']['output'];
+  signUpToken: Scalars['String']['output'];
 };
 
 export type TUserTokenDto = {
@@ -584,6 +585,7 @@ export type TUserResolvers<ContextType = any, ParentType extends TResolversParen
   language?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   mail?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  signUpToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -664,7 +666,7 @@ export type TFMediaStatus = (
 
 export type TFUser = (
   { __typename?: 'User' }
-  & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+  & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
 );
 
 export type TMAddToAlbumVariables = Exact<{
@@ -1286,7 +1288,7 @@ export type TMChangeLanguage = (
   { __typename?: 'Mutation' }
   & { changeLanguage: (
     { __typename?: 'User' }
-    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
   ) }
 );
 
@@ -1309,7 +1311,7 @@ export type TQProfile = (
   { __typename?: 'Query' }
   & { profile: (
     { __typename?: 'User' }
-    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
   ) }
 );
 
@@ -1326,7 +1328,7 @@ export type TMRefreshAccessToken = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
@@ -1344,7 +1346,7 @@ export type TMSignIn = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
@@ -1372,7 +1374,7 @@ export type TMSignUp = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
@@ -1464,6 +1466,7 @@ export const FUser = gql`
   firstName
   lastName
   language
+  signUpToken
 }
     `;
 export const MAddToAlbumDocument = gql`
@@ -2019,7 +2022,8 @@ export type GraphCacheResolvers = {
     id?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
     language?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
     lastName?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
-    mail?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>
+    mail?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>,
+    signUpToken?: GraphCacheResolver<WithTypename<TUser>, Record<string, never>, Scalars['String'] | string>
   },
   UserTokenDto?: {
     accessToken?: GraphCacheResolver<WithTypename<TUserTokenDto>, Record<string, never>, Scalars['String'] | string>,
@@ -2172,7 +2176,8 @@ export type GraphCacheUpdaters = {
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     language?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
     lastName?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
-    mail?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>
+    mail?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>,
+    signUpToken?: GraphCacheUpdateResolver<Maybe<WithTypename<TUser>>, Record<string, never>>
   },
   UserTokenDto?: {
     accessToken?: GraphCacheUpdateResolver<Maybe<WithTypename<TUserTokenDto>>, Record<string, never>>,
