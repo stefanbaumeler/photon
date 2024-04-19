@@ -27,10 +27,8 @@ export class Album {
     })
         cover?: Medium
 
-    @Field(() => User, {
-        nullable: true
-    })
-        owner?: User
+    @Field(() => User)
+        owner!: User
 
     @Field(() => [Medium], {
         nullable: true

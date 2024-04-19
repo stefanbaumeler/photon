@@ -9,7 +9,7 @@ export const Uploader = () => {
     let dragTimeout = 0
 
     const drag = useCallback((event: DragEvent) => {
-        if (event.dataTransfer.types.indexOf('Files') !== -1) {
+        if (event.dataTransfer?.types.indexOf('Files') !== -1) {
             setVisible(true)
 
             clearTimeout(dragTimeout)

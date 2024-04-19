@@ -32,7 +32,7 @@ export type TAlbum = {
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   media?: Maybe<Array<TMedium>>;
-  owner?: Maybe<TUser>;
+  owner: TUser;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -447,7 +447,7 @@ export type TAlbumResolvers<ContextType = any, ParentType extends TResolversPare
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType>;
-  owner?: Resolver<Maybe<TResolversTypes['User']>, ParentType, ContextType>;
+  owner?: Resolver<TResolversTypes['User'], ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -707,10 +707,10 @@ export type TQAlbum = (
         { __typename?: 'VideoMeta' }
         & Pick<TVideoMeta, 'width' | 'height'>
       ) }
-    )>, owner?: Maybe<(
+    )>, owner: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    )>, media?: Maybe<Array<(
+    ), media?: Maybe<Array<(
       { __typename: 'Medium' }
       & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
       & { tags: Array<(
@@ -786,10 +786,10 @@ export type TQAlbums = (
         { __typename?: 'VideoMeta' }
         & Pick<TVideoMeta, 'width' | 'height'>
       ) }
-    )>, owner?: Maybe<(
+    )>, owner: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    )>, media?: Maybe<Array<(
+    ), media?: Maybe<Array<(
       { __typename: 'Medium' }
       & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
       & { tags: Array<(
@@ -835,10 +835,10 @@ export type TQAlbumsOfMedium = (
         { __typename?: 'VideoMeta' }
         & Pick<TVideoMeta, 'width' | 'height'>
       ) }
-    )>, owner?: Maybe<(
+    )>, owner: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    )>, media?: Maybe<Array<(
+    ), media?: Maybe<Array<(
       { __typename?: 'Medium' }
       & Pick<TMedium, 'id'>
     )>> }

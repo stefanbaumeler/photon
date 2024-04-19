@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 type Props = {
     medium: TCover | null
-    width: number
+    width?: number
     testId?: string
     priority?: boolean
     position?: string

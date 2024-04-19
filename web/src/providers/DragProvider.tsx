@@ -5,8 +5,8 @@ type Props = {
 }
 
 interface DragContext {
-    dragging: string
-    setDragging: Dispatch<SetStateAction<string>>
+    dragging?: string
+    setDragging: Dispatch<SetStateAction<string | undefined>>
 }
 
 const DragContext = createContext<DragContext | null>(null)
@@ -24,8 +24,15 @@ const DragProvider = ({ children }: Props) => {
 }
 
 const useDragContext = () => {
-    return useContext(DragContext)
+    const ctx = useContext(DragContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
+
 export {
     DragProvider, useDragContext
 }

@@ -18,7 +18,7 @@ interface SelectionContext {
     clear: () => void
     mode: ESelectionMode
     setMode: Dispatch<SetStateAction<ESelectionMode>>
-    lastAdded: string
+    lastAdded?: string
     shiftTargets: string[]
     setShiftTargets: Dispatch<SetStateAction<string[]>>
 }
@@ -95,7 +95,7 @@ const SelectionProvider = ({ children }: Props) => {
 
             setSelected(newSet)
 
-            if (itemsToAdd.indexOf(lastAdded) === itemsToAdd.length - 1) {
+            if (lastAdded && itemsToAdd.indexOf(lastAdded) === itemsToAdd.length - 1) {
                 setLastAdded(itemsToAdd[0])
             }
             else {
@@ -159,8 +159,15 @@ const SelectionProvider = ({ children }: Props) => {
 }
 
 const useSelectionContext = () => {
-    return useContext(SelectionContext)
+    const ctx = useContext(SelectionContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
+
 export {
     SelectionProvider, useSelectionContext
 }

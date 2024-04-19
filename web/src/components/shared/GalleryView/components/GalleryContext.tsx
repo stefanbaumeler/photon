@@ -2,23 +2,20 @@ import { createContext, ReactNode, useContext } from 'react'
 
 type Props = {
     children?: ReactNode
-    containerWidth: number
-    targetRowHeight: number
+    containerWidth?: number
 }
 
 interface GalleryContext {
     containerWidth: number
-    targetRowHeight: number
 }
 
 const GalleryContext = createContext<GalleryContext | null>(null)
 
 const GalleryProvider = ({
-    containerWidth, targetRowHeight, children
+    containerWidth = typeof window !== 'undefined' ? window.innerWidth - 272 : 0, children
 }: Props) => {
     return <GalleryContext.Provider value={{
-        containerWidth,
-        targetRowHeight
+        containerWidth
     }}
     >
         {children}
@@ -26,7 +23,13 @@ const GalleryProvider = ({
 }
 
 const useGalleryContext = () => {
-    return useContext(GalleryContext)
+    const ctx = useContext(GalleryContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

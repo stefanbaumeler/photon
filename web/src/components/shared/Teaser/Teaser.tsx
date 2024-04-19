@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const Teaser = ({
-    id, cover, favoredBy, title, href, displayWidth, displayHeight, stack, album = false
+    id, cover, favoredBy = 0, title, href, displayWidth, displayHeight, stack, album = false
 }: Props) => {
     const router = useRouter()
     const details = useDetailsContext()
@@ -30,10 +30,10 @@ export const Teaser = ({
             if (album) {
                 router.push(`albums/${id}`)
             }
-            else {
+            else if (cover) {
                 details.open({
-                    id,
-                    ...cover
+                    ...cover,
+                    id
                 })
             }
         }}
@@ -41,8 +41,8 @@ export const Teaser = ({
         cover={cover}
         displayWidth={displayWidth}
         displayHeight={displayHeight}
-        nativeWidth={cover ? cover.meta.width : undefined}
-        nativeHeight={cover ? cover.meta.height : undefined}
+        nativeWidth={cover ? cover.meta.width : 0}
+        nativeHeight={cover ? cover.meta.height : 0}
         bottomLeftControls={favoredBy > 0 ? <TeaserFavoredByControl count={favoredBy} /> : null}
         bottomRightControls={!album ? <TeaserOpenFallbackControl /> : undefined}
         topRightControls={cover?.mimetype === 'video' ? <TeaserDurationControl duration={(cover.meta as TVideoMeta).duration} /> : <TeaserNavControl

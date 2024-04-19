@@ -16,9 +16,15 @@ const buildPrecedentsMap = <T>(graph: GraphFunction<T>, startNode: T, endNode: T
     })
 
     while (pQueue.size() > 0) {
+        const pQueueValue = pQueue.pop()
+
+        if (!pQueueValue) {
+            return undefined
+        }
+
         const {
             id, weight
-        } = pQueue.pop()
+        } = pQueueValue
 
         if (!visited.has(id)) {
             const neighboringNodes = graph(id)
@@ -32,7 +38,7 @@ const buildPrecedentsMap = <T>(graph: GraphFunction<T>, startNode: T, endNode: T
                 if (
                     currentWeight === undefined ||
                     currentWeight > newWeight &&
-                        (currentWeight / newWeight > 1.005 || currentId !== undefined && currentId < id)
+                        (currentWeight / newWeight > 1.005 || currentId !== null && currentId !== undefined && currentId < id)
                 ) {
                     storedShortestPaths.set(neighbor, newWeight)
                     pQueue.push({

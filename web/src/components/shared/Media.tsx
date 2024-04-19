@@ -14,7 +14,7 @@ export const Media = () => {
                 cover: medium,
                 title: medium.title,
                 owner: medium.owner,
-                favoredBy: medium.favoredBy.length,
+                favoredBy: medium.favoredBy?.length,
                 dateTaken: medium.dateTaken,
                 mimetype: medium.mimetype
             }

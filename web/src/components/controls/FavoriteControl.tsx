@@ -3,8 +3,9 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
-import { useDetailsContext, useSelectionContext, useUserContext } from '@/providers'
+import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useHotkey } from '@/hooks/hotkey'
+import { useQFavorites } from '@photon/schema'
 
 type Props = {
     media: string[]
@@ -19,9 +20,9 @@ export const FavoriteControl = ({
     const { t } = useTranslation()
     const details = useDetailsContext()
     const selection = useSelectionContext()
-    const { favorites } = useUserContext()
+    const [{  data: favorites }] = useQFavorites()
 
-    const favoriteIds = favorites?.map((favorite) => favorite.id)
+    const favoriteIds = favorites?.favorites.map((favorite) => favorite.id)
 
     const hasUnfavorited = !!media.filter((medium) => !favoriteIds?.find((favorite) => favorite === medium)).length
 
@@ -57,16 +58,16 @@ export const FavoriteControl = ({
         testId,
         label,
         callback: action,
-        shortcut: shortcut && 'F'
+        shortcut: shortcut ? 'F' : undefined
     }}
     /> : <Button
         testId={testId}
         onClick={action}
         hint={label}
-        shortcut={shortcut && 'F'}
-        appearance={details.active && {
+        shortcut={shortcut ? 'F' : undefined}
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
         icon={icon}
     />
 }

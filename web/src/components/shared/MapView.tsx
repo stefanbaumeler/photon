@@ -41,7 +41,7 @@ export const MapView = () => {
                 id: medium.id,
                 cover: medium,
                 width: medium.meta.width,
-                favoredBy: medium.favoredBy.length
+                favoredBy: medium.favoredBy?.length
             }
 
             if (medium.location[0] && medium.location[1]) {
@@ -73,15 +73,15 @@ export const MapView = () => {
     ] as LayerProps[]
 
     const onMapClick = (event: MapLayerMouseEvent) => {
-        const feature = event.features[0]
-
-        if (!feature) {
+        if (!event.features?.[0]) {
             return
         }
 
-        const clusterId = feature.properties.cluster_id
+        const feature = event.features[0]
 
-        const mapboxSource = mapRef.current.getSource('mediaMarkers') as GeoJSONSource
+        const clusterId = feature.properties?.cluster_id
+
+        const mapboxSource = mapRef.current?.getSource('mediaMarkers') as GeoJSONSource
 
         mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
             if (err) {
@@ -89,7 +89,7 @@ export const MapView = () => {
             }
 
             if (feature.geometry.type === 'Point') {
-                mapRef.current.easeTo({
+                mapRef.current?.easeTo({
                     center: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
                     zoom,
                     duration: 500
@@ -106,7 +106,7 @@ export const MapView = () => {
         const features = mapRef.current?.querySourceFeatures('mediaMarkers') || []
 
         features.forEach((feature) => {
-            if (feature.geometry.type !== 'Point' || feature.properties.cluster_id) {
+            if (feature.geometry.type !== 'Point' || !feature.properties || feature.properties?.cluster_id) {
                 return
             }
 
@@ -122,7 +122,7 @@ export const MapView = () => {
         })
 
         features.forEach((feature) => {
-            if (feature.geometry.type !== 'Point' || !feature.properties.cluster_id) {
+            if (feature.geometry.type !== 'Point' || !feature.properties || !feature.properties.cluster_id) {
                 return
             }
 
@@ -187,7 +187,7 @@ export const MapView = () => {
                     cover: medium,
                     width: medium.meta.width,
                     location: medium.location,
-                    favoredBy: medium.favoredBy.length
+                    favoredBy: medium.favoredBy?.length
                 }
             })
 
@@ -202,12 +202,16 @@ export const MapView = () => {
     const HTMLMarker = ({ k }: { k: string }) => {
         const medium = markers.find((marker) => marker.id === k)
 
-        return medium ? <div
+        return medium?.cover ? <div
             className="map__marker"
-            onClick={() => details.open({
-                id: medium.id,
-                ...medium.cover
-            })}
+            onClick={() => {
+                if (medium.cover) {
+                    details.open({
+                        ...medium.cover,
+                        id: medium.id
+                    })
+                }
+            }}
         >
             <Medium
                 medium={medium.cover}
@@ -215,7 +219,7 @@ export const MapView = () => {
             />
         </div> : <div className="map__cluster">
             <div className="map__cluster-label">
-                {markersOnScreen[k].feature.properties.point_count_abbreviated}
+                {markersOnScreen[k].feature.properties?.point_count_abbreviated}
             </div>
         </div>
     }
@@ -255,7 +259,7 @@ export const MapView = () => {
                             return {
                                 geometry: {
                                     type: 'Point',
-                                    coordinates: [marker.location[1], marker.location[0]]
+                                    coordinates: marker.location ?? []
                                 },
                                 properties: marker,
                                 type: 'Feature'

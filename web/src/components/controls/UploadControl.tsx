@@ -20,7 +20,7 @@ export const UploadControl = ({
     const upload = useUpload()
 
     const action = () => {
-        uploadRef.current.click()
+        uploadRef.current?.click()
         callback && callback()
     }
 
@@ -43,12 +43,12 @@ export const UploadControl = ({
             testId: 'upload',
             label: t(ETrans.UPLOAD),
             callback: action,
-            shortcut: shortcut && 'C'
+            shortcut: shortcut ? 'C' : undefined
         }}
         /> : <Button
             testId="upload"
             hint={t(ETrans.UPLOAD)}
-            shortcut={shortcut && 'C'}
+            shortcut={shortcut ? 'C' : undefined}
             icon={Icons.mdiTrayArrowUp}
             onClick={action}
         />}

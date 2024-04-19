@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { ETrans } from '@/types/translations'
 import { Button, Dropdown } from '@/components'
-import { DeleteControl, ArchiveControl, RotateControl, DownloadMediaControl } from '@/components/controls'
+import { MoveToTrashControl, ArchiveControl, RotateControl, DownloadMediaControl } from '@/components/controls'
 
 type Props = {
     element: string
@@ -23,7 +23,7 @@ export const ListItemControls = ({
     }
 
     const moreItems = [
-        <DeleteControl
+        <MoveToTrashControl
             key={0}
             dropdown
             elements={[element]}

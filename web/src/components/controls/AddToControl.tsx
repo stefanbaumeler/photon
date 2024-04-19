@@ -32,9 +32,9 @@ export const AddToControl = ({ dropdown }: Props) => {
             testId="add-to"
             hint={t(ETrans.ADD_TO)}
             onClick={action}
-            appearance={details.active && {
+            appearance={details.active ? {
                 text: 'light'
-            }}
+            } : undefined}
             icon={Icons.mdiPlus}
         />}
     </>

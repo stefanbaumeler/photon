@@ -28,8 +28,8 @@ export const VisualGalleryView = ({ elements }: Props) => {
                 return new Date(medium.dateCreated)
             }
         }).sort((a, b) => {
-            const aTime = a.getTime()
-            const bTime = b.getTime()
+            const aTime = a?.getTime() ?? 0
+            const bTime = b?.getTime() ?? 0
             return sort.sort === EMediumSort.OLDEST ? aTime - bTime : bTime - aTime
         }).map((groupDate) => formatDate(groupDate))
 

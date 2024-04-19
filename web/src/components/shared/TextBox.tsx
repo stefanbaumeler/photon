@@ -11,7 +11,7 @@ type Props = {
 }
 const TextBoxEl = ({
     id, label, placeholder = '', type = 'text', value, onChange, testId
-}: Props, ref: Ref<null>) => {
+}: Props, ref: Ref<HTMLInputElement>) => {
     return <div className="input">
         {label ? <label
             htmlFor={id}
@@ -20,7 +20,7 @@ const TextBoxEl = ({
             {label}
         </label> : null}
         <input
-            ref={ref}
+            ref={ref as Ref<HTMLInputElement>}
             data-testid={testId}
             id={id}
             type={type}

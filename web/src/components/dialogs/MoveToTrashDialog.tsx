@@ -1,5 +1,5 @@
 import { ETrans } from '@/types/translations'
-import { useSelectionContext } from '@/providers'
+import { useSearchContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
@@ -15,6 +15,7 @@ export const MoveToTrashDialog = ({
     closeCallback, callback, media
 }: Props) => {
     const selection = useSelectionContext()
+    const search = useSearchContext()
     const { t } = useTranslation()
 
     const trash = useSetMediaStatus({
@@ -24,8 +25,9 @@ export const MoveToTrashDialog = ({
 
     const confirm = async () => {
         await trash()
+        search.refresh()
         closeCallback()
-        callback()
+        callback && callback()
     }
 
     return <Dialog

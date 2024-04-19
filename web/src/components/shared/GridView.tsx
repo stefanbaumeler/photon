@@ -2,12 +2,12 @@ import { Teaser } from '@/components'
 import { TGridItem } from '@/types/app'
 
 type Props = {
-    albums: boolean
+    albums?: boolean
     elements: TGridItem[]
 }
 
 export const GridView = ({
-    elements, albums
+    elements, albums = false
 }: Props) => {
     const items = elements.map((element, key) => {
         return <Teaser

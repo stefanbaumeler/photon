@@ -66,7 +66,8 @@ export class AlbumRepository {
             },
             include: {
                 cover: true,
-                media: true
+                media: true,
+                owner: true
             }
         })
     }

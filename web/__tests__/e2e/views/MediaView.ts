@@ -1,5 +1,5 @@
 import { VisitableView } from './VisitableView'
-import { expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { TeaserComponent } from '../components/TeaserComponent'
 import { SelectionComponent } from '../components/SelectionComponent'
 import { ActionsComponent } from '../components/ActionsComponent'
@@ -57,6 +57,12 @@ export class MediaView extends VisitableView {
 
         for (const el of images) {
             const src = await el.getAttribute('src')
+
+            if (!src) {
+                test.fail()
+                return []
+            }
+
             const split = src.split(/[/?]/g)
             const id = split[split.length - 2]
             ids.push(id)

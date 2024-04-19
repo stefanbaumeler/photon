@@ -15,7 +15,8 @@ export const Details = () => {
     const { t } = useTranslation()
     const details = useDetailsContext()
     const { hits: media } = useSearchContext()
-    const index = media.map(({ id }) => id).indexOf(details.medium?.id)
+
+    const index = media.map(({ id }) => id).indexOf(details.medium?.id ?? '')
     const [showInfos, setShowInfos] = useState(true)
     const medium = details.medium ?? details.placeholder
     const [borderPosition, setBorderPosition] = useState<'horizontal' | 'vertical'>()
@@ -24,7 +25,7 @@ export const Details = () => {
         updatedSource, rotation, loading
     } = useRotate()
 
-    const previewRef = useRef(null)
+    const previewRef = useRef<HTMLDivElement>(null)
 
     const {
         zoom, zoomRef, reset, zoomLevel, zoomCenter
@@ -50,7 +51,7 @@ export const Details = () => {
         }
 
         const imageAspectRatio = medium.meta.width / medium.meta.height
-        const containerAspectRatio = previewRef.current?.clientWidth / previewRef.current?.clientHeight
+        const containerAspectRatio = (previewRef.current?.clientWidth ?? 0) / (previewRef.current?.clientHeight ?? 1)
 
         if (imageAspectRatio > containerAspectRatio) {
             setBorderPosition('horizontal')
@@ -148,8 +149,8 @@ export const Details = () => {
                 onWheel={zoom}
                 style={{
                     aspectRatio: `${medium.meta.width} / ${medium.meta.height}`,
-                    width: borderPosition === 'horizontal' ? '100%' : null,
-                    height: borderPosition === 'vertical' ? '100%' : null,
+                    width: borderPosition === 'horizontal' ? '100%' : undefined,
+                    height: borderPosition === 'vertical' ? '100%' : undefined,
                     opacity: borderPosition ? 1 : 0
                 }}
             >

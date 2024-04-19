@@ -12,9 +12,9 @@ export const useRotate = () => {
     useEffect(() => {
         setRotation(details.rotationRequest)
         const timer = setTimeout(() => {
-            if (rotation !== 0) {
+            if (rotation !== 0 && details.medium) {
                 rotate({
-                    id: details.medium?.id,
+                    id: details.medium.id,
                     deg: details.rotationRequest
                 }).then(() => {
                     details.resolveRotationRequest()

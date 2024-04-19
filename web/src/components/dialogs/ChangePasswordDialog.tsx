@@ -2,8 +2,7 @@ import { Dialog, TextBox } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { useMChangePassword } from '@photon/schema'
-import { useUserContext } from '@/providers'
+import { useMChangePassword, useQProfile } from '@photon/schema'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 
@@ -17,17 +16,19 @@ export const ChangePasswordDialog = ({ closeCallback }: Props) => {
     const [newPassword, setNewPassword] = useState('')
     const [repeatNewPassword, setRepeatNewPassword] = useState('')
     const [, changePasswordMutation] = useMChangePassword()
-    const { user } = useUserContext()
+    const [{ data: user }] = useQProfile()
     const { t } = useTranslation()
 
     const submit = () => {
-        changePasswordMutation({
-            currentPassword,
-            newPassword,
-            mail: user.mail
-        }).then(() => {
-            setChangedPassword(true)
-        })
+        if (user) {
+            changePasswordMutation({
+                currentPassword,
+                newPassword,
+                mail: user.profile.mail
+            }).then(() => {
+                setChangedPassword(true)
+            })
+        }
     }
 
     const close = () => {

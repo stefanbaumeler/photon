@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { globalBeforeEach } from '../support/common'
 import { User } from '../actors/user'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '@photon/api/dist/src/database/helpers/ids'
@@ -112,6 +112,10 @@ test('can delete', async ({ page }) => {
 
     await dialog.confirm()
     await overview.shouldHaveTeasers(count - 1)
+
+    const trash = await overview.nav.visitTrash()
+
+    await trash.shouldHaveTeasers(1)
 })
 
 test('can rotate', async ({ page }) => {
@@ -122,11 +126,15 @@ test('can rotate', async ({ page }) => {
 
     const image = await details.getMedium()
 
-    const width = await image.getAttribute('naturalWidth')
-    const height = await image.getAttribute('naturalHeight')
+    const before = await image.evaluate((img) => {
+        return {
+            width: img.naturalWidth,
+            height: img.naturalHeight
+        }
+    })
 
     await details.rotate()
-    await details.shouldHaveRotated(width, height)
+    await details.shouldHaveRotated(before.width, before.height)
 })
 
 test('can favorite', async ({ page }) => {

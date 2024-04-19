@@ -4,7 +4,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useState } from 'react'
-import { DeleteMediaDialog, RestoreMediaDialog } from '@/components/dialogs'
+import { RestoreMediaDialog } from '@/components/dialogs'
 
 type Props = {
     dropdown?: boolean
@@ -12,7 +12,7 @@ type Props = {
     media: string[]
 }
 
-export const DeleteControl = ({
+export const RestoreControl = ({
     dropdown, media, callback
 }: Props) => {
     const selection = useSelectionContext()
@@ -29,23 +29,26 @@ export const DeleteControl = ({
     }
 
     return <>
-        {dialogActive ? <DeleteMediaDialog
+        {dialogActive ? <RestoreMediaDialog
             media={media}
             closeCallback={action}
         /> : null}
         {dropdown ? <DropdownItem item={{
-            testId: 'trash-delete',
-            label: t(ETrans.DELETE),
+            testId: 'trash-restore',
+            label: t(ETrans.RESTORE),
             callback: () => {
                 setDialogActive(true)
                 callback && callback()
             }
         }}
         /> : <Button
-            label={t(ETrans.DELETE)}
-            onClick={() => setDialogActive(true)}
-            icon={Icons.mdiDeleteForever}
-            testId="trash-delete"
+            label={t(ETrans.RESTORE)}
+            onClick={() => {
+                setDialogActive(true)
+                callback && callback()
+            }}
+            icon={Icons.mdiDeleteRestore}
+            testId="trash-restore"
             appearance={{
                 type: 'tertiary',
                 text: details.active ? 'light' : undefined

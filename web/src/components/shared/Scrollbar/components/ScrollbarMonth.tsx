@@ -17,7 +17,9 @@ export const ScrollbarMonth = ({
     const click: MouseEventHandler<HTMLDivElement> = (event) => {
         const percentage = (event.clientY - 88) / (window.innerHeight - 88)
 
-        document.scrollingElement.scrollTop = (document.scrollingElement.scrollHeight - window.innerHeight) * percentage
+        if (document.scrollingElement) {
+            document.scrollingElement.scrollTop = (document.scrollingElement.scrollHeight - window.innerHeight) * percentage
+        }
     }
 
     return <div

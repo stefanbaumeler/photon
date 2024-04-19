@@ -12,6 +12,7 @@ export const Thumbnail = ({
 }: TThumbnail) => {
     const { t } = useTranslation()
 
+    console.log('thumb')
     const [mediumQuery] = useQMedium({
         variables: {
             id: `${idMedium}`

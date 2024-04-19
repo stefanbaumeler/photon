@@ -54,20 +54,29 @@ export class DetailView extends VisitableView {
         expect((await fs.promises.stat(await download.path())).size).toBeGreaterThan(1000000)
     }
     getMedium = async () => {
-        return await this.locator.getByTestId('details-image').elementHandle() as ElementHandle<HTMLImageElement>
+        const image = await this.locator.getByTestId('details-image').elementHandle() as ElementHandle<HTMLImageElement>
+        await expect.poll(() => image.evaluate((img) => img.naturalWidth)).toBeGreaterThan(0)
+
+        return image
     }
     clickOnAnyAlbum = async () => {
         await this.locator.getByTestId('album-detail').first().click()
 
         return this.user.albumView()
     }
-    shouldHaveRotated = async (beforeWidth: string, beforeHeight: string) => {
+    shouldHaveRotated = async (beforeWidth: number, beforeHeight: number) => {
         const image = await this.getMedium()
-        const afterWidth = await image.getAttribute('naturalWidth')
-        const afterHeight = await image.getAttribute('naturalHeight')
+        await expect.poll(() => image.evaluate((img) => img.naturalWidth)).not.toBe(beforeWidth)
 
-        expect(beforeWidth).toBe(afterHeight)
-        expect(beforeHeight).toBe(afterWidth)
+        const after = await image.evaluate((img) => {
+            return {
+                width: img.naturalWidth,
+                height: img.naturalHeight
+            }
+        })
+
+        expect(beforeWidth).toBe(after.height)
+        expect(beforeHeight).toBe(after.width)
     }
     shouldBeMedium = async (id: string) => {
         const image = this.locator.getByTestId('details-image')

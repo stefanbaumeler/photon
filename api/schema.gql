@@ -102,7 +102,7 @@ type Album {
   title: String
   description: String
   cover: Medium
-  owner: User
+  owner: User!
   media: [Medium!]
 }
 

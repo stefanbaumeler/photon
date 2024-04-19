@@ -2,15 +2,15 @@ import Icon from '@mdi/react'
 import { TCover } from '@/types/app'
 
 type Props = {
-    icon: string | TCover
-    title: string
-    values?: string | string[]
+    icon?: string | TCover
+    title?: string
+    values?: string | (string | undefined)[]
 }
 
 export const DetailContents = ({
     icon, title, values
 }: Props) => {
-    values = Array.isArray(values) ? values : [values]
+    const valuesArray = Array.isArray(values) ? values : [values]
 
     return <>
         <div className="detail__icon">
@@ -29,7 +29,7 @@ export const DetailContents = ({
                 {title}
             </span>
             <div className="detail__values">
-                {values.map((value, k) => <span
+                {valuesArray.map((value, k) => <span
                     key={k}
                     className="detail__value"
                 >

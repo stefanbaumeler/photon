@@ -25,8 +25,15 @@ const SortProvider = ({ children }: Props) => {
 }
 
 const useSortContext = () => {
-    return useContext(SortContext)
+    const ctx = useContext(SortContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
+
 export {
     SortProvider, useSortContext
 }

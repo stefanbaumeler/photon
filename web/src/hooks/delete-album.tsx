@@ -16,13 +16,13 @@ export const useDeleteAlbum = ({
     const [, deleteMedia] = useMDeleteAlbums()
 
     return async () => {
-        await deleteMedia({
-            ids: idsToDelete
-        })
+        if (idsToDelete) {
+            await deleteMedia({
+                ids: idsToDelete
+            })
 
-        console.log('after')
-
-        callback && callback()
-        router.push('/albums')
+            callback && callback()
+            router.push('/albums')
+        }
     }
 }

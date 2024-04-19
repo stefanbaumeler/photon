@@ -9,7 +9,7 @@ import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
 import { TrashControls } from '@/components/control-groups'
 import { FavoriteControl,
-    DeleteControl,
+    MoveToTrashControl,
     ArchiveControl,
     RotateControl,
     SetAlbumCoverControl,
@@ -25,7 +25,7 @@ export const DetailsControls = () => {
 
     const [albumQuery] = useQAlbum({
         variables: {
-            id: idAlbum
+            id: idAlbum ?? ''
         },
         pause: !router.isReady || !idAlbum
     })
@@ -39,7 +39,9 @@ export const DetailsControls = () => {
     const [moreActive, setMoreActive] = useState(false)
 
     const select = () => {
-        selection.toggle(details.medium.id)
+        if (medium) {
+            selection.toggle(medium.id)
+        }
     }
 
     useHotkey({
@@ -48,6 +50,10 @@ export const DetailsControls = () => {
         scopes: EKeyboardScope.details,
         condition: selection.selected.size > 0
     })
+
+    if (!medium) {
+        return null
+    }
 
     if (selection.mode === ESelectionMode.SELECT) {
         return <Tippy
@@ -66,7 +72,7 @@ export const DetailsControls = () => {
     }
 
     const moreItems = [
-        <DeleteControl
+        <MoveToTrashControl
             dropdown
             shortcut
             elements={[medium.id]}
@@ -98,7 +104,7 @@ export const DetailsControls = () => {
         />)
     }
 
-    return router.pathname === '/trash' ? <TrashControls white /> : <>
+    return router.pathname === '/trash' ? <TrashControls /> : <>
         <DownloadMediaControl
             elements={[medium.id]}
             shortcut

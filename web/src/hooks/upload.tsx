@@ -39,7 +39,7 @@ export const useUpload = () => {
         const asChangeEvent = event as ChangeEvent<HTMLInputElement>
         const asFileDropEvent = event as string[]
 
-        if (asChangeEvent.target) {
+        if (asChangeEvent.target && asChangeEvent.target.files) {
             files = [...asChangeEvent.target.files]
         }
         else {

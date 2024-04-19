@@ -34,7 +34,7 @@ export const CreateAlbumControl = ({
     /> : <Button
         testId="album-create"
         hint={label}
-        shortcut={shortcut && 'C'}
+        shortcut={shortcut ? 'C' : undefined}
         icon={Icons.mdiPlus}
         onClick={action}
     />

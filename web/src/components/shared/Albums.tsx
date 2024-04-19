@@ -16,10 +16,10 @@ export const Albums = ({ albums }: Props) => {
             elements={albums.map((album) => {
                 return {
                     id: album.id,
-                    cover: album.cover,
+                    cover: album.cover ?? null,
                     href: `albums/${album.id}`,
-                    title: album.title,
-                    stack: album.media?.map((medium) => medium.id)
+                    title: album.title ?? undefined,
+                    stack: album.media?.map((medium) => medium.id) ?? []
                 }
             })}
         />
@@ -29,10 +29,10 @@ export const Albums = ({ albums }: Props) => {
         return <ListView albums={albums.map((album) => {
             return {
                 id: album.id,
-                cover: album.cover,
-                title: album.title,
+                cover: album.cover ?? null,
+                title: album.title ?? undefined,
                 owner: album.owner,
-                albumMedia: album.media?.map((medium) => medium.id)
+                albumMedia: album.media?.map((medium) => medium.id) ?? []
             }
         })}
         />

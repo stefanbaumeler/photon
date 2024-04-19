@@ -57,7 +57,7 @@ const asDate = (date: string | number | Date) => {
 
 export const formatDate = (date?: Date | number | string, format: EDateFormat = EDateFormat.SHORT) => {
     if (typeof date === 'undefined' || date === null) {
-        return
+        return ''
     }
 
     const d = asDate(date)

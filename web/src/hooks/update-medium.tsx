@@ -1,12 +1,14 @@
 import { useMUpdateMedium } from '@photon/schema'
 
-export const useUpdateMedium = (id: string, description: string) => {
+export const useUpdateMedium = (description: string, id?: string) => {
     const [, updateMedium] = useMUpdateMedium()
 
     return () => {
-        updateMedium({
-            id,
-            description
-        })
+        if (id) {
+            updateMedium({
+                id,
+                description
+            })
+        }
     }
 }

@@ -9,8 +9,8 @@ export const sortMediaByDate = <T extends TSortMedium[]>(media: T, sortBy: EMedi
     return media.sort((a, b) => {
         const sortByIndex = sortBy === EMediumSort.RECENT ? 'dateCreated' : 'dateTaken'
 
-        let aTime
-        let bTime
+        let aTime = 0
+        let bTime = 0
 
         if (a[sortByIndex] && b[sortByIndex]) {
             aTime = new Date(a[sortByIndex]).getTime()

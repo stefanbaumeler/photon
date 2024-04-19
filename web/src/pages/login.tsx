@@ -47,7 +47,7 @@ const LoginPage = () => {
                 password
             })
 
-            data = res.data.signUp
+            data = res.data?.signUp
         }
 
         if (data) {

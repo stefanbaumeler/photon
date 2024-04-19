@@ -26,7 +26,7 @@ export const DownloadAlbumsControl = ({
     const selectedMedia = [...new Set(albums?.albums.filter((album) => {
         return [...selection.selected].includes(album.id)
     }).map((album) => {
-        return album.media.filter((medium) => medium.status === EMediumStatus.ALL).map((medium) => medium.id)
+        return album.media?.filter((medium) => medium.status === EMediumStatus.ALL).map((medium) => medium.id) ?? []
     }).flat())]
 
     const actionCallback = () => {
@@ -51,16 +51,16 @@ export const DownloadAlbumsControl = ({
         testId: 'download',
         label: t(ETrans.DOWNLOAD),
         callback: download,
-        shortcut: shortcut && 'D'
+        shortcut: shortcut ? 'D' : undefined
     }}
     /> : <Button
         testId="download"
         hint={t(ETrans.DOWNLOAD)}
-        shortcut={shortcut && 'D'}
+        shortcut={shortcut ? 'D' : undefined}
         onClick={download}
-        appearance={details.active && {
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
         icon={Icons.mdiTrayArrowDown}
     />
 }

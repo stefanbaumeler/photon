@@ -3,7 +3,7 @@ import bem from '@/util/bem'
 import { ScrollbarCursor, useScrollbarContext, ScrollbarPosition, ScrollbarYears } from '..'
 
 export const VisualScrollbar = () => {
-    const [mouseY, setMouseY] = useState<number>()
+    const [mouseY, setMouseY] = useState<number>(0)
     const [scrolling, setScrolling] = useState(false)
     let scrollingTimeout = 0
 

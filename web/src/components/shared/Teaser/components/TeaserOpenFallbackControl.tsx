@@ -10,7 +10,7 @@ export const TeaserOpenFallbackControl = () => {
     const selection = useSelectionContext()
 
     const open = () => {
-        onOpen()
+        onOpen && onOpen()
     }
 
     const fallbackButtonClasses = bem('teaser__open-fallback', [

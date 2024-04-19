@@ -25,8 +25,15 @@ const EditProvider = ({ children }: Props) => {
 }
 
 const useEditContext = () => {
-    return useContext(EditContext)
+    const ctx = useContext(EditContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
+
 export {
     EditProvider, useEditContext
 }

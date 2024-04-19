@@ -1,33 +1,32 @@
 import * as Icons from '@mdi/js'
 import { Dropdown, Button } from '../'
-import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { DeleteControl, SetAlbumCoverControl, ViewControl, SortControl, DownloadMediaControl } from '@/components/controls'
+import { MoveToTrashControl, SetAlbumCoverControl, ViewControl, SortControl, DownloadMediaControl } from '@/components/controls'
 import { useQAlbum } from '@photon/schema'
+import { ETrans } from '@/types/translations'
 
 export const AlbumControls = () => {
     const { t } = useTranslation()
     const router = useRouter()
-    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
+
+    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum?.join('') : router.query.idAlbum
     const [moreActive, setMoreActive] = useState(false)
 
-    const [albumQuery] = useQAlbum({
+    const [{ data }] = useQAlbum({
         variables: {
-            id
+            id: id ?? ''
         },
         pause: !id
     })
 
-    const album = albumQuery.data?.album
-
     const moreItems = [
-        <DeleteControl
+        <MoveToTrashControl
             dropdown
             shortcut
             callback={() => setMoreActive(false)}
-            elements={album ? [album.id] : []}
+            elements={data?.album ? [data?.album.id] : []}
             key={0}
         />,
         <SetAlbumCoverControl
@@ -40,7 +39,7 @@ export const AlbumControls = () => {
             dropdown
             shortcut
             callback={() => setMoreActive(false)}
-            elements={album ? album.media.map((medium) => medium.id) : []}
+            elements={data?.album.media ? data?.album.media?.map((medium) => medium.id) : []}
             key={2}
         />
     ]

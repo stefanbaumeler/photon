@@ -3,15 +3,20 @@ import { useQAlbumsOfMedium } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { DetailsSection, DetailsAlbum } from '..'
+import { useRouter } from 'next/router'
 
 export const DetailsAlbums = () => {
     const details = useDetailsContext()
     const { t } = useTranslation()
+    const router = useRouter()
+
+    const id = Array.isArray(router.query.idMedium) ? router.query.idMedium?.join('') : router.query.idMedium
 
     const [{ data: result }] = useQAlbumsOfMedium({
         variables: {
-            id: details.medium.id
-        }
+            id: id ?? ''
+        },
+        pause: !id
     })
 
     const albums  = result?.mediumAlbums

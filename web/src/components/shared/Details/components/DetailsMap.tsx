@@ -1,13 +1,14 @@
 import { Map, Marker } from 'react-map-gl'
-import { useDetailsContext } from '@/providers'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const DetailsMap = () => {
-    const details = useDetailsContext()
-    const hasLocation = !!details.medium.location && !!details.medium.location[0] && !!details.medium.location[1]
-    const latitude = hasLocation ? details.medium.location[0] : 0
-    const longitude = hasLocation ? details.medium.location[1] : 0
+    const { medium } = useMediumFromRouter()
+
+    const hasLocation = !!medium?.location && !!medium?.location[0] && !!medium?.location[1]
+    const latitude = hasLocation ? medium?.location[0] : 0
+    const longitude = hasLocation ? medium?.location[1] : 0
 
     const [mapState, setMapState] = useState({
         latitude,
@@ -19,7 +20,7 @@ export const DetailsMap = () => {
             latitude,
             longitude
         })
-    }, [latitude, longitude, details.medium.location])
+    }, [latitude, longitude, medium?.location])
 
     return hasLocation ? <div className="details__map">
         <Link

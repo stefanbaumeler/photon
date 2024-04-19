@@ -24,7 +24,7 @@ export const VisualTeaser = () => {
 
     const open = (event: MouseEvent) => {
         if (!teaser.selectable) {
-            teaser.onOpen()
+            teaser.onOpen && teaser.onOpen()
             return
         }
 
@@ -35,7 +35,7 @@ export const VisualTeaser = () => {
             return
         }
 
-        teaser.onOpen()
+        teaser.onOpen && teaser.onOpen()
     }
 
     const updateShiftTargets = (clear = false) => {
@@ -49,7 +49,7 @@ export const VisualTeaser = () => {
         }
 
         const ids = media.map((medium) => medium.id)
-        const lastIndex = ids.indexOf(selection.lastAdded)
+        const lastIndex = ids.indexOf(selection.lastAdded ?? '')
         const hoverIndex = ids.indexOf(teaser.id)
 
         const newShiftTargets = (lastIndex < hoverIndex ? media.slice(lastIndex, hoverIndex + 1) : media.slice(hoverIndex, lastIndex + 1)).map((item) => item.id)
@@ -79,6 +79,18 @@ export const VisualTeaser = () => {
         }
     }
 
+    const getWidth = () => {
+        if (teaser.displayWidth) {
+            return teaser.displayWidth
+        }
+
+        if (teaser.displayHeight) {
+            return teaser.displayHeight * teaser.nativeWidth
+        }
+
+        return 300
+    }
+
     return <div
         data-testid="teaser"
         className={classes}
@@ -106,8 +118,8 @@ export const VisualTeaser = () => {
                 >
                     <Medium
                         testId="teaser-image"
-                        medium={teaser.cover}
-                        width={teaser.displayWidth ? teaser.displayWidth : teaser.displayHeight / teaser.nativeHeight * teaser.nativeWidth || 300}
+                        medium={teaser.cover ?? null}
+                        width={getWidth()}
                         updateHash={updatedSource}
                     />
                 </div>

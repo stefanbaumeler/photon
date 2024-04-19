@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/router'
-import { useUserContext } from '@/providers'
 import { useSignOut } from '@/hooks'
+import { useQProfile } from '@photon/schema'
 
 type Props = {
     children: ReactNode
@@ -12,16 +12,16 @@ const AuthGuard = ({ children }: Props) => {
     const [authorized, setAuthorized] = useState(true)
     const signOut = useSignOut()
 
-    const {
-        user, fetching
-    } = useUserContext()
+    const [{
+        data: user, fetching
+    }] = useQProfile()
 
     useEffect(() => {
         const authCheck = (url: string) => {
             const publicPaths = ['/login', '/']
             const path = url.split('?')[0]
 
-            if (!user && !fetching && !publicPaths.includes(path)) {
+            if (!user?.profile && !fetching && !publicPaths.includes(path)) {
                 setAuthorized(false)
                 signOut()
             } else {

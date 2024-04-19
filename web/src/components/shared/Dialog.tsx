@@ -53,6 +53,10 @@ export const Dialog = ({
             <div className="dialog__controls">
                 {buttons.map((button, k) => <Button
                     {...button}
+                    onClick={() => {
+                        disableScope(EKeyboardScope.dialog)
+                        button.onClick && button.onClick()
+                    }}
                     key={k}
                 />)}
             </div>

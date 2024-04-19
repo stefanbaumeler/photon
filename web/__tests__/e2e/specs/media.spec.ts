@@ -65,6 +65,10 @@ for (const i in views) {
 
         await dialog.confirm()
         await overview.shouldHaveTeasers(count - 1)
+
+        const trash = await overview.nav.visitTrash()
+
+        await trash.shouldHaveTeasers(1)
     })
 
     test(`can sort on ${views[i]}`, async ({ page }) => {

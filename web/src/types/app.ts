@@ -23,7 +23,7 @@ export type TNavContext = {
     active: string[]
     setActive: Dispatch<SetStateAction<string[]>>
     navs: TNav[]
-    getActiveItem: () => TNavItem
+    getActiveItem: () => TNavItem | undefined
     pathname: string
 }
 
@@ -48,14 +48,14 @@ export type TDropdownItem = {
     shortcut?: string
 }
 
-export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype' | 'id'> & { meta: Pick<TMeta, 'width' | 'height'> } | null
+export type TCover = Pick<TMedium, 'filenameDisk' | 'mimetype' | 'id'> & { meta: Pick<TMeta, 'width' | 'height'> }
 
 export type TGridItem = {
     id: string
     href: string
     favoredBy?: number
     cover: TCover | null
-    title: string
+    title?: string
     stack: string[]
 }
 
@@ -64,13 +64,13 @@ export type TMapItem = {
     cover: TCover | null
     width: number
     location?: number[]
-    favoredBy: number
+    favoredBy?: number
 }
 
 type TListItem = {
     id: string
     cover: TCover | null
-    title: string
+    title?: string
     owner: Pick<TUser, 'firstName' | 'lastName'>
 }
 
@@ -87,7 +87,7 @@ export type TAlbumListItem = TListItem & {
 export type TFilmStripItem = {
     id: string
     cover: TCover | null
-    favoredBy: number
+    favoredBy?: number
 }
 
 export enum ENavs {

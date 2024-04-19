@@ -2,12 +2,17 @@ import { TImageMeta } from '@photon/schema'
 import { Detail } from '@/components'
 import * as Icons from '@mdi/js'
 import { useDetailsContext } from '@/providers'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const DetailsImageMeta = () => {
-    const details = useDetailsContext()
+    const { medium } = useMediumFromRouter()
 
-    const meta = details.medium.meta as TImageMeta
-    const subtitle = [details.medium.address,  details.medium.place].filter((val) => !!val)
+    if (!medium) {
+        return null
+    }
+
+    const meta = medium.meta as TImageMeta
+    const subtitle = [medium.address,  medium.place].filter((val) => !!val)
 
     const f = meta.fNumber ? `f/${meta.fNumber}` : undefined
     const iso = meta.iso ? `ISO${meta.iso}` : undefined
@@ -16,18 +21,18 @@ export const DetailsImageMeta = () => {
         <Detail
             icon={Icons.mdiCameraIris}
             title={`${meta.cameraMake} ${meta.cameraModel}`}
-            values={[f, meta.focalLength, iso]}
+            values={[f, meta.focalLength ?? '', iso]}
             testId="camera-detail"
         />
         <Detail
             icon={Icons.mdiImageOutline}
-            title={`${details.medium.filenameDownload}`}
+            title={`${medium.filenameDownload}`}
             values={[`${(meta.width * meta.height / 1000000).toFixed(1)}MP`, `${meta.width}×${meta.height}`]}
             testId="image-detail"
         />
-        {!details.medium.region && !details.medium.country ? null : <Detail
+        {!medium.region && !medium.country ? null : <Detail
             icon={Icons.mdiMapMarkerOutline}
-            title={`${details.medium.region}, ${details.medium.country}`}
+            title={`${medium.region}, ${medium.country}`}
             values={subtitle.length ? subtitle : undefined}
             testId="location-detail"
         />}

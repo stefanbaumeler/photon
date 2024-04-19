@@ -1,36 +1,37 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "jsx": "react-jsx",
-    "experimentalDecorators": true,
-    "noEmit": true,
-    "types": [
-      "node",
-      "jest",
-      "@testing-library/jest-dom"
-    ],
-    "isolatedModules": false,
-    "paths": {
-      "@/*": [
+    "compilerOptions": {
+        "baseUrl": "./",
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "incremental": true,
+        "esModuleInterop": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "jsx": "react-jsx",
+        "experimentalDecorators": true,
+        "strictNullChecks": true,
+        "noEmit": true,
+        "types": [
+            "node",
+            "jest",
+            "@testing-library/jest-dom"
+        ],
+        "isolatedModules": false,
+        "paths": {
+            "@/*": [
+                "web/*",
+                "web/src/*"
+            ]
+        }
+    },
+    "include": [
         "web/*",
-        "web/src/*"
-      ]
-    }
-  },
-  "include": [
-    "web/*",
-    "api/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+        "api/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

@@ -4,19 +4,13 @@ import { formatDate } from '@/util/date'
 import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode, TMediumListItem } from '@/types/app'
 import Tippy from '@tippyjs/react'
-import Icon from '@mdi/react'
-import * as Icons from '@mdi/js'
-import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { FavoriteControl } from '@/components/controls'
 export const MediumListItem = ({
-    id, title, cover, favoredBy, dateTaken, mimetype, owner
+    id, title, cover, dateTaken, mimetype, owner
 }: TMediumListItem) => {
     const selection = useSelectionContext()
     const details = useDetailsContext()
-
-    const addToFavorites = useAddToFavorites([id])
-    const removeFromFavorites = useRemoveFromFavorites([id])
 
     // const [updatedSource, setUpdatedSource] = useState(0)
 
@@ -37,10 +31,12 @@ export const MediumListItem = ({
     }
 
     const open = () => {
-        details.open({
-            id,
-            ...cover
-        })
+        if (cover) {
+            details.open({
+                ...cover,
+                id
+            })
+        }
     }
 
     return <tr

@@ -1,20 +1,26 @@
 import AppLayout from '@/layouts/app-layout'
 import HomeLayout from '@/layouts/home-layout'
 import { Media, Uploader } from '@/components'
-import { useSearchContext, useUserContext } from '@/providers'
-import { useEffect } from 'react'
+import { useSearchContext } from '@/providers'
+import { useEffect, useState } from 'react'
 import { EMediumStatus } from '@/types/app'
+import { useQProfile } from '@photon/schema'
 
 const HomePage = () => {
     const search = useSearchContext()
-    const {
-        unauthenticated, user
-    } = useUserContext()
+    const [{ data: user }] = useQProfile()
+    const [unauthenticated, setUnauthenticated] = useState(false)
 
     useEffect(() => {
         search.setStatus(EMediumStatus.ALL)
         search.setFavorites(false)
     }, [search])
+
+    useEffect(() => {
+        if (!window.localStorage.photon) {
+            setUnauthenticated(true)
+        }
+    }, [])
 
     if (!user) {
         if (unauthenticated) {

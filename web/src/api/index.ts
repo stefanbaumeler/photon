@@ -12,7 +12,7 @@ export const initializeAuthState = () => {
         }
     }
 
-    const cache = JSON.parse(window.localStorage.getItem('photon'))
+    const cache = JSON.parse(window.localStorage.getItem('photon') ?? '{}')
 
     if (!cache || !cache.accessToken) {
         return {
@@ -25,6 +25,10 @@ export const initializeAuthState = () => {
         accessToken: cache.accessToken,
         refreshToken: cache.refreshToken
     }
+}
+
+if (!process.env.NEXT_PUBLIC_API_URL) {
+    throw new Error('Cannot create urql client: NEXT_PUBLIC_API_URL is not defined in the env variables.')
 }
 
 export const urqlClient = new Client({
@@ -67,7 +71,7 @@ export const urqlClient = new Client({
             },
             willAuthError () {
                 const token = jwt.decode(accessToken) as jwt.JwtPayload
-                return Date.now() >= token.exp * 1000
+                return Date.now() >= (token.exp ?? 0) * 1000
             },
             refreshAuth: async () => {
                 const newAccess = await utils.mutate(MRefreshAccessTokenDocument, {

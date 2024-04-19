@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { DetailContents } from '.'
 
 type Props = {
-    icon: string | TCover
-    title: string
-    values?: string | string[]
+    icon?: string | TCover
+    title?: string
+    values?: string | (string | undefined)[]
     testId?: string
     href?: string
     onClick?: () => void

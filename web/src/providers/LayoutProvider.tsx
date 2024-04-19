@@ -1,9 +1,8 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { ELayout } from '@/types/app'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
 import { useTranslation } from 'react-i18next'
-import { useHotkeysContext } from 'react-hotkeys-hook'
 
 type Props = {
     children?: ReactNode
@@ -32,11 +31,6 @@ const LayoutProvider = ({ children }: Props) => {
 
     const getLayoutProps = (id: string) => {
         switch (id) {
-        case ELayout.GALLERY:
-            return {
-                name: t(ETrans.GALLERY_VIEW),
-                icon: Icons.mdiViewCompact
-            }
         case ELayout.LIST:
             return {
                 name: t(ETrans.LIST_VIEW),
@@ -46,6 +40,11 @@ const LayoutProvider = ({ children }: Props) => {
             return {
                 name: t(ETrans.MAP_VIEW),
                 icon: Icons.mdiMapMarker
+            }
+        default:
+            return {
+                name: t(ETrans.GALLERY_VIEW),
+                icon: Icons.mdiViewCompact
             }
         }
     }
@@ -63,7 +62,13 @@ const LayoutProvider = ({ children }: Props) => {
 }
 
 const useLayoutContext = () => {
-    return useContext(LayoutContext)
+    const ctx = useContext(LayoutContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

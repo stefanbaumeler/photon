@@ -1,7 +1,7 @@
 import { useSelectionContext } from '@/providers'
 import { useMRemoveFromAlbum, useMUpdateAlbum } from '@photon/schema'
 
-export const useUpdateAlbum = (id: string, title: string) => {
+export const useUpdateAlbum = (title: string, id?: string) => {
     const selection = useSelectionContext()
 
     const [, removeFromAlbum] = useMRemoveFromAlbum()
@@ -9,6 +9,10 @@ export const useUpdateAlbum = (id: string, title: string) => {
     const [, updateAlbumTitle] = useMUpdateAlbum()
 
     return () => {
+        if (!id) {
+            return
+        }
+
         const promises = []
 
         if (selection.selected.size) {

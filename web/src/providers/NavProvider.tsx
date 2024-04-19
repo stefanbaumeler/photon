@@ -11,7 +11,7 @@ type Props = {
     children?: ReactNode
 }
 
-const NavContext = createContext<TNavContext>(null)
+const NavContext = createContext<TNavContext | null>(null)
 
 const NavProvider = ({ children }: Props) => {
     const router = useRouter()
@@ -227,7 +227,13 @@ const NavProvider = ({ children }: Props) => {
 }
 
 const useNavContext = () => {
-    return useContext(NavContext)
+    const ctx = useContext(NavContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

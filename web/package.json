@@ -30,7 +30,7 @@
         "@urql/exchange-auth": "^2.1.5",
         "@urql/exchange-persisted": "^4.2.0",
         "@urql/introspection": "^1.0.2",
-        "eslint-config-next": "^13.0.7",
+        "eslint-config-next": "^14.2.2",
         "graphql-tag": "^2.12.6",
         "graphql-upload-minimal": "^1.6.0",
         "i18next": "^21.9.1",

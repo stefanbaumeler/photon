@@ -2,7 +2,6 @@ import * as Icons from '@mdi/js'
 import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useQMedium } from '@photon/schema'
 import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
@@ -25,13 +24,9 @@ export const ArchiveControl = ({
     const search = useSearchContext()
     const router = useRouter()
 
-    const [{ data }] = useQMedium({
-        variables: {
-            id: media[0]
-        }
-    })
+    const first = search.hits.find((medium) => medium.id === media[0])
 
-    const shouldArchive = data?.medium.status !== EMediumStatus.ARCHIVED
+    const shouldArchive = first?.status !== EMediumStatus.ARCHIVED
 
     const archive = useSetMediaStatus({
         media,
@@ -61,7 +56,7 @@ export const ArchiveControl = ({
         if (shouldArchive) {
             search.setStatus(EMediumStatus.ARCHIVED)
 
-            await router.push('/archive', null, {
+            await router.push('/archive', undefined, {
                 shallow: true
             })
         }
@@ -83,16 +78,16 @@ export const ArchiveControl = ({
         testId,
         label,
         callback: action,
-        shortcut: shortcut && 'A'
+        shortcut: shortcut ? 'A' : undefined
     }}
     /> : <Button
         testId={testId}
         onClick={action}
         hint={label}
-        shortcut={shortcut && 'A'}
+        shortcut={shortcut ? 'A' : undefined}
         icon={icon}
-        appearance={details.active && {
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
     />
 }

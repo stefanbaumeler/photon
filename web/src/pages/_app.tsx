@@ -6,7 +6,6 @@ import { NavProvider,
     SortProvider,
     SearchProvider,
     DragProvider,
-    UserProvider,
     DetailsProvider } from '@/providers'
 import { AppProps } from 'next/app'
 import { urqlClient } from '@/api'
@@ -35,22 +34,21 @@ const Photon = ({
 }: AppProps) => {
     return <Provider value={urqlClient}>
         <I18nextProvider i18n={i18next}>
-            <ProviderProvider components={[
-                HotkeysProvider,
-                UserProvider,
-                SelectionProvider,
-                DragProvider,
-                NavProvider,
-                EditProvider,
-                LayoutProvider,
-                SortProvider,
-                DetailsProvider
-            ]}
-            >
-                <SearchProvider>
+            <HotkeysProvider>
+                <ProviderProvider components={[
+                    SelectionProvider,
+                    DragProvider,
+                    NavProvider,
+                    EditProvider,
+                    LayoutProvider,
+                    SortProvider,
+                    DetailsProvider,
+                    SearchProvider
+                ]}
+                >
                     <Component {...pageProps} />
-                </SearchProvider>
-            </ProviderProvider>
+                </ProviderProvider>
+            </HotkeysProvider>
         </I18nextProvider>
     </Provider>
 }

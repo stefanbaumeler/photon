@@ -1,7 +1,8 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { TMedium, useQMedium } from '@photon/schema'
 import { useRouter } from 'next/router'
 import { TCover } from '@/types/app'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     children?: ReactNode
@@ -9,8 +10,8 @@ type Props = {
 
 interface DetailsContext {
     active: boolean
-    medium?: TMedium
-    placeholder?: TCover
+    medium?: TMedium | null
+    placeholder?: TCover | null
     getUrl: (medium: string) => string
     open: (medium: TCover) => void
     close: () => Promise<void>
@@ -24,24 +25,13 @@ const DetailsContext = createContext<DetailsContext | null>(null)
 const DetailsProvider = ({ children }: Props) => {
     const router = useRouter()
     const [active, setActive] = useState(false)
-    const [medium, setMedium] = useState<TMedium>()
-    const [placeholder, setPlaceholder] = useState<TCover>()
-    const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
+    const [medium, setMedium] = useState<TMedium | null>(null)
+    const [placeholder, setPlaceholder] = useState<TCover | null>(null)
     const [rotationRequest, setRotationRequest] = useState(0)
 
-    const [mediumQuery] = useQMedium({
-        variables: {
-            id: idMedium
-        },
-        pause: !idMedium
-    })
-
-    useEffect(() => {
-        if (mediumQuery.data?.medium) {
-            setActive(true)
-            setMedium(mediumQuery.data?.medium as TMedium)
-        }
-    }, [mediumQuery.data?.medium])
+    const {
+        medium: fetchedMedium, id
+    } = useMediumFromRouter()
 
     const getUrl = (mediumId: string) => {
         const path = router.pathname.endsWith('/') ? router.pathname.slice(0, -1) : router.pathname
@@ -58,16 +48,39 @@ const DetailsProvider = ({ children }: Props) => {
         return newUrl
     }
 
-    const open = (newMedium: TCover) => {
+    const open = useCallback(async (newMedium: TCover) => {
         setActive(true)
-        setMedium(undefined)
+        setMedium(fetchedMedium as TMedium)
         setPlaceholder(newMedium)
 
         if (router.query.idMedium !== newMedium.id) {
-            router.push(getUrl(newMedium.id), null, {
+            await router.push(getUrl(newMedium.id), undefined, {
                 shallow: true
             })
         }
+    }, [fetchedMedium, getUrl, router])
+
+    useEffect(() => {
+        if (fetchedMedium && fetchedMedium?.id === id) {
+            open(fetchedMedium)
+        }
+    }, [fetchedMedium, id, open])
+
+    const close = async () => {
+        let newUrl = router.pathname
+
+        if (router.query.idAlbum) {
+            newUrl = `/albums/${router.query.idAlbum}/`
+        }
+
+        await router.push(newUrl, undefined, {
+            shallow: true
+        })
+
+        setRotationRequest(0)
+        setActive(false)
+        setMedium(null)
+        setPlaceholder(null)
     }
 
     return <DetailsContext.Provider value={{
@@ -76,22 +89,7 @@ const DetailsProvider = ({ children }: Props) => {
         placeholder,
         getUrl,
         open,
-        close: async () => {
-            setRotationRequest(0)
-            setActive(false)
-            setMedium(null)
-            setPlaceholder(null)
-
-            let newUrl = router.pathname
-
-            if (router.query.idAlbum) {
-                newUrl = `/albums/${router.query.idAlbum}/`
-            }
-
-            await router.push(newUrl, null, {
-                shallow: true
-            })
-        },
+        close,
         rotationRequest,
         resolveRotationRequest: () => {
             setRotationRequest(0)
@@ -106,7 +104,13 @@ const DetailsProvider = ({ children }: Props) => {
 }
 
 const useDetailsContext = () => {
-    return useContext(DetailsContext)
+    const ctx = useContext(DetailsContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

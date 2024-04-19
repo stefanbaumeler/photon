@@ -16,6 +16,10 @@ export const useZoom = () => {
 
         const percentDistance = (event?.deltaY ?? 0) / 2000
 
+        if (!zoomRef.current) {
+            return
+        }
+
         const size = {
             x: zoomRef.current.clientWidth,
             y: zoomRef.current.clientHeight

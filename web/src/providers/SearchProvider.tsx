@@ -39,7 +39,7 @@ const SearchProvider = ({ children }: Props) => {
             favorites,
             q: query
         },
-        pause: !router.isReady
+        pause: !router.isReady || !status
     })
 
     const sortedMedia = sortMediaByDate<TQMedia['media']>(media?.media || [], sort)
@@ -64,8 +64,15 @@ const SearchProvider = ({ children }: Props) => {
 }
 
 const useSearchContext = () => {
-    return useContext(SearchContext)
+    const ctx = useContext(SearchContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
+
 export {
     SearchProvider, useSearchContext
 }

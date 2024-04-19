@@ -7,10 +7,10 @@ import { TMedium } from '@photon/schema'
 
 type TAlbumDetail = {
     id: string
-    media?: Partial<TMedium>[]
-    cover?: TCover
+    media?: Partial<TMedium>[] | null
+    cover?: TCover | null
     dateCreated: string
-    title?: string
+    title?: string | null
 }
 
 type Props = {
@@ -29,8 +29,8 @@ export const DetailsAlbum = ({
     const date = formatDate(album.dateCreated, EDateFormat.SHORT)
 
     return <Detail
-        icon={album.cover}
-        title={album.title}
+        icon={album.cover ?? undefined}
+        title={album.title ?? undefined}
         values={[count, date]}
         testId="album-detail"
         href={`/albums/${album.id}`}

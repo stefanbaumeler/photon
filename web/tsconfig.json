@@ -1,46 +1,52 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "paths": {
-            "@/*": [
-                "web/*",
-                "web/src/*"
-            ]
-        },
-        "target": "es2016",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "noImplicitAny": true,
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strict": false,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "incremental": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "jsx": "preserve"
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "web/*",
+        "web/src/*"
+      ]
     },
-    "include": [
-        "./",
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        "**.*.css"
+    "target": "es2016",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": [
-        "src-tauri",
-        "node_modules"
+    "noImplicitAny": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
     ],
-    "ts-node": {
-        "compilerOptions": {
-            "module": "commonjs"
-        }
+    "strictNullChecks": true
+  },
+  "include": [
+    "./",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**.*.css",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "src-tauri",
+    "node_modules"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
     }
+  }
 }

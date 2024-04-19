@@ -34,7 +34,13 @@ const TeaserProvider = ({
 }
 
 const useTeaserContext = () => {
-    return useContext(TeaserContext)
+    const ctx = useContext(TeaserContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

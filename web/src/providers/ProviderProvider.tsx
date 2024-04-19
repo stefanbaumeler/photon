@@ -1,7 +1,7 @@
 import { ReactNode, JSXElementConstructor, PropsWithChildren } from 'react'
 
 interface Props {
-    components: Array<JSXElementConstructor<PropsWithChildren>>
+    components: JSXElementConstructor<PropsWithChildren>[]
     children: ReactNode
 }
 

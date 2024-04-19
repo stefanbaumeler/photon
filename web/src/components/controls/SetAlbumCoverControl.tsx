@@ -45,16 +45,16 @@ export const SetAlbumCoverControl = ({
         testId: 'album-set-cover',
         label: t(ETrans.SET_ALBUM_COVER),
         callback: action,
-        shortcut: shortcut && 'C'
+        shortcut: shortcut ? 'C' : undefined
     }}
     /> : <Button
         testId="album-set-cover"
         hint={t(ETrans.SET_ALBUM_COVER)}
-        shortcut={shortcut && 'C'}
+        shortcut={shortcut ? 'C' : undefined}
         onClick={action}
-        appearance={details.active && {
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
         icon={Icons.mdiImageAlbum}
     />
 }

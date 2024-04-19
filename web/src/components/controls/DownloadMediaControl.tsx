@@ -49,16 +49,16 @@ export const DownloadMediaControl = ({
         testId: 'download',
         label: t(ETrans.DOWNLOAD),
         callback: action,
-        shortcut: shortcut && 'D'
+        shortcut: shortcut ? 'D' : undefined
     }}
     /> : <Button
         testId="download"
         hint={t(ETrans.DOWNLOAD)}
-        shortcut={shortcut && 'D'}
+        shortcut={shortcut ? 'D' : undefined}
         onClick={action}
-        appearance={details.active && {
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
         icon={Icons.mdiTrayArrowDown}
     />
 }

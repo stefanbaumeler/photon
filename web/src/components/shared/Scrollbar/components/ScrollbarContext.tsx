@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { TMediumCountYear, useQMediaYearCount } from '@photon/schema'
 
 type Props = {
@@ -6,8 +6,8 @@ type Props = {
 }
 
 interface ScrollbarContext {
-    mouseOverMonth: string
-    setMouseOverMonth: Dispatch<SetStateAction<string>>
+    mouseOverMonth?: string
+    setMouseOverMonth: Dispatch<SetStateAction<string | undefined>>
     years: TMediumCountYear[]
     total: number
 }
@@ -15,24 +15,14 @@ interface ScrollbarContext {
 const ScrollbarContext = createContext<ScrollbarContext | null>(null)
 
 const ScrollbarProvider = ({ children }: Props) => {
-    const [mouseOverMonth, setMouseOverMonth] = useState<string>('')
-    const [years, setYears] = useState<TMediumCountYear[]>()
-    const [total, setTotal] = useState<number>()
-
+    const [mouseOverMonth, setMouseOverMonth] = useState<string>()
     const [{ data: count }] = useQMediaYearCount()
-
-    useEffect(() => {
-        if (count) {
-            setYears(count.countMediaByYear.years)
-            setTotal(count.countMediaByYear.count)
-        }
-    }, [count])
 
     return <ScrollbarContext.Provider value={{
         mouseOverMonth,
         setMouseOverMonth,
-        years,
-        total
+        years: count?.countMediaByYear.years ?? [],
+        total: count?.countMediaByYear.count ?? 0
     }}
     >
         {children}
@@ -40,7 +30,13 @@ const ScrollbarProvider = ({ children }: Props) => {
 }
 
 const useScrollbarContext = () => {
-    return useContext(ScrollbarContext)
+    const ctx = useContext(ScrollbarContext)
+
+    if (!ctx) {
+        throw new Error('Context not defined')
+    }
+
+    return ctx
 }
 
 export {

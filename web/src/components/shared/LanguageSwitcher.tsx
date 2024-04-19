@@ -3,20 +3,19 @@ import { TDropdownItem } from '@/types/app'
 import { Button, Dropdown } from '@/components'
 import * as Icons from '@mdi/js'
 import i18next from '@/translations'
-import { useUserContext } from '@/providers'
-import { useMChangeLanguage } from '@photon/schema'
+import { useMChangeLanguage, useQProfile } from '@photon/schema'
 
 export const LanguageSwitcher = () => {
     const [moreActive, setMoreActive] = useState(false)
-    const { user } = useUserContext()
+    const [{ data: user }] = useQProfile()
     const [language, setLanguage] = useState('')
     const [, changeLanguage] = useMChangeLanguage()
 
     useEffect(() => {
-        if (user?.language) {
-            setLanguage(user?.language === 'en-US' ? 'English' : 'Deutsch')
+        if (user?.profile.language) {
+            setLanguage(user?.profile.language === 'en-US' ? 'English' : 'Deutsch')
         }
-    }, [user?.language])
+    }, [user?.profile.language])
 
     const moreItems: TDropdownItem[] = [
         {

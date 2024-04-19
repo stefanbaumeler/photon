@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { DeleteAlbumDialog } from '../dialogs/DeleteAlbumDialog'
 import { MoveToTrashDialog } from '../dialogs/MoveToTrashDialog'
 import type { User } from '../actors/user'
@@ -83,7 +83,14 @@ export class TeaserComponent {
     }
 
     getSrc = async () => {
-        return await this.locator.getByTestId('teaser-image').first().getAttribute('src')
+        const src = await this.locator.getByTestId('teaser-image').first().getAttribute('src')
+
+        if (!src) {
+            test.fail()
+            return ''
+        }
+
+        return src
     }
 
     shouldHaveSrc = async (src: string) => {

@@ -1,17 +1,20 @@
 import { ETrans } from '@/types/translations'
 import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import { useDeleteMedia } from '@/hooks'
 import { Dialog } from '@/components'
+import { useMDeleteMedia } from '@photon/schema'
 
 type Props = {
+    media: string[]
     closeCallback: () => void
 }
 
-export const DeleteMediaDialog = ({ closeCallback }: Props) => {
+export const DeleteMediaDialog = ({
+    media, closeCallback
+}: Props) => {
     const { t } = useTranslation()
     const selection = useSelectionContext()
-    const confirm = useDeleteMedia()
+    const [, deleteMedia] = useMDeleteMedia()
 
     return <Dialog
         closeCallback={closeCallback}
@@ -33,7 +36,12 @@ export const DeleteMediaDialog = ({ closeCallback }: Props) => {
             {
                 testId: 'confirm',
                 label: t(ETrans.PERMANENTLY_DELETE),
-                onClick: confirm
+                onClick: () => {
+                    deleteMedia({
+                        ids: media
+                    })
+                    closeCallback()
+                }
             }
         ]}
     />

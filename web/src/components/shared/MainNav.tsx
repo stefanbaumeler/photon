@@ -27,7 +27,7 @@ export const MainNav = ({ nav }: Props) => {
 
         const onDrop = () => {
             if (item.canDrop) {
-                item.onDrop()
+                item.onDrop && item.onDrop()
             }
         }
 

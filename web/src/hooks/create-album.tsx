@@ -8,7 +8,9 @@ export const useCreateAlbum = () => {
 
     return () => {
         createAlbumMutation({}).then((result) => {
-            router.push(`/albums/${result.data.createAlbum.id}`)
+            if (result.data) {
+                router.push(`/albums/${result.data.createAlbum.id}`)
+            }
         })
     }
 }

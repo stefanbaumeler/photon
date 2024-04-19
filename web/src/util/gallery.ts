@@ -49,6 +49,10 @@ export const generateGallery = (config: TGalleryConfig) => {
 
     const layout = []
 
+    if (!path) {
+        return undefined
+    }
+
     for (let i = 1; i < path.length; i += 1) {
         const row = config.images.slice(path[i - 1], path[i])
 

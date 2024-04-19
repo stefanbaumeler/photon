@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { TextBox } from '@/components'
 import { ETrans } from '@/types/translations'
-import { useMChangePassword } from '@photon/schema'
-import { useUserContext } from '@/providers'
+import { useMChangePassword, useQProfile } from '@photon/schema'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -16,16 +15,15 @@ export const ChangePasswordFields = ({
     const [newPassword, setNewPassword] = useState('')
     const [repeatNewPassword, setRepeatNewPassword] = useState('')
     const [, changePasswordMutation] = useMChangePassword()
-    const { user } = useUserContext()
+    const [{ data: user }] = useQProfile()
     const { t } = useTranslation()
 
     useEffect(() => {
-        console.log('sub', submit)
-        if (submit) {
+        if (submit && user) {
             changePasswordMutation({
                 currentPassword,
                 newPassword,
-                mail: user.mail
+                mail: user.profile.mail
             }).then(() => {
                 callback && callback()
             })

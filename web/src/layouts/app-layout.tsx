@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { SearchBar, Sidebar, FocusOverlay, Details, VerifyAccountMessage } from '@/components'
+import { SearchBar, Sidebar, FocusOverlay, Details } from '@/components'
 import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
@@ -21,7 +21,7 @@ const AppLayout = ({ children }: Props) => {
             id="root"
         >
             <div id="modal-root"></div>
-            <VerifyAccountMessage />
+            {/*<VerifyAccountMessage />*/}
             <div
                 id="app-root"
                 data-testid="content-root"

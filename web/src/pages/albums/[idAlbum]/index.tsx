@@ -1,8 +1,7 @@
 import * as Icons from '@mdi/js'
 import Layout from '@/layouts/app-layout'
 import { Button, Media, Uploader } from '@/components'
-import { useDetailsContext,
-    useEditContext,
+import { useEditContext,
     useSearchContext,
     useSelectionContext } from '@/providers'
 import { useRouter } from 'next/router'
@@ -25,7 +24,7 @@ const AlbumPage = () => {
     const edit = useEditContext()
     const { hits: media } = useSearchContext()
 
-    const titleEl = useRef(null)
+    const titleEl = useRef<HTMLInputElement>(null)
 
     const [title, setTitle] = useState('')
     const [earliest, setEarliest] = useState('')
@@ -33,13 +32,13 @@ const AlbumPage = () => {
 
     const [albumQuery] = useQAlbum({
         variables: {
-            id: idAlbum
+            id: idAlbum ?? ''
         },
-        pause: !router.isReady
+        pause: !router.isReady || !idAlbum
     })
 
     const setAlbumCover = useSetAlbumCover(idAlbum)
-    const updateAlbum = useUpdateAlbum(idAlbum, title)
+    const updateAlbum = useUpdateAlbum(title, idAlbum)
 
     const editAlbum = () => {
         selection.setMode(ESelectionMode.DELETE)

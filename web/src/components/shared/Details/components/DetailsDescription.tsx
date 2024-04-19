@@ -1,25 +1,27 @@
-import { useDetailsContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { ETrans } from '@/types/translations'
 import { useUpdateMedium } from '@/hooks'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const DetailsDescription = () => {
-    const details = useDetailsContext()
     const { t } = useTranslation()
+    const {
+        id, medium
+    } = useMediumFromRouter()
 
-    const descriptionEl = useRef(null)
+    const descriptionEl = useRef<HTMLTextAreaElement>(null)
 
-    const [description, setDescription] = useState(details.medium.description || '')
+    const [description, setDescription] = useState(medium?.description ?? '')
 
-    const updateMedium = useUpdateMedium(details.medium.id, description)
+    const updateMedium = useUpdateMedium(description, id)
 
     useEffect(() => {
-        setDescription(details.medium.description || '')
-    }, [details.medium])
+        setDescription(medium?.description ?? '')
+    }, [medium?.description])
 
     const onChange = () => {
-        setDescription(descriptionEl.current.value)
+        setDescription(descriptionEl.current?.value ?? '')
     }
 
     const onBlur = () => {

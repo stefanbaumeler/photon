@@ -3,7 +3,6 @@ import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useDetailsContext } from '@/providers'
-import { EKeyboardScope } from '@/types/app'
 import { useHotkey } from '@/hooks/hotkey'
 
 type Props = {
@@ -32,16 +31,16 @@ export const RotateControl = ({
         testId: 'rotate',
         label: t(ETrans.ROTATE_CLOCKWISE),
         callback: action,
-        shortcut: shortcut && 'R'
+        shortcut: shortcut ? 'R' : undefined
     }}
     /> : <Button
         testId="rotate"
         hint={t(ETrans.ROTATE_CLOCKWISE)}
-        shortcut={shortcut && 'R'}
+        shortcut={shortcut ? 'R' : undefined}
         onClick={action}
-        appearance={details.active && {
+        appearance={details.active ? {
             text: 'light'
-        }}
+        } : undefined}
         icon={Icons.mdiRotateLeft}
     />
 }

@@ -18,7 +18,7 @@ export const GallerySection = ({
     media, title
 }: Props) => {
     const gallery = useGalleryContext()
-    const [containerWidth, setContainerWidth] = useState(gallery.containerWidth || window.innerWidth - 272)
+    const [containerWidth, setContainerWidth] = useState(gallery.containerWidth)
     const details = useDetailsContext()
 
     const selection = useSelectionContext()
@@ -36,7 +36,7 @@ export const GallerySection = ({
     })
 
     const resize = () => {
-        setContainerWidth(gallery.containerWidth || window.innerWidth - 272)
+        setContainerWidth(gallery.containerWidth)
     }
 
     useEffect(() => {
@@ -61,6 +61,10 @@ export const GallerySection = ({
         ['selecting', selection.mode !== ESelectionMode.OFF]
     ])
 
+    if (!dimensions) {
+        return null
+    }
+
     return <div
         data-testid="gallery-section"
         className={classes}
@@ -83,7 +87,7 @@ export const GallerySection = ({
         <div className="gallery-section__container">
             {media.map((medium, k) => <Teaser
                 id={medium.id}
-                favoredBy={medium.favoredBy.length}
+                favoredBy={medium.favoredBy?.length}
                 href={details.getUrl(medium.id)}
                 cover={medium}
                 displayWidth={dimensions[k].width}
