@@ -2,7 +2,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EMediumStatus } from '@/types/app'
 import { asArray } from '@/util/as'
-import { useSetMediaStatus } from '@/hooks/set-status'
+import { useSetMediaStatus } from '@/hooks/useSetMediaStatus'
 import { Dialog } from '@/components/shared/Dialog'
 
 type Props = {

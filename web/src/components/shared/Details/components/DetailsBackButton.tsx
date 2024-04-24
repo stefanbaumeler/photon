@@ -6,7 +6,7 @@ import { getParentUrl } from '@/util/routing'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useHotkey } from '@/hooks/hotkey'
+import { useHotkey } from '@/hooks/useHotkey'
 
 type Props = {
     album?: string

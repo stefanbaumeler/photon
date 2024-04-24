@@ -3,7 +3,6 @@ import { ESelectionMode } from '@/types/app'
 import { useEffect, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
 import bem from '@/util/bem'
-import { useGalleryContext } from '@/components/shared/GalleryView/components/GalleryContext'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { Check } from '@/components/shared/Check'
 import { Teaser } from '@/components/shared/Teaser'
@@ -22,8 +21,7 @@ export const GallerySection = ({
 }: Props) => {
     const params = useParams()
     const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
-    const gallery = useGalleryContext()
-    const [containerWidth, setContainerWidth] = useState(gallery.containerWidth)
+    const [containerWidth, setContainerWidth] = useState(typeof window !== 'undefined' ? window.innerWidth - 272 : 0)
     const pathname = usePathname()
 
     const selection = useSelectionContext()
@@ -40,7 +38,7 @@ export const GallerySection = ({
     })
 
     const resize = () => {
-        setContainerWidth(gallery.containerWidth)
+        setContainerWidth(typeof window !== 'undefined' ? window.innerWidth - 272 : 0)
     }
 
     useEffect(() => {

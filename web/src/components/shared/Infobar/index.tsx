@@ -36,7 +36,7 @@ export const Infobar = ({ medium }: Props) => {
                     title={formatDate(medium.dateTaken, EDateFormat.LONG)}
                     values={getRelativeTime(medium.dateTaken)}
                 /> : null}
-                {medium.mimetype.startsWith('image') ? <InfobarImageMeta medium={medium} /> : <InfobarVideoMeta />}
+                {medium.mimetype.startsWith('image') ? <InfobarImageMeta /> : <InfobarVideoMeta />}
             </InfobarSection>
             <InfobarOwner />
             <InfobarShares />

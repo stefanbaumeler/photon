@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import bem from '../../util/bem'
 import tauri from '../../tauri'
-import { useUpload } from '@/hooks/upload'
+import { useUpload } from '@/hooks/useUpload'
 
 export const Uploader = () => {
     const [visible, setVisible] = useState(false)

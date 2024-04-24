@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { useDragContext } from '@/providers/DragProvider'
-import { useAddToFavorites } from '@/hooks/add-to-favorites'
-import { useSetMediaStatus } from '@/hooks/set-status'
+import { useAddToFavorites } from '@/hooks/useAddToFavorites'
+import { useSetMediaStatus } from '@/hooks/useSetMediaStatus'
 
 type Props = {
     children?: ReactNode

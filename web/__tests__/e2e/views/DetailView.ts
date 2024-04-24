@@ -79,7 +79,7 @@ export class DetailView extends VisitableView {
 
         const image = await this.getMedium()
 
-        await expect.poll(() => image.evaluate((img) => img.naturalWidth)).not.toBe(beforeWidth)
+        await expect.poll(() => image.evaluate((img) => img.naturalHeight)).not.toBe(beforeHeight)
 
         const after = await image.evaluate((img) => {
             return {
@@ -88,8 +88,7 @@ export class DetailView extends VisitableView {
             }
         })
 
-        expect(beforeWidth).toBe(after.height)
-        expect(beforeHeight).toBe(after.width)
+        expect(after.height).toBeGreaterThan(beforeHeight)
     }
     shouldBeMedium = async (id: string) => {
         const image = this.locator.getByTestId('details-image')

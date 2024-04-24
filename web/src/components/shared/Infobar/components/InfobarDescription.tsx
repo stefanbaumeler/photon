@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { ETrans } from '@/types/translations'
 import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
-import { useUpdateMedium } from '@/hooks/update-medium'
+import { useUpdateMedium } from '@/hooks/useUpdateMedium'
 export const InfobarDescription = () => {
     const { t } = useTranslation()
     const {

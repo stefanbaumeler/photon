@@ -48,7 +48,7 @@ const MediumEl = ({
                 data-testid={testId}
                 className="medium__image"
                 fill
-                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}&update=${updateHash}`}
+                src={`${process.env.NEXT_PUBLIC_UPLOADS_URL}/${medium.filenameDisk}?w=${Math.abs(parseInt(`${width * 2}`, 10))}${updateHash ? `&update=${updateHash}` : ''}`}
                 onLoad={onLoad}
             /> : null}
             {medium.mimetype?.startsWith('video') ? <video

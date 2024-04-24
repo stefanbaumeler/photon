@@ -1,14 +1,7 @@
-import Layout from '@/layouts/app-layout'
-import { Uploader } from '@/components/shared/Uploader'
-
 const SharingPage = () => {
-    return <Layout>
-        <section>
-            <div>
-                <Uploader />
-            </div>
-        </section>
-    </Layout>
+    return <>
+        Sharing
+    </>
 }
 
 export default SharingPage

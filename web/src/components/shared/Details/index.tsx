@@ -38,9 +38,7 @@ export const Details = async ({
         className={classes}
         data-testid="details"
     >
-        <div
-            className="details__preview"
-        >
+        <div className="details__preview">
             <div className="toolbar toolbar--light">
                 <div className="toolbar__section toolbar__section--left">
                     <DetailsBackButton album={album} />

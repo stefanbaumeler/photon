@@ -84,6 +84,8 @@ export type TAlbumListItem = TListItem & {
     albumMedia: string[]
 }
 
+export type TTeaser = Pick<TMedium, 'dateCreated' | 'dateTaken' | 'id'>
+
 export type TFilmStripItem = {
     id: string
     cover: TCover | null

@@ -19,13 +19,17 @@ export const MediumListItem = ({
     const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
 
     const selection = useSelectionContext()
-    const { rotationRequest } = useRotationContext()
+    const {
+        mediumToRotate, rotationRequest, loading
+    } = useRotationContext()
 
     const src = useRef(0)
 
     useEffect(() => {
-        src.current = src.current + 1
-    }, [id, src, rotationRequest])
+        if (!rotationRequest && loading) {
+            src.current = src.current + 1
+        }
+    }, [id, src, rotationRequest, loading])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
@@ -66,7 +70,7 @@ export const MediumListItem = ({
                 href={href}
                 className="list-view__link"
             >
-                <Tippy
+                {mediumToRotate === id && rotationRequest ? null : <Tippy
                     className="list-view__tip"
                     followCursor
                     content={<Medium
@@ -81,11 +85,11 @@ export const MediumListItem = ({
                 >
                     <Medium
                         testId="teaser-image"
-                        updateHash={src.current}
                         medium={cover}
                         width={50}
+                        updateHash={src.current}
                     />
-                </Tippy>
+                </Tippy>}
             </Link>
         </td>
         <td

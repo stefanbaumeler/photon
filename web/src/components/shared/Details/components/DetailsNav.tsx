@@ -4,7 +4,7 @@ import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
 import Link from 'next/link'
 import { useSearchContext } from '@/providers/SearchProvider'
-import { useHotkey } from '@/hooks/hotkey'
+import { useHotkey } from '@/hooks/useHotkey'
 import { useRouter } from 'next/navigation'
 
 type Props = {

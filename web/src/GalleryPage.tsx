@@ -1,29 +1,21 @@
-import AppLayout from '@/layouts/app-layout'
 import { Uploader } from '@/components/shared/Uploader'
 import { Media } from '@/components/shared/Media'
-import { EMediumStatus } from '@/types/app'
 import { Suspense } from 'react'
+import { SearchBar } from '@/components/shared/SearchBar'
 
-type Props = {
-    favorites?: boolean
-    status?: EMediumStatus
-}
-
-const GalleryPage = async ({
-    favorites, status
-}: Props) => {
-    return <AppLayout
-        favorites={favorites}
-        status={status}
-    >
+const GalleryPage = async () => {
+    return <>
         <Uploader />
-        <Suspense fallback={<p>
-            Loading...
-        </p>}
-        >
-            <Media />
-        </Suspense>
-    </AppLayout>
+        <SearchBar />
+        <main className="main">
+            <Suspense fallback={<p>
+                Loading...
+            </p>}
+            >
+                <Media />
+            </Suspense>
+        </main>
+    </>
 }
 
 export default GalleryPage

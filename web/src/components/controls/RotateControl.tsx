@@ -1,7 +1,7 @@
 import * as Icons from '@mdi/js'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useHotkey } from '@/hooks/hotkey'
+import { useHotkey } from '@/hooks/useHotkey'
 import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
 import { Button } from '@/components/shared/Button'
 import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'

@@ -1,12 +1,17 @@
-import { TImageMeta, TQMedium } from '@photon/schema/dist/client'
+'use client'
+
+import { TImageMeta } from '@photon/schema/dist/client'
 import * as Icons from '@mdi/js'
 import { Detail } from '@/components/shared/Detail'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
-type Props = {
-    medium: TQMedium['medium']
-}
+export const InfobarImageMeta = () => {
+    const { medium } = useMediumFromRouter()
 
-export const InfobarImageMeta = ({ medium }: Props) => {
+    if (!medium) {
+        return null
+    }
+
     const meta = medium.meta as TImageMeta
     const subtitle = [medium.address,  medium.place].filter((val) => !!val)
 

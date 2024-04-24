@@ -95,10 +95,7 @@ const LoginPage = () => {
 
     const title = loginFormMode === ELoginFormMode.SIGNUP ? t(ETrans.SIGN_UP) : t(ETrans.SIGN_IN)
 
-    return <div
-        id="app-root"
-        data-testid="content-root"
-    >
+    return <main className="main main--full">
         <div className="login">
             <div className="login__container">
                 <div className="login__content-container">
@@ -177,7 +174,7 @@ const LoginPage = () => {
                 <div className="login__image"></div>
             </div>
         </div>
-    </div>
+    </main>
 }
 
 export default LoginPage

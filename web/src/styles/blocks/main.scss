@@ -9,6 +9,10 @@
         width: 100%;
         box-sizing: border-box;
     }
+
+    &--full {
+        padding: 0;
+    }
 }
 
 @mixin main {

@@ -31,7 +31,7 @@
     height: 100%;
 
     @at-root .grid-view & {
-        height: 300px;
+        aspect-ratio: 3/2;
     }
 }
 

@@ -2,7 +2,7 @@ import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { asArray } from '@/util/as'
 import { Dialog } from '@/components/shared/Dialog'
-import { useDeleteAlbum } from '@/hooks/delete-album'
+import { useDeleteAlbum } from '@/hooks/useDeleteAlbum'
 
 type Props = {
     id?: string | string[]

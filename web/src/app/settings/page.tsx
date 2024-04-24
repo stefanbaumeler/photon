@@ -1,11 +1,9 @@
 'use client'
 
-import AppLayout from '@/layouts/app-layout'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { ChangePasswordDialog } from '@/components/dialogs/ChangePasswordDialog'
-import { Uploader } from '@/components/shared/Uploader'
 import { Heading } from '@/components/shared/Heading'
 import { Setting } from '@/components/shared/Setting'
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher'
@@ -14,13 +12,12 @@ import { Button } from '@/components/shared/Button'
 const SettingsPage = () => {
     const { t } = useTranslation()
     const [dialogActive, setDialogActive] = useState(false)
-    return <AppLayout>
+    return <>
         {dialogActive ? <ChangePasswordDialog
             closeCallback={() => {
                 setDialogActive(false)
             }}
         /> : null}
-        <Uploader />
         <div className="page">
             <Heading
                 level={1}
@@ -64,7 +61,7 @@ const SettingsPage = () => {
                 </li>
             </ul>
         </div>
-    </AppLayout>
+    </>
 }
 
 export default SettingsPage

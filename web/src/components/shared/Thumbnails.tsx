@@ -2,8 +2,8 @@ import { EThumbnailType, TThumbnail } from '@/types/app'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useQAlbums } from '@photon/schema/dist/client'
-import { useAddToNewAlbum } from '@/hooks/add-to-new-album'
-import { useAddToAlbum } from '@/hooks/add-to-album'
+import { useAddToNewAlbum } from '@/hooks/useAddToNewAlbum'
+import { useAddToAlbum } from '@/hooks/useAddToAlbum'
 import { Thumbnail } from '@/components/shared/Thumbnail'
 
 export const Thumbnails = () => {

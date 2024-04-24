@@ -50,7 +50,7 @@ const ResetPasswordPage = () => {
     if (resetFormMode === EResetFormMode.SENT) {
         hint = t(ETrans.RESET_PASSWORD_SENT)
     }
-    return <section>
+    return <main className="main main--full">
         <div className="login login--reset">
             <div className="login__container">
                 <div className="login__content-container">
@@ -103,7 +103,7 @@ const ResetPasswordPage = () => {
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 }
 
 export default ResetPasswordPage

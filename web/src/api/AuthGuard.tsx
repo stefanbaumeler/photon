@@ -3,7 +3,7 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { useQProfile } from '@photon/schema/dist/client'
-import { useSignOut } from '@/hooks/sign-out'
+import { useSignOut } from '@/hooks/useSignOut'
 
 type Props = {
     children: ReactNode

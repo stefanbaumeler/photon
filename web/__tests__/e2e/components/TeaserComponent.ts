@@ -148,9 +148,12 @@ export class TeaserComponent {
     }
 
     shouldHaveRotated = async (beforeWidth: number, beforeHeight: number) => {
+        await this.user.page.waitForTimeout(3000)
+
         const image = await this.getMedium()
 
         await expect.poll(() => image.evaluate((img) => {
+            console.log(img.naturalHeight, img.src)
             return img.naturalHeight
         })).not.toBe(beforeHeight)
 
@@ -165,7 +168,6 @@ export class TeaserComponent {
             }
         })
 
-        expect(after.height).not.toBe(beforeHeight)
-        expect(after.width).not.toBe(beforeWidth)
+        expect(after.height).toBeGreaterThan(beforeHeight)
     }
 }

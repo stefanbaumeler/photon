@@ -2,7 +2,7 @@ import * as Icons from '@mdi/js'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
-import { useSignOut } from '@/hooks/sign-out'
+import { useSignOut } from '@/hooks/useSignOut'
 import { Button } from '@/components/shared/Button'
 
 type Props = {

@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { EEditState, EKeyboardScope, ESelectionMode } from '@/types/app'
 import { useSelectionContext } from '@/providers/SelectionProvider'
-import { useUpdateAlbum } from '@/hooks/update-album'
+import { useUpdateAlbum } from '@/hooks/useUpdateAlbum'
 import { useParams } from 'next/navigation'
 import { useEditContext } from '@/providers/EditProvider'
-import { useSetAlbumCover } from '@/hooks/set-album-cover'
-import { useHotkey } from '@/hooks/hotkey'
+import { useSetAlbumCover } from '@/hooks/useSetAlbumCover'
+import { useHotkey } from '@/hooks/useHotkey'
 import { useQAlbum } from '@photon/schema/dist/client'
 
 export const AlbumsDetailsTitle = () => {

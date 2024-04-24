@@ -1,7 +1,7 @@
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EMediumStatus } from '@/types/app'
-import { useSetMediaStatus } from '@/hooks/set-status'
+import { useSetMediaStatus } from '@/hooks/useSetMediaStatus'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { useSearchContext } from '@/providers/SearchProvider'
 import { Dialog } from '@/components/shared/Dialog'

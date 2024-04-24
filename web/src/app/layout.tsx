@@ -4,7 +4,7 @@ import 'tippy.js/themes/light.css'
 import tauri from '@/tauri'
 import { DatepickerConfig } from '@/components/shared/DatepickerConfig'
 import { ReactNode } from 'react'
-import { BaseProviders } from '@/BaseProviders'
+import { BaseProviders } from '@/providers/BaseProviders'
 import AuthGuard from '@/api/AuthGuard'
 import { TippyConfig } from '@/components/shared/TippyConfig'
 
@@ -15,9 +15,9 @@ export const metadata = {
     description: ''
 }
 
-export default function RootLayout ({ children }: {
+const RootLayout = ({ children }: {
     children: ReactNode
-}) {
+}) => {
     return <>
         <DatepickerConfig />
         <TippyConfig />
@@ -47,3 +47,4 @@ export default function RootLayout ({ children }: {
     </>
 }
 
+export default RootLayout

@@ -5,20 +5,17 @@ import { GalleryProvider } from '@/components/shared/GalleryView/components/Gall
 import { VisualGalleryView } from '@/components/shared/GalleryView/components/VisualGalleryView'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { useSortContext } from '@/providers/SortProvider'
-import { EMediumSort, ESelectionMode } from '@/types/app'
+import { EMediumSort, ESelectionMode, TTeaser } from '@/types/app'
 import { formatDate } from '@/util/date'
 import { sortMediaByDate } from '@/util/sort'
 import { GallerySection } from '@/components/shared/GalleryView/components/GallerySection'
 import { useEffect, useState } from 'react'
 
 type Props = {
-    containerWidth?: number
-    elements: TMedium[]
+    elements: TTeaser[]
 }
 
-export const GalleryView = ({
-    containerWidth, elements
-}: Props) => {
+export const GalleryView = ({ elements }: Props) => {
     const selection = useSelectionContext()
     const sort = useSortContext()
 
@@ -41,7 +38,7 @@ export const GalleryView = ({
             return sort.sort === EMediumSort.OLDEST ? aTime - bTime : bTime - aTime
         }).map((groupDate) => formatDate(groupDate))
 
-    const sections = [...new Set(groups)].map((groupDate, key) => {
+    const sections = [...new Set(groups)].map((groupDate) => {
         const mediaMatchingThisGroup = media.filter((medium) => {
             return sort.sort === EMediumSort.RECENT
                 ? formatDate(medium.dateCreated) === groupDate
@@ -69,17 +66,13 @@ export const GalleryView = ({
         setIsSSR(false)
     }, [])
 
-    return <GalleryProvider
-        containerWidth={containerWidth}
-    >
-        <VisualGalleryView>
-            {isSSR ? null : sections.map((group, key) => {
-                return <GallerySection
-                    key={key}
-                    title={group.date}
-                    media={group.media}
-                />
-            })}
-        </VisualGalleryView>
-    </GalleryProvider>
+    return <VisualGalleryView>
+        {isSSR ? null : sections.map((group, key) => {
+            return <GallerySection
+                key={key}
+                title={group.date}
+                media={group.media}
+            />
+        })}
+    </VisualGalleryView>
 }

@@ -10,6 +10,7 @@ interface RotationContext {
     rotation: number
     updatedSource: number
     rotationRequest: number
+    mediumToRotate: string
     rotate: (medium: string) => void
     sourceLoadedCallback: () => void
 }
@@ -48,6 +49,7 @@ const RotationProvider = ({ children }: Props) => {
         rotation,
         updatedSource,
         rotationRequest,
+        mediumToRotate,
         sourceLoadedCallback: () => {
             setLoading(false)
         },

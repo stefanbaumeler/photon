@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useZoom } from '@/components/shared/Details/hooks/zoom'
 import { TCover } from '@/types/app'
 import bem from '@/util/bem'
-import { useInfobarContext } from '@/components/shared/Infobar/components/InfobarContext'
+import { useInfobarContext } from '@/components/shared/Infobar/components/InfobarProvider'
 
 type Props = {
     children: ReactNode

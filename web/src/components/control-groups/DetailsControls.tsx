@@ -8,7 +8,7 @@ import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { useParams, usePathname } from 'next/navigation'
 import { useQAlbum } from '@photon/schema/dist/client'
-import { useHotkey } from '@/hooks/hotkey'
+import { useHotkey } from '@/hooks/useHotkey'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { useLayoutContext } from '@/providers/LayoutProvider'
 import { Check } from '@/components/shared/Check'
@@ -21,7 +21,7 @@ import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl
 import { FavoriteControl } from '@/components/controls/FavoriteControl'
 import { Dropdown } from '@/components/shared/Dropdown'
 import { Button } from '@/components/shared/Button'
-import { useInfobarContext } from '@/components/shared/Infobar/components/InfobarContext'
+import { useInfobarContext } from '@/components/shared/Infobar/components/InfobarProvider'
 import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const DetailsControls = () => {

@@ -2,7 +2,7 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffe
 import { EKeyboardScope, ESelectionMode } from '@/types/app'
 import { usePathname } from 'next/navigation'
 import { useHotkeysContext } from 'react-hotkeys-hook'
-import { useHotkey } from '@/hooks/hotkey'
+import { useHotkey } from '@/hooks/useHotkey'
 import bem from '@/util/bem'
 import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
