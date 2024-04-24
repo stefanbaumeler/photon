@@ -27,32 +27,33 @@ export const TeaserNavControl = ({
 
     const moreItems = []
 
-    if (!album) {
-        moreItems.push(<RotateControl
-            dropdown
-            callback={() => setMoreActive(false)}
-        />)
-
-        if (!isTrash) {
-            moreItems.push(<ArchiveControl
-                dropdown
-                media={stack ?? [id]}
-                callback={() => setMoreActive(false)}
-            />)
-            moreItems.push(<FavoriteControl
-                dropdown
-                media={stack ?? [id]}
-                callback={() => setMoreActive(false)}
-            />)
-        }
-    }
-
     moreItems.push(<DownloadMediaControl
         dropdown
         callback={() => setMoreActive(false)}
         elements={stack ?? [id]}
         key={1}
     />)
+
+    if (!album) {
+        if (!isTrash) {
+            moreItems.push(<FavoriteControl
+                dropdown
+                media={stack ?? [id]}
+                callback={() => setMoreActive(false)}
+            />)
+            moreItems.push(<ArchiveControl
+                dropdown
+                media={stack ?? [id]}
+                callback={() => setMoreActive(false)}
+            />)
+        }
+
+        moreItems.push(<RotateControl
+            medium={id}
+            dropdown
+            callback={() => setMoreActive(false)}
+        />)
+    }
 
     if (isTrash) {
         moreItems.push(<RestoreControl

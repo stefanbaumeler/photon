@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { ElementHandle, expect, test } from '@playwright/test'
 import { DeleteAlbumDialog } from '../dialogs/DeleteAlbumDialog'
 import { MoveToTrashDialog } from '../dialogs/MoveToTrashDialog'
 import type { User } from '../actors/user'
@@ -6,6 +6,7 @@ import fs from 'fs'
 
 export class TeaserComponent {
     locator
+
     constructor (public user: User, public index: number, public isAlbum: boolean) {
         this.locator = this.user.page.getByTestId('teaser').nth(index)
     }
@@ -58,6 +59,11 @@ export class TeaserComponent {
         await this.shouldNotBeFavorite(view)
     }
 
+    rotate = async () => {
+        await this.locator.getByTestId('teaser-nav').click()
+        await this.locator.getByTestId('rotate').click()
+    }
+
     click = async () => {
         await this.locator.hover()
         await this.locator.click()
@@ -95,6 +101,18 @@ export class TeaserComponent {
         return src
     }
 
+    getMedium = async () => {
+        const image = await this.locator.getByTestId('teaser-image').elementHandle() as ElementHandle<HTMLImageElement>
+
+        await expect.poll(() => {
+            return image.evaluate((img) => {
+                return img.naturalWidth
+            })
+        }).toBeGreaterThan(0)
+
+        return image
+    }
+
     shouldHaveSrc = async (src: string) => {
         const image = await this.locator.getByTestId('teaser-image')
         await image.evaluate((img: HTMLImageElement) => img.complete)
@@ -127,5 +145,27 @@ export class TeaserComponent {
 
     shouldNotBeSelected = async () => {
         await expect(this.locator).not.toHaveClass(/teaser--selected/)
+    }
+
+    shouldHaveRotated = async (beforeWidth: number, beforeHeight: number) => {
+        const image = await this.getMedium()
+
+        await expect.poll(() => image.evaluate((img) => {
+            return img.naturalHeight
+        })).not.toBe(beforeHeight)
+
+        await expect.poll(() => image.evaluate((img) => {
+            return img.naturalHeight
+        })).not.toBe(0)
+
+        const after = await image.evaluate((img) => {
+            return {
+                width: img.naturalWidth,
+                height: img.naturalHeight
+            }
+        })
+
+        expect(after.height).not.toBe(beforeHeight)
+        expect(after.width).not.toBe(beforeWidth)
     }
 }

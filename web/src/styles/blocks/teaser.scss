@@ -29,6 +29,10 @@
 
 @mixin teaser-image-container {
     height: 100%;
+
+    @at-root .grid-view & {
+        height: 300px;
+    }
 }
 
 @mixin teaser-check {

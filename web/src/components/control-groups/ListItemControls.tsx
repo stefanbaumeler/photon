@@ -37,6 +37,7 @@ export const ListItemControls = ({
 
     if (!album) {
         moreItems.push(<RotateControl
+            medium={element}
             dropdown
             callback={toggleDropdown}
         />)

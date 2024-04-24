@@ -43,15 +43,6 @@ const RotationProvider = ({ children }: Props) => {
         }
     }, [updatedSource, rotation, mediumToRotate, rotate, rotationRequest])
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setLoading(false)
-    //     }, 100)
-    //     return () => {
-    //         clearTimeout(timer)
-    //     }
-    // }, [loading])
-
     return <RotationContext.Provider value={{
         loading,
         rotation,

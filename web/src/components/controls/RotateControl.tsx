@@ -11,17 +11,18 @@ type Props = {
     dropdown?: boolean
     shortcut?: boolean
     callback?: () => void
+    medium: string
 }
 
 export const RotateControl = ({
-    dropdown, shortcut, callback
+    dropdown, shortcut, callback, medium
 }: Props) => {
     const { t } = useTranslation()
-    const { medium } = useMediumFromRouter()
+    const { medium: detailsMedium } = useMediumFromRouter()
     const { rotate } = useRotationContext()
     const action = () => {
-        if (medium?.id) {
-            rotate(medium.id)
+        if (medium) {
+            rotate(medium)
         }
         callback && callback()
     }
@@ -43,7 +44,7 @@ export const RotateControl = ({
         hint={t(ETrans.ROTATE_CLOCKWISE)}
         shortcut={shortcut ? 'R' : undefined}
         onClick={action}
-        appearance={medium ? {
+        appearance={detailsMedium ? {
             text: 'light'
         } : undefined}
         icon={Icons.mdiRotateLeft}

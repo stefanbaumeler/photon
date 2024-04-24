@@ -143,11 +143,13 @@ test('can favorite', async ({ page }) => {
 
     await favorites.visit()
 
+    const ids = await favorites.getDetailIds()
     const count = await favorites.getTeaserCount()
-
     const details = await favorites.getTeaser(0).click()
 
+    await details.shouldBeMedium(ids[0])
     await details.unfavorite()
+    await details.shouldBeMedium(ids[1])
     await page.keyboard.press('Escape')
     await favorites.shouldHaveTeasers(count - 1)
 })

@@ -2,7 +2,7 @@
     height: 100%;
     position: relative;
     transition: opacity .5s, scale .1s;
-    max-width: 100%;
+    width: 100%;
 
     &--placeholder {
         position: absolute;
@@ -44,14 +44,14 @@
 }
 
 @mixin medium-image {
-    object-fit: cover;
+    object-fit: contain;
+
+    @at-root .grid-view & {
+        object-fit: cover;
+    }
 
     @at-root .medium--top & {
         object-position: top;
-    }
-
-    @at-root .details__container & {
-        object-fit: contain;
     }
 
     @at-root .medium--none & {

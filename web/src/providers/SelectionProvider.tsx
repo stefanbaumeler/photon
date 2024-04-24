@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { useHotkeysContext } from 'react-hotkeys-hook'
 import { useHotkey } from '@/hooks/hotkey'
 import bem from '@/util/bem'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     children?: ReactNode
@@ -32,6 +33,7 @@ const SelectionProvider = ({ children }: Props) => {
     const [shiftTargets, setShiftTargets] = useState<string[]>([])
     const [shift, setShift] = useState(false)
     const pathname = usePathname()
+    const { id } = useMediumFromRouter()
 
     const clear = () => {
         if (selected.size || mode === ESelectionMode.DELETE) {
@@ -58,7 +60,11 @@ const SelectionProvider = ({ children }: Props) => {
 
     useHotkey({
         key: 'Escape',
-        callback: clear,
+        callback: () => {
+            if (!id) {
+                clear()
+            }
+        },
         scopes: EKeyboardScope.select
     })
 

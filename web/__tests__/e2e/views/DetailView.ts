@@ -77,7 +77,7 @@ export class DetailView extends VisitableView {
         const rotator = this.locator.getByTestId('details-rotate')
         await expect(rotator).not.toHaveClass(/details__rotate--active/)
 
-        const image = await this.getMedium(true)
+        const image = await this.getMedium()
 
         await expect.poll(() => image.evaluate((img) => img.naturalWidth)).not.toBe(beforeWidth)
 

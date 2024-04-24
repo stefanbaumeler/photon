@@ -1,7 +1,7 @@
 import { formatDate } from '@/util/date'
 import { ESelectionMode, TMediumListItem } from '@/types/app'
 import Tippy from '@tippyjs/react'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelectionContext } from '@/providers/SelectionProvider'
 import { Check } from '@/components/shared/Check'
 import { FavoriteControl } from '@/components/controls/FavoriteControl'
@@ -10,6 +10,7 @@ import { Medium } from '@/components/shared/Medium'
 import Link from 'next/link'
 import { getDetailsUrl } from '@/util/routing'
 import { useParams, usePathname } from 'next/navigation'
+import { useRotationContext } from '@/providers/RotationProvider'
 export const MediumListItem = ({
     id, title, cover, dateTaken, mimetype, owner
 }: TMediumListItem) => {
@@ -18,16 +19,13 @@ export const MediumListItem = ({
     const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
 
     const selection = useSelectionContext()
-
-    // const [updatedSource, setUpdatedSource] = useState(0)
+    const { rotationRequest } = useRotationContext()
 
     const src = useRef(0)
 
-    // useEffect(() => {
-    //     if (id === details.medium?.id) {
-    //         src.current = src.current + 1
-    //     }
-    // }, [id, details.medium?.id, src, details.rotationRequest])
+    useEffect(() => {
+        src.current = src.current + 1
+    }, [id, src, rotationRequest])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
@@ -36,15 +34,6 @@ export const MediumListItem = ({
 
         selection.toggle(id)
     }
-
-    // const open = () => {
-    //     if (cover) {
-    //         details.open({
-    //             ...cover,
-    //             id
-    //         })
-    //     }
-    // }
 
     const href = getDetailsUrl(pathname, id, album)
 
@@ -85,6 +74,7 @@ export const MediumListItem = ({
                         medium={cover}
                         width={500}
                         position={'top'}
+                        forceAspectRatio={true}
                     />}
                     theme="transparent"
                     zIndex={102}

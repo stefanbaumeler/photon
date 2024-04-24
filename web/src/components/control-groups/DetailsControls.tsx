@@ -87,6 +87,7 @@ export const DetailsControls = () => {
             key={0}
         />,
         <RotateControl
+            medium={medium.id}
             dropdown
             shortcut
             callback={() => setMoreActive(false)}

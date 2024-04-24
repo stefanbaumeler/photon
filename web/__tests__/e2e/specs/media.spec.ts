@@ -88,7 +88,25 @@ for (const i in views) {
     })
 
     test(`can rotate on ${views[i]}`, async ({ page }) => {
-        // TODO
+        const user = new User(page)
+        const overview = user.overviewView()
+
+        await overview.visit()
+        await overview.actions.setView(views[i])
+
+        const teaser = await overview.getTeaser(0)
+
+        const image = await teaser.getMedium()
+
+        const before = await image.evaluate((img) => {
+            return {
+                width: img.naturalWidth,
+                height: img.naturalHeight
+            }
+        })
+
+        await teaser.rotate()
+        await teaser.shouldHaveRotated(before.width, before.height)
     })
 
     test(`can archive on ${views[i]}`, async ({ page }) => {

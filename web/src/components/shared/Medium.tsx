@@ -12,13 +12,15 @@ type Props = {
     placeholder?: boolean
     updateHash?: number
     onLoad?: () => void
+    forceAspectRatio?: boolean
 }
 
 const MediumEl = ({
-    medium, width, testId, priority = false, position, placeholder, updateHash = 0, onLoad
+    medium, width, testId, priority = false, position, placeholder, updateHash = 0, onLoad,
+    forceAspectRatio
 }: Props, ref?: Ref<unknown>) => {
     const classes = bem('medium', [
-        ['position', !!position],
+        [position, !!position],
         ['placeholder', !!placeholder],
         ['none', !medium]
     ])
@@ -29,9 +31,14 @@ const MediumEl = ({
         </div>
     }
 
+    const naturalAspectRatio = medium.meta.width / medium.meta.height
+
     return <div
         className={classes}
         ref={ref as Ref<HTMLDivElement>}
+        style={{
+            aspectRatio: forceAspectRatio ? naturalAspectRatio : ''
+        }}
     >
         {width && !!medium ? <>
             {medium.mimetype?.startsWith('image') ? <Image
