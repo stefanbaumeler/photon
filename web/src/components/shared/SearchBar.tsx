@@ -1,19 +1,25 @@
-import { Brand, Search, FocusOverlay } from '@/components'
-import { AlbumsControls,
-    EditControls,
-    DefaultControls,
-    AlbumControls,
-    BulkAlbumsControls, BulkMediaControls } from '@/components/control-groups'
-import { useSelectionContext } from '@/providers'
+'use client'
+
 import { ESelectionMode } from '@/types/app'
-import { useRouter } from 'next/router'
+import { useParams, usePathname } from 'next/navigation'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { FocusOverlay } from '@/components/shared/FocusOverlay'
+import { Brand } from '@/components/shared/Brand'
+import { Search } from '@/components/shared/Search'
+import { BulkAlbumsControls } from '@/components/control-groups/BulkAlbumsControls'
+import { BulkMediaControls } from '@/components/control-groups/BulkMediaControls'
+import { EditControls } from '@/components/control-groups/EditControls'
+import { AlbumsControls } from '@/components/control-groups/AlbumsControls'
+import { AlbumControls } from '@/components/control-groups/AlbumControls'
+import { DefaultControls } from '@/components/control-groups/DefaultControls'
 
 export const SearchBar = () => {
     const selection = useSelectionContext()
-    const router = useRouter()
+    const pathname = usePathname()
+    const params = useParams()
 
-    const isAlbumPage = router.pathname === '/albums/[idAlbum]'
-    const isAlbumsPage = router.pathname === '/albums'
+    const isAlbumPage = !!params.idAlbum
+    const isAlbumsPage = pathname === '/albums'
 
     return <div className="searchbar">
         <FocusOverlay />

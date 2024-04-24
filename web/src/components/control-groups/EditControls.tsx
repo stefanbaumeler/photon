@@ -1,9 +1,9 @@
 import * as Icons from '@mdi/js'
-import { Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EEditState } from '@/types/app'
-import { useEditContext } from '@/providers'
+import { useEditContext } from '@/providers/EditProvider'
+import { Button } from '@/components/shared/Button'
 
 export const EditControls = () => {
     const { t } = useTranslation()

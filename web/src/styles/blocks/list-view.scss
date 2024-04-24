@@ -48,6 +48,24 @@
     &--image {
         width: 100px;
     }
+
+    &:has(.list-view__link):not(:has(.medium)) {
+        padding: 0;
+    }
+}
+
+@mixin list-view-link {
+    color: $color-black;
+    width: 100%;
+    height: calc(100% - 16px);
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+
+    &:has(.medium) {
+        padding: 0;
+        height: auto;
+    }
 }
 
 @mixin list-view-tip {
@@ -72,6 +90,10 @@
 
         &__cell {
             @include list-view-cell;
+        }
+
+        &__link {
+            @include list-view-link;
         }
 
         &__tip {

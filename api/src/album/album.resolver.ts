@@ -14,7 +14,7 @@ export class AlbumResolver {
         return this.service.getAll()
     }
 
-    @Query(() => [Album])
+    @Query(() => Medium)
     async mediumAlbums (@Args() dto: IdDto) {
         return this.service.getByMedium(dto)
     }

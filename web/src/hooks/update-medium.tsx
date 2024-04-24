@@ -1,4 +1,4 @@
-import { useMUpdateMedium } from '@photon/schema'
+import { useMUpdateMedium } from '@photon/schema/dist/client'
 
 export const useUpdateMedium = (description: string, id?: string) => {
     const [, updateMedium] = useMUpdateMedium()

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { TextBox } from '@/components'
 import { ETrans } from '@/types/translations'
-import { useMChangePassword, useQProfile } from '@photon/schema'
+import { useMChangePassword, useQProfile } from '@photon/schema/dist/client'
 import { useTranslation } from 'react-i18next'
+import { TextBox } from '@/components/shared/TextBox'
 
 type Props = {
     submit: boolean

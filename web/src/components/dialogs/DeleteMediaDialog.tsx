@@ -1,12 +1,12 @@
 import { ETrans } from '@/types/translations'
-import { useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import { Dialog } from '@/components'
-import { useMDeleteMedia } from '@photon/schema'
+import { useMDeleteMedia } from '@photon/schema/dist/client'
+import { Dialog } from '@/components/shared/Dialog'
+import { useSelectionContext } from '@/providers/SelectionProvider'
 
 type Props = {
     media: string[]
-    closeCallback: () => void
+    closeCallback: (actionTaken: boolean) => void
 }
 
 export const DeleteMediaDialog = ({
@@ -17,7 +17,7 @@ export const DeleteMediaDialog = ({
     const [, deleteMedia] = useMDeleteMedia()
 
     return <Dialog
-        closeCallback={closeCallback}
+        closeCallback={() => closeCallback(false)}
         title={t(ETrans.PERMANENTLY_DELETE)}
         text={t(ETrans.PERMANENTLY_DELETE_THING, {
             count: selection.selected.size || 1,
@@ -28,7 +28,7 @@ export const DeleteMediaDialog = ({
         buttons={[
             {
                 label: t(ETrans.CANCEL),
-                onClick: closeCallback,
+                onClick: () => closeCallback(false),
                 appearance: {
                     type: 'secondary'
                 }
@@ -40,7 +40,7 @@ export const DeleteMediaDialog = ({
                     deleteMedia({
                         ids: media
                     })
-                    closeCallback()
+                    closeCallback(true)
                 }
             }
         ]}

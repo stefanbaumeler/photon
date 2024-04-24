@@ -4,15 +4,13 @@ import { I18nextProvider } from 'react-i18next'
 import i18next from '../src/translations'
 import { Provider } from 'urql'
 import { urqlClient } from '@/api'
-
-import { DetailsProvider,
-    EditProvider,
-    LayoutProvider,
-    SortProvider,
-    NavProvider,
-    ProviderProvider,
-    SelectionProvider,
-    DragProvider } from '@/providers'
+import { NavProvider } from '@/providers/NavProvider'
+import { ProviderProvider } from '@/providers/ProviderProvider'
+import { SelectionProvider } from '@/providers/SelectionProvider'
+import { DragProvider } from '@/providers/DragProvider'
+import { EditProvider } from '@/providers/EditProvider'
+import { LayoutProvider } from '@/providers/LayoutProvider'
+import { SortProvider } from '@/providers/SortProvider'
 
 interface Props {
     children: ReactNode
@@ -30,8 +28,7 @@ const TestProvider = (props: Props) => {
                     NavProvider,
                     EditProvider,
                     LayoutProvider,
-                    SortProvider,
-                    DetailsProvider
+                    SortProvider
                 ]}
                 >
                     {children}

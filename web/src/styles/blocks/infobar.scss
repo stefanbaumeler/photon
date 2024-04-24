@@ -1,0 +1,87 @@
+@mixin infobar-root {
+    background-color: $color-white;
+    width: $sidebar-width * 1.5;
+    height: 100%;
+    transition: translate .25s;
+    translate: 100%;
+    flex-shrink: 0;
+    overflow: auto;
+    z-index: 1;
+
+    @at-root .details--active & {
+        translate: none;
+    }
+}
+
+@mixin infobar-content {
+    padding-top: 64px;
+}
+
+@mixin infobar-map {
+    cursor: default;
+    margin-top: 20px;
+}
+
+@mixin infobar-section {
+    border-bottom: 1px solid $color-gray-light;
+    padding-top: 24px;
+
+    &:has(+ .infobar__map) {
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+}
+
+@mixin infobar-title {
+    font-size: 10px;
+    line-height: 10px;
+    letter-spacing: 1.5px;
+    color: $color-gray;
+    font-weight: 600;
+    padding-left: 14px;
+    text-transform: uppercase;
+}
+
+@mixin infobar-description-container {
+    padding: 24px 14px 0;
+}
+
+@mixin infobar-description {
+    border-width: 0 0 2px 0;
+    height: 1.5em;
+    border-color: $color-gray-light;
+    width: 100%;
+    resize: none;
+}
+
+@mixin infobar {
+    .infobar {
+        @include infobar-root;
+
+        &__content {
+            @include infobar-content;
+        }
+
+        &__map {
+            @include infobar-map;
+        }
+
+        &__section {
+            @include infobar-section;
+        }
+
+        &__title {
+            @include infobar-title;
+        }
+
+        &__description-container {
+            @include infobar-description-container;
+        }
+
+        &__description {
+            @include infobar-description;
+        }
+    }
+}
+
+@include infobar;

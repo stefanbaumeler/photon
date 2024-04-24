@@ -6,7 +6,7 @@ export {}
 // import { I18nextProvider } from 'react-i18next'
 // import i18next from '@/translations'
 // import { SelectionProvider } from '@/providers'
-// import { TMedium } from '@photon/schema'
+// import { TMedium } from '@photon/schema/dist/client'
 //
 // jest.mock('next/router', () => ({
 //     useRouter () {

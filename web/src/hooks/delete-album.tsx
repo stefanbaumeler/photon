@@ -1,5 +1,5 @@
-import { useMDeleteAlbums } from '@photon/schema'
-import { useRouter } from 'next/router'
+import { useMDeleteAlbums } from '@photon/schema/dist/client'
+import { useParams, useRouter } from 'next/navigation'
 import { asArray } from '@/util/as'
 
 type Props = {
@@ -11,7 +11,8 @@ export const useDeleteAlbum = ({
     id, callback
 }: Props) => {
     const router = useRouter()
-    const idsToDelete = id ? asArray(id) : router.query.id
+    const params = useParams()
+    const idsToDelete = id ? asArray(id) : params.id
 
     const [, deleteMedia] = useMDeleteAlbums()
 

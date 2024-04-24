@@ -1,8 +1,9 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { EKeyboardScope, ESelectionMode } from '@/types/app'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { useHotkeysContext } from 'react-hotkeys-hook'
 import { useHotkey } from '@/hooks/hotkey'
+import bem from '@/util/bem'
 
 type Props = {
     children?: ReactNode
@@ -30,7 +31,7 @@ const SelectionProvider = ({ children }: Props) => {
     const [lastAdded, setLastAdded] = useState<string>()
     const [shiftTargets, setShiftTargets] = useState<string[]>([])
     const [shift, setShift] = useState(false)
-    const router = useRouter()
+    const pathname = usePathname()
 
     const clear = () => {
         if (selected.size || mode === ESelectionMode.DELETE) {
@@ -78,6 +79,10 @@ const SelectionProvider = ({ children }: Props) => {
         scopes: EKeyboardScope.select
     })
 
+    const classes = bem('selection-state', [
+        ['selecting', mode !== ESelectionMode.OFF]
+    ])
+
     return <SelectionContext.Provider value={{
         shift,
         selected,
@@ -103,7 +108,7 @@ const SelectionProvider = ({ children }: Props) => {
             }
 
             if (newSet.size !== 0 && mode === ESelectionMode.OFF) {
-                setMode(router.pathname.endsWith('/albums') ? ESelectionMode.ALBUMS : ESelectionMode.SELECT)
+                setMode(pathname.endsWith('/albums') ? ESelectionMode.ALBUMS : ESelectionMode.SELECT)
             }
         },
         remove (items) {
@@ -154,7 +159,9 @@ const SelectionProvider = ({ children }: Props) => {
         }
     }}
     >
-        {children}
+        <div className={classes}>
+            {children}
+        </div>
     </SelectionContext.Provider>
 }
 

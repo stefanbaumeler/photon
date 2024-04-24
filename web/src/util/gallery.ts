@@ -1,5 +1,5 @@
 import findShortestPath from './dijkstra'
-import { TMedium } from '@photon/schema'
+import { TMedium } from '@photon/schema/dist/client'
 
 type TGalleryConfig = {
     containerWidth: number

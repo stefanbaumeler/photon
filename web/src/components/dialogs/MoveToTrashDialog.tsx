@@ -1,9 +1,10 @@
 import { ETrans } from '@/types/translations'
-import { useSearchContext, useSelectionContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
-import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
-import { Dialog } from '@/components'
+import { useSetMediaStatus } from '@/hooks/set-status'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { Dialog } from '@/components/shared/Dialog'
 
 type Props = {
     media: string[]

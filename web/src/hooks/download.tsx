@@ -1,5 +1,5 @@
-import { useQDownload } from '@photon/schema'
-import { useRouter } from 'next/router'
+import { useQDownload } from '@photon/schema/dist/client'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 type Props = {

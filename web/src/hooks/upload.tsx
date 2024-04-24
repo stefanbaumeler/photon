@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import tauri from '../tauri'
-import { initializeAuthState } from '@/api'
-import { useSearchContext } from '@/providers'
+import { initializeAuthState } from '@/api/exchanges/authExchange'
+import { useSearchContext } from '@/providers/SearchProvider'
 
 export const useUpload = () => {
     const [files, setFiles] = useState<File[] | FileList>()

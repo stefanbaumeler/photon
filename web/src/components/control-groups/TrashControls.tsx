@@ -1,11 +1,12 @@
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { RestoreControl } from '@/components/controls/RestoreControl'
 import { DeleteControl } from '@/components/controls/DeleteControl'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const TrashControls = () => {
     const selection = useSelectionContext()
-    const details = useDetailsContext()
-    const media = details.active && details.medium?.id ? [details.medium.id] : [...selection.selected]
+    const { medium } = useMediumFromRouter()
+    const media = medium ? [medium.id] : [...selection.selected]
 
     return <>
         <DeleteControl media={media} />

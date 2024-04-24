@@ -1,19 +1,23 @@
-import { TQAlbums } from '@photon/schema'
+'use client'
+
+import { useQAlbums } from '@photon/schema/dist/client'
 import { ELayout } from '@/types/app'
-import { useLayoutContext } from '@/providers'
-import { GridView, ListView } from '@/components'
+import { useLayoutContext } from '@/providers/LayoutProvider'
+import { GridView } from '@/components/shared/GridView'
+import { ListView } from '@/components/shared/ListView'
 
-type Props = {
-    albums: Required<TQAlbums['albums']>
-}
-
-export const Albums = ({ albums }: Props) => {
+export const Albums = () => {
+    const [{  data }] = useQAlbums()
     const layout = useLayoutContext()
+
+    if (!data?.albums) {
+        return null
+    }
 
     if (layout.albumsLayout === ELayout.GRID) {
         return <GridView
             albums
-            elements={albums.map((album) => {
+            elements={data.albums.map((album) => {
                 return {
                     id: album.id,
                     cover: album.cover ?? null,
@@ -26,7 +30,7 @@ export const Albums = ({ albums }: Props) => {
     }
 
     if (layout.albumsLayout === ELayout.LIST) {
-        return <ListView albums={albums.map((album) => {
+        return <ListView albums={data.albums.map((album) => {
             return {
                 id: album.id,
                 cover: album.cover ?? null,
@@ -37,4 +41,6 @@ export const Albums = ({ albums }: Props) => {
         })}
         />
     }
+
+    return null
 }

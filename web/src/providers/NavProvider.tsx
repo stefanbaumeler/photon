@@ -1,11 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 import * as Icons from '@mdi/js'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { EMediumStatus, ENavItemType, ENavs, TNav, TNavContext, TNavItem } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { useDragContext, useSelectionContext } from '@/providers/index'
-import { useAddToFavorites, useSetMediaStatus } from '@/hooks'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useDragContext } from '@/providers/DragProvider'
+import { useAddToFavorites } from '@/hooks/add-to-favorites'
+import { useSetMediaStatus } from '@/hooks/set-status'
 
 type Props = {
     children?: ReactNode
@@ -14,7 +16,6 @@ type Props = {
 const NavContext = createContext<TNavContext | null>(null)
 
 const NavProvider = ({ children }: Props) => {
-    const router = useRouter()
     const { t } = useTranslation()
     const selection = useSelectionContext()
 
@@ -42,8 +43,8 @@ const NavProvider = ({ children }: Props) => {
         media: actUpon,
         status: EMediumStatus.ALL
     })
-
-    const defaultNav = router.route.split('/')[1].toUpperCase()
+    const pathname = usePathname()
+    const defaultNav = pathname.split('/')[1].toUpperCase()
 
     const [active, setActive] = useState([Object.keys(ENavs).includes(defaultNav.toUpperCase()) ? defaultNav : ENavs.HOME])
 
@@ -68,7 +69,7 @@ const NavProvider = ({ children }: Props) => {
                     href: '',
                     testId: 'nav-index',
                     onDrop: moveToAll,
-                    canDrop: router.pathname !== '/' && router.pathname !== '/favorites' && !router.pathname.includes('/albums'),
+                    canDrop: pathname !== '/' && pathname !== '/favorites' && !pathname.includes('/albums'),
                     type: ENavItemType.ALL
                 },
                 {
@@ -204,7 +205,7 @@ const NavProvider = ({ children }: Props) => {
     ] as TNav[]
 
     const setActiveItem = (navs: TNav[]) => {
-        const route = router.route.substring( 1, router.route.length)
+        const route = pathname.substring( 1, pathname.length)
         navs.forEach((nav) => {
             nav.items.forEach((item) => {
                 item.active = item.href === route
@@ -219,7 +220,7 @@ const NavProvider = ({ children }: Props) => {
         setActive,
         navs,
         getActiveItem,
-        pathname: router.pathname
+        pathname: pathname
     }}
     >
         {children}

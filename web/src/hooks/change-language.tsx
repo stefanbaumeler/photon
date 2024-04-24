@@ -1,4 +1,4 @@
-import { useMChangeLanguage } from '@photon/schema'
+import { useMChangeLanguage } from '@photon/schema/dist/client'
 
 export const useChangeLanguage = (language: string) => {
     const [, changeLanguage] = useMChangeLanguage()

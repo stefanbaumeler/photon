@@ -1,9 +1,10 @@
-import { Thumbnail } from '..'
 import { EThumbnailType, TThumbnail } from '@/types/app'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useAddToNewAlbum, useAddToAlbum } from '@/hooks'
-import { useQAlbums } from '@photon/schema'
+import { useQAlbums } from '@photon/schema/dist/client'
+import { useAddToNewAlbum } from '@/hooks/add-to-new-album'
+import { useAddToAlbum } from '@/hooks/add-to-album'
+import { Thumbnail } from '@/components/shared/Thumbnail'
 
 export const Thumbnails = () => {
     const { t } = useTranslation()

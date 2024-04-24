@@ -14,7 +14,7 @@ export default {
     setting_plural: 'Settings',
     general: 'General',
     security: 'Security',
-    user: 'User',
+    user: ' User',
     user_plural: 'Users',
     api: 'API',
     search: 'Search',

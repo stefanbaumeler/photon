@@ -1,26 +1,33 @@
-import { Check, Medium } from '@/components'
-import { ListItemControls } from '@/components/control-groups'
 import { formatDate } from '@/util/date'
-import { useSelectionContext, useDetailsContext } from '@/providers'
 import { ESelectionMode, TMediumListItem } from '@/types/app'
 import Tippy from '@tippyjs/react'
-import { useEffect, useRef } from 'react'
-import { FavoriteControl } from '@/components/controls'
+import { useRef } from 'react'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { Check } from '@/components/shared/Check'
+import { FavoriteControl } from '@/components/controls/FavoriteControl'
+import { ListItemControls } from '@/components/control-groups/ListItemControls'
+import { Medium } from '@/components/shared/Medium'
+import Link from 'next/link'
+import { getDetailsUrl } from '@/util/routing'
+import { useParams, usePathname } from 'next/navigation'
 export const MediumListItem = ({
     id, title, cover, dateTaken, mimetype, owner
 }: TMediumListItem) => {
+    const params = useParams()
+    const pathname = usePathname()
+    const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
+
     const selection = useSelectionContext()
-    const details = useDetailsContext()
 
     // const [updatedSource, setUpdatedSource] = useState(0)
 
     const src = useRef(0)
 
-    useEffect(() => {
-        if (id === details.medium?.id) {
-            src.current = src.current + 1
-        }
-    }, [id, details.medium?.id, src, details.rotationRequest])
+    // useEffect(() => {
+    //     if (id === details.medium?.id) {
+    //         src.current = src.current + 1
+    //     }
+    // }, [id, details.medium?.id, src, details.rotationRequest])
 
     const select = () => {
         if (selection.mode === ESelectionMode.OFF) {
@@ -30,14 +37,16 @@ export const MediumListItem = ({
         selection.toggle(id)
     }
 
-    const open = () => {
-        if (cover) {
-            details.open({
-                ...cover,
-                id
-            })
-        }
-    }
+    // const open = () => {
+    //     if (cover) {
+    //         details.open({
+    //             ...cover,
+    //             id
+    //         })
+    //     }
+    // }
+
+    const href = getDetailsUrl(pathname, id, album)
 
     return <tr
         className="list-view__row"
@@ -63,51 +72,71 @@ export const MediumListItem = ({
         </td>
         <td
             className="list-view__cell list-view__cell--image"
-            onClick={open}
         >
-            <Tippy
-                className="list-view__tip"
-                followCursor
-                content={<Medium
-                    updateHash={src.current}
-                    medium={cover}
-                    width={500}
-                    position={'top'}
-                />}
-                theme="transparent"
-                zIndex={102}
+            <Link
+                href={href}
+                className="list-view__link"
             >
-                <Medium
-                    testId="teaser-image"
-                    updateHash={src.current}
-                    medium={cover}
-                    width={50}
-                />
-            </Tippy>
+                <Tippy
+                    className="list-view__tip"
+                    followCursor
+                    content={<Medium
+                        updateHash={src.current}
+                        medium={cover}
+                        width={500}
+                        position={'top'}
+                    />}
+                    theme="transparent"
+                    zIndex={102}
+                >
+                    <Medium
+                        testId="teaser-image"
+                        updateHash={src.current}
+                        medium={cover}
+                        width={50}
+                    />
+                </Tippy>
+            </Link>
         </td>
         <td
             className="list-view__cell list-view__cell--title"
-            onClick={open}
         >
-            {title}
+            <Link
+                href={href}
+                className="list-view__link"
+            >
+                {title}
+            </Link>
         </td>
         { dateTaken ? <td
             className="list-view__cell"
-            onClick={open}
         >
-            {formatDate(dateTaken)}
+            <Link
+                href={href}
+                className="list-view__link"
+            >
+                {formatDate(dateTaken)}
+            </Link>
         </td> : null}
         {mimetype ? <td
             className="list-view__cell"
-            onClick={open}
         >
-            {mimetype}
+            <Link
+                href={href}
+                className="list-view__link"
+            >
+                {mimetype}
+            </Link>
         </td> : null}
         <td
             className="list-view__cell"
-            onClick={open}
         >
-            {`${owner.firstName} ${owner.lastName}`}
+            <Link
+                href={href}
+                className="list-view__link"
+            >
+                {`${owner.firstName} ${owner.lastName}`}
+            </Link>
         </td>
         <td className="list-view__cell">
             <ListItemControls

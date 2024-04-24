@@ -9,7 +9,7 @@
         "dev": "tsc --watch"
     },
     "devDependencies": {
-        "typescript": "^4.7.4",
+        "typescript": "*",
         "eslint": "^8.20.0",
         "eslint-plugin-react": "^7.30.1"
     }

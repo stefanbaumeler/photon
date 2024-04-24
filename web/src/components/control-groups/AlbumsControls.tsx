@@ -1,4 +1,5 @@
-import { CreateAlbumControl, AlbumsViewControl } from '@/components/controls'
+import { AlbumsViewControl } from '@/components/controls/AlbumsViewControl'
+import { CreateAlbumControl } from '@/components/controls/CreateAlbumControl'
 
 export const AlbumsControls = () => {
     return <div className="actions">

@@ -1,12 +1,16 @@
+'use client'
+
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { EMediumStatus } from '@/types/app'
 import { useSortContext } from '@/providers/SortProvider'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 import { sortMediaByDate } from '@/util/sort'
-import { TQMedia, useQMedia } from '@photon/schema'
+import { TQMedia, useQMedia } from '@photon/schema/dist/client'
 
 type Props = {
     children?: ReactNode
+    status?: EMediumStatus
+    favorites?: boolean
 }
 
 interface SearchContext {
@@ -22,24 +26,26 @@ interface SearchContext {
 
 const SearchContext = createContext<SearchContext | null>(null)
 
-const SearchProvider = ({ children }: Props) => {
-    const router = useRouter()
+const SearchProvider = ({
+    children, status: defaultStatus = EMediumStatus.ALL, favorites: defaultFavorites = false
+}: Props) => {
+    const params = useParams()
+    const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
 
-    const album = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
-
-    const [status, setStatus] = useState(EMediumStatus.ALL)
-    const [favorites, setFavorites] = useState(false)
-    const [query, setQuery] = useState('')
+    const [status, setStatus] = useState(defaultStatus)
+    const [favorites, setFavorites] = useState(defaultFavorites)
+    const [searchQuery, setSearchQuery] = useState('')
     const { sort } = useSortContext()
+
     const [{ data: media }, refresh] = useQMedia({
         variables: {
             status,
             sort,
             album,
             favorites,
-            q: query
+            q: searchQuery
         },
-        pause: !router.isReady || !status
+        pause: !status
     })
 
     const sortedMedia = sortMediaByDate<TQMedia['media']>(media?.media || [], sort)
@@ -50,8 +56,8 @@ const SearchProvider = ({ children }: Props) => {
         status,
         favorites,
         setFavorites,
-        query,
-        setQuery,
+        query: searchQuery,
+        setQuery: setSearchQuery,
         refresh: () => {
             refresh({
                 requestPolicy: 'network-only'

@@ -9,7 +9,7 @@
         "generate:colors": "ts-node colors"
     },
     "devDependencies": {
-        "typescript": "^4.7.4",
+        "typescript": "*",
         "ts-node": "*"
     }
 }

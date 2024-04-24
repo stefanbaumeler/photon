@@ -1,8 +1,9 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useSignOut } from '@/hooks'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { useSignOut } from '@/hooks/sign-out'
+import { Button } from '@/components/shared/Button'
 
 type Props = {
     dropdown?: boolean

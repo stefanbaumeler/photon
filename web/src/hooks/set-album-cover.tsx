@@ -1,6 +1,6 @@
-import { useMUpdateAlbum } from '@photon/schema'
-import { useSelectionContext } from '@/providers'
-import { useRouter } from 'next/router'
+import { useMUpdateAlbum } from '@photon/schema/dist/client'
+import { useRouter } from 'next/navigation'
+import { useSelectionContext } from '@/providers/SelectionProvider'
 
 export const useSetAlbumCover = (idAlbum?: string, idMedium?: string) => {
     const selection = useSelectionContext()

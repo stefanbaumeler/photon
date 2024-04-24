@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { TDropdownItem } from '@/types/app'
-import { Button, Dropdown } from '@/components'
 import * as Icons from '@mdi/js'
 import i18next from '@/translations'
-import { useMChangeLanguage, useQProfile } from '@photon/schema'
+import { useMChangeLanguage, useQProfile } from '@photon/schema/dist/client'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
 
 export const LanguageSwitcher = () => {
     const [moreActive, setMoreActive] = useState(false)

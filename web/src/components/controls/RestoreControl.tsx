@@ -1,10 +1,14 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useState } from 'react'
-import { RestoreMediaDialog } from '@/components/dialogs'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { RestoreMediaDialog } from '@/components/dialogs/RestoreMediaDialog'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
+import { usePathname, useRouter } from 'next/navigation'
+import { getParentUrl } from '@/util/routing'
 
 type Props = {
     dropdown?: boolean
@@ -17,21 +21,23 @@ export const RestoreControl = ({
 }: Props) => {
     const selection = useSelectionContext()
     const [dialogActive, setDialogActive] = useState(false)
+    const { medium } = useMediumFromRouter()
+    const router = useRouter()
+    const pathname = usePathname()
 
     const { t } = useTranslation()
-    const details = useDetailsContext()
-
-    const action = () => {
-        setDialogActive(false)
-        details.close()
-        selection.clear()
-        callback && callback()
-    }
 
     return <>
         {dialogActive ? <RestoreMediaDialog
             media={media}
-            closeCallback={action}
+            closeCallback={(actionTaken) => {
+                setDialogActive(false)
+                if (actionTaken) {
+                    router.push(getParentUrl(pathname))
+                    selection.clear()
+                    callback && callback()
+                }
+            }}
         /> : null}
         {dropdown ? <DropdownItem item={{
             testId: 'trash-restore',
@@ -51,7 +57,7 @@ export const RestoreControl = ({
             testId="trash-restore"
             appearance={{
                 type: 'tertiary',
-                text: details.active ? 'light' : undefined
+                text: medium ? 'light' : undefined
             }}
         />}
     </>

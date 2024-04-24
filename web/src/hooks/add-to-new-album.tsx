@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useMCreateAlbum } from '@photon/schema'
-import { useSelectionContext } from '@/providers'
-import { useRouter } from 'next/router'
+import { useMCreateAlbum } from '@photon/schema/dist/client'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useRouter } from 'next/navigation'
 
 export const useAddToNewAlbum = () => {
     const router = useRouter()
@@ -17,9 +17,8 @@ export const useAddToNewAlbum = () => {
                 media: Array.from(selection.selected)
             }).then((result) => {
                 if (result.data) {
-                    router.push(`/albums/${result.data.createAlbum.id}`).then(() => {
-                        selection.clear()
-                    })
+                    router.push(`/albums/${result.data.createAlbum.id}`)
+                    selection.clear()
                 }
             })
         }

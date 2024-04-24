@@ -1,5 +1,6 @@
 import { ETrans } from '@/types/translations'
-import { Dialog, Thumbnails } from '@/components'
+import { Dialog } from '@/components/shared/Dialog'
+import { Thumbnails } from '@/components/shared/Thumbnails'
 import { useTranslation } from 'react-i18next'
 
 type Props = {

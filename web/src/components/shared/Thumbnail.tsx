@@ -4,7 +4,7 @@ import { EThumbnailType, TThumbnail } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
 import bem from '../../util/bem'
-import { useQMedium } from '@photon/schema'
+import { useQMedium } from '@photon/schema/dist/client'
 
 export const Thumbnail = ({
     idMedium, title, onClick,

@@ -1,10 +1,14 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useState } from 'react'
-import { DeleteMediaDialog, RestoreMediaDialog } from '@/components/dialogs'
+import { DeleteMediaDialog } from '@/components/dialogs/DeleteMediaDialog'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
+import { getParentUrl } from '@/util/routing'
+import { usePathname, useRouter } from 'next/navigation'
 
 type Props = {
     dropdown?: boolean
@@ -17,21 +21,23 @@ export const DeleteControl = ({
 }: Props) => {
     const selection = useSelectionContext()
     const [dialogActive, setDialogActive] = useState(false)
-
+    const { medium } = useMediumFromRouter()
     const { t } = useTranslation()
-    const details = useDetailsContext()
-
-    const action = () => {
-        setDialogActive(false)
-        details.close()
-        selection.clear()
-        callback && callback()
-    }
+    const router = useRouter()
+    const pathname = usePathname()
 
     return <>
         {dialogActive ? <DeleteMediaDialog
             media={media}
-            closeCallback={action}
+            closeCallback={(actionTaken) => {
+                setDialogActive(false)
+
+                if (actionTaken) {
+                    router.push(getParentUrl(pathname))
+                    selection.clear()
+                    callback && callback()
+                }
+            }}
         /> : null}
         {dropdown ? <DropdownItem item={{
             testId: 'trash-delete',
@@ -48,7 +54,7 @@ export const DeleteControl = ({
             testId="trash-delete"
             appearance={{
                 type: 'tertiary',
-                text: details.active ? 'light' : undefined
+                text: medium ? 'light' : undefined
             }}
         />}
     </>

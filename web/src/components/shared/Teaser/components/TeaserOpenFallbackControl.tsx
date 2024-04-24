@@ -1,31 +1,30 @@
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
-import { useTeaserContext } from '..'
 import bem from '@/util/bem'
 import { ESelectionMode } from '@/types/app'
-import { useSelectionContext } from '@/providers'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import Link from 'next/link'
 
-export const TeaserOpenFallbackControl = () => {
-    const { onOpen } = useTeaserContext()
+type Props = {
+    href: string
+}
+
+export const TeaserOpenFallbackControl = ({ href }: Props) => {
     const selection = useSelectionContext()
-
-    const open = () => {
-        onOpen && onOpen()
-    }
 
     const fallbackButtonClasses = bem('teaser__open-fallback', [
         ['delete', selection.mode === ESelectionMode.DELETE],
         ['single', selection.mode === ESelectionMode.SINGLE]
     ])
 
-    return <button
+    return <Link
+        href={href}
         data-testid="teaser-details-fallback"
         className={fallbackButtonClasses}
-        onClick={open}
     >
         <Icon
             path={Icons.mdiMagnifyPlusOutline}
             size={1}
         />
-    </button>
+    </Link>
 }

@@ -1,11 +1,13 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDownload } from '@/hooks'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useHotkey } from '@/hooks/hotkey'
 import { EKeyboardScope } from '@/types/app'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useDownload } from '@/hooks/download'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     elements?: string[]
@@ -18,9 +20,9 @@ export const DownloadMediaControl = ({
     elements, dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
     const selection = useSelectionContext()
     const selectedMedia = elements ?? [...selection.selected]
+    const { medium } = useMediumFromRouter()
 
     const actionCallback = () => {
         if (selection.selected.size) {
@@ -56,7 +58,7 @@ export const DownloadMediaControl = ({
         hint={t(ETrans.DOWNLOAD)}
         shortcut={shortcut ? 'D' : undefined}
         onClick={action}
-        appearance={details.active ? {
+        appearance={medium ? {
             text: 'light'
         } : undefined}
         icon={Icons.mdiTrayArrowDown}

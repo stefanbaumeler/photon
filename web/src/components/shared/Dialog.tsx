@@ -1,9 +1,9 @@
-import { Button } from '@/components'
 import { ReactNode, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { EKeyboardScope } from '@/types/app'
 import { useHotkeysContext } from 'react-hotkeys-hook'
 import { useHotkey } from '@/hooks/hotkey'
+import { Button } from '@/components/shared/Button'
 
 type Props = {
     title?: string

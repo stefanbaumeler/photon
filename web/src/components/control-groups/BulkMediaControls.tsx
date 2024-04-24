@@ -1,17 +1,22 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '@/components'
 import { useState } from 'react'
-import { useSelectionContext } from '@/providers'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import bem from '@/util/bem'
-import { TrashControls } from '@/components/control-groups'
-import { FavoriteControl, ArchiveControl, MoveToTrashControl, AddToControl, DownloadMediaControl } from '@/components/controls'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { TrashControls } from '@/components/control-groups/TrashControls'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
+import { ArchiveControl } from '@/components/controls/ArchiveControl'
+import { FavoriteControl } from '@/components/controls/FavoriteControl'
+import { AddToControl } from '@/components/controls/AddToControl'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
 
 export const BulkMediaControls = () => {
     const { t } = useTranslation()
-    const router = useRouter()
+    const pathname = usePathname()
     const selection = useSelectionContext()
 
     const selected = [...selection.selected]
@@ -36,7 +41,7 @@ export const BulkMediaControls = () => {
     ]
 
     const classes = bem('actions', [
-        ['labeled', router.pathname === '/trash']
+        ['labeled', pathname === '/trash']
     ])
 
     return <div
@@ -51,7 +56,7 @@ export const BulkMediaControls = () => {
                 n: selected.length
             })}
         </span>
-        {router.pathname === '/trash' ? <TrashControls /> : <>
+        {pathname === '/trash' ? <TrashControls /> : <>
             <AddToControl />
             <DownloadMediaControl
                 shortcut

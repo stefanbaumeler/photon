@@ -1,12 +1,14 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDownload } from '@/hooks'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { EKeyboardScope, EMediumStatus, ESelectionMode } from '@/types/app'
-import { useQAlbums } from '@photon/schema'
+import { useQAlbums } from '@photon/schema/dist/client'
 import { useHotkey } from '@/hooks/hotkey'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useDownload } from '@/hooks/download'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     dropdown?: boolean
@@ -17,7 +19,7 @@ export const DownloadAlbumsControl = ({
     dropdown, shortcut
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
+    const { medium } = useMediumFromRouter()
     const selection = useSelectionContext()
     const [{ data: albums }] = useQAlbums({
         pause: selection.mode !== ESelectionMode.ALBUMS
@@ -58,7 +60,7 @@ export const DownloadAlbumsControl = ({
         hint={t(ETrans.DOWNLOAD)}
         shortcut={shortcut ? 'D' : undefined}
         onClick={download}
-        appearance={details.active ? {
+        appearance={medium ? {
             text: 'light'
         } : undefined}
         icon={Icons.mdiTrayArrowDown}

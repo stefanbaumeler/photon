@@ -1,5 +1,5 @@
-import { Teaser } from '@/components'
 import { TGridItem } from '@/types/app'
+import { Teaser } from '@/components/shared/Teaser'
 
 type Props = {
     albums?: boolean

@@ -5,30 +5,9 @@ module.exports = withGraphql({
     reactStrictMode: true,
     swcMinify: true,
     output: 'standalone',
-    async rewrites () {
-        return [
-            {
-                source: '/albums/:idAlbum/media/:idMedium',
-                destination: '/albums/:idAlbum?idMedium=:idMedium'
-            },
-            {
-                source: '/media/:idMedium',
-                destination: '/?idMedium=:idMedium'
-            },
-            {
-                source: '/favorites/:idMedium',
-                destination: '/favorites?idMedium=:idMedium'
-            },
-            {
-                source: '/archive/media/:idMedium',
-                destination: '/archive?idMedium=:idMedium'
-            },
-            {
-                source: '/trash/media/:idMedium',
-                destination: '/trash?idMedium=:idMedium'
-            }
-        ]
-    },
+    // eslint: {
+    //     ignoreDuringBuilds: true
+    // },
     images: {
         unoptimized: true
     }

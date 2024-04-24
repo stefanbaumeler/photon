@@ -1,6 +1,6 @@
 import { TDropdownItem } from '@/types/app'
-import { DropdownItem } from '..'
 import { JSX } from 'react'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
 
 type Props = {
     items: (TDropdownItem | JSX.Element)[]

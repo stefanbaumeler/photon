@@ -19,13 +19,12 @@ export default {
                 minify: true
             }
         },
-        './packages/schema/index.ts': {
+        './packages/schema/client.ts': {
             plugins: [
                 'typescript',
                 'typescript-resolvers',
                 'typescript-operations',
                 'typescript-urql',
-                'typescript-urql-graphcache',
                 {
                     add: {
                         content: 'import { FileUpload } from \'graphql-upload-minimal\''
@@ -39,6 +38,35 @@ export default {
                 preResolveTypes: false,
                 useTypeImports: true,
                 withMutationFn: true,
+                typesPrefix: 'T',
+                addDocBlocks: true,
+                dedupeFragments: true,
+                omitOperationSuffix: true,
+                namingConvention: {
+                    typeNames: 'pascal-case#pascalCase',
+                    transformUnderscore: true
+                }
+            }
+        },
+        './packages/schema/server.ts': {
+            plugins: [
+                'typescript',
+                'typescript-resolvers',
+                'typescript-operations',
+                'typescript-urql',
+                {
+                    add: {
+                        content: 'import { FileUpload } from \'graphql-upload-minimal\''
+                    }
+                }
+            ],
+            config: {
+                scalars: {
+                    Upload: 'Promise<FileUpload>'
+                },
+                withHooks: false,
+                preResolveTypes: false,
+                useTypeImports: true,
                 typesPrefix: 'T',
                 addDocBlocks: true,
                 dedupeFragments: true,

@@ -1,7 +1,7 @@
 import { formatDate } from '@/util/date'
 import { EDateFormat } from '@/types/app'
 import { MouseEventHandler } from 'react'
-import { useScrollbarContext } from '..'
+import { useScrollbarContext } from '@/components/shared/Scrollbar/components/ScrollbarContext'
 
 type Props = {
     percentage?: number

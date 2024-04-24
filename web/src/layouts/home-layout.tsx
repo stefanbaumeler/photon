@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import { useSelectionContext } from '@/providers'
 import { ESelectionMode } from '@/types/app'
 import bem from '../util/bem'
+import { useSelectionContext } from '@/providers/SelectionProvider'
 
 type Props = {
     children?: ReactNode

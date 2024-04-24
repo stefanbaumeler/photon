@@ -1,10 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { useSortContext } from '@/providers'
 import { EMediumSort } from '@/types/app'
+import { useSortContext } from '@/providers/SortProvider'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
 
 export const SortControl = () => {
     const { t } = useTranslation()

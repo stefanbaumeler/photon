@@ -1,6 +1,6 @@
 import { forwardRef, ReactElement, Ref } from 'react'
 import { Placement } from 'tippy.js'
-import { Tooltip } from '@/components'
+import { Tooltip } from '@/components/shared/Tooltip'
 
 type Props = {
     id: string

@@ -1,4 +1,4 @@
-import { useScrollbarContext } from '..'
+import { useScrollbarContext } from '@/components/shared/Scrollbar/components/ScrollbarContext'
 
 type Props = {
     mouseY: number

@@ -1,12 +1,15 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
-import { useDetailsContext, useSearchContext, useSelectionContext } from '@/providers'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useHotkey } from '@/hooks/hotkey'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { useSetMediaStatus } from '@/hooks/set-status'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     media: string[]
@@ -19,7 +22,7 @@ export const ArchiveControl = ({
     media, dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
+    const { medium } = useMediumFromRouter()
     const selection = useSelectionContext()
     const search = useSearchContext()
     const router = useRouter()
@@ -49,16 +52,10 @@ export const ArchiveControl = ({
             selection.clear()
         }
 
-        if (details.active) {
-            await details.close()
-        }
-
         if (shouldArchive) {
             search.setStatus(EMediumStatus.ARCHIVED)
 
-            await router.push('/archive', undefined, {
-                shallow: true
-            })
+            router.push('/archive')
         }
 
         callback && callback()
@@ -86,7 +83,7 @@ export const ArchiveControl = ({
         hint={label}
         shortcut={shortcut ? 'A' : undefined}
         icon={icon}
-        appearance={details.active ? {
+        appearance={medium ? {
             text: 'light'
         } : undefined}
     />

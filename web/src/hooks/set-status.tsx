@@ -1,4 +1,4 @@
-import { useMUpdateMedia } from '@photon/schema'
+import { useMUpdateMedia } from '@photon/schema/dist/client'
 import { EMediumStatus } from '@/types/app'
 
 type Props = {

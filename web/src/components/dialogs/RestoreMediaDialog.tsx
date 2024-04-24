@@ -1,13 +1,13 @@
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useSetMediaStatus } from '@/hooks'
 import { EMediumStatus } from '@/types/app'
 import { asArray } from '@/util/as'
-import { Dialog } from '@/components'
+import { useSetMediaStatus } from '@/hooks/set-status'
+import { Dialog } from '@/components/shared/Dialog'
 
 type Props = {
     media: string[]
-    closeCallback: () => void
+    closeCallback: (actionTaken: boolean) => void
 }
 
 export const RestoreMediaDialog = ({
@@ -21,11 +21,11 @@ export const RestoreMediaDialog = ({
 
     const submit = () => {
         restore()
-        closeCallback()
+        closeCallback(true)
     }
 
     return <Dialog
-        closeCallback={closeCallback}
+        closeCallback={() => closeCallback(false)}
         title={t(ETrans.RESTORE)}
         text={t(ETrans.RESTORE_THING, {
             count: asArray(media).length || 1,
@@ -36,7 +36,7 @@ export const RestoreMediaDialog = ({
         buttons={[
             {
                 label: t(ETrans.CANCEL),
-                onClick: closeCallback,
+                onClick: () => closeCallback(false),
                 appearance: {
                     type: 'secondary'
                 }

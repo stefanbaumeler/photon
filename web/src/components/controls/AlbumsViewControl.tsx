@@ -1,11 +1,12 @@
 import * as Icons from '@mdi/js'
-import { Button, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { useLayoutContext } from '@/providers'
 import { ELayout } from '@/types/app'
 import { useHotkey } from '@/hooks/hotkey'
+import { useLayoutContext } from '@/src/providers/LayoutProvider'
+import { Button } from '../shared/Button'
+import { Dropdown } from '../shared/Dropdown'
 
 export const AlbumsViewControl = () => {
     const { t } = useTranslation()

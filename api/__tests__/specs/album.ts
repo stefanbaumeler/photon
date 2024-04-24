@@ -1,4 +1,4 @@
-// import * as Schema from '@photon/schema'
+// import * as Schema from '@photon/schema/server'
 // import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 // import { strict as assert } from 'assert'
 // import { useTestQuery } from '../utility'

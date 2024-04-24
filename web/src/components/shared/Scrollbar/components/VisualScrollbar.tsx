@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import bem from '@/util/bem'
-import { ScrollbarCursor, useScrollbarContext, ScrollbarPosition, ScrollbarYears } from '..'
+import { useScrollbarContext } from '@/components/shared/Scrollbar/components/ScrollbarContext'
+import { ScrollbarYears } from '@/components/shared/Scrollbar/components/ScrollbarYears'
+import { ScrollbarPosition } from '@/components/shared/Scrollbar/components/ScrollbarPosition'
+import { ScrollbarCursor } from '@/components/shared/Scrollbar/components/ScrollbarCursor'
 
 export const VisualScrollbar = () => {
     const [mouseY, setMouseY] = useState<number>(0)

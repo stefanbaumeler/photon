@@ -1,17 +1,22 @@
 import * as Icons from '@mdi/js'
-import { Dropdown, Button } from '../'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { MoveToTrashControl, SetAlbumCoverControl, ViewControl, SortControl, DownloadMediaControl } from '@/components/controls'
-import { useQAlbum } from '@photon/schema'
+import { useParams } from 'next/navigation'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
+import { SetAlbumCoverControl } from '@/components/controls/SetAlbumCoverControl'
+import { ViewControl } from '@/components/controls/ViewControl'
+import { SortControl } from '@/components/controls/SortControl'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { useQAlbum } from '@photon/schema/dist/client'
 import { ETrans } from '@/types/translations'
 
 export const AlbumControls = () => {
     const { t } = useTranslation()
-    const router = useRouter()
+    const params = useParams()
 
-    const id = Array.isArray(router.query.idAlbum) ? router.query.idAlbum?.join('') : router.query.idAlbum
+    const id = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
     const [moreActive, setMoreActive] = useState(false)
 
     const [{ data }] = useQAlbum({

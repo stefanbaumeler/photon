@@ -56,18 +56,21 @@ export class AlbumRepository {
     }
 
     async findManyByMedium (dto: IdDto) {
-        return this.prisma.album.findMany({
+        return this.prisma.medium.findUnique({
             where: {
-                media: {
-                    some: {
-                        id: dto.id
-                    }
-                }
+                id: dto.id
             },
             include: {
-                cover: true,
-                media: true,
-                owner: true
+                albums: {
+                    include: {
+                        cover: true,
+                        media: {
+                            where: {
+                                status: 'all'
+                            }
+                        }
+                    }
+                }
             }
         })
     }

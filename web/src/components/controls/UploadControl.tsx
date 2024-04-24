@@ -1,10 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useUpload } from '@/hooks'
 import { useRef } from 'react'
 import { useHotkey } from '@/hooks/hotkey'
+import { useUpload } from '@/hooks/upload'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
 
 type Props = {
     dropdown?: boolean

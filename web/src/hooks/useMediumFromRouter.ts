@@ -1,9 +1,9 @@
-import { useRouter } from 'next/router'
-import { useQMedium } from '@photon/schema'
+import { useParams } from 'next/navigation'
+import { useQMedium } from '@photon/schema/dist/client'
 
 export const useMediumFromRouter = () => {
-    const router = useRouter()
-    const id = Array.isArray(router.query.idMedium) ? router.query.idMedium?.join('') : router.query.idMedium
+    const query = useParams()
+    const id = Array.isArray(query.idMedium) ? query.idMedium[0] : query.idMedium
 
     const [{ data }] = useQMedium({
         variables: {

@@ -2,8 +2,12 @@ import * as Icons from '@mdi/js'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { ETrans } from '@/types/translations'
-import { Button, Dropdown } from '@/components'
-import { MoveToTrashControl, ArchiveControl, RotateControl, DownloadMediaControl } from '@/components/controls'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
+import { RotateControl } from '@/components/controls/RotateControl'
+import { ArchiveControl } from '@/components/controls/ArchiveControl'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
 
 type Props = {
     element: string

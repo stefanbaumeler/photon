@@ -1,4 +1,4 @@
-import { TAlbum, TMedium } from '@photon/schema'
+import { TAlbum, TMedium } from '@photon/schema/dist/client'
 
 export const isAlbums = (elements: (TAlbum | TMedium)[]): elements is TAlbum[] => {
     return !elements.find((element) => !isAlbum(element))

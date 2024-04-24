@@ -30,6 +30,8 @@ export class TeaserComponent {
         await this.locator.getByTestId('teaser-nav').click()
         await this.locator.getByTestId('archive').click()
 
+        await this.user.page.waitForURL('/archive')
+
         return this.user.archiveView()
     }
 
@@ -94,9 +96,9 @@ export class TeaserComponent {
     }
 
     shouldHaveSrc = async (src: string) => {
-        const imageSrc = await this.locator.getByTestId('teaser-image').getAttribute('src')
-
-        expect(imageSrc).toContain(src)
+        const image = await this.locator.getByTestId('teaser-image')
+        await image.evaluate((img: HTMLImageElement) => img.complete)
+        await expect.poll(async () => await image.getAttribute('src')).toContain(src)
     }
 
     shouldBeFavorite = async (view: string) => {

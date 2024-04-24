@@ -1,7 +1,7 @@
 import { forwardRef, ReactElement, Ref } from 'react'
 import Link from 'next/link'
 import { Placement } from 'tippy.js'
-import { Tooltip } from '@/components'
+import { Tooltip } from '@/components/shared/Tooltip'
 
 type Props = {
     onClick?: () => void

@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { ETrans } from '@/types/translations'
-import { Button } from '@/components'
 import * as Icons from '@mdi/js'
 import { useEffect, KeyboardEvent, useState, ChangeEvent } from 'react'
 import bem from '@/util/bem'
-import { useSearchContext } from '@/providers'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { Button } from '@/components/shared/Button'
 
 export const Search = () => {
     const { t } = useTranslation()

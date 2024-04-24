@@ -1,18 +1,19 @@
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import bem from '@/util/bem'
-import { useSelectionContext } from '@/providers'
-import { MoveToTrashControl, DownloadAlbumsControl } from '@/components/controls'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { DownloadAlbumsControl } from '@/components/controls/DownloadAlbumsControl'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
 
 export const BulkAlbumsControls = () => {
     const { t } = useTranslation()
-    const router = useRouter()
+    const pathname = usePathname()
     const selection = useSelectionContext()
     const selected = [...selection.selected]
 
     const classes = bem('actions', [
-        ['labeled', router.pathname === '/trash']
+        ['labeled', pathname === '/trash']
     ])
 
     return <div

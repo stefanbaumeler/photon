@@ -1,4 +1,4 @@
-import { TMeta } from '@photon/schema'
+import { TMeta } from '@photon/schema/server'
 
 export * from './user'
 export * from './album'

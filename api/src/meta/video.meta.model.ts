@@ -1,4 +1,4 @@
-import { TVideoMeta } from '@photon/schema'
+import { TVideoMeta } from '@photon/schema/server'
 import { Field, ObjectType } from '@nestjs/graphql'
 @ObjectType()
 export class VideoMeta {

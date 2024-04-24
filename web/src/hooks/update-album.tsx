@@ -1,8 +1,10 @@
-import { useSelectionContext } from '@/providers'
-import { useMRemoveFromAlbum, useMUpdateAlbum } from '@photon/schema'
+import { useMRemoveFromAlbum, useMUpdateAlbum } from '@photon/schema/dist/client'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useRouter } from 'next/navigation'
 
 export const useUpdateAlbum = (title: string, id?: string) => {
     const selection = useSelectionContext()
+    const router = useRouter()
 
     const [, removeFromAlbum] = useMRemoveFromAlbum()
 

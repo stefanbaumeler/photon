@@ -47,7 +47,7 @@
             opacity: 1;
         }
     }
-    @at-root .root--selecting & {
+    @at-root .selection-state--selecting & {
         opacity: .75;
 
         &:hover {
@@ -98,12 +98,12 @@
         pointer-events: all;
     }
 
-    @at-root .root--selecting & {
+    @at-root .selection-state--selecting & {
         pointer-events: none;
         opacity: 0;
     }
 
-    @at-root .root--selecting .teaser:hover & {
+    @at-root .selection-state--selecting .teaser:hover & {
         pointer-events: none;
         opacity: 0;
     }
@@ -135,7 +135,7 @@
         display: none;
     }
 
-    @at-root .root--selecting .teaser:hover & {
+    @at-root .selection-state--selecting .teaser:hover & {
         opacity: .75;
         pointer-events: all;
 

@@ -1,10 +1,11 @@
-import { Dialog, TextBox } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { useMChangePassword, useQProfile } from '@photon/schema'
+import { useMChangePassword, useQProfile } from '@photon/schema/dist/client'
 import Icon from '@mdi/react'
 import * as Icons from '@mdi/js'
+import { Dialog } from '@/components/shared/Dialog'
+import { TextBox } from '@/components/shared/TextBox'
 
 type Props = {
     closeCallback: () => void

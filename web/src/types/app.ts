@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TMedium, TMeta, TUser } from '@photon/schema'
+import { TMedium, TMeta, TUser } from '@photon/schema/dist/client'
 
 export type TNavItem = {
     label: string

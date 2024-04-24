@@ -1,13 +1,17 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
-import { DeleteAlbumDialog, MoveToTrashDialog } from '@/components/dialogs'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { EKeyboardScope, ESelectionMode } from '@/types/app'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useHotkey } from '@/hooks/hotkey'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { DeleteAlbumDialog } from '@/components/dialogs/DeleteAlbumDialog'
+import { MoveToTrashDialog } from '@/components/dialogs/MoveToTrashDialog'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
+import { getParentUrl } from '@/util/routing'
 
 type Props = {
     elements: string[]
@@ -20,8 +24,9 @@ export const MoveToTrashControl = ({
     elements, dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
     const selection = useSelectionContext()
+    const pathname = usePathname()
+    const { medium } = useMediumFromRouter()
     const router = useRouter()
 
     const actionCallback = () => {
@@ -34,7 +39,7 @@ export const MoveToTrashControl = ({
     const [moveToTrashDialogActive, setMoveToTrashDialogActive] = useState(false)
 
     const action = () => {
-        if (selection.mode === ESelectionMode.ALBUMS || router.pathname === '/albums') {
+        if (selection.mode === ESelectionMode.ALBUMS || pathname === '/albums') {
             setDeleteAlbumDialogActive(true)
         }
         else {
@@ -65,7 +70,11 @@ export const MoveToTrashControl = ({
             media={elements}
             closeCallback={() => setMoveToTrashDialogActive(false)}
             callback={async () => {
-                await details.close()
+                // await details.close()
+                if (medium) {
+                    const parent = getParentUrl(pathname)
+                    router.push(parent)
+                }
                 actionCallback()
             }}
         /> : null}
@@ -81,7 +90,7 @@ export const MoveToTrashControl = ({
             shortcut={shortcut ? 'Backspace' : undefined}
             onClick={action}
             icon={Icons.mdiTrashCanOutline}
-            appearance={details.active ? {
+            appearance={medium ? {
                 text: 'light'
             } : undefined}
         />}

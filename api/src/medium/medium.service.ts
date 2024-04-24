@@ -11,10 +11,9 @@ import { getEnv } from '../../env'
 import { randomUUID } from 'crypto'
 import AdmZip from 'adm-zip'
 import sharp from 'sharp'
-import { TMeta } from '@photon/schema'
+import { TMeta } from '@photon/schema/server'
 import { IdDto, IdsDto } from '../shared/dto'
 import { Prisma } from '@prisma/client'
-import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
 import { v2 } from '@google-cloud/translate'
 import { ClsService } from 'nestjs-cls'
 
@@ -26,6 +25,8 @@ export class MediumService {
 
     async getAll (dto?: MediumFilterDto) {
         const userId = this.cls.get('userId')
+
+        let order: Prisma.MediumOrderByWithRelationAndSearchRelevanceInput
 
         const conditions: Prisma.MediumWhereInput = {
             owner: {
@@ -40,6 +41,25 @@ export class MediumService {
                         id: userId
                     }
                 }
+            }
+
+            switch (dto.sort) {
+            case 'oldest':
+                order = {
+                    dateTaken: 'asc'
+                }
+                break
+            case 'recent':
+                order = {
+                    dateCreated: 'desc'
+                }
+                break
+            case 'newest':
+            default:
+                order = {
+                    dateTaken: 'desc'
+                }
+                break
             }
 
             if (dto.status) {
@@ -72,7 +92,7 @@ export class MediumService {
             if (dto.album) {
                 return await this.repository.findByAlbum({
                     id: dto.album
-                }, conditions, this.includeAll())
+                }, conditions, order, this.includeAll())
             }
 
             if (dto.ids) {
@@ -82,7 +102,7 @@ export class MediumService {
             }
         }
 
-        return this.repository.findMany(conditions,  this.includeAll())
+        return this.repository.findMany(conditions, order,  this.includeAll())
     }
 
     private includeAll () {
@@ -167,6 +187,7 @@ export class MediumService {
         const filePath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk)
         const filePathOld = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, `old_${medium.filenameDisk}`)
         fs.renameSync(filePath, filePathOld)
+
         const row = await sharp(filePathOld).rotate(dto.deg).toFile(filePath)
 
         const meta = {

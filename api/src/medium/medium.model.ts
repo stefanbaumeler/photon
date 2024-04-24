@@ -1,10 +1,10 @@
-import { TMedium } from '@photon/schema'
 import { Field, ObjectType, Float } from '@nestjs/graphql'
 import { User } from '../user/user.model'
 import { Meta } from '../meta/meta.model'
 import { Tag } from '../tag/tag.model'
 import { ImageMeta } from '../meta/image.meta.model'
 import { VideoMeta } from '../meta/video.meta.model'
+import { Album } from '../album/album.model'
 
 @ObjectType()
 export class Medium {
@@ -79,4 +79,7 @@ export class Medium {
 
     @Field(() => String)
         address!: string
+
+    @Field(() => [Album])
+        albums!: Album[]
 }

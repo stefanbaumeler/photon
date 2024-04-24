@@ -43,7 +43,6 @@
     },
     "dependencies": {
         "@graphql-codegen/cli": "^5.0.0",
-        "@graphql-codegen/typescript-urql-graphcache": "^3.0.0",
         "@types/supertest": "^2.0.16",
         "dotenv": "^16.3.1",
         "graphql": "^16.8.1",

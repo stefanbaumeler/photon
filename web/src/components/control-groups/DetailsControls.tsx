@@ -1,40 +1,47 @@
+'use client'
+
 import * as Icons from '@mdi/js'
-import { Button, Check, Dropdown } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
 import { EKeyboardScope, ELayout, ESelectionMode } from '@/types/app'
 import { useState } from 'react'
-import { useDetailsContext, useLayoutContext, useSelectionContext } from '@/providers'
 import Tippy from '@tippyjs/react'
-import { useRouter } from 'next/router'
-import { TrashControls } from '@/components/control-groups'
-import { FavoriteControl,
-    MoveToTrashControl,
-    ArchiveControl,
-    RotateControl,
-    SetAlbumCoverControl,
-    DownloadMediaControl } from '@/components/controls'
-import { useQAlbum } from '@photon/schema'
+import { useParams, usePathname } from 'next/navigation'
+import { useQAlbum } from '@photon/schema/dist/client'
 import { useHotkey } from '@/hooks/hotkey'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useLayoutContext } from '@/providers/LayoutProvider'
+import { Check } from '@/components/shared/Check'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
+import { RotateControl } from '@/components/controls/RotateControl'
+import { ArchiveControl } from '@/components/controls/ArchiveControl'
+import { SetAlbumCoverControl } from '@/components/controls/SetAlbumCoverControl'
+import { TrashControls } from '@/components/control-groups/TrashControls'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { FavoriteControl } from '@/components/controls/FavoriteControl'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
+import { useInfobarContext } from '@/components/shared/Infobar/components/InfobarContext'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const DetailsControls = () => {
     const { t } = useTranslation()
-    const router = useRouter()
+    const pathname = usePathname()
+    const params = useParams()
 
-    const idAlbum = Array.isArray(router.query.idAlbum) ? router.query.idAlbum.join('') : router.query.idAlbum
+    const idAlbum = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
 
     const [albumQuery] = useQAlbum({
         variables: {
             id: idAlbum ?? ''
         },
-        pause: !router.isReady || !idAlbum
+        pause: !idAlbum
     })
 
-    const details = useDetailsContext()
     const selection = useSelectionContext()
     const layout = useLayoutContext()
-
-    const medium = details.medium ?? details.placeholder
+    const infobar = useInfobarContext()
+    const { medium } = useMediumFromRouter()
 
     const [moreActive, setMoreActive] = useState(false)
 
@@ -104,7 +111,7 @@ export const DetailsControls = () => {
         />)
     }
 
-    return router.pathname === '/trash' ? <TrashControls /> : <>
+    return pathname.startsWith('/trash') ? <TrashControls /> : <>
         <DownloadMediaControl
             elements={[medium.id]}
             shortcut
@@ -128,5 +135,16 @@ export const DetailsControls = () => {
                 onClick={() => setMoreActive(true)}
             />
         </Dropdown>
+        {infobar.infobarVisible ? null : <Button
+            testId="show-infos"
+            hint={t(ETrans.SHOW_THING, {
+                thing: t(ETrans.INFO_PLURAL)
+            })}
+            appearance={{
+                text: 'light'
+            }}
+            onClick={infobar.showInfobar}
+            icon={Icons.mdiInformation}
+        />}
     </>
 }

@@ -1,11 +1,13 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext, useSelectionContext } from '@/providers'
-import { useSetAlbumCover } from '@/hooks'
 import { EKeyboardScope, ESelectionMode } from '@/types/app'
 import { useHotkey } from '@/hooks/hotkey'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useSetAlbumCover } from '@/hooks/set-album-cover'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     album?: string
@@ -19,7 +21,7 @@ export const SetAlbumCoverControl = ({
     album, medium, dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
+    const { medium: detailMedium } = useMediumFromRouter()
     const selection = useSelectionContext()
 
     const setAlbumCover = useSetAlbumCover(album, medium)
@@ -52,7 +54,7 @@ export const SetAlbumCoverControl = ({
         hint={t(ETrans.SET_ALBUM_COVER)}
         shortcut={shortcut ? 'C' : undefined}
         onClick={action}
-        appearance={details.active ? {
+        appearance={detailMedium ? {
             text: 'light'
         } : undefined}
         icon={Icons.mdiImageAlbum}

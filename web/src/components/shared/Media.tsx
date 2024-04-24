@@ -1,6 +1,11 @@
-import { useLayoutContext, useSearchContext } from '@/providers'
+'use client'
+
 import { ELayout } from '@/types/app'
-import { GalleryView, ListView, MapView } from '..'
+import { GalleryView } from '@/components/shared/GalleryView'
+import { ListView } from '@/components/shared/ListView'
+import { MapView } from '@/components/shared/MapView'
+import { useLayoutContext } from '@/providers/LayoutProvider'
+import { useSearchContext } from '@/providers/SearchProvider'
 
 export const Media = () => {
     const layout = useLayoutContext()

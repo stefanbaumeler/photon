@@ -1,5 +1,5 @@
-import { TQMediaYearCount } from '@photon/schema'
-import { ScrollbarMonth } from '..'
+import { TQMediaYearCount } from '@photon/schema/dist/client'
+import { ScrollbarMonth } from '@/components/shared/Scrollbar/components/ScrollbarMonth'
 
 type Props = {
     year: TQMediaYearCount['countMediaByYear']['years'][0]

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { globalBeforeEach } from '../support/common'
 import { User } from '../actors/user'
 import { predefinedAlbumUUIDs, predefinedMediumUUIDs } from '@photon/api/dist/src/database/helpers/ids'

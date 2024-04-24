@@ -1,7 +1,9 @@
+'use client'
+
 import { useCallback, useEffect, useState } from 'react'
 import bem from '../../util/bem'
-import { useUpload } from '@/hooks'
 import tauri from '../../tauri'
+import { useUpload } from '@/hooks/upload'
 
 export const Uploader = () => {
     const [visible, setVisible] = useState(false)

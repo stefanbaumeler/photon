@@ -1,11 +1,22 @@
-import { useMDeleteFavorites } from '@photon/schema'
-import { useDetailsContext, useSearchContext } from '@/providers'
-import { useRouter } from 'next/router'
+import { useMDeleteFavorites } from '@photon/schema/dist/client'
+import { usePathname, useRouter } from 'next/navigation'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
+import { getParentUrl } from '@/util/routing'
 
 export const useRemoveFromFavorites = (mediaIds: string[]) => {
-    const { hits: media } = useSearchContext()
+    const pathname = usePathname()
     const router = useRouter()
-    const details = useDetailsContext()
+
+    const {
+        medium, id
+    } = useMediumFromRouter()
+    const { hits: media } = useSearchContext()
+    const index = media.map(({ id }) => id).indexOf(id)
+    const next = media[index + 1]
+    const prev = media[index - 1]
+    const parent = getParentUrl(pathname)
+    const evade = next?.id ?? prev?.id ?? parent
 
     const [, removeFromFavorites] = useMDeleteFavorites()
 
@@ -13,24 +24,8 @@ export const useRemoveFromFavorites = (mediaIds: string[]) => {
         removeFromFavorites({
             ids: mediaIds
         }).then(() => {
-            const topLevelRoute = router.pathname.split('/')[1]
-
-            if (topLevelRoute === 'favorites') {
-                const idMedium = Array.isArray(router.query.idMedium) ? router.query.idMedium.join('') : router.query.idMedium
-
-                if (idMedium) {
-                    const index = media.findIndex((medium) => medium.id === idMedium)
-
-                    let newSelected = media[index + 1]
-
-                    if (!newSelected) {
-                        newSelected = media[index - 1]
-                    }
-
-                    if (newSelected) {
-                        details.open(newSelected)
-                    }
-                }
+            if (medium) {
+                router.push(evade)
             }
         })
     }

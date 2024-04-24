@@ -1,9 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext } from '@/providers'
 import { useHotkey } from '@/hooks/hotkey'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
+import { useRotationContext } from '@/providers/RotationProvider'
 
 type Props = {
     dropdown?: boolean
@@ -15,9 +17,12 @@ export const RotateControl = ({
     dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
+    const { medium } = useMediumFromRouter()
+    const { rotate } = useRotationContext()
     const action = () => {
-        details.rotate()
+        if (medium?.id) {
+            rotate(medium.id)
+        }
         callback && callback()
     }
 
@@ -38,7 +43,7 @@ export const RotateControl = ({
         hint={t(ETrans.ROTATE_CLOCKWISE)}
         shortcut={shortcut ? 'R' : undefined}
         onClick={action}
-        appearance={details.active ? {
+        appearance={medium ? {
             text: 'light'
         } : undefined}
         icon={Icons.mdiRotateLeft}

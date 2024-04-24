@@ -11,7 +11,6 @@ interface TeaserContext {
     cover?: TCover | null
     draggable: boolean
     selectable: boolean
-    onOpen?: () => void
     topLeftControls?: ReactNode
     topRightControls?: ReactNode
     bottomLeftControls?: ReactNode

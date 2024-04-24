@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { AttributionControl,
     GeoJSONSource, Layer,
@@ -7,21 +9,28 @@ import { AttributionControl,
     MapLayerMouseEvent,
     Marker as MarkerEl,
     MapRef, Source } from 'react-map-gl'
-import { useDetailsContext, useSearchContext } from '@/providers'
 import { useTranslation } from 'react-i18next'
 import { Marker } from 'mapbox-gl'
 import { ETrans } from '@/types/translations'
 import * as Icons from '@mdi/js'
-import { Drawer, FilmStrip, Medium, Button } from '@/components'
 import { TMapItem } from '@/types/app'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { Drawer } from '@/components/shared/Drawer'
+import { Medium } from '@/components/shared/Medium'
+import { FilmStrip } from '@/components/shared/FilmStrip'
+import { Button } from '@/components/shared/Button'
+import Link from 'next/link'
+import { getDetailsUrl } from '@/util/routing'
+import { useParams, usePathname } from 'next/navigation'
 
 export const MapView = () => {
     const mapRef = useRef<MapRef>(null)
-
+    const params = useParams()
+    const pathname = usePathname()
     const { hits: media } = useSearchContext()
     const { t } = useTranslation()
-    const details = useDetailsContext()
     // const selection = useSelectionContext()
+    const idAlbum = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
 
     const [markersOnScreen, setMarkersOnScreen] = useState<{[key: string]: {
             marker: Marker
@@ -202,22 +211,15 @@ export const MapView = () => {
     const HTMLMarker = ({ k }: { k: string }) => {
         const medium = markers.find((marker) => marker.id === k)
 
-        return medium?.cover ? <div
+        return medium?.cover ? <Link
+            href={getDetailsUrl(pathname, medium.id, idAlbum)}
             className="map__marker"
-            onClick={() => {
-                if (medium.cover) {
-                    details.open({
-                        ...medium.cover,
-                        id: medium.id
-                    })
-                }
-            }}
         >
             <Medium
                 medium={medium.cover}
                 width={120}
             />
-        </div> : <div className="map__cluster">
+        </Link> : <div className="map__cluster">
             <div className="map__cluster-label">
                 {markersOnScreen[k].feature.properties?.point_count_abbreviated}
             </div>

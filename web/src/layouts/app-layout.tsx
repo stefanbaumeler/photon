@@ -1,42 +1,30 @@
 import { ReactNode } from 'react'
-import { SearchBar, Sidebar, FocusOverlay, Details } from '@/components'
-import { useSelectionContext } from '@/providers'
-import { ESelectionMode } from '@/types/app'
-import bem from '../util/bem'
-import AuthGuard from '@/api/AuthGuard'
+import { EMediumStatus } from '@/types/app'
+import { SearchProvider } from '@/providers/SearchProvider'
+import { FocusOverlay } from '@/components/shared/FocusOverlay'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { Sidebar } from '@/components/shared/Sidebar'
 
 type Props = {
     children?: ReactNode
+    status?: EMediumStatus
+    favorites?: boolean
 }
 
-const AppLayout = ({ children }: Props) => {
-    const selection = useSelectionContext()
-
-    const classes = bem('root', [
-        ['selecting', selection.mode !== ESelectionMode.OFF]
-    ])
-
-    return <AuthGuard>
-        <div
-            id="root"
-        >
-            <div id="modal-root"></div>
-            {/*<VerifyAccountMessage />*/}
-            <div
-                id="app-root"
-                data-testid="content-root"
-                className={classes}
-            >
-                <FocusOverlay />
-                <SearchBar />
-                <Sidebar />
-                <Details />
-                <main className="main">
-                    {children}
-                </main>
-            </div>
-        </div>
-    </AuthGuard>
+const AppLayout = ({
+    children, status, favorites
+}: Props) => {
+    return <SearchProvider
+        status={status}
+        favorites={favorites}
+    >
+        <FocusOverlay />
+        <SearchBar />
+        <Sidebar />
+        <main className="main">
+            {children}
+        </main>
+    </SearchProvider>
 }
 
 export default AppLayout

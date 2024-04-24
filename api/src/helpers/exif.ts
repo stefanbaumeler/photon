@@ -4,7 +4,7 @@ import path from 'path'
 import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
-import { TVideoMeta, TImageMeta, TMeta } from '@photon/schema'
+import { TVideoMeta, TImageMeta, TMeta } from '@photon/schema/server'
 import { Prisma } from '@prisma/client'
 import mime from 'mime-types'
 

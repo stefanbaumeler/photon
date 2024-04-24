@@ -1,7 +1,7 @@
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useEmptyTrash } from '@/hooks'
-import { Dialog } from '@/components'
+import { Dialog } from '@/components/shared/Dialog'
+import { useEmptyTrash } from '@/hooks/empty-trash'
 
 type Props = {
     closeCallback: () => void

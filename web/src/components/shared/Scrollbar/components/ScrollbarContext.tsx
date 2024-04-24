@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
-import { TMediumCountYear, useQMediaYearCount } from '@photon/schema'
+import { TMediumCountYear, useQMediaYearCount } from '@photon/schema/dist/client'
 
 type Props = {
     children?: ReactNode

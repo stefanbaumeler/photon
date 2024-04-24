@@ -1,16 +1,18 @@
+'use client'
+
 import { useState, useEffect, ReactNode } from 'react'
-import { useRouter } from 'next/router'
-import { useSignOut } from '@/hooks'
-import { useQProfile } from '@photon/schema'
+import { usePathname } from 'next/navigation'
+import { useQProfile } from '@photon/schema/dist/client'
+import { useSignOut } from '@/hooks/sign-out'
 
 type Props = {
     children: ReactNode
 }
 
 const AuthGuard = ({ children }: Props) => {
-    const router = useRouter()
     const [authorized, setAuthorized] = useState(true)
     const signOut = useSignOut()
+    const pathname = usePathname()
 
     const [{
         data: user, fetching
@@ -29,14 +31,16 @@ const AuthGuard = ({ children }: Props) => {
             }
         }
 
-        authCheck(router.asPath)
-
-        router.events.on('routeChangeComplete', authCheck)
-
-        return () => {
-            router.events.off('routeChangeComplete', authCheck)
+        if (pathname) {
+            authCheck(pathname)
         }
-    }, [signOut, router, user, fetching])
+
+        // router.events.on('routeChangeComplete', authCheck)
+        //
+        // return () => {
+        //     router.events.off('routeChangeComplete', authCheck)
+        // }
+    }, [signOut, pathname, user, fetching])
 
     return authorized && children
 }

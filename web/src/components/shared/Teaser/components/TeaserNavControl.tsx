@@ -1,15 +1,16 @@
 import * as Icons from '@mdi/js'
-import { useTeaserContext } from '..'
-import { Dropdown, Button } from '@/components'
 import { useState } from 'react'
-import { ArchiveControl,
-    MoveToTrashControl,
-    DownloadMediaControl,
-    FavoriteControl,
-    RotateControl } from '@/components/controls'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { RestoreControl } from '@/components/controls/RestoreControl'
 import { DeleteControl } from '@/components/controls/DeleteControl'
+import { RotateControl } from '@/components/controls/RotateControl'
+import { useTeaserContext } from '@/components/shared/Teaser/components/TeaserContext'
+import { ArchiveControl } from '@/components/controls/ArchiveControl'
+import { FavoriteControl } from '@/components/controls/FavoriteControl'
+import { DownloadMediaControl } from '@/components/controls/DownloadMediaControl'
+import { MoveToTrashControl } from '@/components/controls/MoveToTrashControl'
+import { Dropdown } from '@/components/shared/Dropdown'
+import { Button } from '@/components/shared/Button'
 
 type Props = {
     stack?: string[]
@@ -20,9 +21,9 @@ export const TeaserNavControl = ({
     stack, album = false
 }: Props) => {
     const { id } = useTeaserContext()
-    const router = useRouter()
+    const pathname = usePathname()
     const [moreActive, setMoreActive] = useState(false)
-    const isTrash = router.pathname === '/trash'
+    const isTrash = pathname === '/trash'
 
     const moreItems = []
 

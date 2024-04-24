@@ -1,11 +1,14 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useAddToFavorites, useRemoveFromFavorites } from '@/hooks'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import { useHotkey } from '@/hooks/hotkey'
-import { useQFavorites } from '@photon/schema'
+import { useQFavorites } from '@photon/schema/dist/client'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useAddToFavorites } from '@/hooks/add-to-favorites'
+import { useRemoveFromFavorites } from '@/hooks/remove-from-favorites'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     media: string[]
@@ -18,7 +21,6 @@ export const FavoriteControl = ({
     media, dropdown, shortcut, callback
 }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
     const selection = useSelectionContext()
     const [{  data: favorites }] = useQFavorites()
 
@@ -53,6 +55,7 @@ export const FavoriteControl = ({
     const testId = hasUnfavorited ? 'favorite' : 'unfavorite'
     const label = t(hasUnfavorited ? ETrans.FAVORITE : ETrans.UNFAVORITE)
     const icon = hasUnfavorited ? Icons.mdiStarOutline : Icons.mdiStar
+    const { medium } = useMediumFromRouter()
 
     return dropdown ? <DropdownItem item={{
         testId,
@@ -65,7 +68,7 @@ export const FavoriteControl = ({
         onClick={action}
         hint={label}
         shortcut={shortcut ? 'F' : undefined}
-        appearance={details.active ? {
+        appearance={medium ? {
             text: 'light'
         } : undefined}
         icon={icon}

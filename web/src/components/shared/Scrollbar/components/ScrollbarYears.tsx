@@ -1,4 +1,5 @@
-import { useScrollbarContext, ScrollbarMonths } from '..'
+import { useScrollbarContext } from '@/components/shared/Scrollbar/components/ScrollbarContext'
+import { ScrollbarMonths } from '@/components/shared/Scrollbar/components/ScrollbarMonths'
 
 export const ScrollbarYears = () => {
     const scrollbar = useScrollbarContext()

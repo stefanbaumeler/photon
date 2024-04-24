@@ -1,4 +1,4 @@
-import { TMedium } from '@photon/schema'
+import { TMedium } from '@photon/schema/dist/client'
 
 export default {
     'address': '',

@@ -1,7 +1,7 @@
-import { Check } from '@/components'
 import { ESelectionMode } from '@/types/app'
-import { useSelectionContext } from '@/providers'
-import { useTeaserContext } from '..'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useTeaserContext } from '@/components/shared/Teaser/components/TeaserContext'
+import { Check } from '@/components/shared/Check'
 
 export const TeaserTopLeftCorner = () => {
     const selection = useSelectionContext()

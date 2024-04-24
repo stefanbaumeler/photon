@@ -25,6 +25,17 @@ type Tag {
   idUser: String!
 }
 
+type Album {
+  id: String!
+  dateCreated: DateTime!
+  dateModified: DateTime!
+  title: String
+  description: String
+  cover: Medium
+  owner: User!
+  media: [Medium!]
+}
+
 type Medium {
   id: String!
   dateCreated: DateTime!
@@ -48,6 +59,7 @@ type Medium {
   region: String!
   place: String!
   address: String!
+  albums: [Album!]!
 }
 
 union Meta = ImageMeta | VideoMeta
@@ -95,17 +107,6 @@ type UserTokenDto {
   user: User!
 }
 
-type Album {
-  id: String!
-  dateCreated: DateTime!
-  dateModified: DateTime!
-  title: String
-  description: String
-  cover: Medium
-  owner: User!
-  media: [Medium!]
-}
-
 type Device {
   id: String!
   dateCreated: DateTime!
@@ -118,7 +119,7 @@ type Device {
 type Query {
   profile: User!
   albums: [Album!]!
-  mediumAlbums(id: String!): [Album!]!
+  mediumAlbums(id: String!): Medium!
   album(id: String!): Album!
   albumMedia(id: String!): [Medium!]!
   media(status: String, favorites: Boolean, q: String, album: String, sort: String, ids: [String!]): [Medium!]!

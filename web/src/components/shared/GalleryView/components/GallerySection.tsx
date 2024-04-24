@@ -1,11 +1,14 @@
-import { TMedium } from '@photon/schema'
+import { TMedium } from '@photon/schema/dist/client'
 import { ESelectionMode } from '@/types/app'
-import { Check, Teaser } from '@/components'
 import { useEffect, useState } from 'react'
 import { generateGallery } from '@/util/gallery'
-import { useDetailsContext, useSelectionContext } from '@/providers'
 import bem from '@/util/bem'
-import { useGalleryContext } from '..'
+import { useGalleryContext } from '@/components/shared/GalleryView/components/GalleryContext'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { Check } from '@/components/shared/Check'
+import { Teaser } from '@/components/shared/Teaser'
+import { getDetailsUrl } from '@/util/routing'
+import { useParams, usePathname } from 'next/navigation'
 
 type Props = {
     media: TMedium[]
@@ -17,15 +20,16 @@ type Props = {
 export const GallerySection = ({
     media, title
 }: Props) => {
+    const params = useParams()
+    const album = Array.isArray(params.idAlbum) ? params.idAlbum[0] : params.idAlbum
     const gallery = useGalleryContext()
     const [containerWidth, setContainerWidth] = useState(gallery.containerWidth)
-    const details = useDetailsContext()
+    const pathname = usePathname()
 
     const selection = useSelectionContext()
 
-    // const trh = gallery.targetRowHeight || (window.innerWidth < 1024 ? 225 : 200)
     const trh = window.innerWidth < 1024 ? 225 : 200
-    const maxHeight = window.innerWidth < 1024 ? 355 : 250
+    const maxHeight = window.innerHeight < 1024 ? 355 : 250
 
     const dimensions = generateGallery({
         containerWidth,
@@ -85,15 +89,17 @@ export const GallerySection = ({
             </span>
         </div>
         <div className="gallery-section__container">
-            {media.map((medium, k) => <Teaser
-                id={medium.id}
-                favoredBy={medium.favoredBy?.length}
-                href={details.getUrl(medium.id)}
-                cover={medium}
-                displayWidth={dimensions[k].width}
-                displayHeight={dimensions[k].height}
-                key={k}
-            />)}
+            {media.map((medium, k) => {
+                return <Teaser
+                    id={medium.id}
+                    favoredBy={medium.favoredBy?.length}
+                    href={getDetailsUrl(pathname, medium.id, album)}
+                    cover={medium}
+                    displayWidth={dimensions[k].width}
+                    displayHeight={dimensions[k].height}
+                    key={k}
+                />
+            })}
         </div>
     </div>
 }

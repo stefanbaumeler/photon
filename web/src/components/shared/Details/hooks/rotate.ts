@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react'
-import { useMRotate } from '@photon/schema'
-import { useDetailsContext } from '@/providers'
+import { useMRotate } from '@photon/schema/dist/client'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 export const useRotate = () => {
     const [loading, setLoading] = useState(false)
     const [rotation, setRotation] = useState(0)
+    const [rotationRequest, setRotationRequest] = useState(0)
     const [, rotate] = useMRotate()
     const [updatedSource, setUpdatedSource] = useState(0)
-    const details = useDetailsContext()
+    const {  id } = useMediumFromRouter()
 
     useEffect(() => {
-        setRotation(details.rotationRequest)
+        setRotation(rotationRequest)
         const timer = setTimeout(() => {
-            if (rotation !== 0 && details.medium) {
+            if (rotation !== 0) {
                 rotate({
-                    id: details.medium.id,
-                    deg: details.rotationRequest
+                    id,
+                    deg: rotationRequest
                 }).then(() => {
-                    details.resolveRotationRequest()
+                    setRotationRequest(0)
                     setUpdatedSource(updatedSource + 1)
                     setLoading(true)
                 })
@@ -26,7 +27,7 @@ export const useRotate = () => {
         return () => {
             clearTimeout(timer)
         }
-    }, [updatedSource, rotation, details, rotate])
+    }, [updatedSource, rotation, id, rotate, rotationRequest])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -40,6 +41,9 @@ export const useRotate = () => {
     return {
         loading,
         rotation,
-        updatedSource
+        updatedSource,
+        rotate: () => {
+            setRotationRequest(rotationRequest + 90)
+        }
     }
 }

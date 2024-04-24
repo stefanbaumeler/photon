@@ -1,10 +1,11 @@
 import * as Icons from '@mdi/js'
-import { Button, DropdownItem } from '@/components'
-import { AddToAlbumDialog } from '@/components/dialogs'
+import { DropdownItem } from '@/components/shared/Dropdown/components/DropdownItem'
+import { Button } from '@/components/shared/Button'
+import { AddToAlbumDialog } from '@/components/dialogs/AddToAlbumDialog'
 import { ETrans } from '@/types/translations'
 import { useTranslation } from 'react-i18next'
-import { useDetailsContext } from '@/providers'
 import { useState } from 'react'
+import { useMediumFromRouter } from '@/hooks/useMediumFromRouter'
 
 type Props = {
     dropdown?: boolean
@@ -12,8 +13,8 @@ type Props = {
 
 export const AddToControl = ({ dropdown }: Props) => {
     const { t } = useTranslation()
-    const details = useDetailsContext()
     const [dialogActive, setDialogActive] = useState(false)
+    const { medium } = useMediumFromRouter()
 
     const action = () => {
         setDialogActive(true)
@@ -32,7 +33,7 @@ export const AddToControl = ({ dropdown }: Props) => {
             testId="add-to"
             hint={t(ETrans.ADD_TO)}
             onClick={action}
-            appearance={details.active ? {
+            appearance={medium ? {
                 text: 'light'
             } : undefined}
             icon={Icons.mdiPlus}

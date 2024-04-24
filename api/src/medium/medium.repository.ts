@@ -10,10 +10,11 @@ export class MediumRepository {
     constructor (private prisma: PrismaService, private cls: ClsService) {
     }
 
-    async findMany (conditions?: Prisma.MediumWhereInput, include?: Prisma.MediumInclude) {
+    async findMany (conditions?: Prisma.MediumWhereInput, order?: Prisma.MediumOrderByWithRelationAndSearchRelevanceInput, include?: Prisma.MediumInclude) {
         return this.prisma.medium.findMany({
             where: conditions,
-            include
+            include,
+            orderBy: order
         })
     }
 
@@ -61,7 +62,7 @@ export class MediumRepository {
         })
     }
 
-    async findByAlbum (dto: IdDto, conditions?: Prisma.MediumWhereInput, include?: Prisma.MediumInclude) {
+    async findByAlbum (dto: IdDto, conditions?: Prisma.MediumWhereInput, order?: Prisma.MediumOrderByWithRelationAndSearchRelevanceInput, include?: Prisma.MediumInclude) {
         const album = await this.prisma.album.findUnique({
             where: {
                 id: dto.id
@@ -69,7 +70,8 @@ export class MediumRepository {
             include: {
                 media: {
                     include,
-                    where: conditions
+                    where: conditions,
+                    orderBy: order
                 }
             }
         })
@@ -151,7 +153,7 @@ export class MediumRepository {
             id: {
                 in: ids
             }
-        }, {
+        }, undefined, {
             owner: true,
             uploader: true,
             tags: true,

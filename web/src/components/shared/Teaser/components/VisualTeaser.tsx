@@ -1,41 +1,34 @@
-import { useDetailsContext, useDragContext, useSearchContext, useSelectionContext } from '@/providers'
-import { Medium } from '@/components'
 import { ESelectionMode } from '@/types/app'
 import bem from '@/util/bem'
-import { useTeaserContext, TeaserTopLeftCorner } from '..'
 import Link from 'next/link'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { useSelectionContext } from '@/providers/SelectionProvider'
+import { useTeaserContext } from '@/components/shared/Teaser/components/TeaserContext'
+import { useDragContext } from '@/providers/DragProvider'
+import { useSearchContext } from '@/providers/SearchProvider'
+import { TeaserTopLeftCorner } from '@/components/shared/Teaser/components/TeaserTopLeftCorner'
+import { Medium } from '@/components/shared/Medium'
 
 export const VisualTeaser = () => {
     const selection = useSelectionContext()
     const teaser = useTeaserContext()
     const drag = useDragContext()
     const { hits: media } = useSearchContext()
-    const details = useDetailsContext()
     const [updatedSource, setUpdatedSource] = useState(0)
 
     const src = useRef(updatedSource)
 
-    useEffect(() => {
-        if (teaser.id === details.medium?.id) {
-            setUpdatedSource(src.current + 1)
-        }
-    }, [teaser.id, details.medium?.id, src, details.rotationRequest])
+    // useEffect(() => {
+    //     if (teaser.id === details.medium?.id) {
+    //         setUpdatedSource(src.current + 1)
+    //     }
+    // }, [teaser.id, details.medium?.id, src, details.rotationRequest])
 
     const open = (event: MouseEvent) => {
-        if (!teaser.selectable) {
-            teaser.onOpen && teaser.onOpen()
-            return
-        }
-
-        event.preventDefault()
-
         if (selection.mode !== ESelectionMode.OFF) {
             selection.toggle(teaser.id)
-            return
+            event.preventDefault()
         }
-
-        teaser.onOpen && teaser.onOpen()
     }
 
     const updateShiftTargets = (clear = false) => {

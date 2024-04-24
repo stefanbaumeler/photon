@@ -1,5 +1,6 @@
-import { Button, Message } from '@/components'
 import { useTranslation } from 'react-i18next'
+import { Message } from '@/components/shared/Message'
+import { Button } from '@/components/shared/Button'
 
 export const VerifyAccountMessage = () => {
     const { t } = useTranslation()

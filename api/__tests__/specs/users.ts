@@ -1,4 +1,4 @@
-// import * as Schema from '@photon/schema'
+// import * as Schema from '@photon/schema/server'
 // import { seed } from '../../prisma/seed'
 // import { useTestQuery } from '../utility'
 //

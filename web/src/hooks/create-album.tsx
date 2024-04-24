@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
-import { useMCreateAlbum } from '@photon/schema'
+import { useRouter } from 'next/navigation'
+import { useMCreateAlbum } from '@photon/schema/dist/client'
 
 export const useCreateAlbum = () => {
     const router = useRouter()

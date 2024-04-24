@@ -11,12 +11,16 @@ export class DetailView extends VisitableView {
         this.locator = this.user.page.getByTestId('details')
     }
     hideInfos = async () => {
+        const infobarState = this.user.page.getByTestId('infobar-state')
+
         await this.locator.getByTestId('hide-infos').click()
-        await expect(this.locator).not.toHaveClass(/details--infos/)
+        await expect(infobarState).not.toHaveClass(/infobar-state--active/)
     }
     showInfos = async () => {
+        const infobarState = this.user.page.getByTestId('infobar-state')
+
         await this.locator.getByTestId('show-infos').click()
-        await expect(this.locator).toHaveClass(/details--infos/)
+        await expect(infobarState).toHaveClass(/infobar-state--active/)
     }
     next = async () => {
         await this.locator.getByTestId('next-medium').click()
@@ -55,7 +59,12 @@ export class DetailView extends VisitableView {
     }
     getMedium = async () => {
         const image = await this.locator.getByTestId('details-image').elementHandle() as ElementHandle<HTMLImageElement>
-        await expect.poll(() => image.evaluate((img) => img.naturalWidth)).toBeGreaterThan(0)
+
+        await expect.poll(() => {
+            return image.evaluate((img) => {
+                return img.naturalWidth
+            })
+        }).toBeGreaterThan(0)
 
         return image
     }
@@ -65,7 +74,11 @@ export class DetailView extends VisitableView {
         return this.user.albumView()
     }
     shouldHaveRotated = async (beforeWidth: number, beforeHeight: number) => {
-        const image = await this.getMedium()
+        const rotator = this.locator.getByTestId('details-rotate')
+        await expect(rotator).not.toHaveClass(/details__rotate--active/)
+
+        const image = await this.getMedium(true)
+
         await expect.poll(() => image.evaluate((img) => img.naturalWidth)).not.toBe(beforeWidth)
 
         const after = await image.evaluate((img) => {
