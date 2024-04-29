@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { mediumToAlbum, mediumToTag, tag } from '../../src/drizzle/schema'
 
 export const connectIds = (ids: string[]) => {
     return {
@@ -18,6 +18,8 @@ export const connectId = (id: string) => {
     }
 }
 
+export const defaultUser = '51dde765-a6de-48c6-b372-41534fb91d55'
+
 export const connectDefaultUser = () => {
     return {
         connect: {
@@ -26,21 +28,19 @@ export const connectDefaultUser = () => {
     }
 }
 
-export const createTags = (labels: string[], idUser = '51dde765-a6de-48c6-b372-41534fb91d55'): Prisma.TagCreateNestedManyWithoutMediaInput => {
-    return {
-        connectOrCreate: labels.map((label) => {
-            return {
-                where: {
-                    idUser_label: {
-                        idUser,
-                        label
-                    }
-                },
-                create: {
-                    idUser,
-                    label
-                }
-            }
-        })
-    }
+export const createTags = (idMedium: string, tagsData: typeof tag.$inferInsert[], labels: string[]): typeof mediumToTag.$inferInsert[] => {
+    return labels.map((label) => ({
+        idMedium,
+        idTag: tagsData.find((tag) => {
+            // console.log(tag.label === label, tag.label, label)
+            return tag.label === label
+        }).id
+    }))
+}
+
+export const createAlbumWithMedia = (idAlbum: string, media: string[]): typeof mediumToAlbum.$inferInsert[] => {
+    return media.map((idMedium) => ({
+        idMedium,
+        idAlbum
+    }))
 }

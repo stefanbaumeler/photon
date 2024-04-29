@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql'
 import { User } from '../user/user.model'
 import { Medium } from '../medium/medium.model'
 @ObjectType()
@@ -6,10 +6,10 @@ export class Album {
     @Field(() => String)
         id!: string
 
-    @Field(() => Date)
+    @Field(() => GraphQLISODateTime)
         dateCreated!: Date
 
-    @Field(() => Date)
+    @Field(() => GraphQLISODateTime)
         dateModified!: Date
 
     @Field(() => String, {

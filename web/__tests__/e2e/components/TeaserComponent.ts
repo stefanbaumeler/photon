@@ -153,7 +153,6 @@ export class TeaserComponent {
         const image = await this.getMedium()
 
         await expect.poll(() => image.evaluate((img) => {
-            console.log(img.naturalHeight, img.src)
             return img.naturalHeight
         })).not.toBe(beforeHeight)
 

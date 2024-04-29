@@ -1,5 +1,4 @@
 import { ArgsType, Field } from '@nestjs/graphql'
-import { Prisma } from '@prisma/client'
 
 @ArgsType()
 export class AlbumMediaDto {
@@ -18,12 +17,12 @@ export class AlbumUpdateDto {
     @Field(() => String, {
         nullable: true
     })
-        title?: Prisma.AlbumUpdateInput['title']
+        title?: string
 
     @Field(() => String, {
         nullable: true
     })
-        description?: Prisma.AlbumUpdateInput['description']
+        description?: string
 
     @Field(() => String, {
         nullable: true
@@ -36,15 +35,15 @@ export class AlbumCreateDto {
     @Field(() => String, {
         nullable: true
     })
-        title: Prisma.AlbumCreateInput['title']
+        title: string
 
     @Field(() => String, {
         nullable: true
     })
-        description: Prisma.AlbumCreateInput['description']
+        description: string
 
     @Field(() => [String], {
         nullable: true
     })
-        media?: Prisma.AlbumCreateInput['media']
+        media?: string
 }

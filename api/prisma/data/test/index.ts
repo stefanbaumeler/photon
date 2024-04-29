@@ -1,35 +1,30 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { db } from '../../../src/drizzle/db'
 
-import { users } from './users'
-import { media } from './media'
-import { albums } from './albums'
+import { usersData } from './users'
+import { favoritesData, mediaData } from './media'
+import { albumsData, mediumToAlbumData } from './albums'
+import { album, mediumToAlbum, medium, user, favorite, tag, mediumToTag } from '../../../src/drizzle/schema'
+import { tagsData, mediumToTagsData } from './tags'
 
-export default async () => {
-    await prisma.user.deleteMany()
-    await prisma.$transaction(
-        users.map((user) => {
-            return prisma.user.create({
-                data: user
-            })
-        })
-    )
+export const testEnv = async () => {
+    await db.delete(user)
+    await db.insert(user).values(usersData)
 
-    await prisma.medium.deleteMany()
-    await prisma.$transaction(
-        media.map((medium) => {
-            return prisma.medium.create({
-                data: medium
-            })
-        })
-    )
+    await db.delete(medium)
+    await db.insert(medium).values(mediaData)
 
-    await prisma.album.deleteMany()
-    await prisma.$transaction(
-        albums.map((album) => {
-            return prisma.album.create({
-                data: album
-            })
-        })
-    )
+    await db.delete(favorite)
+    await db.insert(favorite).values(favoritesData)
+
+    await db.delete(tag)
+    await db.insert(tag).values(tagsData)
+
+    await db.delete(mediumToTag)
+    await db.insert(mediumToTag).values(mediumToTagsData)
+
+    await db.delete(album)
+    await db.insert(album).values(albumsData)
+
+    await db.delete(mediumToAlbum)
+    await db.insert(mediumToAlbum).values(mediumToAlbumData)
 }

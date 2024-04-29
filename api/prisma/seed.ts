@@ -1,17 +1,19 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-import devEnv from './data/dev'
-import testEnv from './data/test'
+import 'dotenv/config'
+
+import { devEnv } from './data/dev'
+import { testEnv } from './data/test'
 import { getEnv } from '../env'
 import { setDbUrl } from '../src/database'
 import path from 'path'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
 import https from 'https'
+import { client } from '../src/drizzle/db'
 
 export async function seedDatabase (setup: string, force = false) {
     const env = getEnv()
     setDbUrl()
+    await client.connect()
     const uploadsDir = path.join(__dirname, '../', env.API_UPLOADS_DIR)
     const zipPath = path.join(__dirname, `./data/${setup}/uploads.zip`)
 
@@ -64,13 +66,10 @@ export async function seedDatabase (setup: string, force = false) {
 }
 
 export const seed = async (setup = 'dev', force = false) => {
-    await seedDatabase(setup, force)
-        .then(async () => {
-            await prisma.$disconnect()
-        })
-        .catch(async (e) => {
-            console.error(e)
-            await prisma.$disconnect()
-            process.exit(1)
-        })
+    await seedDatabase(setup, force).then(() => {
+        process.exit()
+    }).catch(async (e) => {
+        console.error(e)
+        process.exit(1)
+    })
 }

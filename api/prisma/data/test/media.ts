@@ -1,15 +1,17 @@
-import { Prisma } from '@prisma/client'
-import { connectDefaultUser, connectId, createTags } from '../helpers'
+import { defaultUser, createTags } from '../helpers'
+import { favorite, medium, mediumToTag } from '../../../src/drizzle/schema'
 
-export const media: Prisma.MediumCreateInput[] = [
+const mediaIds = ['9b004ea9-996f-4c18-92e3-bec2b9051585', '2b96675e-2428-4520-909e-91e8a91fb5f9', '114d5e91-b89e-4a31-9305-d3753bf64f2c', 'bc8b723c-3f58-4bd6-a2e5-9fa1fbdd305d', '3498b0eb-9433-4c90-a27b-ac1f08221fa7', '6e11ebf1-4d3d-457d-b27b-7fcf66d5bb16', '2ef6335e-ef45-400f-97ee-213f2c1e1a48']
+
+export const mediaData: typeof medium.$inferInsert[] = [
     {
-        id: '9b004ea9-996f-4c18-92e3-bec2b9051585',
+        id: mediaIds[0],
         hash: '4027638022486444',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.582Z',
         dateTaken: '2022-07-22T13:33:36.000Z',
-        filenameDisk: '9b004ea9-996f-4c18-92e3-bec2b9051585',
+        filenameDisk: mediaIds[0],
         filenameDownload: 'Test Image 0.jpg',
         title: 'Test Image 0',
         location: [],
@@ -25,19 +27,17 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 40,
             focalLength: '6.81 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Hut', 'Nature', 'Outdoors', 'Countryside', 'Building', 'Rural', 'Architecture', 'Shelter', 'Housing', 'Shack']),
-        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: '2b96675e-2428-4520-909e-91e8a91fb5f9',
+        id: mediaIds[1],
         hash: '6399297107300791',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.672Z',
         dateTaken: '2022-07-22T13:18:09.000Z',
-        filenameDisk: '2b96675e-2428-4520-909e-91e8a91fb5f9',
+        filenameDisk: mediaIds[1],
         filenameDownload: 'Test Image 1.jpg',
         title: 'Test Image 1',
         location: [],
@@ -49,19 +49,17 @@ export const media: Prisma.MediumCreateInput[] = [
             cameraMake: 'Google',
             cameraModel: 'Pixel 6'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Scenery', 'Nature', 'Outdoors', 'Rubble', 'Gravel', 'Road', 'Rock', 'Wilderness', 'Landscape', 'Person', 'Slope', 'Mountain Range', 'Mountain']),
-        favoredBy: connectId('51dde765-a6de-48c6-b372-41534fb91d55')
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: '114d5e91-b89e-4a31-9305-d3753bf64f2c',
+        id: mediaIds[2],
         hash: '7970782094991679',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.702Z',
         dateTaken: '2017-06-17T09:47:02.000Z',
-        filenameDisk: '114d5e91-b89e-4a31-9305-d3753bf64f2c',
+        filenameDisk: mediaIds[2],
         filenameDownload: 'Test Image 2.jpg',
         title: 'Test Image 2',
         location: [
@@ -81,18 +79,17 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 62,
             focalLength: '4.67 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Scenery', 'Outdoors', 'Nature', 'Boat', 'Vehicle', 'Transportation', 'Railing', 'Handrail', 'Bridge', 'Summer', 'Water', 'Bird', 'Animal'])
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: 'bc8b723c-3f58-4bd6-a2e5-9fa1fbdd305d',
+        id: mediaIds[3],
         hash: '8031633646104408',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.747Z',
         dateTaken: '2022-07-22T07:18:09.000Z',
-        filenameDisk: 'bc8b723c-3f58-4bd6-a2e5-9fa1fbdd305d',
+        filenameDisk: mediaIds[3],
         filenameDownload: 'Test Image 3.jpg',
         title: 'Test Image 3',
         location: [],
@@ -108,18 +105,17 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 44,
             focalLength: '6.81 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Grassland', 'Nature', 'Outdoors', 'Field', 'Meadow', 'Countryside', 'Rural', 'Plateau', 'Pasture', 'Farm', 'Grass', 'Plant', 'Ground', 'Scenery'])
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: '3498b0eb-9433-4c90-a27b-ac1f08221fa7',
+        id: mediaIds[4],
         hash: '4786596051521061',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.777Z',
         dateTaken: '2022-07-22T09:10:19.000Z',
-        filenameDisk: '3498b0eb-9433-4c90-a27b-ac1f08221fa7',
+        filenameDisk: mediaIds[4],
         filenameDownload: 'Test Image 4.jpg',
         title: 'Test Image 4',
         location: [],
@@ -135,18 +131,17 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 44,
             focalLength: '6.81 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Reservoir', 'Outdoors', 'Nature', 'Water', 'Promontory', 'Scenery', 'Sea', 'Land'])
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: '6e11ebf1-4d3d-457d-b27b-7fcf66d5bb16',
+        id: mediaIds[5],
         hash: '1663484318860797',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.810Z',
         dateTaken: '2022-07-22T09:35:19.000Z',
-        filenameDisk: '6e11ebf1-4d3d-457d-b27b-7fcf66d5bb16',
+        filenameDisk: mediaIds[5],
         filenameDownload: 'Test Image 5.jpg',
         title: 'Test Image 5',
         location: [],
@@ -162,18 +157,17 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 39,
             focalLength: '6.81 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Shelter', 'Outdoors', 'Building', 'Architecture', 'Hut', 'Nature', 'Countryside', 'Rural', 'Scenery', 'Car', 'Vehicle', 'Transportation', 'Pickup Truck', 'Truck', 'Person'])
+        idOwner: defaultUser,
+        idUploader: defaultUser
     },
     {
-        id: '2ef6335e-ef45-400f-97ee-213f2c1e1a48',
+        id: mediaIds[6],
         hash: '80032229074241',
         dateCreated: '2022-11-10T23:00:00.000Z',
         dateModified: '2022-11-10T23:00:00.000Z',
         dateModifiedStatus: '2023-03-19T09:29:00.836Z',
         dateTaken: '2022-07-22T08:41:00.000Z',
-        filenameDisk: '2ef6335e-ef45-400f-97ee-213f2c1e1a48',
+        filenameDisk: mediaIds[6],
         filenameDownload: 'Test Image 6.jpg',
         title: 'Test Image 6',
         location: [],
@@ -189,8 +183,18 @@ export const media: Prisma.MediumCreateInput[] = [
             iso: 45,
             focalLength: '6.81 mm'
         },
-        owner: connectDefaultUser(),
-        uploader: connectDefaultUser(),
-        tags: createTags(['Scenery', 'Outdoors', 'Nature', 'Promontory', 'Water', 'Beach', 'Shoreline', 'Sea', 'Coast'])
+        idOwner: defaultUser,
+        idUploader: defaultUser
+    }
+]
+
+export const favoritesData: typeof favorite.$inferInsert[] = [
+    {
+        idMedium: mediaIds[0],
+        idUser: defaultUser
+    },
+    {
+        idMedium: mediaIds[1],
+        idUser: defaultUser
     }
 ]

@@ -36,6 +36,6 @@ export class AlbumService {
     }
 
     async create (album: AlbumCreateDto) {
-        return this.repository.create(album)
+        // return this.repository.create(album)
     }
 }

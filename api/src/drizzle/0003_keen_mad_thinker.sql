@@ -1,0 +1,2 @@
+ALTER TABLE "album" ALTER COLUMN "date_created" SET DATA TYPE timestamp(0) with time zone;--> statement-breakpoint
+ALTER TABLE "album" ALTER COLUMN "date_modified" SET DATA TYPE timestamp (0) with time zone;
