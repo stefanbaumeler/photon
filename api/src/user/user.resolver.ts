@@ -6,13 +6,13 @@ import { UserChangePasswordDto,
     UserRefreshTokenDto,
     UserSignInDto,
     UserSignUpDto,
-    UserTokenDto, UserVerifyAccountDto } from './user.dto'
+    UserTokenDto } from './user.dto'
 import { Public } from '../auth/public.decorator'
 import { Response } from 'express'
 
 @Resolver(() => User)
 export class UserResolver {
-    constructor (private readonly service: UserService) {}
+    constructor (private readonly service: UserService) { }
 
     @Query(() => User)
     async profile () {
@@ -47,7 +47,7 @@ export class UserResolver {
         return this.service.refreshAccessToken(dto, res)
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => User)
     async changePassword (@Args() dto: UserChangePasswordDto) {
         return this.service.changePassword(dto)
     }

@@ -1,5 +1,5 @@
 query QFavorites {
-    favorites {
+    media(favorites: true) {
         ...FMedia
     }
 }

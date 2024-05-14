@@ -24,7 +24,7 @@ export const FavoriteControl = ({
     const selection = useSelectionContext()
     const [{  data: favorites }] = useQFavorites()
 
-    const favoriteIds = favorites?.favorites.map((favorite) => favorite.id)
+    const favoriteIds = favorites?.media.map((favorite) => favorite.id)
 
     const hasUnfavorited = !!media.filter((medium) => !favoriteIds?.find((favorite) => favorite === medium)).length
 

@@ -5,30 +5,30 @@ import { getEnv } from '../../env'
 import { randomUUID } from 'crypto'
 import path from 'path'
 import { fileToMedium } from '../helpers/exif'
-import { Prisma } from '@prisma/client'
 import AdmZip from 'adm-zip'
 import sharp from 'sharp'
-import { getCV } from '../../drivers'
 import { ClsService } from 'nestjs-cls'
 import { Request, Response } from 'express'
 import { IdDto } from '../shared/dto'
 import GeocodingClient from '@mapbox/mapbox-sdk/services/geocoding'
+import { MediumCreateDto } from '../medium/medium.dto'
 
 const env = getEnv()
 
 @Injectable()
 export class UploadService {
-    constructor (private repository: MediumRepository, private cls: ClsService) {}
+    constructor (private mediumRepository: MediumRepository, private cls: ClsService) { }
 
     async serve (dto: IdDto, req: Request, res: Response) {
         res.setHeader('Content-Type', 'image/jpeg')
 
         try {
-            const medium = await this.repository.findOneByFilenameDisk({
-                filenameDisk: dto.id
+            const medium = await this.mediumRepository.findById(dto, {
+                owner: true
             })
 
-            if (medium?.idOwner !== this.cls.get('userId')) {
+            if (medium?.owner.id !== this.cls.get('userId')) {
+                console.log(medium?.owner.id)
                 res.statusCode = 403
                 res.send()
                 return
@@ -38,9 +38,7 @@ export class UploadService {
                 this.resize(path.join(__dirname, '../../../', `./uploads/${dto.id}`), req.query.w as string).pipe(res)
             }
             else {
-                await this.repository.findOneByFilenameDisk({
-                    filenameDisk: dto.id
-                }).then((medium) => {
+                await this.mediumRepository.findById(dto).then((medium) => {
                     if (medium) {
                         res.setHeader(
                             'Content-disposition',
@@ -88,8 +86,6 @@ export class UploadService {
                 return []
             }
 
-            this.generateTags(file.path, file.filename)
-
             return await fileToMedium({
                 filePath: file.path,
                 fileName: file.filename,
@@ -119,8 +115,6 @@ export class UploadService {
             const pathName = `${env.API_UPLOADS_DIR}/${name}`
 
             fs.copyFileSync(filePath, pathName)
-
-            this.generateTags(pathName, name)
 
             return await fileToMedium({
                 filePath: pathName,
@@ -163,59 +157,6 @@ export class UploadService {
         return files
     }
 
-    async generateTags (pathName: string, filenameDisk: string) {
-        if (!env.CV_REKOGNITION_ACCESS_KEY_ID || !env.CV_REKOGNITION_SECRET_ACCESS_KEY || !env.CV_REKOGNITION_REGION) {
-            return false
-        }
-
-        const buffer = await fs.promises.readFile(pathName)
-
-        const bufferForCV = await this.reduceToFileSize(buffer, 4.9)
-
-        const recognize = await getCV()
-        const labels = await recognize.labels(bufferForCV)
-        const text = await recognize.text(bufferForCV)
-        // const faces = await recognize.faces(bufferForCV)
-
-        console.log(labels, text)
-
-        if (labels && text) {
-            await this.writeGeneratedTags([...labels, ...text], filenameDisk)
-        }
-    }
-
-    async writeGeneratedTags (tags: string[], filenameDisk: string) {
-        const medium = await this.repository.findOneByFilenameDisk({
-            filenameDisk
-        })
-
-        const userId = this.cls.get('userId')
-
-        if (!medium) {
-            return
-        }
-
-        await this.repository.update({
-            id: medium.id,
-            tags: {
-                connectOrCreate: tags.map((tag) => {
-                    return {
-                        where: {
-                            idUser_label: {
-                                idUser: userId,
-                                label: tag
-                            }
-                        },
-                        create: {
-                            idUser: userId,
-                            label: tag
-                        }
-                    }
-                })
-            }
-        })
-    }
-
     reduceToFileSize = async (buffer: Buffer, sizeInMB: number, quality = 80, attempts = 10): Promise<Buffer> => {
         const newFile = await sharp(buffer).jpeg({
             quality
@@ -232,7 +173,7 @@ export class UploadService {
         return newFile
     }
 
-    async createMany (media: Prisma.MediumCreateInput[]) {
+    async createMany (media: MediumCreateDto[]) {
         const promises = media.map((medium) => {
             return this.createOne(medium)
         })
@@ -242,18 +183,8 @@ export class UploadService {
         })
     }
 
-    async createOne (medium: Prisma.MediumCreateInput) {
-        const include = {
-            owner: true,
-            uploader: true,
-            favoredBy: {
-                where: {
-                    id: this.cls.get('userId')
-                }
-            }
-        }
-
-        const existing = await this.repository.findOneByIdOrHash(medium, include)
+    async createOne (medium: MediumCreateDto) {
+        const existing = await this.mediumRepository.findByIdOrHash(medium)
 
         if (existing && medium.filenameDisk) {
             const existingPath = path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk)
@@ -267,13 +198,13 @@ export class UploadService {
 
         const locationData = await this.getLocationData(medium.location)
 
-        return await this.repository.createOne({
+        return await this.mediumRepository.createOne({
             ...medium,
             ...locationData
-        }, include)
+        })
     }
 
-    getLocationData = async (location?: Prisma.InputJsonValue) => {
+    getLocationData = async (location?: [number, number]) => {
         if (!location || typeof location !== 'object' || !Array.isArray(location) || !location[0] || !location[1]) {
             return {}
         }
@@ -292,7 +223,7 @@ export class UploadService {
         const placeFeature = result.body.features.find((feature) => feature.place_type[0] === 'place')
         const addressFeature = result.body.features.find((feature) => feature.place_type[0] === 'address')
 
-        const data = {} as Partial<Prisma.MediumCreateInput>
+        const data = {} as Partial<MediumCreateDto>
 
         if (countryFeature) {
             data.country = countryFeature.text

@@ -1,4 +1,4 @@
-import { defaultUser, connectId } from '../helpers'
+import { defaultUser, secondaryUser } from '../helpers'
 import { favorite, medium } from '../../../src/drizzle/schema'
 
 export const mediaData: typeof medium.$inferInsert[] = [
@@ -22,7 +22,7 @@ export const mediaData: typeof medium.$inferInsert[] = [
         status: 'all',
         mimetype: 'image/jpeg',
         idOwner: defaultUser,
-        idUploader: defaultUser,
+        idUploader: secondaryUser,
         meta: {
             width: 4080,
             height: 3072,

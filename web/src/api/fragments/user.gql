@@ -2,7 +2,7 @@ fragment FUser on User {
     id
     dateCreated
     dateModified
-    mail
+    email
     firstName
     lastName
     language

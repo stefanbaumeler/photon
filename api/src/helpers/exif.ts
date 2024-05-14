@@ -5,8 +5,8 @@ import { promises as fsPromises } from 'fs'
 import MediaInfoFactory, { ReadChunkFunc } from 'mediainfo.js'
 import { ResultObject, Track } from 'mediainfo.js/dist/types'
 import { TVideoMeta, TImageMeta, TMeta } from '@photon/schema/server'
-import { Prisma } from '@prisma/client'
 import mime from 'mime-types'
+import { MediumCreateDto } from '../medium/medium.dto'
 
 export const hash = (str: string, seed = 0) => {
     // https://stackoverflow.com/a/52171480
@@ -75,7 +75,7 @@ const getCoordinates = (result: ResultObject) => {
         })
     })
 
-    return coordinates
+    return coordinates as [number, number]
 }
 
 const getDateTaken = (result: ResultObject) => {
@@ -127,7 +127,7 @@ const getDuration = (result: ResultObject) => {
 }
 
 const handleImage = async (filePath: string) => {
-    const isXmpTag = (element: unknown): element is XmpTag  => {
+    const isXmpTag = (element: unknown): element is XmpTag => {
         return typeof element === 'object'
     }
 
@@ -146,7 +146,7 @@ const handleImage = async (filePath: string) => {
 
     const date = rawMeta?.DateTime?.value[0].split(' ')[0].split(':').join('-')
     const time = rawMeta?.DateTime?.value[0].split(' ')[1]
-    const dateTime = new Date([date, time].join(' '))
+    const dateTime = new Date([date, time].join(' ')).toISOString()
 
     const latRef = rawMeta?.GPSLatitudeRef?.value[0] === 'N' ? 1 : -1
     const lngRef = rawMeta?.GPSLongitudeRef?.value[0] === 'E' ? 1 : -1
@@ -160,7 +160,7 @@ const handleImage = async (filePath: string) => {
     const mediumData = {
         dateTaken: dateTime,
         hash: hash(JSON.stringify(rawMeta)).toString(),
-        location: lat && lng ? [lat, lng] : undefined
+        location: lat && lng ? [lat, lng] as [number, number] : undefined
     }
 
     const meta: Partial<TImageMeta> = {
@@ -216,8 +216,6 @@ const handleVideo = async (filePath: string) => {
         const dimensions = getDimensions(result)
         const duration = getDuration(result)
 
-        console.log(result, dateTaken)
-
         const meta: TVideoMeta = {
             duration,
             height: dimensions.height || 0,
@@ -244,10 +242,10 @@ const handleVideo = async (filePath: string) => {
 
 export const fileToMedium = async ({
     filePath, fileName, originalName, type, user
-}: { filePath: string, fileName: string, originalName: string, type?: string, user: string }): Promise<Prisma.MediumCreateInput> => {
+}: { filePath: string, fileName: string, originalName: string, type?: string, user: string }): Promise<MediumCreateDto> => {
     const mimetype = type || mime.lookup(originalName) || ''
     const mediumType = mimetype.split('/')[0]
-    const combine = (info: { data?: Partial<Prisma.MediumCreateInput>, meta?: Partial<TImageMeta | TVideoMeta> }): Prisma.MediumCreateInput => {
+    const combine = (info: { data?: Partial<MediumCreateDto>, meta?: Partial<TImageMeta | TVideoMeta> }): MediumCreateDto => {
         return {
             mimetype,
             filenameDisk: fileName,
@@ -255,17 +253,7 @@ export const fileToMedium = async ({
             title: path.parse(originalName).name,
             description: '',
             ...info.data,
-            meta: info.meta as TMeta,
-            owner: {
-                connect: {
-                    id: user
-                }
-            },
-            uploader: {
-                connect: {
-                    id: user
-                }
-            }
+            meta: info.meta as TMeta
         }
     }
 

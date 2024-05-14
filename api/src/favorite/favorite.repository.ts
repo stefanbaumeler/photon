@@ -1,61 +1,27 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { IdDto, IdsDto } from '../shared/dto'
+import { Inject, Injectable } from '@nestjs/common'
+import { IdsDto } from '../shared/dto'
 import { ClsService } from 'nestjs-cls'
-
+import * as schema from '../drizzle/schema'
+import { DrizzleAsyncProvider } from '../drizzle/drizzle.provider'
+import { NodePgDatabase } from 'drizzle-orm/node-postgres'
+import { favorite } from '../drizzle/schema'
+import { and, eq, inArray } from 'drizzle-orm'
 @Injectable()
 export class FavoriteRepository {
-    constructor (private prisma: PrismaService, private cls: ClsService) {}
-
-    async findByUser (dto: IdDto) {
-        return this.prisma.medium.findMany({
-            where: {
-                favoredBy: {
-                    some: {
-                        id: dto.id
-                    }
-                }
-            },
-            include: {
-                owner: true,
-                uploader: true,
-                tags: true,
-                favoredBy: {
-                    where: {
-                        id: this.cls.get('userId')
-                    }
-                }
-            }
-        })
-    }
+    constructor (private cls: ClsService, @Inject(DrizzleAsyncProvider) private db: NodePgDatabase<typeof schema>) { }
 
     async insertMany (dto: IdsDto) {
-        return this.prisma.user.update({
-            where: {
-                id: this.cls.get('userId')
-            },
-            data: {
-                favorites: {
-                    connect: dto.ids.map((id) => ({
-                        id
-                    }))
-                }
-            }
-        })
+        await this.db.insert(favorite).values(dto.ids.map((id) => ({
+            idUser: this.cls.get('userId'),
+            idMedium: id
+        })))
+
+        return true
     }
 
     async deleteMany (dto: IdsDto) {
-        return this.prisma.user.update({
-            where: {
-                id: this.cls.get('userId')
-            },
-            data: {
-                favorites: {
-                    disconnect: dto.ids.map((id) => ({
-                        id
-                    }))
-                }
-            }
-        })
+        await this.db.delete(favorite).where(and(eq(favorite.idUser, this.cls.get('userId')), inArray(favorite.idMedium, dto.ids)))
+
+        return true
     }
 }

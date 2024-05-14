@@ -2,12 +2,12 @@ import { ETrans } from '@/types/translations'
 import { formatDate } from '@/util/date'
 import { EDateFormat, TCover } from '@/types/app'
 import { useTranslation } from 'react-i18next'
-import { TMedium } from '@photon/schema/dist/client'
+import { TFlatMedium } from '@photon/schema/dist/client'
 import { Detail } from '@/components/shared/Detail'
 
 type TAlbumDetail = {
     id: string
-    media?: Partial<TMedium>[] | null
+    media?: Partial<TFlatMedium>[] | null
     cover?: TCover | null
     dateCreated: string
     title?: string | null

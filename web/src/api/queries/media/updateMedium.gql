@@ -1,5 +1,5 @@
 mutation MUpdateMedium($id: String!, $description: String) {
     updateMedium(id: $id, description: $description) {
-        ...FMedia
+        ...FFlatMedia
     }
 }

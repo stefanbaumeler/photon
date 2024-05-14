@@ -22,12 +22,12 @@ export type Scalars = {
 
 export type TAlbum = {
   __typename?: 'Album';
-  cover?: Maybe<TMedium>;
-  dateCreated: Scalars['DateTime']['output'];
-  dateModified: Scalars['DateTime']['output'];
+  cover?: Maybe<TFlatMedium>;
+  dateCreated: Scalars['String']['output'];
+  dateModified: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  media?: Maybe<Array<TMedium>>;
+  media?: Maybe<Array<TFlatMedium>>;
   owner: TUser;
   title?: Maybe<Scalars['String']['output']>;
 };
@@ -40,6 +40,37 @@ export type TDevice = {
   name: Scalars['String']['output'];
   title: Scalars['String']['output'];
   users: Array<TUser>;
+};
+
+export type TFlatAlbum = {
+  __typename?: 'FlatAlbum';
+  dateCreated: Scalars['String']['output'];
+  dateModified: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type TFlatMedium = {
+  __typename?: 'FlatMedium';
+  address: Scalars['String']['output'];
+  country: Scalars['String']['output'];
+  dateCreated: Scalars['String']['output'];
+  dateModified: Scalars['String']['output'];
+  dateModifiedStatus: Scalars['String']['output'];
+  dateTaken: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  filenameDisk: Scalars['String']['output'];
+  filenameDownload: Scalars['String']['output'];
+  hash?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  location: Array<Scalars['Float']['output']>;
+  meta: TMeta;
+  mimetype: Scalars['String']['output'];
+  place: Scalars['String']['output'];
+  region: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
 };
 
 export type TImageMeta = {
@@ -57,12 +88,11 @@ export type TImageMeta = {
 export type TMedium = {
   __typename?: 'Medium';
   address: Scalars['String']['output'];
-  albums: Array<TAlbum>;
   country: Scalars['String']['output'];
-  dateCreated: Scalars['DateTime']['output'];
-  dateModified: Scalars['DateTime']['output'];
-  dateModifiedStatus: Scalars['DateTime']['output'];
-  dateTaken: Scalars['DateTime']['output'];
+  dateCreated: Scalars['String']['output'];
+  dateModified: Scalars['String']['output'];
+  dateModifiedStatus: Scalars['String']['output'];
+  dateTaken: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   favoredBy?: Maybe<Array<TUser>>;
   filenameDisk: Scalars['String']['output'];
@@ -111,22 +141,22 @@ export type TMutation = {
   __typename?: 'Mutation';
   addMediaToAlbum: TAlbum;
   changeLanguage: TUser;
-  changePassword: Scalars['Boolean']['output'];
+  changePassword: TUser;
   createAlbum: TAlbum;
-  deleteAlbums: Array<TAlbum>;
-  deleteFavorites: TUser;
-  deleteMedia: Array<TMedium>;
-  emptyTrash: Array<TMedium>;
-  insertFavorites: TUser;
+  deleteAlbums: Array<TFlatAlbum>;
+  deleteFavorites: Scalars['Boolean']['output'];
+  deleteMedia: Array<TFlatMedium>;
+  emptyTrash: Array<TFlatMedium>;
+  insertFavorites: Scalars['Boolean']['output'];
   refreshAccessToken: TUserTokenDto;
   removeMediaFromAlbum: TAlbum;
-  rotateMedium: TMedium;
+  rotateMedium: TFlatMedium;
   signIn: TUserTokenDto;
   signOut: Scalars['Boolean']['output'];
   signUp: TUserTokenDto;
-  updateAlbum: TAlbum;
-  updateMedia: Array<TMedium>;
-  updateMedium: TMedium;
+  updateAlbum: TFlatAlbum;
+  updateMedia: Array<TFlatMedium>;
+  updateMedium: TFlatMedium;
 };
 
 
@@ -143,12 +173,13 @@ export type TMutationChangeLanguageArgs = {
 
 export type TMutationChangePasswordArgs = {
   currentPassword: Scalars['String']['input'];
-  mail: Scalars['String']['input'];
+  email: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
 };
 
 
 export type TMutationCreateAlbumArgs = {
+  cover?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<Scalars['String']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -194,16 +225,16 @@ export type TMutationRotateMediumArgs = {
 
 
 export type TMutationSignInArgs = {
-  mail: Scalars['String']['input'];
+  email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
 
 export type TMutationSignUpArgs = {
+  email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   language: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
-  mail: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
@@ -226,7 +257,6 @@ export type TMutationUpdateMediumArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   meta?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -242,7 +272,7 @@ export type TQuery = {
   favorites: Array<TMedium>;
   media: Array<TMedium>;
   medium: TMedium;
-  mediumAlbums: TMedium;
+  mediumAlbums: Array<TAlbum>;
   profile: TUser;
   trash: Array<TMedium>;
 };
@@ -292,13 +322,13 @@ export type TTag = {
 
 export type TUser = {
   __typename?: 'User';
-  dateCreated: Scalars['DateTime']['output'];
-  dateModified: Scalars['DateTime']['output'];
+  dateCreated: Scalars['String']['output'];
+  dateModified: Scalars['String']['output'];
+  email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   language: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
-  mail: Scalars['String']['output'];
   signUpToken: Scalars['String']['output'];
 };
 
@@ -395,6 +425,8 @@ export type TResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Device: ResolverTypeWrapper<TDevice>;
+  FlatAlbum: ResolverTypeWrapper<TFlatAlbum>;
+  FlatMedium: ResolverTypeWrapper<Omit<TFlatMedium, 'meta'> & { meta: TResolversTypes['Meta'] }>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ImageMeta: ResolverTypeWrapper<TImageMeta>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -419,6 +451,8 @@ export type TResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   DateTime: Scalars['DateTime']['output'];
   Device: TDevice;
+  FlatAlbum: TFlatAlbum;
+  FlatMedium: Omit<TFlatMedium, 'meta'> & { meta: TResolversParentTypes['Meta'] };
   Float: Scalars['Float']['output'];
   ImageMeta: TImageMeta;
   Int: Scalars['Int']['output'];
@@ -438,12 +472,12 @@ export type TResolversParentTypes = {
 };
 
 export type TAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Album'] = TResolversParentTypes['Album']> = {
-  cover?: Resolver<Maybe<TResolversTypes['Medium']>, ParentType, ContextType>;
-  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  cover?: Resolver<Maybe<TResolversTypes['FlatMedium']>, ParentType, ContextType>;
+  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  media?: Resolver<Maybe<Array<TResolversTypes['Medium']>>, ParentType, ContextType>;
+  media?: Resolver<Maybe<Array<TResolversTypes['FlatMedium']>>, ParentType, ContextType>;
   owner?: Resolver<TResolversTypes['User'], ParentType, ContextType>;
   title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -463,6 +497,37 @@ export type TDeviceResolvers<ContextType = any, ParentType extends TResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TFlatAlbumResolvers<ContextType = any, ParentType extends TResolversParentTypes['FlatAlbum'] = TResolversParentTypes['FlatAlbum']> = {
+  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TFlatMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['FlatMedium'] = TResolversParentTypes['FlatMedium']> = {
+  address?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  country?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModifiedStatus?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateTaken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  filenameDisk?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  filenameDownload?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  hash?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  location?: Resolver<Array<TResolversTypes['Float']>, ParentType, ContextType>;
+  meta?: Resolver<TResolversTypes['Meta'], ParentType, ContextType>;
+  mimetype?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  place?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  region?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TImageMetaResolvers<ContextType = any, ParentType extends TResolversParentTypes['ImageMeta'] = TResolversParentTypes['ImageMeta']> = {
   cameraMake?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   cameraModel?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -477,12 +542,11 @@ export type TImageMetaResolvers<ContextType = any, ParentType extends TResolvers
 
 export type TMediumResolvers<ContextType = any, ParentType extends TResolversParentTypes['Medium'] = TResolversParentTypes['Medium']> = {
   address?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  albums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType>;
   country?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateModifiedStatus?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateTaken?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModifiedStatus?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateTaken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<TResolversTypes['String']>, ParentType, ContextType>;
   favoredBy?: Resolver<Maybe<Array<TResolversTypes['User']>>, ParentType, ContextType>;
   filenameDisk?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
@@ -533,22 +597,22 @@ export type TMetaResolvers<ContextType = any, ParentType extends TResolversParen
 export type TMutationResolvers<ContextType = any, ParentType extends TResolversParentTypes['Mutation'] = TResolversParentTypes['Mutation']> = {
   addMediaToAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationAddMediaToAlbumArgs, 'id' | 'media'>>;
   changeLanguage?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationChangeLanguageArgs, 'language'>>;
-  changePassword?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType, RequireFields<TMutationChangePasswordArgs, 'currentPassword' | 'mail' | 'newPassword'>>;
+  changePassword?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationChangePasswordArgs, 'currentPassword' | 'email' | 'newPassword'>>;
   createAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, Partial<TMutationCreateAlbumArgs>>;
-  deleteAlbums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumsArgs, 'ids'>>;
-  deleteFavorites?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationDeleteFavoritesArgs, 'ids'>>;
-  deleteMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
-  emptyTrash?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
-  insertFavorites?: Resolver<TResolversTypes['User'], ParentType, ContextType, RequireFields<TMutationInsertFavoritesArgs, 'ids'>>;
+  deleteAlbums?: Resolver<Array<TResolversTypes['FlatAlbum']>, ParentType, ContextType, RequireFields<TMutationDeleteAlbumsArgs, 'ids'>>;
+  deleteFavorites?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType, RequireFields<TMutationDeleteFavoritesArgs, 'ids'>>;
+  deleteMedia?: Resolver<Array<TResolversTypes['FlatMedium']>, ParentType, ContextType, RequireFields<TMutationDeleteMediaArgs, 'ids'>>;
+  emptyTrash?: Resolver<Array<TResolversTypes['FlatMedium']>, ParentType, ContextType>;
+  insertFavorites?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType, RequireFields<TMutationInsertFavoritesArgs, 'ids'>>;
   refreshAccessToken?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationRefreshAccessTokenArgs, 'accessToken' | 'refreshToken'>>;
   removeMediaFromAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationRemoveMediaFromAlbumArgs, 'id' | 'media'>>;
-  rotateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationRotateMediumArgs, 'deg' | 'id'>>;
-  signIn?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignInArgs, 'mail' | 'password'>>;
+  rotateMedium?: Resolver<TResolversTypes['FlatMedium'], ParentType, ContextType, RequireFields<TMutationRotateMediumArgs, 'deg' | 'id'>>;
+  signIn?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignInArgs, 'email' | 'password'>>;
   signOut?: Resolver<TResolversTypes['Boolean'], ParentType, ContextType>;
-  signUp?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'firstName' | 'language' | 'lastName' | 'mail' | 'password'>>;
-  updateAlbum?: Resolver<TResolversTypes['Album'], ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'id'>>;
-  updateMedia?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, RequireFields<TMutationUpdateMediaArgs, 'ids'>>;
-  updateMedium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TMutationUpdateMediumArgs, 'id'>>;
+  signUp?: Resolver<TResolversTypes['UserTokenDto'], ParentType, ContextType, RequireFields<TMutationSignUpArgs, 'email' | 'firstName' | 'language' | 'lastName' | 'password'>>;
+  updateAlbum?: Resolver<TResolversTypes['FlatAlbum'], ParentType, ContextType, RequireFields<TMutationUpdateAlbumArgs, 'id'>>;
+  updateMedia?: Resolver<Array<TResolversTypes['FlatMedium']>, ParentType, ContextType, RequireFields<TMutationUpdateMediaArgs, 'ids'>>;
+  updateMedium?: Resolver<TResolversTypes['FlatMedium'], ParentType, ContextType, RequireFields<TMutationUpdateMediumArgs, 'id'>>;
 };
 
 export type TQueryResolvers<ContextType = any, ParentType extends TResolversParentTypes['Query'] = TResolversParentTypes['Query']> = {
@@ -562,7 +626,7 @@ export type TQueryResolvers<ContextType = any, ParentType extends TResolversPare
   favorites?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
   media?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType, Partial<TQueryMediaArgs>>;
   medium?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumArgs, 'id'>>;
-  mediumAlbums?: Resolver<TResolversTypes['Medium'], ParentType, ContextType, RequireFields<TQueryMediumAlbumsArgs, 'id'>>;
+  mediumAlbums?: Resolver<Array<TResolversTypes['Album']>, ParentType, ContextType, RequireFields<TQueryMediumAlbumsArgs, 'id'>>;
   profile?: Resolver<TResolversTypes['User'], ParentType, ContextType>;
   trash?: Resolver<Array<TResolversTypes['Medium']>, ParentType, ContextType>;
 };
@@ -576,13 +640,13 @@ export type TTagResolvers<ContextType = any, ParentType extends TResolversParent
 };
 
 export type TUserResolvers<ContextType = any, ParentType extends TResolversParentTypes['User'] = TResolversParentTypes['User']> = {
-  dateCreated?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
-  dateModified?: Resolver<TResolversTypes['DateTime'], ParentType, ContextType>;
+  dateCreated?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  dateModified?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
-  mail?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   signUpToken?: Resolver<TResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -605,6 +669,8 @@ export type TResolvers<ContextType = any> = {
   Album?: TAlbumResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Device?: TDeviceResolvers<ContextType>;
+  FlatAlbum?: TFlatAlbumResolvers<ContextType>;
+  FlatMedium?: TFlatMediumResolvers<ContextType>;
   ImageMeta?: TImageMetaResolvers<ContextType>;
   Medium?: TMediumResolvers<ContextType>;
   MediumCountDto?: TMediumCountDtoResolvers<ContextType>;
@@ -622,8 +688,8 @@ export type TResolvers<ContextType = any> = {
 
 
 export type TFCover = (
-  { __typename?: 'Medium' }
-  & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+  { __typename?: 'FlatMedium' }
+  & Pick<TFlatMedium, 'id' | 'mimetype' | 'filenameDisk'>
   & { meta: (
     { __typename?: 'ImageMeta' }
     & Pick<TImageMeta, 'width' | 'height'>
@@ -633,10 +699,28 @@ export type TFCover = (
   ) }
 );
 
+export type TFFlatMedia = (
+  { __typename: 'FlatMedium' }
+  & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+  & { meta: (
+    { __typename?: 'ImageMeta' }
+    & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+  ) | (
+    { __typename?: 'VideoMeta' }
+    & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+  ) }
+);
+
 export type TFMedia = (
   { __typename: 'Medium' }
-  & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-  & { tags: Array<(
+  & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+  & { meta: (
+    { __typename?: 'ImageMeta' }
+    & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+  ) | (
+    { __typename?: 'VideoMeta' }
+    & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+  ), tags: Array<(
     { __typename?: 'Tag' }
     & Pick<TTag, 'id'>
   )>, favoredBy?: Maybe<Array<(
@@ -648,23 +732,12 @@ export type TFMedia = (
   ), uploader: (
     { __typename?: 'User' }
     & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-  ), meta: (
-    { __typename?: 'ImageMeta' }
-    & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-  ) | (
-    { __typename?: 'VideoMeta' }
-    & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
   ) }
-);
-
-export type TFMediaStatus = (
-  { __typename: 'Medium' }
-  & Pick<TMedium, 'id' | 'status'>
 );
 
 export type TFUser = (
   { __typename?: 'User' }
-  & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+  & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
 );
 
 export type TMAddToAlbumVariables = Exact<{
@@ -679,8 +752,8 @@ export type TMAddToAlbum = (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id'>
     & { media?: Maybe<Array<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id'>
     )>> }
   ) }
 );
@@ -696,8 +769,8 @@ export type TQAlbum = (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id' | 'mimetype' | 'filenameDisk'>
       & { meta: (
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height'>
@@ -709,21 +782,9 @@ export type TQAlbum = (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     ), media?: Maybe<Array<(
-      { __typename: 'Medium' }
-      & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-      & { tags: Array<(
-        { __typename?: 'Tag' }
-        & Pick<TTag, 'id'>
-      )>, favoredBy?: Maybe<Array<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>>, owner: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), uploader: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), meta: (
+      { __typename: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+      & { meta: (
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
       ) | (
@@ -743,8 +804,14 @@ export type TQAlbumMedia = (
   { __typename?: 'Query' }
   & { albumMedia: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -756,12 +823,6 @@ export type TQAlbumMedia = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -775,8 +836,8 @@ export type TQAlbums = (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id' | 'title' | 'description' | 'dateCreated' | 'dateModified'>
     & { cover?: Maybe<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id' | 'mimetype' | 'filenameDisk'>
       & { meta: (
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height'>
@@ -788,21 +849,9 @@ export type TQAlbums = (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
     ), media?: Maybe<Array<(
-      { __typename: 'Medium' }
-      & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-      & { tags: Array<(
-        { __typename?: 'Tag' }
-        & Pick<TTag, 'id'>
-      )>, favoredBy?: Maybe<Array<(
-        { __typename?: 'User' }
-        & Pick<TUser, 'id'>
-      )>>, owner: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), uploader: (
-        { __typename?: 'User' }
-        & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-      ), meta: (
+      { __typename: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+      & { meta: (
         { __typename?: 'ImageMeta' }
         & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
       ) | (
@@ -820,28 +869,24 @@ export type TQAlbumsOfMediumVariables = Exact<{
 
 export type TQAlbumsOfMedium = (
   { __typename?: 'Query' }
-  & { mediumAlbums: (
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
-    & { albums: Array<(
-      { __typename?: 'Album' }
-      & Pick<TAlbum, 'id' | 'title' | 'dateCreated'>
-      & { cover?: Maybe<(
-        { __typename?: 'Medium' }
-        & Pick<TMedium, 'id' | 'mimetype' | 'filenameDisk'>
-        & { meta: (
-          { __typename?: 'ImageMeta' }
-          & Pick<TImageMeta, 'width' | 'height'>
-        ) | (
-          { __typename?: 'VideoMeta' }
-          & Pick<TVideoMeta, 'width' | 'height'>
-        ) }
-      )>, media?: Maybe<Array<(
-        { __typename?: 'Medium' }
-        & Pick<TMedium, 'id'>
-      )>> }
-    )> }
-  ) }
+  & { mediumAlbums: Array<(
+    { __typename?: 'Album' }
+    & Pick<TAlbum, 'id' | 'title' | 'dateCreated'>
+    & { cover?: Maybe<(
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id' | 'mimetype' | 'filenameDisk'>
+      & { meta: (
+        { __typename?: 'ImageMeta' }
+        & Pick<TImageMeta, 'width' | 'height'>
+      ) | (
+        { __typename?: 'VideoMeta' }
+        & Pick<TVideoMeta, 'width' | 'height'>
+      ) }
+    )>, media?: Maybe<Array<(
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id'>
+    )>> }
+  )> }
 );
 
 export type TMCreateAlbumVariables = Exact<{
@@ -867,8 +912,8 @@ export type TMDeleteAlbumsVariables = Exact<{
 export type TMDeleteAlbums = (
   { __typename?: 'Mutation' }
   & { deleteAlbums: Array<(
-    { __typename?: 'Album' }
-    & Pick<TAlbum, 'id'>
+    { __typename?: 'FlatAlbum' }
+    & Pick<TFlatAlbum, 'id'>
   )> }
 );
 
@@ -884,8 +929,8 @@ export type TMRemoveFromAlbum = (
     { __typename?: 'Album' }
     & Pick<TAlbum, 'id'>
     & { media?: Maybe<Array<(
-      { __typename?: 'Medium' }
-      & Pick<TMedium, 'id'>
+      { __typename?: 'FlatMedium' }
+      & Pick<TFlatMedium, 'id'>
     )>> }
   ) }
 );
@@ -901,8 +946,8 @@ export type TMUpdateAlbumVariables = Exact<{
 export type TMUpdateAlbum = (
   { __typename?: 'Mutation' }
   & { updateAlbum: (
-    { __typename?: 'Album' }
-    & Pick<TAlbum, 'id'>
+    { __typename?: 'FlatAlbum' }
+    & Pick<TFlatAlbum, 'id'>
   ) }
 );
 
@@ -913,10 +958,7 @@ export type TMDeleteFavoritesVariables = Exact<{
 
 export type TMDeleteFavorites = (
   { __typename?: 'Mutation' }
-  & { deleteFavorites: (
-    { __typename?: 'User' }
-    & Pick<TUser, 'id'>
-  ) }
+  & Pick<TMutation, 'deleteFavorites'>
 );
 
 export type TQFavoritesVariables = Exact<{ [key: string]: never; }>;
@@ -924,10 +966,16 @@ export type TQFavoritesVariables = Exact<{ [key: string]: never; }>;
 
 export type TQFavorites = (
   { __typename?: 'Query' }
-  & { favorites: Array<(
+  & { media: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -939,12 +987,6 @@ export type TQFavorites = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -956,10 +998,7 @@ export type TMInsertFavoritesVariables = Exact<{
 
 export type TMInsertFavorites = (
   { __typename?: 'Mutation' }
-  & { insertFavorites: (
-    { __typename?: 'User' }
-    & Pick<TUser, 'id'>
-  ) }
+  & Pick<TMutation, 'insertFavorites'>
 );
 
 export type TQArchiveVariables = Exact<{ [key: string]: never; }>;
@@ -969,8 +1008,14 @@ export type TQArchive = (
   { __typename?: 'Query' }
   & { archive: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -982,12 +1027,6 @@ export type TQArchive = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -1000,8 +1039,8 @@ export type TMDeleteMediaVariables = Exact<{
 export type TMDeleteMedia = (
   { __typename?: 'Mutation' }
   & { deleteMedia: Array<(
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
+    { __typename?: 'FlatMedium' }
+    & Pick<TFlatMedium, 'id'>
   )> }
 );
 
@@ -1024,8 +1063,8 @@ export type TMEmptyTrashVariables = Exact<{ [key: string]: never; }>;
 export type TMEmptyTrash = (
   { __typename?: 'Mutation' }
   & { emptyTrash: Array<(
-    { __typename?: 'Medium' }
-    & Pick<TMedium, 'id'>
+    { __typename?: 'FlatMedium' }
+    & Pick<TFlatMedium, 'id'>
   )> }
 );
 
@@ -1043,8 +1082,14 @@ export type TQMedia = (
   { __typename?: 'Query' }
   & { media: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -1056,12 +1101,6 @@ export type TQMedia = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -1075,8 +1114,14 @@ export type TQMediaStatus = (
   { __typename?: 'Query' }
   & { media: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -1088,12 +1133,6 @@ export type TQMediaStatus = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -1126,8 +1165,14 @@ export type TQMedium = (
   { __typename?: 'Query' }
   & { medium: (
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -1139,12 +1184,6 @@ export type TQMedium = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   ) }
 );
@@ -1158,21 +1197,9 @@ export type TMRotateVariables = Exact<{
 export type TMRotate = (
   { __typename?: 'Mutation' }
   & { rotateMedium: (
-    { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
-      { __typename?: 'Tag' }
-      & Pick<TTag, 'id'>
-    )>, favoredBy?: Maybe<Array<(
-      { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )>>, owner: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), uploader: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
+    { __typename: 'FlatMedium' }
+    & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
@@ -1189,8 +1216,14 @@ export type TQTrash = (
   { __typename?: 'Query' }
   & { trash: Array<(
     { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
+    & Pick<TMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
+      { __typename?: 'ImageMeta' }
+      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
+    ) | (
+      { __typename?: 'VideoMeta' }
+      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
+    ), tags: Array<(
       { __typename?: 'Tag' }
       & Pick<TTag, 'id'>
     )>, favoredBy?: Maybe<Array<(
@@ -1202,12 +1235,6 @@ export type TQTrash = (
     ), uploader: (
       { __typename?: 'User' }
       & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
-      { __typename?: 'ImageMeta' }
-      & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
-    ) | (
-      { __typename?: 'VideoMeta' }
-      & Pick<TVideoMeta, 'width' | 'height' | 'duration'>
     ) }
   )> }
 );
@@ -1221,21 +1248,9 @@ export type TMUpdateMediaVariables = Exact<{
 export type TMUpdateMedia = (
   { __typename?: 'Mutation' }
   & { updateMedia: Array<(
-    { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
-      { __typename?: 'Tag' }
-      & Pick<TTag, 'id'>
-    )>, favoredBy?: Maybe<Array<(
-      { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )>>, owner: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), uploader: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
+    { __typename: 'FlatMedium' }
+    & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
@@ -1254,21 +1269,9 @@ export type TMUpdateMediumVariables = Exact<{
 export type TMUpdateMedium = (
   { __typename?: 'Mutation' }
   & { updateMedium: (
-    { __typename: 'Medium' }
-    & Pick<TMedium, 'id' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype' | 'status'>
-    & { tags: Array<(
-      { __typename?: 'Tag' }
-      & Pick<TTag, 'id'>
-    )>, favoredBy?: Maybe<Array<(
-      { __typename?: 'User' }
-      & Pick<TUser, 'id'>
-    )>>, owner: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), uploader: (
-      { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'firstName' | 'lastName'>
-    ), meta: (
+    { __typename: 'FlatMedium' }
+    & Pick<TFlatMedium, 'id' | 'status' | 'dateCreated' | 'dateModified' | 'dateModifiedStatus' | 'hash' | 'dateTaken' | 'filenameDisk' | 'filenameDownload' | 'title' | 'description' | 'location' | 'country' | 'region' | 'place' | 'address' | 'mimetype'>
+    & { meta: (
       { __typename?: 'ImageMeta' }
       & Pick<TImageMeta, 'width' | 'height' | 'cameraMake' | 'cameraModel' | 'flash' | 'fNumber' | 'iso'>
     ) | (
@@ -1287,20 +1290,23 @@ export type TMChangeLanguage = (
   { __typename?: 'Mutation' }
   & { changeLanguage: (
     { __typename?: 'User' }
-    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
   ) }
 );
 
 export type TMChangePasswordVariables = Exact<{
   currentPassword: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
-  mail: Scalars['String']['input'];
+  email: Scalars['String']['input'];
 }>;
 
 
 export type TMChangePassword = (
   { __typename?: 'Mutation' }
-  & Pick<TMutation, 'changePassword'>
+  & { changePassword: (
+    { __typename?: 'User' }
+    & Pick<TUser, 'id'>
+  ) }
 );
 
 export type TQProfileVariables = Exact<{ [key: string]: never; }>;
@@ -1310,7 +1316,7 @@ export type TQProfile = (
   { __typename?: 'Query' }
   & { profile: (
     { __typename?: 'User' }
-    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+    & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
   ) }
 );
 
@@ -1327,13 +1333,13 @@ export type TMRefreshAccessToken = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
 
 export type TMSignInVariables = Exact<{
-  mail: Scalars['String']['input'];
+  email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 }>;
 
@@ -1345,7 +1351,7 @@ export type TMSignIn = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
@@ -1359,7 +1365,7 @@ export type TMSignOut = (
 );
 
 export type TMSignUpVariables = Exact<{
-  mail: Scalars['String']['input'];
+  email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -1373,13 +1379,13 @@ export type TMSignUp = (
     & Pick<TUserTokenDto, 'accessToken' | 'refreshToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'mail' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
+      & Pick<TUser, 'id' | 'dateCreated' | 'dateModified' | 'email' | 'firstName' | 'lastName' | 'language' | 'signUpToken'>
     ) }
   ) }
 );
 
 export const FCover = gql`
-    fragment FCover on Medium {
+    fragment FCover on FlatMedium {
   id
   mimetype
   filenameDisk
@@ -1395,25 +1401,15 @@ export const FCover = gql`
   }
 }
     `;
-export const FMediaStatus = gql`
-    fragment FMediaStatus on Medium {
+export const FFlatMedia = gql`
+    fragment FFlatMedia on FlatMedium {
   id
   __typename
   status
-}
-    `;
-export const FMedia = gql`
-    fragment FMedia on Medium {
-  ...FMediaStatus
-  id
-  __typename
   dateCreated
   dateModified
   dateModifiedStatus
   hash
-  tags {
-    id
-  }
   dateTaken
   filenameDisk
   filenameDownload
@@ -1425,19 +1421,6 @@ export const FMedia = gql`
   place
   address
   mimetype
-  favoredBy {
-    id
-  }
-  owner {
-    id
-    firstName
-    lastName
-  }
-  uploader {
-    id
-    firstName
-    lastName
-  }
   meta {
     ... on ImageMeta {
       width
@@ -1456,12 +1439,66 @@ export const FMedia = gql`
   }
 }
     `;
+export const FMedia = gql`
+    fragment FMedia on Medium {
+  id
+  status
+  __typename
+  dateCreated
+  dateModified
+  dateModifiedStatus
+  hash
+  dateTaken
+  filenameDisk
+  filenameDownload
+  title
+  description
+  location
+  country
+  region
+  place
+  address
+  mimetype
+  meta {
+    ... on ImageMeta {
+      width
+      height
+      cameraMake
+      cameraModel
+      flash
+      fNumber
+      iso
+    }
+    ... on VideoMeta {
+      width
+      height
+      duration
+    }
+  }
+  tags {
+    id
+  }
+  favoredBy {
+    id
+  }
+  owner {
+    id
+    firstName
+    lastName
+  }
+  uploader {
+    id
+    firstName
+    lastName
+  }
+}
+    `;
 export const FUser = gql`
     fragment FUser on User {
   id
   dateCreated
   dateModified
-  mail
+  email
   firstName
   lastName
   language
@@ -1495,21 +1532,19 @@ export const QAlbumDocument = gql`
       lastName
     }
     media {
-      ...FMedia
+      ...FFlatMedia
     }
   }
 }
     ${FCover}
-${FMedia}
-${FMediaStatus}`;
+${FFlatMedia}`;
 export const QAlbumMediaDocument = gql`
     query QAlbumMedia($id: String!) {
   albumMedia(id: $id) {
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const QAlbumsDocument = gql`
     query QAlbums {
   albums {
@@ -1527,27 +1562,23 @@ export const QAlbumsDocument = gql`
       lastName
     }
     media {
-      ...FMedia
+      ...FFlatMedia
     }
   }
 }
     ${FCover}
-${FMedia}
-${FMediaStatus}`;
+${FFlatMedia}`;
 export const QAlbumsOfMediumDocument = gql`
     query QAlbumsOfMedium($id: String!) {
   mediumAlbums(id: $id) {
     id
-    albums {
+    title
+    dateCreated
+    cover {
+      ...FCover
+    }
+    media {
       id
-      title
-      dateCreated
-      cover {
-        ...FCover
-      }
-      media {
-        id
-      }
     }
   }
 }
@@ -1585,24 +1616,19 @@ export const MUpdateAlbumDocument = gql`
     `;
 export const MDeleteFavoritesDocument = gql`
     mutation MDeleteFavorites($ids: [String!]!) {
-  deleteFavorites(ids: $ids) {
-    id
-  }
+  deleteFavorites(ids: $ids)
 }
     `;
 export const QFavoritesDocument = gql`
     query QFavorites {
-  favorites {
+  media(favorites: true) {
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const MInsertFavoritesDocument = gql`
     mutation MInsertFavorites($ids: [String!]!) {
-  insertFavorites(ids: $ids) {
-    id
-  }
+  insertFavorites(ids: $ids)
 }
     `;
 export const QArchiveDocument = gql`
@@ -1611,8 +1637,7 @@ export const QArchiveDocument = gql`
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const MDeleteMediaDocument = gql`
     mutation MDeleteMedia($ids: [String!]!) {
   deleteMedia(ids: $ids) {
@@ -1647,16 +1672,14 @@ export const QMediaDocument = gql`
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const QMediaStatusDocument = gql`
     query QMediaStatus($ids: [String!]!) {
   media(ids: $ids) {
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const QMediaYearCountDocument = gql`
     query QMediaYearCount {
   countMediaByYear {
@@ -1678,40 +1701,35 @@ export const QMediumDocument = gql`
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const MRotateDocument = gql`
     mutation MRotate($id: String!, $deg: Int!) {
   rotateMedium(id: $id, deg: $deg) {
-    ...FMedia
+    ...FFlatMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FFlatMedia}`;
 export const QTrashDocument = gql`
     query QTrash {
   trash {
     ...FMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FMedia}`;
 export const MUpdateMediaDocument = gql`
     mutation MUpdateMedia($ids: [String!]!, $status: String!) {
   updateMedia(ids: $ids, status: $status) {
-    ...FMedia
+    ...FFlatMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FFlatMedia}`;
 export const MUpdateMediumDocument = gql`
     mutation MUpdateMedium($id: String!, $description: String) {
   updateMedium(id: $id, description: $description) {
-    ...FMedia
+    ...FFlatMedia
   }
 }
-    ${FMedia}
-${FMediaStatus}`;
+    ${FFlatMedia}`;
 export const MChangeLanguageDocument = gql`
     mutation MChangeLanguage($language: String!) {
   changeLanguage(language: $language) {
@@ -1720,12 +1738,14 @@ export const MChangeLanguageDocument = gql`
 }
     ${FUser}`;
 export const MChangePasswordDocument = gql`
-    mutation MChangePassword($currentPassword: String!, $newPassword: String!, $mail: String!) {
+    mutation MChangePassword($currentPassword: String!, $newPassword: String!, $email: String!) {
   changePassword(
     currentPassword: $currentPassword
     newPassword: $newPassword
-    mail: $mail
-  )
+    email: $email
+  ) {
+    id
+  }
 }
     `;
 export const QProfileDocument = gql`
@@ -1747,8 +1767,8 @@ export const MRefreshAccessTokenDocument = gql`
 }
     ${FUser}`;
 export const MSignInDocument = gql`
-    mutation MSignIn($mail: String!, $password: String!) {
-  signIn(mail: $mail, password: $password) {
+    mutation MSignIn($email: String!, $password: String!) {
+  signIn(email: $email, password: $password) {
     accessToken
     refreshToken
     user {
@@ -1763,9 +1783,9 @@ export const MSignOutDocument = gql`
 }
     `;
 export const MSignUpDocument = gql`
-    mutation MSignUp($mail: String!, $password: String!, $firstName: String!, $lastName: String!) {
+    mutation MSignUp($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
   signUp(
-    mail: $mail
+    email: $email
     password: $password
     firstName: $firstName
     lastName: $lastName

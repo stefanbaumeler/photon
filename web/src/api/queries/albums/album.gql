@@ -14,7 +14,7 @@ query QAlbum($id: String!) {
             lastName
         }
         media {
-            ...FMedia
+            ...FFlatMedia
         }
     }
 }

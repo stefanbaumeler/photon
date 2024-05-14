@@ -4,14 +4,14 @@ export class User {
     @Field(() => String)
         id!: string
 
-    @Field(() => Date)
+    @Field(() => String)
         dateCreated!: Date
 
-    @Field(() => Date)
+    @Field(() => String)
         dateModified!: Date
 
     @Field(() => String)
-        mail!: string
+        email!: string
 
     @Field(() => String)
         firstName!: string

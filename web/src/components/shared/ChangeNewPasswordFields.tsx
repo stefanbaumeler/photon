@@ -23,7 +23,7 @@ export const ChangePasswordFields = ({
             changePasswordMutation({
                 currentPassword,
                 newPassword,
-                mail: user.profile.mail
+                email: user.profile.email
             }).then(() => {
                 callback && callback()
             })

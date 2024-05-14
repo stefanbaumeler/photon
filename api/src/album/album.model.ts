@@ -1,15 +1,16 @@
-import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 import { User } from '../user/user.model'
-import { Medium } from '../medium/medium.model'
+import { FlatMedium } from '../medium/medium.model'
+
 @ObjectType()
-export class Album {
+export class FlatAlbum {
     @Field(() => String)
         id!: string
 
-    @Field(() => GraphQLISODateTime)
+    @Field(() => String)
         dateCreated!: Date
 
-    @Field(() => GraphQLISODateTime)
+    @Field(() => String)
         dateModified!: Date
 
     @Field(() => String, {
@@ -21,17 +22,20 @@ export class Album {
         nullable: true
     })
         description?: string
+}
 
-    @Field(() => Medium, {
+@ObjectType()
+export class Album extends FlatAlbum {
+    @Field(() => FlatMedium, {
         nullable: true
     })
-        cover?: Medium
+        cover?: FlatMedium
 
     @Field(() => User)
         owner!: User
 
-    @Field(() => [Medium], {
+    @Field(() => [FlatMedium], {
         nullable: true
     })
-        media?: Medium
+        media?: FlatMedium[]
 }

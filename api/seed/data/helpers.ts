@@ -1,24 +1,10 @@
 import { mediumToAlbum, mediumToTag, tag } from '../../src/drizzle/schema'
-
-export const connectIds = (ids: string[]) => {
-    return {
-        connect: ids.map((id) => {
-            return {
-                id
-            }
-        })
-    }
-}
-
-export const connectId = (id: string) => {
-    return {
-        connect: {
-            id
-        }
-    }
-}
+import { QueryBuilder } from 'drizzle-orm/pg-core'
+import { getColumns, jsonAggBuildObject } from '../../src/drizzle/helpers'
+import { eq } from 'drizzle-orm'
 
 export const defaultUser = '51dde765-a6de-48c6-b372-41534fb91d55'
+export const secondaryUser = 'e8b4641f-57ac-441a-9276-219393f620ab'
 
 export const connectDefaultUser = () => {
     return {

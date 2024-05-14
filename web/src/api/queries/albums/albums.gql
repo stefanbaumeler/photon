@@ -14,7 +14,7 @@ query QAlbums {
             lastName
         },
         media {
-            ...FMedia
+            ...FFlatMedia
         }
     }
 }

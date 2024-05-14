@@ -1,5 +1,3 @@
 mutation MDeleteFavorites($ids: [String!]!) {
-    deleteFavorites(ids: $ids) {
-        id
-    }
+    deleteFavorites(ids: $ids)
 }

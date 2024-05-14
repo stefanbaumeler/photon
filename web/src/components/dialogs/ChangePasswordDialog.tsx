@@ -25,7 +25,7 @@ export const ChangePasswordDialog = ({ closeCallback }: Props) => {
             changePasswordMutation({
                 currentPassword,
                 newPassword,
-                mail: user.profile.mail
+                mail: user.profile.email
             }).then(() => {
                 setChangedPassword(true)
             })

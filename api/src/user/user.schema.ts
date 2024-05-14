@@ -12,7 +12,7 @@ export const userSchema = pgTable('user', {
         withTimezone: true,
         mode: 'string'
     }).defaultNow().notNull(),
-    mail: varchar('mail', {
+    email: varchar('mail', {
         length: 255
     }).notNull(),
     password: varchar('password', {

@@ -1,5 +1,5 @@
 mutation MUpdateMedia($ids: [String!]!, $status: String!) {
     updateMedia(ids: $ids, status: $status) {
-        ...FMedia
+        ...FFlatMedia
     }
 }

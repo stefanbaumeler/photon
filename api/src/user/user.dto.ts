@@ -14,7 +14,7 @@ export class UserLanguageDto {
 export class UserSignInDto {
     @IsEmail()
     @Field(() => String)
-        mail!: string
+        email!: string
 
     @Field(() => String)
         password!: string
@@ -25,7 +25,7 @@ export class UserSignInDto {
 export class UserSignUpDto {
     @IsEmail()
     @Field(() => String)
-        mail!: string
+        email!: string
 
     @Field(() => String)
         password!: string
@@ -66,7 +66,7 @@ export class UserRefreshTokenDto {
 @ArgsType()
 export class UserChangePasswordDto {
     @Field(() => String)
-        mail!: string
+        email!: string
 
     @Field(() => String)
         currentPassword!: string

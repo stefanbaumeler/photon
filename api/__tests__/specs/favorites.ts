@@ -1,6 +1,6 @@
 // import { useTestQuery } from '../utility'
 // import * as Schema from '@photon/schema/server'
-// import { seed } from '../../prisma/seed'
+// import { seed } from '../../seed/seed'
 // import { predefinedFavoriteUUIDs, predefinedMediumUUIDs } from '../../src/database/helpers/ids'
 //
 // beforeAll(async () => {

@@ -5,7 +5,7 @@ import { AlbumCreateDto, AlbumMediaDto, AlbumUpdateDto } from './album.dto'
 
 @Injectable()
 export class AlbumService {
-    constructor (private repository: AlbumRepository) {}
+    constructor (private repository: AlbumRepository) { }
 
     async getAll () {
         return this.repository.all()
@@ -16,7 +16,7 @@ export class AlbumService {
     }
 
     async getById (dto: IdDto) {
-        return this.repository.findOneById(dto)
+        return this.repository.findById(dto)
     }
 
     async delete (dto: IdsDto) {
@@ -36,6 +36,6 @@ export class AlbumService {
     }
 
     async create (album: AlbumCreateDto) {
-        // return this.repository.create(album)
+        return this.repository.create(album)
     }
 }

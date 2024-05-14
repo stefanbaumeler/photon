@@ -1,14 +1,11 @@
 fragment FMedia on Medium {
-    ...FMediaStatus
     id
+    status
     __typename
     dateCreated
     dateModified
     dateModifiedStatus
     hash
-    tags {
-        id
-    }
     dateTaken
     filenameDisk
     filenameDownload
@@ -20,19 +17,6 @@ fragment FMedia on Medium {
     place
     address
     mimetype
-    favoredBy {
-        id
-    }
-    owner {
-        id
-        firstName
-        lastName
-    }
-    uploader {
-        id
-        firstName
-        lastName
-    }
     meta {
         ...on ImageMeta {
             width
@@ -48,5 +32,21 @@ fragment FMedia on Medium {
             height
             duration
         }
+    }
+    tags {
+        id
+    }
+    favoredBy {
+        id
+    }
+    owner {
+        id
+        firstName
+        lastName
+    }
+    uploader {
+        id
+        firstName
+        lastName
     }
 }

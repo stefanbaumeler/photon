@@ -12,8 +12,8 @@
         "@photon/cv": "*"
     },
     "devDependencies": {
-        "typescript": "^4.7.4",
-        "eslint": "^8.20.0",
+        "typescript": "*",
+        "eslint": "*",
         "eslint-plugin-react": "^7.30.1"
     }
 }

@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { AlbumService } from './album.service'
-import { Album } from './album.model'
+import { Album, FlatAlbum } from './album.model'
 import { IdDto, IdsDto } from '../shared/dto'
 import { Medium } from '../medium/medium.model'
 import { AlbumCreateDto, AlbumMediaDto, AlbumUpdateDto } from './album.dto'
@@ -14,7 +14,7 @@ export class AlbumResolver {
         return this.service.getAll()
     }
 
-    @Query(() => Medium)
+    @Query(() => [Album])
     async mediumAlbums (@Args() dto: IdDto) {
         return this.service.getByMedium(dto)
     }
@@ -30,14 +30,9 @@ export class AlbumResolver {
         return album?.media
     }
 
-    @Mutation(() => [Album])
+    @Mutation(() => [FlatAlbum])
     async deleteAlbums (@Args() dto: IdsDto) {
-        await this.service.delete(dto)
-        return dto.ids.map((id) => {
-            return {
-                id
-            }
-        })
+        return this.service.delete(dto)
     }
 
     @Mutation(() => Album)
@@ -50,7 +45,7 @@ export class AlbumResolver {
         return this.service.removeMedia(dto)
     }
 
-    @Mutation(() => Album)
+    @Mutation(() => FlatAlbum)
     async updateAlbum (@Args() dto: AlbumUpdateDto) {
         return this.service.update(dto)
     }

@@ -1,0 +1,36 @@
+fragment FFlatMedia on FlatMedium {
+    id
+    __typename
+    status
+    dateCreated
+    dateModified
+    dateModifiedStatus
+    hash
+    dateTaken
+    filenameDisk
+    filenameDownload
+    title
+    description
+    location
+    country
+    region
+    place
+    address
+    mimetype
+    meta {
+        ...on ImageMeta {
+            width
+            height
+            cameraMake
+            cameraModel
+            flash
+            fNumber
+            iso
+        }
+        ...on VideoMeta {
+            width
+            height
+            duration
+        }
+    }
+}

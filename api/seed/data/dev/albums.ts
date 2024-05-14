@@ -2,6 +2,7 @@ import { defaultUser } from '../helpers'
 import type { album, mediumToAlbum } from '../../../src/drizzle/schema'
 
 const albumIds = ['09e5e7e1-f13d-4fcd-a729-6532dfbdc1d4', '738110c5-c8c1-400f-aa29-b95772d6324e', '77e4c72c-6ebc-4f8d-a787-9e4a63388288']
+
 export const albumsData: typeof album.$inferInsert[] = [
     {
         id: albumIds[0],

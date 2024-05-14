@@ -1,64 +1,57 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
 import { IdDto, IdsDto } from '../shared/dto'
-import { AlbumMediaDto, AlbumUpdateDto } from './album.dto'
-import { Prisma } from '@prisma/client'
+import { AlbumCreateDto, AlbumMediaDto, AlbumUpdateDto } from './album.dto'
 import { ClsService } from 'nestjs-cls'
 import { DrizzleAsyncProvider } from '../drizzle/drizzle.provider'
 import * as schema from '../drizzle/schema'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
-import { album, medium, mediumToAlbum, mediumToAlbumRelations } from '../drizzle/schema'
-import { and, AnyColumn, count, eq, GetColumnData, getTableColumns, InferColumnsDataTypes, SQL, sql } from 'drizzle-orm'
-
-export function coalesce<T> (value: SQL.Aliased<T> | SQL<T>, defaultValue: SQL) {
-    return sql<T>`coalesce(${value}, ${defaultValue})`
-}
-
-export function jsonAgg<Column extends AnyColumn> (column: Column) {
-    return coalesce<GetColumnData<Column, 'raw'>[]>(
-        sql`json_agg(distinct ${sql`${column}`}) filter (where ${column} is not null)`,
-        sql`'[]'`
-    )
-}
+import { album, medium, mediumToAlbum, user } from '../drizzle/schema'
+import { and, count, eq, getTableColumns, inArray } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+import { getManyToMany, TAlbumInclude } from '../drizzle/helpers'
 
 @Injectable()
 export class AlbumRepository {
-    constructor (private prisma: PrismaService, private cls: ClsService, @Inject(DrizzleAsyncProvider) private db: NodePgDatabase<typeof schema>) {}
+    constructor (private cls: ClsService, @Inject(DrizzleAsyncProvider) private db: NodePgDatabase<typeof schema>) { }
+
+    columns = getTableColumns(album)
+
+    findBy ({ include = {} }: { include?: TAlbumInclude } = {}) {
+        const media = getManyToMany('media', album, mediumToAlbum, medium, ['idAlbum', 'idMedium'])
+            // .where(eq(medium.status, 'all'))
+            .as('mediaQuery')
+
+        const {
+            idCover, idOwner, ...columns
+        } = this.columns
+
+        const cover = alias(medium, 'cover')
+
+        return this.db.with(media)
+            .select({
+                ...columns,
+                cover: getTableColumns(cover),
+                media: media.result,
+                ...include.owner ? {
+                    owner: getTableColumns(user)
+                } : {}
+            })
+            .from(album)
+            .innerJoin(user, eq(user.id, album.idOwner))
+            .leftJoin(mediumToAlbum, eq(mediumToAlbum.idAlbum, album.id))
+            .innerJoin(media, eq(album.id, media.id))
+            .leftJoin(cover, eq(album.idCover, cover.id))
+            .groupBy(album.id, media.result, cover.id, cover.mimetype, cover.filenameDisk, user.id)
+    }
 
     async all () {
-        return this.prisma.album.findMany({
-            where: {
-                owner: {
-                    id: this.cls.get('userId')
-                }
-            },
+        const query = this.findBy({
             include: {
-                owner: true,
-                media: {
-                    include: {
-                        favoredBy: {
-                            where: {
-                                id: this.cls.get('userId')
-                            }
-                        },
-                        owner: true,
-                        uploader: true,
-                        tags: true
-                    }
-                },
-                cover: {
-                    include: {
-                        owner: true,
-                        uploader: true,
-                        favoredBy: {
-                            where: {
-                                id: this.cls.get('userId')
-                            }
-                        }
-                    }
-                }
+                owner: true
             }
         })
+
+        return query.where(eq(album.idOwner, this.cls.get('userId')))
     }
 
     async findMany (dto: IdsDto) {
@@ -68,191 +61,76 @@ export class AlbumRepository {
     }
 
     async findManyByMedium (dto: IdDto) {
-        const mediaOfAlbum = this.db.$with('mediaOfAlbum').as(
-            this.db.select({
-                id: album.id,
-                count: sql<number>`cast(count(${medium.id}) as int)`.as('count')
-            }).from(album)
-                .leftJoin(mediumToAlbum, eq(album.id, mediumToAlbum.idAlbum))
-                .leftJoin(medium, eq(mediumToAlbum.idMedium, medium.id))
-                .where(eq(medium.status, 'all'))
-                .groupBy(album.id)
-        )
+        const cover = alias(medium, 'cover')
 
-        const albumsOfMedium = this.db.$with('albumsOfMedium').as(
-            this.db.select({
-                id: mediumToAlbum.idAlbum
-            }).from(mediumToAlbum).where(eq(mediumToAlbum.idMedium, dto.id))
-        )
-
-        const covers = this.db.$with('covers').as(
-            this.db.with(albumsOfMedium).select({
-                id: medium.id,
-                filenameDisk: medium.filenameDisk,
-                mimetype: medium.mimetype
-            }).from(medium)
-                .leftJoin(album, eq(album.idCover, medium.id))
-                .rightJoin(albumsOfMedium, eq(album.id, albumsOfMedium.id))
-        )
-
-        return this.db.with(mediaOfAlbum, albumsOfMedium, covers).select({
+        const mediaCountOfAlbum = this.db.select({
             id: album.id,
-            title: album.title,
-            count: mediaOfAlbum.count,
-            cover: {
-                id: covers.id,
-                mimetype: covers.mimetype,
-                filenameDisk: covers.filenameDisk
-            }
+            count: count(medium.id).as('count')
         }).from(album)
-            .leftJoin(mediaOfAlbum, eq(album.id, mediaOfAlbum.id))
-            .leftJoin(covers, eq(album.idCover, covers.id))
-            .rightJoin(albumsOfMedium, eq(album.id, albumsOfMedium.id))
-    }
+            .leftJoin(mediumToAlbum, eq(album.id, mediumToAlbum.idAlbum))
+            .leftJoin(medium, eq(mediumToAlbum.idMedium, medium.id))
+            .where(eq(medium.status, 'all'))
+            .groupBy(album.id).as('mediaCountOfAlbum')
 
-    async findOneById (dto: IdDto) {
-        const media = this.db.$with('media').as(
-            this.db.select().from(medium)
-                .leftJoin(mediumToAlbum, eq(mediumToAlbum.idMedium, medium.id))
-                .where(and(
-                    eq(mediumToAlbum.idAlbum, dto.id),
-                    eq(medium.status, 'all')
-                ))
-        )
-
-        const cover = this.db.$with('cover').as(
-            this.db.select().from(medium)
-                .leftJoin(album, eq(album.idCover, medium.id))
-        )
-
-        // const s = await this.db.select(foo.medium).from(foo)
+        const albumsOfMedium = this.db.select({
+            id: mediumToAlbum.idAlbum
+        }).from(mediumToAlbum).where(eq(mediumToAlbum.idMedium, dto.id)).as('albumsOfMedium')
 
         const {
             idCover, idOwner, ...columns
-        } = getTableColumns(album)
+        } = this.columns
 
-        const selectedAlbum = await this.db.with(media, cover).select({
+        const res = await this.db.with(mediaCountOfAlbum, albumsOfMedium).select({
             ...columns,
-            media: jsonAgg(media.medium)
-            // cover: cover.medium
-        }).from(album).leftJoin(mediumToAlbum, eq(mediumToAlbum.idAlbum, album.id)).leftJoin(media, eq(media.medium_to_album.idAlbum, album.id)).groupBy(album.id)
-        // .leftJoin(media, eq(album.id, media.medium_to_album.idAlbum))
-        // .leftJoin(cover, eq(album.idCover, cover.medium.id))
-        // .where(eq(album.id, dto.id))
+            count: mediaCountOfAlbum.count,
+            cover: getTableColumns(cover)
+        }).from(album)
+            .innerJoin(mediaCountOfAlbum, eq(album.id, mediaCountOfAlbum.id))
+            .leftJoin(cover, eq(album.idCover, cover.id))
+            .rightJoin(albumsOfMedium, eq(album.id, albumsOfMedium.id))
 
-        console.log(selectedAlbum)
+        return res
+    }
 
-        // const res = await this.db.query.album.findFirst({
-        //     where: (album, { eq }) => eq(album.id, dto.id),
-        //     with: {
-        //         owner: true,
-        //         cover: true,
-        //         media: {
-        //             with: {
-        //                 medium: true
-        //             }
-        //         }
-        //     }
-        // })
-        // const sss = this.db.query.album.findFirst({
-        //     where: (album, { eq }) => eq(album.id, dto.id),
-        //     with: {
-        //         owner: true,
-        //         cover: true,
-        //         media: {
-        //             with: {
-        //                 medium: true
-        //             }
-        //         }
-        //     }
-        // }).toSQL()
-        // console.log(res, sss)
-        return {
-            media: []
-        }
-        // return this.prisma.album.findUnique({
-        //     where: {
-        //         id: dto.id
-        //     },
-        //     include: {
-        //         media: {
-        //             include: {
-        //                 tags: true,
-        //                 favoredBy: true,
-        //                 owner: true,
-        //                 uploader: true
-        //             }
-        //         },
-        //         owner: true,
-        //         cover: true
-        //     }
-        // })
+    async findById (dto: IdDto) {
+        const albums = this.findBy({
+            include: {
+                owner: true
+            }
+        })
+
+        const selectedAlbum = await albums.where(eq(album.id, dto.id))
+
+        return selectedAlbum[0]
     }
 
     async deleteMany (dto: IdsDto) {
-        return this.prisma.album.deleteMany({
-            where: {
-                id: {
-                    in: dto.ids
-                }
-            }
-        })
+        await this.db
+            .delete(mediumToAlbum)
+            .where(inArray(mediumToAlbum.idAlbum, dto.ids))
+
+        return this.db
+            .delete(album)
+            .where(inArray(album.id, dto.ids)).returning(this.columns)
     }
 
     async addMedia (dto: AlbumMediaDto) {
-        return this.prisma.album.update({
-            where: {
-                id: dto.id
-            },
-            data: {
-                media: {
-                    connect: dto.media.map((mediumToAdd) => {
-                        return {
-                            id: mediumToAdd
-                        }
-                    })
-                }
-            },
-            include: {
-                media: {
-                    include: {
-                        tags: true,
-                        favoredBy: true,
-                        owner: true,
-                        uploader: true
-                    }
-                },
-                owner: true,
-                cover: true
+        await this.db.insert(mediumToAlbum).values(dto.media.map((mediumToAdd) => {
+            return {
+                idMedium: mediumToAdd,
+                idAlbum: dto.id
             }
+        }))
+
+        return this.findById({
+            id: dto.id
         })
     }
 
     async removeMedia (dto: AlbumMediaDto) {
-        await this.prisma.album.update({
-            where: {
-                id: dto.id
-            },
-            data: {
-                media: {
-                    disconnect: dto.media.map((mediumToRemove) => {
-                        return {
-                            id: mediumToRemove
-                        }
-                    })
-                }
-            },
-            include: {
-                owner: true,
-                cover: {
-                    include: {
-                        owner: true
-                    }
-                }
-            }
-        })
+        await this.db.delete(mediumToAlbum).where(and(eq(mediumToAlbum.idAlbum, dto.id), inArray(mediumToAlbum.idMedium, dto.media)))
 
-        return await this.findOneById({
+        return await this.findById({
             id: dto.id
         })
     }
@@ -261,47 +139,31 @@ export class AlbumRepository {
         const {
             id, cover, ...data
         } = dto
-        return this.prisma.album.update({
-            where: {
-                id
-            },
-            data: {
-                ...data,
-                cover: cover ? {
-                    connect: {
-                        id: cover
-                    }
-                } : undefined
-            }
-        })
+
+        return this.db.update(album).set({
+            ...data,
+            idCover: cover
+        }).where(eq(album.id, id)).returning(this.columns)
     }
 
-    async create (album: Prisma.AlbumCreateInput) {
-        const media = album.media as string[]
+    async create (albumToCreate: AlbumCreateDto) {
+        const createdAlbum = await this.db.insert(album).values({
+            ...albumToCreate,
+            idCover: albumToCreate.cover,
+            idOwner: this.cls.get('userId')
+        }).returning({
+            id: album.id
+        })
 
-        if (media?.length) {
-            album.cover = {
-                connect: {
-                    id: media[0]
-                }
+        await this.db.insert(mediumToAlbum).values(albumToCreate.media.map((id) => {
+            return {
+                idAlbum: createdAlbum[0].id,
+                idMedium: id
             }
-        }
+        }))
 
-        return this.prisma.album.create({
-            data: {
-                ...album,
-                cover: album.cover,
-                owner: album.owner ? album.owner : {
-                    connect: {
-                        id: this.cls.get('userId')
-                    }
-                },
-                media: media ? {
-                    connect: media.map((id) => ({
-                        id
-                    }))
-                } : undefined
-            }
+        return this.findById({
+            id: createdAlbum[0].id
         })
     }
 }

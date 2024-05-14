@@ -17,16 +17,16 @@ import { randomUUID } from 'crypto'
 
 @Injectable()
 export class UserService {
-    constructor (private repository: UserRepository, private jwtService: JwtService, private config: ConfigService, private mail: MailService) {}
+    constructor (private repository: UserRepository, private jwtService: JwtService, private config: ConfigService, private mail: MailService) { }
 
     async profile (dto?: IdDto) {
         return this.repository.profile(dto)
     }
 
     async verfiyCredentials ({
-        mail, password
-    }: { mail: string, password: string }) {
-        const user = await this.repository.findOneByMail(mail)
+        email, password
+    }: { email: string, password: string }) {
+        const user = await this.repository.findByMail(email)
 
         if (!user) {
             throw new ForbiddenException('Invalid credentials')
@@ -44,7 +44,7 @@ export class UserService {
     async signIn (dto: UserSignInDto, res: Response) {
         const user = await this.verfiyCredentials(dto)
 
-        const tokens = this.createTokens(user.id, user.mail)
+        const tokens = this.createTokens(user.id, user.email)
 
         this.setUserCookies(tokens, res)
         return {
@@ -72,11 +72,11 @@ export class UserService {
         })
 
         await this.mail.sendSignUpMail({
-            to: user.mail,
+            to: user.email,
             token: await argon2.hash(signUpToken)
         })
 
-        const tokens = this.createTokens(user.id, user.mail)
+        const tokens = this.createTokens(user.id, user.email)
 
         this.setUserCookies(tokens, res)
 
@@ -103,7 +103,7 @@ export class UserService {
 
     async changePassword (dto: UserChangePasswordDto) {
         await this.verfiyCredentials({
-            mail: dto.mail,
+            email: dto.email,
             password: dto.currentPassword
         })
 

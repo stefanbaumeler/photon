@@ -1,5 +1,3 @@
 mutation MInsertFavorites($ids: [String!]!) {
-    insertFavorites(ids: $ids) {
-        id
-    }
+    insertFavorites(ids: $ids)
 }

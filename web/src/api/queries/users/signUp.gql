@@ -1,11 +1,11 @@
 mutation MSignUp (
-    $mail: String!
+    $email: String!
     $password: String!
     $firstName: String!
     $lastName: String!
 ) {
     signUp(
-        mail: $mail
+        email: $email
         password: $password
         firstName: $firstName
         lastName: $lastName

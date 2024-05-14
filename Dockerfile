@@ -30,8 +30,6 @@ COPY api/package.json api/
 
 COPY web/package.json web/
 
-COPY api/prisma/schema.prisma api/prisma/
-
 RUN npm i --network-timeout=300000
 
 
@@ -49,8 +47,6 @@ RUN npm run workspace @photon/api build
 FROM base as api-prod
 
 WORKDIR /photon
-
-COPY api/prisma/schema.prisma api/prisma/
 
 COPY api/package.json api/
 

@@ -3,7 +3,7 @@ import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 export const albumSchema = pgTable('album', {
     id: uuid('id').defaultRandom().primaryKey().notNull(),
     dateCreated: timestamp('date_created', {
-        precision: 0,
+        precision: 6,
         withTimezone: true,
         mode: 'string'
     }).defaultNow().notNull(),

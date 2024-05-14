@@ -4,19 +4,14 @@
 
 type User {
   id: String!
-  dateCreated: DateTime!
-  dateModified: DateTime!
-  mail: String!
+  dateCreated: String!
+  dateModified: String!
+  email: String!
   firstName: String!
   lastName: String!
   language: String!
   signUpToken: String!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Tag {
   id: String!
@@ -25,23 +20,12 @@ type Tag {
   idUser: String!
 }
 
-type Album {
+type FlatMedium {
   id: String!
-  dateCreated: DateTime!
-  dateModified: DateTime!
-  title: String
-  description: String
-  cover: Medium
-  owner: User!
-  media: [Medium!]
-}
-
-type Medium {
-  id: String!
-  dateCreated: DateTime!
-  dateModified: DateTime!
-  dateModifiedStatus: DateTime!
-  dateTaken: DateTime!
+  dateCreated: String!
+  dateModified: String!
+  dateModifiedStatus: String!
+  dateTaken: String!
   filenameDisk: String!
   filenameDownload: String!
   title: String!
@@ -50,16 +34,11 @@ type Medium {
   status: String!
   mimetype: String!
   meta: Meta!
-  owner: User!
-  uploader: User!
   hash: String
-  favoredBy: [User!]
-  tags: [Tag!]!
   country: String!
   region: String!
   place: String!
   address: String!
-  albums: [Album!]!
 }
 
 union Meta = ImageMeta | VideoMeta
@@ -79,6 +58,31 @@ type VideoMeta {
   width: Float!
   height: Float!
   duration: Float!
+}
+
+type Medium {
+  id: String!
+  dateCreated: String!
+  dateModified: String!
+  dateModifiedStatus: String!
+  dateTaken: String!
+  filenameDisk: String!
+  filenameDownload: String!
+  title: String!
+  description: String
+  location: [Float!]!
+  status: String!
+  mimetype: String!
+  meta: Meta!
+  hash: String
+  country: String!
+  region: String!
+  place: String!
+  address: String!
+  owner: User!
+  uploader: User!
+  tags: [Tag!]!
+  favoredBy: [User!]
 }
 
 type MediumDownloadDto {
@@ -107,6 +111,25 @@ type UserTokenDto {
   user: User!
 }
 
+type FlatAlbum {
+  id: String!
+  dateCreated: String!
+  dateModified: String!
+  title: String
+  description: String
+}
+
+type Album {
+  id: String!
+  dateCreated: String!
+  dateModified: String!
+  title: String
+  description: String
+  cover: FlatMedium
+  owner: User!
+  media: [FlatMedium!]
+}
+
 type Device {
   id: String!
   dateCreated: DateTime!
@@ -116,10 +139,15 @@ type Device {
   title: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
   profile: User!
   albums: [Album!]!
-  mediumAlbums(id: String!): Medium!
+  mediumAlbums(id: String!): [Album!]!
   album(id: String!): Album!
   albumMedia(id: String!): [Medium!]!
   media(status: String, favorites: Boolean, q: String, album: String, sort: String, ids: [String!]): [Medium!]!
@@ -133,22 +161,22 @@ type Query {
 }
 
 type Mutation {
-  signIn(mail: String!, password: String!): UserTokenDto!
+  signIn(email: String!, password: String!): UserTokenDto!
   signOut: Boolean!
-  signUp(mail: String!, password: String!, firstName: String!, lastName: String!, language: String!): UserTokenDto!
+  signUp(email: String!, password: String!, firstName: String!, lastName: String!, language: String!): UserTokenDto!
   changeLanguage(language: String!): User!
   refreshAccessToken(accessToken: String!, refreshToken: String!): UserTokenDto!
-  changePassword(mail: String!, currentPassword: String!, newPassword: String!): Boolean!
-  deleteAlbums(ids: [String!]!): [Album!]!
+  changePassword(email: String!, currentPassword: String!, newPassword: String!): User!
+  deleteAlbums(ids: [String!]!): [FlatAlbum!]!
   addMediaToAlbum(id: String!, media: [String!]!): Album!
   removeMediaFromAlbum(id: String!, media: [String!]!): Album!
-  updateAlbum(id: String!, title: String, description: String, cover: String): Album!
-  createAlbum(title: String, description: String, media: [String!]): Album!
-  emptyTrash: [Medium!]!
-  deleteMedia(ids: [String!]!): [Medium!]!
-  updateMedium(id: String!, title: String, description: String, meta: String, tags: [String!]): Medium!
-  updateMedia(ids: [String!]!, status: String): [Medium!]!
-  rotateMedium(id: String!, deg: Int!): Medium!
-  insertFavorites(ids: [String!]!): User!
-  deleteFavorites(ids: [String!]!): User!
+  updateAlbum(id: String!, title: String, description: String, cover: String): FlatAlbum!
+  createAlbum(title: String, description: String, media: [String!], cover: String): Album!
+  emptyTrash: [FlatMedium!]!
+  deleteMedia(ids: [String!]!): [FlatMedium!]!
+  updateMedium(id: String!, title: String, description: String, meta: String): FlatMedium!
+  updateMedia(ids: [String!]!, status: String): [FlatMedium!]!
+  rotateMedium(id: String!, deg: Int!): FlatMedium!
+  insertFavorites(ids: [String!]!): Boolean!
+  deleteFavorites(ids: [String!]!): Boolean!
 }

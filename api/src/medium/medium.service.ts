@@ -13,134 +13,111 @@ import AdmZip from 'adm-zip'
 import sharp from 'sharp'
 import { TMeta } from '@photon/schema/server'
 import { IdDto, IdsDto } from '../shared/dto'
-import { Prisma } from '@prisma/client'
 import { v2 } from '@google-cloud/translate'
 import { ClsService } from 'nestjs-cls'
+import { and, asc, desc, eq, inArray } from 'drizzle-orm'
+import { medium } from '../drizzle/schema'
+import { TOrderBy } from '../drizzle/helpers'
 
 const env = getEnv()
 
 @Injectable()
 export class MediumService {
-    constructor (private repository: MediumRepository, private cls: ClsService) {}
+    constructor (private repository: MediumRepository, private cls: ClsService) { }
+
+    includes = {
+        owner: true,
+        uploader: true,
+        tags: true,
+        favoredBy: true
+    }
 
     async getAll (dto?: MediumFilterDto) {
         const userId = this.cls.get('userId')
 
-        let order: Prisma.MediumOrderByWithRelationAndSearchRelevanceInput
+        let orderBy: TOrderBy
 
-        const conditions: Prisma.MediumWhereInput = {
-            owner: {
-                id: userId
-            }
+        const conditions: ReturnType<typeof eq>[] = [eq(medium.idOwner, userId)]
+        let favoriteOf
+
+        switch (dto?.sort) {
+        case 'oldest':
+            orderBy = asc(medium.dateTaken)
+            break
+        case 'recent':
+            orderBy = desc(medium.dateCreated)
+            break
+        case 'newest':
+        default:
+            orderBy = desc(medium.dateTaken)
+            break
         }
 
         if (dto) {
             if (dto.favorites) {
-                conditions.favoredBy = {
-                    some: {
-                        id: userId
-                    }
-                }
-            }
-
-            switch (dto.sort) {
-            case 'oldest':
-                order = {
-                    dateTaken: 'asc'
-                }
-                break
-            case 'recent':
-                order = {
-                    dateCreated: 'desc'
-                }
-                break
-            case 'newest':
-            default:
-                order = {
-                    dateTaken: 'desc'
-                }
-                break
+                favoriteOf = userId
             }
 
             if (dto.status) {
-                conditions.status = dto.status
+                conditions.push(eq(medium.status, dto.status))
             }
 
-            if (dto.q) {
-                const translate = new v2.Translate({
-                    key: env.GCC_TRANSLATE_KEY
-                })
-                const [translated] = await translate.translate(dto.q, {
-                    to: 'en',
-                    from: 'de'
-                })
+            // if (dto.q) {
+            //     const translate = new v2.Translate({
+            //         key: env.GCC_TRANSLATE_KEY
+            //     })
+            //     const [translated] = await translate.translate(dto.q, {
+            //         to: 'en',
+            //         from: 'de'
+            //     })
 
-                conditions.AND = translated.split(' ').filter((s) => s !== '').map((word) => {
-                    return {
-                        tags: {
-                            some: {
-                                label: {
-                                    mode: 'insensitive',
-                                    search: word
-                                }
-                            }
-                        }
-                    }
-                })
-            }
-
-            if (dto.album) {
-                return await this.repository.findByAlbum({
-                    id: dto.album
-                }, conditions, order, this.includeAll())
-            }
+            //     conditions.AND = translated.split(' ').filter((s) => s !== '').map((word) => {
+            //         return {
+            //             tags: {
+            //                 some: {
+            //                     label: {
+            //                         mode: 'insensitive',
+            //                         search: word
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     })
+            // }
 
             if (dto.ids) {
-                conditions.id = {
-                    in: dto.ids
-                }
+                conditions.push(inArray(medium.id, dto.ids))
             }
         }
 
-        return this.repository.findMany(conditions, order,  this.includeAll())
-    }
+        const query = this.repository.findBy({
+            include: this.includes,
+            orderBy,
+            favoriteOf,
+            album: dto?.album ? dto.album : undefined
+        })
 
-    private includeAll () {
-        return {
-            owner: true,
-            uploader: true,
-            tags: true,
-            favoredBy: {
-                where: {
-                    id: this.cls.get('userId')
-                }
-            }
-        }
+        return query.where(and(...conditions))
     }
 
     async getById (dto: IdDto) {
-        return this.repository.findById(dto, this.includeAll())
-    }
-
-    async getByFilenameDisk (dto: MediumFilenameDiskDto) {
-        return this.repository.findOneByFilenameDisk(dto, this.includeAll())
+        return this.repository.findById(dto, this.includes)
     }
 
     async getArchive () {
         return this.repository.findByStatus({
-            status: 'archive'
-        }, this.includeAll())
+            status: 'archived'
+        }, this.includes)
     }
 
     async getTrash () {
         return this.repository.findByStatus({
             status: 'trash'
-        },
-        this.includeAll())
+        }, this.includes)
     }
 
     async update (dto: MediumUpdateDto) {
-        return this.repository.update(dto, this.includeAll())
+        return this.repository.update(dto)
     }
 
     async updateMany (dto: MediumUpdateManyDto) {
@@ -162,11 +139,7 @@ export class MediumService {
     }
 
     async delete (dto: IdsDto) {
-        const media = await this.repository.findMany({
-            id: {
-                in: dto.ids
-            }
-        })
+        const media = await this.repository.findByIds(dto)
 
         media.forEach((medium) => {
             fs.unlinkSync(path.join(__dirname, '../../../', env.API_UPLOADS_DIR, medium.filenameDisk))
@@ -207,11 +180,7 @@ export class MediumService {
     }
 
     async download (dto: IdsDto) {
-        const media = await this.repository.findMany({
-            id: {
-                in: dto.ids
-            }
-        })
+        const media = await this.repository.findByIds(dto)
 
         if (media.length === 1) {
             return {
@@ -238,9 +207,10 @@ export class MediumService {
     }
 
     async countByYear () {
-        const {
-            count, dateSets
-        } = await this.repository.count()
+        const count = await this.repository.count()
+        const dateSets = await this.repository.findByOwner({
+            id: this.cls.get('userId')
+        })
 
         const years: { count: number, year: number, months: { month: number, count: number }[] }[] = []
 

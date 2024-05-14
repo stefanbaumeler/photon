@@ -1,4 +1,4 @@
-fragment FCover on Medium {
+fragment FCover on FlatMedium {
     id
     mimetype
     filenameDisk

@@ -20,7 +20,7 @@ export const InfobarAlbums = () => {
         pause: !id
     })
 
-    const albums  = result?.mediumAlbums.albums
+    const albums  = result?.mediumAlbums
 
     return albums?.length ? <InfobarSection title={t(ETrans.ALBUM_PLURAL)}>
         {albums?.map((album, key) => <InfobarAlbum

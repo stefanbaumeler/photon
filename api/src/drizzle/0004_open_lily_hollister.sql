@@ -1,0 +1,1 @@
+ALTER TABLE "album" ALTER COLUMN "date_created" SET DATA TYPE date;

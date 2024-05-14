@@ -1,8 +1,8 @@
 mutation MSignIn (
-    $mail: String!
+    $email: String!
     $password: String!
 ) {
-    signIn(mail: $mail, password: $password) {
+    signIn(email: $email, password: $password) {
         accessToken
         refreshToken
         user {

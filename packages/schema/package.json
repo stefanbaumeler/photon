@@ -14,7 +14,7 @@
         "graphql-upload-minimal": "*"
     },
     "devDependencies": {
-        "eslint": "^8.20.0",
+        "eslint": "*",
         "eslint-plugin-react": "^7.30.1",
         "typescript": "*"
     }

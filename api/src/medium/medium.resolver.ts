@@ -1,6 +1,6 @@
 import { Query, Resolver, Args, Mutation } from '@nestjs/graphql'
 import { MediumService } from './medium.service'
-import { Medium } from './medium.model'
+import { Medium, FlatMedium } from './medium.model'
 import { MediumDownloadDto,
     MediumCountDto,
     MediumUpdateDto,
@@ -11,7 +11,7 @@ import { UploadService } from '../upload/upload.service'
 
 @Resolver(() => Medium)
 export class MediumResolver {
-    constructor (private readonly service: MediumService, private readonly uploadService: UploadService) {}
+    constructor (private readonly service: MediumService, private readonly uploadService: UploadService) { }
 
     @Query(() => [Medium])
     async media (@Args() dto: MediumFilterDto) {
@@ -20,7 +20,7 @@ export class MediumResolver {
 
     @Query(() => Medium)
     async medium (@Args() dto: IdDto) {
-        return await this.service.getById(dto)
+        return this.service.getById(dto)
     }
 
     @Query(() => [Medium])
@@ -43,27 +43,27 @@ export class MediumResolver {
         return this.service.countByYear()
     }
 
-    @Mutation(() => [Medium])
+    @Mutation(() => [FlatMedium])
     async emptyTrash () {
         return this.service.emptyTrash()
     }
 
-    @Mutation(() => [Medium])
+    @Mutation(() => [FlatMedium])
     async deleteMedia (@Args() dto: IdsDto) {
         return this.service.delete(dto)
     }
 
-    @Mutation(() => Medium)
+    @Mutation(() => FlatMedium)
     async updateMedium (@Args() dto: MediumUpdateDto) {
         return this.service.update(dto)
     }
 
-    @Mutation(() => [Medium])
+    @Mutation(() => [FlatMedium])
     async updateMedia (@Args() dto: MediumUpdateManyDto) {
         return this.service.updateMany(dto)
     }
 
-    @Mutation(() => Medium)
+    @Mutation(() => FlatMedium)
     async rotateMedium (@Args() dto: MediumRotateDto) {
         return this.service.rotate(dto)
     }

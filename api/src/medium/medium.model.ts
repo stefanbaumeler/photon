@@ -1,26 +1,26 @@
-import { Field, ObjectType, Float } from '@nestjs/graphql'
+import { Field, ObjectType, Float, ArgsType } from '@nestjs/graphql'
 import { User } from '../user/user.model'
 import { Meta } from '../meta/meta.model'
 import { Tag } from '../tag/tag.model'
 import { ImageMeta } from '../meta/image.meta.model'
 import { VideoMeta } from '../meta/video.meta.model'
-import { Album } from '../album/album.model'
 
+@ArgsType()
 @ObjectType()
-export class Medium {
+export class FlatMedium {
     @Field(() => String!)
         id!: string
 
-    @Field(() => Date)
+    @Field(() => String)
         dateCreated!: Date
 
-    @Field(() => Date)
+    @Field(() => String)
         dateModified!: Date
 
-    @Field(() => Date)
+    @Field(() => String)
         dateModifiedStatus!: Date
 
-    @Field(() => Date)
+    @Field(() => String)
         dateTaken!: Date
 
     @Field(() => String)
@@ -49,24 +49,10 @@ export class Medium {
     @Field(() => Meta)
         meta!: ImageMeta | VideoMeta
 
-    @Field(() => User)
-        owner!: User
-
-    @Field(() => User)
-        uploader!: User
-
     @Field(() => String, {
         nullable: true
     })
         hash?: string
-
-    @Field(() => [User], {
-        nullable: true
-    })
-        favoredBy?: User[]
-
-    @Field(() => [Tag])
-        tags!: Tag[]
 
     @Field(() => String)
         country!: string
@@ -79,7 +65,29 @@ export class Medium {
 
     @Field(() => String)
         address!: string
+}
 
-    @Field(() => [Album])
-        albums!: Album[]
+@ArgsType()
+@ObjectType()
+export class Medium extends FlatMedium {
+    @Field(() => User)
+        owner!: User
+
+    @Field(() => User)
+        uploader!: User
+
+    @Field(() => [Tag])
+        tags!: Tag[]
+
+    @Field(() => [User], {
+        nullable: true
+    })
+        favoredBy?: User[]
+}
+
+@ArgsType()
+@ObjectType()
+export class MediumId {
+    @Field(() => String)
+        id!: string
 }

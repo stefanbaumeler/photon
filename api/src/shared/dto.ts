@@ -1,13 +1,12 @@
-import { ArgsType, Field, InputType } from '@nestjs/graphql'
+import { ArgsType, Field, InputType, ObjectType } from '@nestjs/graphql'
 
-@InputType()
 @ArgsType()
+@ObjectType()
 export class IdDto {
     @Field(() => String)
         id!: string
 }
 
-@InputType()
 @ArgsType()
 export class IdsDto {
     @Field(() => [String])

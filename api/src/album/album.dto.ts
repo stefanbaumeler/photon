@@ -45,5 +45,10 @@ export class AlbumCreateDto {
     @Field(() => [String], {
         nullable: true
     })
-        media?: string
+        media?: string[]
+
+    @Field(() => String, {
+        nullable: true
+    })
+        cover?: string
 }

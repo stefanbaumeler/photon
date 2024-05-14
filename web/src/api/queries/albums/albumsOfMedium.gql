@@ -1,16 +1,13 @@
 query QAlbumsOfMedium($id: String!) {
     mediumAlbums(id: $id) {
         id
-        albums {
+        title
+        dateCreated
+        cover {
+            ...FCover
+        }
+        media {
             id
-            title
-            dateCreated
-            cover {
-                ...FCover
-            }
-            media {
-                id
-            }
         }
     }
 }

@@ -21,7 +21,7 @@ const LoginPage = () => {
     const [, signUp] = useMSignUp()
     const { t } = useTranslation()
     const [loginFormMode, setLoginFormMode] = useState<ELoginFormMode>(ELoginFormMode.DEFAULT)
-    const [mail, setMail] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -34,7 +34,7 @@ const LoginPage = () => {
 
         if (loginFormMode === ELoginFormMode.DEFAULT) {
             const res = await signIn({
-                mail,
+                email,
                 password
             })
 
@@ -49,7 +49,7 @@ const LoginPage = () => {
             const res = await signUp({
                 firstName,
                 lastName,
-                mail,
+                email,
                 password
             })
 
@@ -67,14 +67,14 @@ const LoginPage = () => {
         else {
             setError(true)
         }
-    }, [loginFormMode, signIn, signUp, firstName, lastName, mail, password, router])
+    }, [loginFormMode, signIn, signUp, firstName, lastName, email, password, router])
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {
             if (event.key === 'Enter') {
                 event.preventDefault()
 
-                if (mail && password) {
+                if (email && password) {
                     if (loginFormMode === ELoginFormMode.DEFAULT) {
                         submit()
                     }
@@ -91,7 +91,7 @@ const LoginPage = () => {
         return () => {
             document.removeEventListener('keydown', keyDownHandler)
         }
-    }, [submit, mail, password, firstName, lastName, loginFormMode])
+    }, [submit, email, password, firstName, lastName, loginFormMode])
 
     const title = loginFormMode === ELoginFormMode.SIGNUP ? t(ETrans.SIGN_UP) : t(ETrans.SIGN_IN)
 
@@ -127,8 +127,8 @@ const LoginPage = () => {
                             testId="signin-mail"
                             id={'mail'}
                             label={t(ETrans.MAIL)}
-                            value={mail}
-                            onChange={(event) => setMail(event.target.value)}
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
                         />
                         <TextBox
                             testId="signin-password"

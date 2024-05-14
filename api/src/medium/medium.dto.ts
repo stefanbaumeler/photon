@@ -1,20 +1,34 @@
 import { ArgsType, Field, InputType, Int, ObjectType } from '@nestjs/graphql'
-import { Prisma } from '@prisma/client'
-import { FileUpload, GraphQLUpload, Upload } from 'graphql-upload-minimal'
-import { Medium } from './medium.model'
+import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
+import { TMeta } from '@photon/schema/server'
+import { Meta } from '../meta/meta.model'
 
 @InputType()
 @ArgsType()
 export class MediumFilenameDiskDto {
     @Field(() => String)
-        filenameDisk!: Medium['filenameDisk']
+        filenameDisk!: string
+}
+
+@InputType()
+@ArgsType()
+export class MediumIdOrHashDto {
+    @Field(() => String, {
+        nullable: true
+    })
+        id?: string
+
+    @Field(() => String, {
+        nullable: true
+    })
+        hash?: string
 }
 
 @InputType()
 @ArgsType()
 export class MediumStatusDto {
     @Field(() => String)
-        status!: Medium['status']
+        status!: string
 }
 
 @ObjectType()
@@ -28,7 +42,7 @@ class MediumCountMonth {
     @Field(() => Int)
         month!: number
 
-    @Field (() => Int)
+    @Field(() => Int)
         count!: number
 }
 
@@ -62,22 +76,17 @@ export class MediumUpdateDto {
     @Field(() => String, {
         nullable: true
     })
-        title?: Prisma.MediumUpdateInput['title']
+        title?: string
 
     @Field(() => String, {
         nullable: true
     })
-        description?: Prisma.MediumUpdateInput['description']
+        description?: string
 
     @Field(() => String, {
         nullable: true
     })
-        meta?: Prisma.MediumUpdateInput['meta']
-
-    @Field(() => [String], {
-        nullable: true
-    })
-        tags?: Prisma.MediumUpdateInput['tags']
+        meta?: TMeta
 }
 
 @InputType()
@@ -89,7 +98,7 @@ export class MediumUpdateManyDto {
     @Field(() => String, {
         nullable: true
     })
-        status?: Prisma.MediumUpdateInput['status']
+        status?: string
 }
 
 @InputType()
@@ -141,4 +150,77 @@ export class MediumRotateDto {
 
     @Field(() => Int)
         deg!: number
+}
+
+@ArgsType()
+export class MediumCreateDto {
+    @Field(() => String, {
+        nullable: true
+    })
+        hash?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        dateTaken?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        filenameDisk: string
+
+    @Field(() => String, {
+        nullable: true
+    })
+        filenameDownload?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        title?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        description?: string | null
+
+    @Field(() => [Number, Number], {
+        nullable: true
+    })
+        location?: [number, number]
+
+    @Field(() => String, {
+        nullable: true
+    })
+        status?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        mimetype?: string | null
+
+    @Field(() => Meta, {
+        nullable: true
+    })
+        meta?: TMeta
+
+    @Field(() => String, {
+        nullable: true
+    })
+        country?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        region?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        place?: string | null
+
+    @Field(() => String, {
+        nullable: true
+    })
+        address?: string | null
 }
